@@ -3,6 +3,11 @@ var https = require('https');
 var fs = require('fs');
 var imagemagick = require('imagemagick');
 
+
+/*
+* Skin retrieval methods are based on @jomo's CLI Crafatar implementation.
+* https://github.com/jomo/Crafatar
+*/
 module.exports = {
   get_profile: function(uuid, callback) {
     https.get("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid, function(res) {
