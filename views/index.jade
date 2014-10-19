@@ -9,17 +9,28 @@ block content
 				p Welcome to Crafatar, a website for server Minecraft skins and heads!
 				h2 API
 				hr
-				p Replace [uuid] with a Mojang UUID to get the related head.
-				.well &lt;img src="https://skins.jake0oo0.me/avatars/[uuid]"&gt;
+				p
+					| Replace 
+					mark.green uuid
+					|  with a Mojang UUID to get the related head.
+				.well
+					| &lt;img src="https://skins.jake0oo0.me/avatars/
+					mark.green uuid
+					| "&gt;
 				p(style="margin-top: 10px;") Example: UUID: '2d5aa9cdaeb049189930461fc9b91cc5', Username: Jake0oo0
 				.well &lt;img src="https://skins.jake0oo0.me/avatars/2d5aa9cdaeb049189930461fc9b91cc5"&gt;
 				p(style="margin-top: 10px;") There is also an option to include a size, default is 180x180px.
-				.well &lt;img src="https://skins.jake0oo0.me/avatars/[uuid]/[size]"&gt;
-				p(style="margin-top: 10px;") Example: UUID: '2d5aa9cdaeb049189930461fc9b91cc5', Size: 250px, Username: Jake0oo0
-				.well &lt;img src="https://skins.jake0oo0.me/avatars/2d5aa9cdaeb049189930461fc9b91cc5/250"&gt;
+				.well
+					| &lt;img src="https://skins.jake0oo0.me/avatars/
+					mark.green uuid
+					| /
+					mark.green size
+					| "&gt;
+				p(style="margin-top: 10px;") Example: UUID: 'ae795aa86327408e92ab25c8a59f3ba1', Size: 250px, Username: redstone_sheep
+				.well &lt;img src="https://skins.jake0oo0.me/avatars/ae795aa86327408e92ab25c8a59f3ba1/250"&gt;
 			.col-md-2
 				img(src= "/avatars/2d5aa9cdaeb049189930461fc9b91cc5")
+				img(src= "/avatars/ae795aa86327408e92ab25c8a59f3ba1")
 				img(src= "/avatars/dab0a06256934c28bf0211142b388c33")
 				img(src= "/avatars/3c7db14dac4b4e35b2c63b2237f382be")
-				img(src= "/avatars/ae795aa86327408e92ab25c8a59f3ba1")
 				img(src= "/avatars/62c41f0e133d4192ad33f0896f47d23a")

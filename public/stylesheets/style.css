@@ -6,3 +6,10 @@ body {
 a {
   color: #00B7FF;
 }
+
+mark.green {
+  background: inherit;
+  color: #008000;
+  font-weight: bold;
+  padding: 0;
+}
