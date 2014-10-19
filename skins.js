@@ -8,6 +8,18 @@ var lwip = require('lwip');
 * Skin retrieval methods are based on @jomo's CLI Crafatar implementation.
 * https://github.com/jomo/Crafatar
 */
+
+function extract_face(inname, outname, callback) {
+	var outfile = fs.createWriteStream(outname);
+	lwip.open(inname, function(err, image) {
+		image.batch()
+		.crop(8, 8, 15, 15)
+		.writeFile(outname, function(err) {
+			callback();
+		});
+	});
+}
+
 module.exports = {
 	get_profile: function(uuid, callback) {
 		https.get("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid, function(res) {
@@ -17,10 +29,14 @@ module.exports = {
 			}
 			res.on('data', function(d) {
 				var profile = JSON.parse(d);
-				if (profile.error) callback(null);
-				callback(profile);
+				if (profile.error) {
+					console.error(profile.error);
+					callback(null);
+				} else {
+					callback(profile);
+				}
 			});
-			
+
 		}).on('error', function(e) {
 			console.error(e);
 		});
@@ -41,22 +57,29 @@ module.exports = {
 	},
 
 	skin_file: function(url, filename, callback) {
-		var file = fs.createWriteStream(filename);
+		var tmpname = "skins/tmp/" + filename;
+		var outname = "skins/" + filename;
+		var tmpfile = fs.createWriteStream(tmpname);
 		http.get(url, function(res) {
 			res.on('data', function(data) {
-				file.write(data);
+				tmpfile.write(data);
 			}).on('end', function() {
-				file.end();
-				callback();
+				tmpfile.end();
+				extract_face(tmpname, outname, function() {
+					fs.unlink(tmpname, function(err) { // unlink = delete
+						if (err) console.error(err);
+					});
+					callback(); // outside unlink callback cause we don't have to wait until it's deleted
+				});
 			});
 		});
 	},
-	extract_face: function(infile, size, callback) {
-		lwip.open(infile, function(err, image){
+
+	resize_img: function(inname, size, callback) {
+		lwip.open("skins/" + inname, function(err, image) {
 			image.batch()
-			.crop(8,8,15,15)
-			.resize(size, size, "nearest-neighbor")
-			.toBuffer('png', function(err, buffer){
+			.resize(size, size, "nearest-neighbor") // nearest-neighbor doesn't blur
+			.toBuffer('png', function(err, buffer) {
 				callback(buffer);
 			});
 		});
