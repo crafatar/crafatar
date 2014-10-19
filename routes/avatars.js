@@ -40,7 +40,7 @@ router.get('/:uuid/:size?', function(req, res) {
     }
   } else {
     res.status(422) // "Unprocessable Entity", valid request, but semantically erroneous: https://tools.ietf.org/html/rfc4918#page-78
-    .send("422 Invlid UUID");
+    .send("422 Invalid UUID");
   }
 });
 
