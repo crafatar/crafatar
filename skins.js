@@ -1,7 +1,7 @@
 var http = require('http');
 var https = require('https');
 var fs = require('fs');
-var imagemagick = require('imagemagick');
+var lwip = require('lwip');
 
 
 /*
@@ -11,12 +11,19 @@ var imagemagick = require('imagemagick');
 module.exports = {
   get_profile: function(uuid, callback) {
     https.get("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid, function(res) {
+      if (res.statusCode == "204") {
+        callback(null);
+        return null;
+      }
      res.on('data', function(d) {
        var profile = JSON.parse(d);
-       if (profile.error) throw profile.error;
+       if (profile.error) callback(null);
        callback(profile);
      });
-   });
+     
+    }).on('error', function(e) {
+      console.error(e);
+    });
   },
 
   skin_url: function(profile) {
@@ -44,10 +51,14 @@ module.exports = {
       });
     });
   },
-  extract_face: function(infile, outfile, callback) {
-    imagemagick.convert([infile, '-crop', '8x8+8+8', outfile], function(err, stdout) {
-      if (err) throw err;
-      callback();
+  extract_face: function(infile, size, callback) {
+    lwip.open(infile, function(err, image){
+      image.batch()
+        .crop(8,8,15,15)
+        .resize(size, size, "nearest-neighbor")
+        .toBuffer('png', function(err, buffer){
+          callback(buffer);
+      });
     });
   }
 };
