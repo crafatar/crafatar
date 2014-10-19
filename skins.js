@@ -2,6 +2,7 @@ var http = require('http');
 var https = require('https');
 var fs = require('fs');
 var lwip = require('lwip');
+var urlparse = require('url').parse
 
 
 /*
@@ -63,7 +64,9 @@ module.exports = {
     var tmpname = "skins/tmp/" + filename;
     var outname = "skins/" + filename;
     var tmpfile = fs.createWriteStream(tmpname);
-    http.get(url, function(res) {
+    var prot = http;
+    if (urlparse(url).protocol == "https") prot = https;
+    prot.get(url, function(res) {
       res.on('data', function(data) {
         tmpfile.write(data);
       }).on('end', function() {
