@@ -37,8 +37,8 @@ module.exports = {
         }
       });
 
-    }).on('error', function(e) {
-      console.error(e);
+    }).on('error', function(err) {
+      throw err;
     });
   },
 
@@ -49,7 +49,7 @@ module.exports = {
         if (prop.name == 'textures') {
           var json = Buffer(prop.value, 'base64').toString();
           var props = JSON.parse(json);
-          url = props.textures.SKIN.url;
+          url = props && props.textures && props.textures.SKIN && props.textures.SKIN.url;
         }
       });
     }
@@ -72,11 +72,14 @@ module.exports = {
           callback(); // outside unlink callback cause we don't have to wait until it's deleted
         });
       });
+    }).on('error', function(err) {
+      throw err;
     });
   },
 
   resize_img: function(inname, size, callback) {
-    lwip.open("skins/" + inname, function(err, image) {
+    lwip.open(inname, function(err, image) {
+      if (err) throw err;
       image.batch()
       .resize(size, size, "nearest-neighbor") // nearest-neighbor doesn't blur
       .toBuffer('png', function(err, buffer) {

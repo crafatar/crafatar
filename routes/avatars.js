@@ -9,29 +9,54 @@ var valid_uuid = /^[0-9a-f]{32}$/;
 router.get('/:uuid/:size?', function(req, res) {
   var uuid = req.param('uuid');
   var size = req.param('size') || 180;
+  var def = req.query.default;
   // Prevent app from crashing/freezing
   if (size <= 0 || size > 512) size = 180;
-  console.log(uuid);
   if (valid_uuid.test(uuid)) {
     var filename = uuid + ".png";
     if (fs.existsSync("skins/" + filename)) {
-      skins.resize_img(filename, size, function(data) {
-        res.writeHead(200, {'Content-Type': 'image/png'});
+      console.log('found ' + filename);
+      skins.resize_img("skins/" + filename, size, function(data) {
+        // tell browser to cache image locally for 10 minutes
+        res.writeHead(200, {'Content-Type': 'image/png', 'Cache-Control': 'max-age=600, public'});
         res.end(data);
       });
     } else {
+      console.log(filename + ' not found, downloading profile..');
       skins.get_profile(uuid, function(profile) {
         var skinurl = skins.skin_url(profile);
         if (skinurl) {
+          console.log('got profile, skin url is "' + skinurl + '" downloading..');
           skins.skin_file(skinurl, filename, function() {
-            skins.resize_img(filename, size, function(data) {
-              res.writeHead(200, {'Content-Type': 'image/png'});
+            console.log('got skin');
+            skins.resize_img("skins/" + filename, size, function(data) {
+              // tell browser to cache image locally for 10 minutes
+              res.writeHead(200, {'Content-Type': 'image/png', 'Cache-Control': 'max-age=600, public'});
               res.end(data);
             });
           });
         } else {
-          res.status(404)        // HTTP status 404: NotFound
-          .send('404 Not found');
+          console.log('no skin url found');
+          switch (def) {
+            case "alex":
+              skins.resize_img("public/images/alex.png", size, function(data) {
+                // tell browser to cache image locally for 10 minutes
+                res.writeHead(404, {'Content-Type': 'image/png', 'Cache-Control': 'max-age=600, public'});
+                res.end(data);
+              });
+              break;
+            case "steve":
+              skins.resize_img("public/images/steve.png", size, function(data) {
+                // tell browser to cache image locally for 10 minutes
+                res.writeHead(404, {'Content-Type': 'image/png', 'Cache-Control': 'max-age=600, public'});
+                res.end(data);
+              });
+              break;
+            default:
+              res.status(404)
+              .send('404 Not found');
+              break;
+          }
         }
       });
     }
