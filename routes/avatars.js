@@ -12,6 +12,10 @@ router.get('/:uuid/:size?', function(req, res) {
   //console.log(req.param('size'))
   var uuid = req.param('uuid');
   var size = req.param('size') || 180;
+  // Add temporary restriction to prevent app from crashing
+  if (size <= 0) {
+    size = 180;
+  }
   console.log(uuid);
   if (valid_uuid.test(uuid)) {
     var filename = 'skins/' + uuid + ".png";
