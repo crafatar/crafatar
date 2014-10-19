@@ -9,6 +9,10 @@ var valid_uuid = /^[0-9a-f]{32}$/;
 router.get('/:uuid/:size?', function(req, res) {
   var uuid = req.param('uuid');
   var size = req.param('size') || 180;
+  // Add temporary restriction to prevent app from crashing
+  if (size <= 0) {
+    size = 180;
+  }
   console.log(uuid);
   if (valid_uuid.test(uuid)) {
     var filename = uuid + ".png";
