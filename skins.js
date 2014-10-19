@@ -12,9 +12,11 @@ var lwip = require('lwip');
 function extract_face(inname, outname, callback) {
   var outfile = fs.createWriteStream(outname);
   lwip.open(inname, function(err, image) {
+    if (err) throw err;
     image.batch()
     .crop(8, 8, 15, 15)
     .writeFile(outname, function(err) {
+      if (err) throw err;
       callback();
     });
   });
@@ -30,6 +32,7 @@ module.exports = {
       res.on('data', function(d) {
         var profile = JSON.parse(d);
         if (profile.error) {
+          // usually this is something like TooManyRequestsException
           console.error(profile.error);
           callback(null);
         } else {
