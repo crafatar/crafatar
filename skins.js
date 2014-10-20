@@ -2,7 +2,7 @@ var http = require('http');
 var https = require('https');
 var fs = require('fs');
 var lwip = require('lwip');
-var urlparse = require('url').parse
+var urlparse = require('url').parse;
 
 
 /*
