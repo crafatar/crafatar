@@ -10,6 +10,7 @@ router.get('/:uuid/:size?', function(req, res) {
   var uuid = req.param('uuid');
   var size = req.param('size') || 180;
   var def = req.query.default;
+  var start = new Date();
   // Prevent app from crashing/freezing
   if (size <= 0 || size > 512) size = 180;
   if (valid_uuid.test(uuid)) {
@@ -18,7 +19,8 @@ router.get('/:uuid/:size?', function(req, res) {
       console.log('found ' + filename);
       skins.resize_img("skins/" + filename, size, function(data) {
         // tell browser to cache image locally for 10 minutes
-        res.writeHead(200, {'Content-Type': 'image/png', 'Cache-Control': 'max-age=600, public'});
+        var end = new Date() - start;
+        res.writeHead(200, {'Content-Type': 'image/png', 'Cache-Control': 'max-age=600, public', 'Response-Time': end, 'Storage-Type': 'local'});
         res.end(data);
       });
     } else {
@@ -31,7 +33,8 @@ router.get('/:uuid/:size?', function(req, res) {
             console.log('got skin');
             skins.resize_img("skins/" + filename, size, function(data) {
               // tell browser to cache image locally for 10 minutes
-              res.writeHead(200, {'Content-Type': 'image/png', 'Cache-Control': 'max-age=600, public'});
+              var end = new Date() - start;
+              res.writeHead(200, {'Content-Type': 'image/png', 'Cache-Control': 'max-age=600, public', 'Response-Time': end, 'Storage-Type': 'downloaded'});
               res.end(data);
             });
           });
@@ -41,20 +44,21 @@ router.get('/:uuid/:size?', function(req, res) {
             case "alex":
               skins.resize_img("public/images/alex.png", size, function(data) {
                 // tell browser to cache image locally for 10 minutes
-                res.writeHead(404, {'Content-Type': 'image/png', 'Cache-Control': 'max-age=600, public'});
+                var end = new Date() - start;
+                res.writeHead(404, {'Content-Type': 'image/png', 'Cache-Control': 'max-age=600, public', 'Response-Time': end, 'Storage-Type': 'local'});
                 res.end(data);
               });
               break;
             case "steve":
               skins.resize_img("public/images/steve.png", size, function(data) {
                 // tell browser to cache image locally for 10 minutes
-                res.writeHead(404, {'Content-Type': 'image/png', 'Cache-Control': 'max-age=600, public'});
+                var end = new Date() - start;
+                res.writeHead(404, {'Content-Type': 'image/png', 'Cache-Control': 'max-age=600, public', 'Response-Time': end, 'Storage-Type': 'local'});
                 res.end(data);
               });
               break;
             default:
-              res.status(404)
-              .send('404 Not found');
+              res.status(404).send('404 Not found');
               break;
           }
         }
