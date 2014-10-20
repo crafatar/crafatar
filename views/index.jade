@@ -9,27 +9,28 @@ block content
         p Welcome to Crafatar, an API for Minecraft's faces!
         h2 API
         hr
+        = protocol
         p
           | Replace 
           mark.green uuid
           |  with a Mojang UUID to get the related head.
         .well
-          | &lt;img src="https://skins.jake0oo0.me/avatars/
+          | &lt;img src="#{domain}/avatars/
           mark.green uuid
           | "&gt;
         p(style="margin-top: 10px;") Example: UUID: '2d5aa9cdaeb049189930461fc9b91cc5', Username: Jake0oo0
-        .well &lt;img src="https://skins.jake0oo0.me/avatars/2d5aa9cdaeb049189930461fc9b91cc5"&gt;
+        .well &lt;img src="#{domain}/avatars/2d5aa9cdaeb049189930461fc9b91cc5"&gt;
         p(style="margin-top: 10px;") There is also an option to include a size, default is 180x180px. The size may not be larger than 512px.
         .well
-          | &lt;img src="https://skins.jake0oo0.me/avatars/
+          | &lt;img src="#{domain}/avatars/
           mark.green uuid
           | /
           mark.green size
           | "&gt;
         p(style="margin-top: 10px;") Example: UUID: 'ae795aa86327408e92ab25c8a59f3ba1', Size: 250px, Username: redstone_sheep
-        .well &lt;img src="https://skins.jake0oo0.me/avatars/ae795aa86327408e92ab25c8a59f3ba1/250"&gt;
+        .well &lt;img src="#{domain}/avatars/ae795aa86327408e92ab25c8a59f3ba1/250"&gt;
         p(style="margin-top: 10px;") By default, a 404 text is returned when the avatar was not found. You can change that to the avatar of steve or alex:
-        .well &lt;img src="https://skins.jake0oo0.me/avatars/ae795aa86327408e92ab25c8a59f3ba1/250?default=alex"&gt;
+        .well &lt;img src="#{domain}/avatars/ae795aa86327408e92ab25c8a59f3ba1/250?default=alex"&gt;
       .col-md-2
         img(src="/avatars/2d5aa9cdaeb049189930461fc9b91cc5?default=steve", title="Jake0oo0")
         img(src="/avatars/ae795aa86327408e92ab25c8a59f3ba1?default=steve", title="redstone_sheep")
