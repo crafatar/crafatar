@@ -11,4 +11,4 @@ See the [API Usage](http://skins.jake0oo0.me)
 * Clone the repository
 * npm install
 * npm start
-* http://localhost:3000
+* Access [http://localhost:3000](http://localhost:3000)
