@@ -1,19 +1,17 @@
-var http = require('http');
-var https = require('https');
-var fs = require('fs');
+var request = require('request');
 var lwip = require('lwip');
-var urlparse = require('url').parse;
-
 
 /*
 * Skin retrieval methods are based on @jomo's CLI Crafatar implementation.
 * https://github.com/jomo/Crafatar
 */
 
-function extract_face(inname, outname, callback) {
-  var outfile = fs.createWriteStream(outname);
-  lwip.open(inname, function(err, image) {
-    if (err) throw err;
+function extract_face(buffer, outname, callback) {
+  lwip.open(buffer, "png", function(err, image) {
+    if (err) {
+      console.log('c ' + buffer.length);
+      throw err;
+    }
     image.batch()
     .crop(8, 8, 15, 15)
     .writeFile(outname, function(err) {
@@ -25,24 +23,28 @@ function extract_face(inname, outname, callback) {
 
 module.exports = {
   get_profile: function(uuid, callback) {
-    https.get("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid, function(res) {
-      if (res.statusCode == "204") {
-        callback(null);
-        return null;
-      }
-      res.on('data', function(d) {
-        var profile = JSON.parse(d);
-        if (profile.error) {
-          // usually this is something like TooManyRequestsException
-          console.error(profile.error);
-          callback(null);
+    request.get({
+      url: "https://sessionserver.mojang.com/session/minecraft/profile/" + uuid,
+      timeout: 1000 // ms
+    }, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        callback(JSON.parse(body));
+      } else {
+        if (error) {
+          console.error(error);
+        } else if (response.statusCode == 204 || response.statusCode == 404) {
+          // we get 204 No Content when UUID doesn't exist (including 404 in case they change that)
+        } else if (response.statusCode == 429) {
+          // Too Many Requests
+          console.warn("Too many requests for " + uuid);
+          console.warn(body);
         } else {
-          callback(profile);
+          console.error("Unknown error:");
+          console.error(response);
+          console.error(body);
         }
-      });
-
-    }).on('error', function(err) {
-      throw err;
+        callback(null);
+      }
     });
   },
 
@@ -60,26 +62,33 @@ module.exports = {
     return url;
   },
 
-  skin_file: function(url, filename, callback) {
-    var tmpname = "skins/tmp/" + filename;
-    var outname = "skins/" + filename;
-    var tmpfile = fs.createWriteStream(tmpname);
-    var prot = http;
-    if (urlparse(url).protocol == "https") prot = https;
-    prot.get(url, function(res) {
-      res.on('data', function(data) {
-        tmpfile.write(data);
-      }).on('end', function() {
-        tmpfile.end();
-        extract_face(tmpname, outname, function() {
-          fs.unlink(tmpname, function(err) { // unlink = delete
-            if (err) console.error(err);
-          });
-          callback(); // outside unlink callback cause we don't have to wait until it's deleted
+  skin_file: function(url, outname, callback) {
+    request.get({
+      url: url,
+      encoding: null, // encoding must be null so we get a buffer
+      timeout: 1000 // ms
+    }, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        extract_face(body, outname, function() {
+          callback();
         });
-      });
-    }).on('error', function(err) {
-      throw err;
+      } else {
+        if (error) {
+          console.error(error);
+        } else if (response.statusCode == 404) {
+          console.warn("Texture not found: " + url);
+        } else if (response.statusCode == 429) {
+          // Too Many Requests
+          // Never got this, seems like textures aren't limited
+          console.warn("Too many requests for " + url);
+          console.warn(body);
+        } else {
+          console.error("Unknown error:");
+          console.error(response);
+          console.error(body);
+        }
+        callback(null);
+      }
     });
   },
 

@@ -29,12 +29,17 @@ router.get('/:uuid/:size?', function(req, res) {
         var skinurl = skins.skin_url(profile);
         if (skinurl) {
           console.log('got profile, skin url is "' + skinurl + '" downloading..');
-          skins.skin_file(skinurl, filename, function() {
+          skins.skin_file(skinurl, "skins/" + filename, function() {
             console.log('got skin');
             skins.resize_img("skins/" + filename, size, function(data) {
               // tell browser to cache image locally for 10 minutes
               var end = new Date() - start;
-              res.writeHead(200, {'Content-Type': 'image/png', 'Cache-Control': 'max-age=600, public', 'Response-Time': end, 'Storage-Type': 'downloaded'});
+              res.writeHead(200, {
+                'Content-Type': 'image/png',
+                'Cache-Control': 'max-age=600, public',
+                'Response-Time': end,
+                'Storage-Type': 'downloaded'
+              });
               res.end(data);
             });
           });
