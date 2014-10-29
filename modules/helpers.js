@@ -4,7 +4,6 @@ var skins = require('./skins');
 var fs = require('fs');
 
 var valid_uuid = /^[0-9a-f]{32}$/;
-var skins_dir = config.skins_dir;
 
 var exp = {};
 
@@ -42,7 +41,7 @@ exp.uuid_valid = function(uuid) {
 //   2: profile requested/found, skin downloaded from mojang servers
 //   3: profile requested/found, but it has no skin
 exp.get_avatar = function(uuid, size, callback) {
-  var filepath = skins_dir + uuid + ".png";
+  var filepath = config.skins_dir + uuid + ".png";
   if (fs.existsSync(filepath)) {
     skins.resize_img(filepath, size, function(result) {
       callback(null, 1, result);

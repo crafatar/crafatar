@@ -1,4 +1,5 @@
 var request = require('request');
+var config = require('./config');
 var skins = require('./skins');
 
 var session_url = "https://sessionserver.mojang.com/session/minecraft/profile/";
@@ -8,7 +9,7 @@ var exp = {};
 exp.get_profile = function(uuid, callback) {
   request.get({
     url: session_url + uuid,
-    timeout: 1000 // ms
+    timeout: config.http_timeout // ms
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       callback(null, JSON.parse(body));
@@ -36,7 +37,7 @@ exp.skin_file = function(url, outname, callback) {
   request.get({
     url: url,
     encoding: null, // encoding must be null so we get a buffer
-    timeout: 1000 // ms
+    timeout: config.http_timeout // ms
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       skins.extract_face(body, outname, function() {
