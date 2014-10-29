@@ -23,16 +23,23 @@ router.get('/:uuid/:size?', function(req, res) {
     return;
   }
 
-  helpers.get_avatar(uuid, size, function(err, status, image) {
-    if (err) {
-      throw err;
-    } else if (status == 1 || status == 2) {
-      var time = new Date() - start;
-      sendimage(200, time, image);
-    } else if (status == 3) {
-      handle_404(def);
-    }
-  });
+  try {
+    helpers.get_avatar(uuid, size, function(err, status, image) {
+      if (err) {
+        console.error(err);
+        handle_404(def);
+      } else if (status == 1 || status == 2) {
+        var time = new Date() - start;
+        sendimage(200, time, image);
+      } else if (status == 3) {
+        handle_404(def);
+      }
+    });
+  } catch(e) {
+    console.error("Error!");
+    console.error(e);
+    res.status(500).send("500 Internal server error");
+  }
 
   function handle_404(def) {
     if (def == "alex" || def == "steve") {

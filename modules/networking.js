@@ -40,12 +40,12 @@ exp.skin_file = function(url, outname, callback) {
     timeout: config.http_timeout // ms
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      skins.extract_face(body, outname, function() {
-        callback();
+      skins.extract_face(body, outname, function(err) {
+        callback(err);
       });
     } else {
       if (error) {
-        console.error(error);
+        console.error("Error downloading '" + url + "': " + error);
       } else if (response.statusCode == 404) {
         console.warn("Texture not found: " + url);
       } else if (response.statusCode == 429) {

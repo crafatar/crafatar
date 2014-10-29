@@ -36,29 +36,38 @@ exp.uuid_valid = function(uuid) {
 //   error, status, image buffer
 //
 // the status gives information about how the image was received
-//  -1: profile requested, but it was not found
+//  -1: error
 //   1: found on disk
 //   2: profile requested/found, skin downloaded from mojang servers
 //   3: profile requested/found, but it has no skin
 exp.get_avatar = function(uuid, size, callback) {
   var filepath = config.skins_dir + uuid + ".png";
   if (fs.existsSync(filepath)) {
-    skins.resize_img(filepath, size, function(result) {
-      callback(null, 1, result);
+    skins.resize_img(filepath, size, function(err, result) {
+      callback(err, 1, result);
     });
   } else {
     networking.get_profile(uuid, function(err, profile) {
       if (err) {
         callback(err, -1, profile);
+        return;
       }
       var skinurl = exp.skin_url(profile);
 
       if (skinurl) {
-        networking.skin_file(skinurl, filepath, function() {
-          console.log('got skin');
-          skins.resize_img(filepath, size, function(result) {
-            callback(null, 2, result);
-          });
+        networking.skin_file(skinurl, filepath, function(err) {
+          if (err) {
+            callback(err, -1, null);
+          } else {
+            console.log('got skin');
+            skins.resize_img(filepath, size, function(err, result) {
+              if (err) {
+                callback(err, -1, null);
+              } else {
+                callback(null, 2, result);
+              }
+            });
+          }
         });
       } else {
         // profile found, but has no skin
