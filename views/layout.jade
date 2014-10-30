@@ -1,21 +1,23 @@
 doctype html
 html
-	head
-		title= title
-		link(rel='stylesheet', href='/stylesheets/style.css')
-		link(href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css", rel="stylesheet")
-		script(src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js")
-	body
-		.navbar.navbar-default.navbar-fixed-top
-				.container
-					.navbar-header
-						button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
-							span.icon-bar
-							span.icon-bar
-							span.icon-bar
-						a.navbar-brand(href='/') Crafatar
-					.navbar-collapse.collapse
-						ul.nav.navbar-nav
-							li.active
-								a(href='/') Home
-		block content
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css", rel="stylesheet")
+    script(src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js")
+  body
+    a.forkme(href="https://github.com/Jake0oo0/crafatar", target="_blank")
+      img(src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67", alt="Fork me on GitHub")
+    .navbar.navbar-default.navbar-fixed-top
+        .container
+          .navbar-header
+            button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+            a.navbar-brand(href='/') Crafatar
+          .navbar-collapse.collapse
+            ul.nav.navbar-nav
+              li.active
+                a(href='/') Home
+    block content
