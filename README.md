@@ -1,6 +1,7 @@
 # Crafatar
 
-Crafatar servers Minecraft skins and heads for use in external applications.
+Crafatar serves Minecraft skins and heads for use in external applications.
+Inspired by [Gravatar](https://gravatar.com) (hence the name) and [Minotar](https://minotar.net).
 
 ## Usage
 
