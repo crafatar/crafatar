@@ -43,7 +43,7 @@ router.get('/:uuid', function(req, res) {
 
   function handle_404(def) {
     if (def == "alex" || def == "steve") {
-      skins.resize_img("public/images/" + def + ".png", size, function(image) {
+      skins.resize_img("public/images/" + def + ".png", size, function(err, image) {
         sendimage(404, image);
       });
     } else {
