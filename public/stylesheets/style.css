@@ -3,6 +3,10 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+p {
+  margin-top: 10px;
+}
+
 a {
   color: #00B7FF;
 }
@@ -21,6 +25,9 @@ mark.green {
   padding: 0;
 }
 
+.code {
+  font-family: monospace;
+}
 .sideface {
   width: 180px;
   height: 180px;

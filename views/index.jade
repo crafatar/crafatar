@@ -7,33 +7,55 @@ block content
         h1 Crafatar
         hr
         p Welcome to Crafatar, an API for Minecraft's faces!
+
         h2 API
         hr
-        = protocol
+
+        h3 Endpoint
         p
           | Replace 
           mark.green uuid
-          |  with a Mojang UUID to get the related head.
-        .well
+          |  with a Mojang UUID to get the related head. All images are PNGs.
+        .well.code
           | &lt;img src="#{domain}/avatars/
           mark.green uuid
           | "&gt;
-        p(style="margin-top: 10px;") Example: UUID: '2d5aa9cdaeb049189930461fc9b91cc5', Username: Jake0oo0
-        .well &lt;img src="#{domain}/avatars/2d5aa9cdaeb049189930461fc9b91cc5"&gt;
-        p(style="margin-top: 10px;") There is also an option to include a size, default is 180x180px. The size may not be larger than 512px.
-        .well
-          | &lt;img src="#{domain}/avatars/
-          mark.green uuid
-          | /
-          mark.green size
-          | "&gt;
-        p(style="margin-top: 10px;") Example: UUID: 'ae795aa86327408e92ab25c8a59f3ba1', Size: 250px, Username: redstone_sheep
-        .well &lt;img src="#{domain}/avatars/ae795aa86327408e92ab25c8a59f3ba1/250"&gt;
-        p(style="margin-top: 10px;") By default, a 404 text is returned when the avatar was not found. You can change that to the avatar of steve or alex:
-        .well &lt;img src="#{domain}/avatars/ae795aa86327408e92ab25c8a59f3ba1/250?default=alex"&gt;
+
+        h3 Parameters
+        h4 size
+        p The size of the image in pixels, 1 - 512. <br> Default is 180.
+        h4 default
+        p The image to be returned when the uuid has no skin. <br> Valid options are 
+          a(href="/avatars/00000000000000000000000000000000?default=steve") steve
+          |  or 
+          a(href="/avatars/00000000000000000000000000000000?default=alex") alex
+          | .<br> Otherwise, a 404 with no content is returned.
+        h4 helm
+        p Get an avatar with the second (helmet) layer applied. <br> The content of this parameter is ignored
+
+        h3 HTTP headers
+        p Images will come with these HTTP headers, useful for debugging.
+        h4 Response-Time
+        p The time, in seconds, it took Crafatar to process the request.
+        h4 X-Storage-Type
+        p Either 'local' or 'downloaded'. Local means that Crafatar already had the image on disk, while downloaded means that it was retrieved from Mojang's skin servers.
+
+        h3 Examples
+        p Get jeb_'s avatar, 180 × 180 pixels
+        img(src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6")
+        .well.code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6"&gt;
+        p Get jeb_'s avatar, 64 × 64 pixels
+        img(src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64")
+        .well.code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64"&gt;
+        p Get jeb_'s helmet avatar, 64 × 64 pixels
+        img(src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64&amp;helm")
+        .well.code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64&amp;helm"&gt;
+        p Get jeb_'s avatar, 64 × 64 pixels, or fall back to steve if his avatar is not found
+        img(src="#{domain}/avatars/00000000000000000000000000000000?default=steve&size=64")
+        .well.code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?default=steve&amp;size=64"&gt;
       .col-md-2
-        .sideface.Jake0oo0(title="Jake0oo0")
         .sideface.redstone_sheep(title="redstone_sheep")
+        .sideface.Jake0oo0(title="Jake0oo0")
         .sideface.Notch(title="Notch")
         .sideface.sk89q(title="sk89q")
         .sideface.md_5(title="md_5")
