@@ -30,7 +30,7 @@ router.get('/:uuid', function(req, res) {
         console.error(err);
         handle_404(def);
       } else if (status == 1 || status == 2) {
-        sendimage(200, image);
+        sendimage(200, status == 1, image);
       } else if (status == 3) {
         handle_404(def);
       }
@@ -44,19 +44,19 @@ router.get('/:uuid', function(req, res) {
   function handle_404(def) {
     if (def == "alex" || def == "steve") {
       skins.resize_img("public/images/" + def + ".png", size, function(err, image) {
-        sendimage(404, image);
+        sendimage(404, true, image);
       });
     } else {
       res.status(404).send('404 Not found');
     }
   }
 
-  function sendimage(status, image) {
+  function sendimage(status, local, image) {
     res.writeHead(status, {
       'Content-Type': 'image/png',
       'Cache-Control': 'max-age=' + config.browser_cache_time + ', public',
       'Response-Time': new Date() - start,
-      'X-Storage-Type': 'local'
+      'X-Storage-Type': local ? 'local' : 'downloaded'
     });
     res.end(image);
   }
