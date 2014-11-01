@@ -6,10 +6,11 @@ var skins = require('../modules/skins');
 var fs = require('fs');
 
 /* GET avatar request. */
-router.get('/:uuid/:size?', function(req, res) {
-  var uuid = req.param('uuid');
-  var size = req.param('size') || config.default_size;
+router.get('/:uuid', function(req, res) {
+  var uuid = req.params.uuid;
+  var size = req.query.size || config.default_size;
   var def = req.query.default;
+  var helm = req.query.hasOwnProperty('helm');
   var start = new Date();
 
   // Prevent app from crashing/freezing
@@ -24,13 +25,12 @@ router.get('/:uuid/:size?', function(req, res) {
   }
 
   try {
-    helpers.get_avatar(uuid, size, function(err, status, image) {
+    helpers.get_avatar(uuid, helm, size, function(err, status, image) {
       if (err) {
         console.error(err);
         handle_404(def);
       } else if (status == 1 || status == 2) {
-        var time = new Date() - start;
-        sendimage(200, time, image);
+        sendimage(200, image);
       } else if (status == 3) {
         handle_404(def);
       }
@@ -44,19 +44,18 @@ router.get('/:uuid/:size?', function(req, res) {
   function handle_404(def) {
     if (def == "alex" || def == "steve") {
       skins.resize_img("public/images/" + def + ".png", size, function(image) {
-        var time = new Date() - start;
-        sendimage(404, time, image);
+        sendimage(404, image);
       });
     } else {
       res.status(404).send('404 Not found');
     }
   }
 
-  function sendimage(status, time, image) {
+  function sendimage(status, image) {
     res.writeHead(status, {
       'Content-Type': 'image/png',
       'Cache-Control': 'max-age=' + config.browser_cache_time + ', public',
-      'Response-Time': time,
+      'Response-Time': new Date() - start,
       'X-Storage-Type': 'local'
     });
     res.end(image);

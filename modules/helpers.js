@@ -8,7 +8,7 @@ var valid_uuid = /^[0-9a-f]{32}$/;
 var exp = {};
 
 // exracts the skin url of a +profile+ object
-// returns null when no url found
+// returns null when no url found (user has no skin)
 exp.skin_url = function(profile) {
   var url = null;
   if (profile && profile.properties) {
@@ -16,7 +16,7 @@ exp.skin_url = function(profile) {
       if (prop.name == 'textures') {
         var json = Buffer(prop.value, 'base64').toString();
         var props = JSON.parse(json);
-        url = props && props.textures && props.textures.SKIN && props.textures.SKIN.url;
+        url = props && props.textures && props.textures.SKIN && props.textures.SKIN.url || null;
       }
     });
   }
@@ -31,22 +31,27 @@ exp.uuid_valid = function(uuid) {
 };
 
 // handles requests for +uuid+ images with +size+
-//
 // callback is a function with 3 parameters:
 //   error, status, image buffer
+//   image is the user's face+helm when helm is true, or the face otherwise
 //
 // the status gives information about how the image was received
 //  -1: error
 //   1: found on disk
 //   2: profile requested/found, skin downloaded from mojang servers
 //   3: profile requested/found, but it has no skin
-exp.get_avatar = function(uuid, size, callback) {
-  var filepath = config.skins_dir + uuid + ".png";
+exp.get_avatar = function(uuid, helm, size, callback) {
+  var facepath = config.faces_dir + uuid + ".png";
+  var helmpath = config.helms_dir + uuid + ".png";
+  var filepath = helm ? helmpath : facepath;
+
   if (fs.existsSync(filepath)) {
+    // file found on disk
     skins.resize_img(filepath, size, function(err, result) {
       callback(err, 1, result);
     });
   } else {
+    // download skin
     networking.get_profile(uuid, function(err, profile) {
       if (err) {
         callback(err, -1, profile);
@@ -55,7 +60,7 @@ exp.get_avatar = function(uuid, size, callback) {
       var skinurl = exp.skin_url(profile);
 
       if (skinurl) {
-        networking.skin_file(skinurl, filepath, function(err) {
+        networking.skin_file(skinurl, facepath, helmpath, function(err) {
           if (err) {
             callback(err, -1, null);
           } else {

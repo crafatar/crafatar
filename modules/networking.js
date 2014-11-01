@@ -6,12 +6,15 @@ var session_url = "https://sessionserver.mojang.com/session/minecraft/profile/";
 
 var exp = {};
 
+// download the Mojang profile for +uuid+
+// callback contains error, profile object
 exp.get_profile = function(uuid, callback) {
   request.get({
     url: session_url + uuid,
     timeout: config.http_timeout // ms
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
+      // profile downloaded successfully
       callback(null, JSON.parse(body));
     } else {
       if (error) {
@@ -33,15 +36,26 @@ exp.get_profile = function(uuid, callback) {
   });
 };
 
-exp.skin_file = function(url, outname, callback) {
+// downloads skin file from +url+
+// stores face image as +facename+
+// stores helm image as +helmname+
+// callback is forwarded from skins/extract_face or skins/extract_helm
+exp.skin_file = function(url, facename, helmname, callback) {
   request.get({
     url: url,
     encoding: null, // encoding must be null so we get a buffer
     timeout: config.http_timeout // ms
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      skins.extract_face(body, outname, function(err) {
-        callback(err);
+      // skin downloaded successfully
+      skins.extract_face(body, facename, function(err) {
+        if (err) {
+          callback(err);
+        } else {
+          skins.extract_helm(facename, body, helmname, function(err) {
+            callback(err);
+          });
+        }
       });
     } else {
       if (error) {
