@@ -72,7 +72,7 @@ exp.skin_file = function(url, facename, helmname, callback) {
         console.error(response);
         console.error(body);
       }
-      callback(null);
+      callback(error);
     }
   });
 };
