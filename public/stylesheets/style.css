@@ -20,3 +20,38 @@ mark.green {
   font-weight: bold;
   padding: 0;
 }
+
+.sideface {
+  width: 180px;
+  height: 180px;
+}
+.sideface.Jake0oo0 {
+  background:url("/avatars/2d5aa9cdaeb049189930461fc9b91cc5?size=180&default=alex");
+}
+.sideface.Jake0oo0:hover {
+  background:url("/avatars/2d5aa9cdaeb049189930461fc9b91cc5?size=180&default=alex&helm");
+}
+.sideface.redstone_sheep {
+  background:url("/avatars/ae795aa86327408e92ab25c8a59f3ba1?size=180&default=alex");
+}
+.sideface.redstone_sheep:hover {
+  background:url("/avatars/ae795aa86327408e92ab25c8a59f3ba1?size=180&default=alex&helm");
+}
+.sideface.Notch {
+  background:url("/avatars/069a79f444e94726a5befca90e38aaf5?size=180&default=alex");
+}
+.sideface.Notch:hover {
+  background:url("/avatars/069a79f444e94726a5befca90e38aaf5?size=180&default=alex&helm");
+}
+.sideface.sk89q {
+  background:url("/avatars/0ea8eca3dbf647cc9d1ac64551ca975c?size=180&default=alex");
+}
+.sideface.sk89q:hover {
+  background:url("/avatars/0ea8eca3dbf647cc9d1ac64551ca975c?size=180&default=alex&helm");
+}
+.sideface.md_5 {
+  background:url("/avatars/af74a02d19cb445bb07f6866a861f783?size=180&default=alex");
+}
+.sideface.md_5:hover {
+  background:url("/avatars/af74a02d19cb445bb07f6866a861f783?size=180&default=alex&helm");
+}
