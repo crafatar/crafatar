@@ -15,7 +15,7 @@ exp.get_profile = function(uuid, callback) {
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       // profile downloaded successfully
-      console.log("profile downloaded for " + uuid);
+      console.log(uuid + " profile downloaded");
       callback(null, JSON.parse(body));
     } else {
       if (error) {
@@ -23,13 +23,13 @@ exp.get_profile = function(uuid, callback) {
         return;
       } else if (response.statusCode == 204 || response.statusCode == 404) {
         // we get 204 No Content when UUID doesn't exist (including 404 in case they change that)
-        console.log("uuid does not exist");
+        console.log(uuid + " uuid does not exist");
       } else if (response.statusCode == 429) {
         // Too Many Requests
-        console.warn("Too many requests for " + uuid);
+        console.warn(uuid + " Too many requests");
         console.warn(body);
       } else {
-        console.error("Unknown error:");
+        console.error(uuid + " Unknown error:");
         console.error(response);
         console.error(body);
       }
@@ -50,14 +50,14 @@ exp.skin_file = function(url, facename, helmname, callback) {
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       // skin downloaded successfully
-      console.log("skin downloaded.");
+      console.log(url + " skin downloaded");
       skins.extract_face(body, facename, function(err) {
         if (err) {
           callback(err);
         } else {
-          console.log("face extracted.");
+          console.log(facename + " face extracted");
           skins.extract_helm(facename, body, helmname, function(err) {
-            console.log("helm extracted.");
+            console.log(helmname + " helm extracted.");
             callback(err);
           });
         }
@@ -66,14 +66,14 @@ exp.skin_file = function(url, facename, helmname, callback) {
       if (error) {
         console.error("Error downloading '" + url + "': " + error);
       } else if (response.statusCode == 404) {
-        console.warn("Texture not found: " + url);
+        console.warn(url + " texture not found");
       } else if (response.statusCode == 429) {
         // Too Many Requests
         // Never got this, seems like textures aren't limited
-        console.warn("Too many requests for " + url);
+        console.warn(url + " too many requests");
         console.warn(body);
       } else {
-        console.error("Unknown error:");
+        console.error(url + " unknown error:");
         console.error(response);
         console.error(body);
       }

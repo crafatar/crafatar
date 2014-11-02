@@ -5,14 +5,14 @@ var exp = {};
 
 // sets the timestamp for +uuid+ to now
 exp.update_timestamp = function(uuid) {
-  console.log("cache: updating timestamp for " + uuid);
+  console.log(uuid + " cache: updating timestamp");
   var time = new Date().getTime();
   redis.hmset(uuid, "t", time);
 };
 
 // create the key +uuid+, store +hash+ and time
 exp.save_hash = function(uuid, hash) {
-  console.log("cache: saving hash for " + uuid);
+  console.log(uuid + " cache: saving hash");
   var time = new Date().getTime();
   redis.hmset(uuid, "h", hash, "t", time);
 };

@@ -20,17 +20,17 @@ function store_images(uuid, details, callback) {
     } else {
       var skinurl = skin_url(profile);
       if (skinurl) {
-        console.log(skinurl);
+        console.log(uuid + " " + skinurl);
         // set file paths
         var hash = get_hash(skinurl);
         if (details && details.h == hash) {
           // hash hasn't changed
-          console.log("hash has not changed");
+          console.log(uuid + " hash has not changed");
           cache.update_timestamp(uuid);
           callback(null, hash);
         } else {
           // hash has changed
-          console.log("new hash: " + hash);
+          console.log(uuid + "new hash: " + hash);
           var facepath = config.faces_dir + hash + ".png";
           var helmpath = config.helms_dir + hash + ".png";
           // download skin, extract face/helm
@@ -81,15 +81,15 @@ function get_image_hash(uuid, callback) {
     } else {
       if (details && details.t + config.local_cache_time >= new Date().getTime()) {
         // uuid known + recently updated
-        console.log("uuid known & recently updated");
+        console.log(uuid + " uuid known & recently updated");
         callback(null, 1, details.h);
       } else {
-        console.log("uuid not known or too old");
+        console.log(uuid + " uuid not known or too old");
         store_images(uuid, details, function(err, hash) {
           if (err) {
             callback(err, -1, details && details.h);
           } else {
-            console.log("hash: " + hash);
+            console.log(uuid + " hash: " + hash);
             callback(null, (hash ? 2 : 3), hash);
           }
         });
