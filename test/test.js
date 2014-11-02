@@ -8,7 +8,7 @@ var skins = require('../modules/skins');
 
 var uuids = fs.readFileSync('test/uuids.txt').toString().split("\r\n");
 // Get a random UUID in order to prevent rate limiting
-var uuid = uuids[Math.floor((Math.random() * 200) + 1)];
+var uuid = uuids[Math.floor(Math.random() * uuids.length)];
 
 // Only deletes files, doesn't delete directory.
 var deleteFolderRecursive = function(path) {
