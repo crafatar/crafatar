@@ -1,7 +1,23 @@
 {
   "name": "crafatar",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
+  "author": "Jake0oo0",
+  "description": "A NodeJS application to server Minecraft avatars.",
+  "contributors": [{
+    "name": "Jomo"
+  }],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jake0oo0/crafatar"
+  },
+  "issues": {
+    "url": "https://github.com/Jake0oo0/crafatar/issues"
+  },
+  "keywords": [
+    "minecraft",
+    "avatar"
+  ],
   "scripts": {
     "start": "node server.js"
   },
