@@ -1,5 +1,8 @@
 var config = require("./config");
-var redis = require("redis").createClient();
+
+var url = require('url');
+var redisURL = url.parse(process.env.REDISCLOUD_URL);
+var redis = require("redis").createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
 
 var exp = {};
 
