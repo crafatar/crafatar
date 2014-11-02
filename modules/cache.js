@@ -44,7 +44,14 @@ exp.save_hash = function(uuid, hash) {
 // null when uuid unkown
 exp.get_details = function(uuid, callback) {
   redis.hgetall(uuid, function(err, data) {
-    callback(err, data);
+    var details = null;
+    if (data) {
+      details = {
+        hash: (data.h == "null" ? null : data.h),
+        time: data.t
+      };
+    }
+    callback(err, details);
   });
 };
 

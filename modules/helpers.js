@@ -15,7 +15,11 @@ function get_hash(url) {
 function store_images(uuid, details, callback) {
   // get profile for +uuid+
   networking.get_profile(uuid, function(err, profile) {
-    if (err) {
+    if (err === 0) {
+      // uuid does not exist
+      cache.save_hash(uuid, null);
+      callback(null, null);
+    } else if (err) {
       callback(err, null);
     } else {
       var skinurl = skin_url(profile);
@@ -23,7 +27,7 @@ function store_images(uuid, details, callback) {
         console.log(uuid + " " + skinurl);
         // set file paths
         var hash = get_hash(skinurl);
-        if (details && details.h == hash) {
+        if (details && details.hash == hash) {
           // hash hasn't changed
           console.log(uuid + " hash has not changed");
           cache.update_timestamp(uuid);
@@ -79,15 +83,15 @@ function get_image_hash(uuid, callback) {
     if (err) {
       callback(err, -1, null);
     } else {
-      if (details && details.t + config.local_cache_time >= new Date().getTime()) {
+      if (details && details.time + config.local_cache_time >= new Date().getTime()) {
         // uuid known + recently updated
         console.log(uuid + " uuid known & recently updated");
-        callback(null, 1, details.h);
+        callback(null, (details.hash ? 1 : 0), details.hash);
       } else {
         console.log(uuid + " uuid not known or too old");
         store_images(uuid, details, function(err, hash) {
           if (err) {
-            callback(err, -1, details && details.h);
+            callback(err, -1, details && details.hash);
           } else {
             console.log(uuid + " hash: " + hash);
             callback(null, (hash ? 2 : 3), hash);
