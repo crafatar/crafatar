@@ -15,6 +15,7 @@ exp.get_profile = function(uuid, callback) {
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       // profile downloaded successfully
+      console.log("profile downloaded for " + uuid);
       callback(null, JSON.parse(body));
     } else {
       if (error) {
@@ -22,6 +23,7 @@ exp.get_profile = function(uuid, callback) {
         return;
       } else if (response.statusCode == 204 || response.statusCode == 404) {
         // we get 204 No Content when UUID doesn't exist (including 404 in case they change that)
+        console.log("uuid does not exist");
       } else if (response.statusCode == 429) {
         // Too Many Requests
         console.warn("Too many requests for " + uuid);
@@ -48,11 +50,14 @@ exp.skin_file = function(url, facename, helmname, callback) {
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       // skin downloaded successfully
+      console.log("skin downloaded.");
       skins.extract_face(body, facename, function(err) {
         if (err) {
           callback(err);
         } else {
+          console.log("face extracted.");
           skins.extract_helm(facename, body, helmname, function(err) {
+            console.log("helm extracted.");
             callback(err);
           });
         }

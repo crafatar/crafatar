@@ -5,11 +5,12 @@ Inspired by [Gravatar](https://gravatar.com) (hence the name) and [Minotar](http
 
 ## Usage
 
-See the [API Usage](http://crafatar.com)
+See the [API Usage](https://crafatar.com)
 
 ## Install
 
 * Clone the repository
-* npm install
-* npm start
+* `npm install`
+* `redis-server`
+* `npm start`
 * Access [http://localhost:3000](http://localhost:3000)

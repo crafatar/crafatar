@@ -1,15 +1,60 @@
 var networking = require('./networking');
 var config = require('./config');
+var cache = require('./cache');
 var skins = require('./skins');
 var fs = require('fs');
 
 var valid_uuid = /^[0-9a-f]{32}$/;
+var hash_pattern = /[0-9a-f]+$/;
 
-var exp = {};
+function get_hash(url) {
+  return hash_pattern.exec(url)[0].toLowerCase();
+}
+
+// requests skin for +uuid+ and extracts face/helm if image hash in +details+ changed
+// callback contains error, image hash
+function store_images(uuid, details, callback) {
+  // get profile for +uuid+
+  networking.get_profile(uuid, function(err, profile) {
+    if (err) {
+      callback(err, null);
+    } else {
+      var skinurl = skin_url(profile);
+      if (skinurl) {
+        console.log(skinurl);
+        // set file paths
+        var hash = get_hash(skinurl);
+        if (details && details.h == hash) {
+          // hash hasn't changed
+          console.log("hash has not changed");
+          cache.update_timestamp(uuid);
+          callback(null, hash);
+        } else {
+          // hash has changed
+          console.log("new hash: " + hash);
+          var facepath = config.faces_dir + hash + ".png";
+          var helmpath = config.helms_dir + hash + ".png";
+          // download skin, extract face/helm
+          networking.skin_file(skinurl, facepath, helmpath, function(err) {
+            if (err) {
+              callback(err, null);
+            } else {
+              cache.save_hash(uuid, hash);
+              callback(null, hash);
+            }
+          });
+        }
+      } else {
+        // profile found, but has no skin
+        callback(null, null);
+      }
+    }
+  });
+}
 
 // exracts the skin url of a +profile+ object
 // returns null when no url found (user has no skin)
-exp.skin_url = function(profile) {
+function skin_url(profile) {
   var url = null;
   if (profile && profile.properties) {
     profile.properties.forEach(function(prop) {
@@ -21,8 +66,40 @@ exp.skin_url = function(profile) {
     });
   }
   return url;
-};
+}
 
+// decides whether to get an image from disk or to download it
+// callback contains error, status, hash
+// the status gives information about how the image was received
+//  -1: error
+//   1: found on disk
+//   2: profile requested/found, skin downloaded from mojang servers
+//   3: profile requested/found, but it has no skin
+function get_image_hash(uuid, callback) {
+  cache.get_details(uuid, function(err, details) {
+    if (err) {
+      callback(err, -1, null);
+    } else {
+      if (details && details.t + config.local_cache_time >= new Date().getTime()) {
+        // uuid known + recently updated
+        console.log("uuid known & recently updated");
+        callback(null, 1, details.h);
+      } else {
+        console.log("uuid not known or too old");
+        store_images(uuid, details, function(err, hash) {
+          if (err) {
+            callback(err, -1, null);
+          } else {
+            console.log("hash: " + hash);
+            callback(null, (hash ? 2 : 3), hash);
+          }
+        });
+      }
+    }
+  });
+}
+
+var exp = {};
 
 // returns true if the +uuid+ is a valid uuid
 // the uuid may be not exist, however
@@ -31,55 +108,31 @@ exp.uuid_valid = function(uuid) {
 };
 
 // handles requests for +uuid+ images with +size+
-// callback is a function with 3 parameters:
-//   error, status, image buffer
-//   image is the user's face+helm when helm is true, or the face otherwise
-//
-// the status gives information about how the image was received
-//  -1: error
-//   1: found on disk
-//   2: profile requested/found, skin downloaded from mojang servers
-//   3: profile requested/found, but it has no skin
+// callback contains error, status, image buffer
+// image is the user's face+helm when helm is true, or the face otherwise
+// for status, see get_image_hash
 exp.get_avatar = function(uuid, helm, size, callback) {
-  var facepath = config.faces_dir + uuid + ".png";
-  var helmpath = config.helms_dir + uuid + ".png";
-  var filepath = helm ? helmpath : facepath;
-
-  if (fs.existsSync(filepath)) {
-    // file found on disk
-    skins.resize_img(filepath, size, function(err, result) {
-      callback(err, 1, result);
-    });
-  } else {
-    // download skin
-    networking.get_profile(uuid, function(err, profile) {
-      if (err) {
-        callback(err, -1, profile);
-        return;
-      }
-      var skinurl = exp.skin_url(profile);
-
-      if (skinurl) {
-        networking.skin_file(skinurl, facepath, helmpath, function(err) {
+  console.log("\nrequest: " + uuid);
+  get_image_hash(uuid, function(err, status, hash) {
+    if (err) {
+      callback(err, -1, null);
+    } else {
+      if (hash) {
+        var filepath = (helm ? config.helms_dir : config.faces_dir) + hash + ".png";
+        skins.resize_img(filepath, size, function(err, result) {
           if (err) {
             callback(err, -1, null);
           } else {
-            console.log('got skin');
-            skins.resize_img(filepath, size, function(err, result) {
-              if (err) {
-                callback(err, -1, null);
-              } else {
-                callback(null, 2, result);
-              }
-            });
+            callback(null, status, result);
           }
         });
       } else {
-        // profile found, but has no skin
-        callback(null, 3, null);
+        // hash is null when uuid has no skin
+        callback(null, status, null);
       }
-    });
-  }
+    }
+  });
+
 };
 
 module.exports = exp;

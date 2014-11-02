@@ -26,12 +26,18 @@ router.get('/:uuid', function(req, res) {
 
   try {
     helpers.get_avatar(uuid, helm, size, function(err, status, image) {
+      console.log(uuid + " - " + status);
       if (err) {
         console.error(err);
         handle_404(def);
       } else if (status == 1 || status == 2) {
         sendimage(200, status == 1, image);
       } else if (status == 3) {
+        handle_404(def);
+      } else {
+        console.error("wat");
+        console.error(err);
+        console.error(status);
         handle_404(def);
       }
     });
