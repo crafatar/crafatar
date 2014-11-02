@@ -25,6 +25,10 @@ function connect_redis() {
 
 var exp = {};
 
+exp.get_redis = function() {
+  return redis;
+};
+
 // sets the timestamp for +uuid+ to now
 exp.update_timestamp = function(uuid) {
   console.log(uuid + " cache: updating timestamp");

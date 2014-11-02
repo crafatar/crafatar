@@ -5,15 +5,15 @@ var networking = require('../modules/networking');
 var helpers = require('../modules/helpers');
 var config = require('../modules/config');
 var skins = require('../modules/skins');
-var redis = require("redis").createClient();
+var cache = require("../modules/cache");
 
 var uuids = fs.readFileSync('test/uuids.txt').toString().split("\r\n");
 // Get a random UUID in order to prevent rate limiting
-var uuid = uuids[Math.floor(Math.random() * uuids.length)];
+var uuid = uuids[Math.floor((Math.random() * 200) + 1)];
 
 describe('Avatar Serving', function(){
   before(function() {
-    redis.flushall();
+    cache.get_redis().flushall();
   });
   describe('UUID', function(){
     it("should be an invalid uuid", function(done){
@@ -41,7 +41,7 @@ describe('Avatar Serving', function(){
   });
   describe('Mojang Errors', function(){
     before(function() {
-      redis.flushall();
+      cache.get_redis().flushall();
     });
     it("should be rate limited", function(done) {
       helpers.get_avatar(uuid, false, 180, function(err, status, image) {
