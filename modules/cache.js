@@ -8,6 +8,7 @@ function connect_redis() {
     var redisURL = require("url").parse(process.env.REDISCLOUD_URL);
     redis = require("redis").createClient(redisURL.port, redisURL.hostname);
     redis.auth(redisURL.auth.split(":")[1]);
+    redis.flushall();
   } else {
     redis = require("redis").createClient();
   }
