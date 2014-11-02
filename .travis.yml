@@ -6,3 +6,4 @@ notifications:
 services:
   - redis-server
 script: "mocha"
+skip_join: true
