@@ -17,22 +17,21 @@ exp.get_profile = function(uuid, callback) {
       // profile downloaded successfully
       console.log(uuid + " profile downloaded");
       callback(null, JSON.parse(body));
+    } else if (error) {
+      callback(error, null);
+    } else if (response.statusCode == 204 || response.statusCode == 404) {
+      // we get 204 No Content when UUID doesn't exist (including 404 in case they change that)
+      console.log(uuid + " uuid does not exist");
+      callback(0, null);
+    } else if (response.statusCode == 429) {
+      // Too Many Requests
+      console.warn(uuid + " Too many requests");
+      console.warn(body);
+      callback(null, null);
     } else {
-      if (error) {
-        callback(error, null);
-        return;
-      } else if (response.statusCode == 204 || response.statusCode == 404) {
-        // we get 204 No Content when UUID doesn't exist (including 404 in case they change that)
-        console.log(uuid + " uuid does not exist");
-      } else if (response.statusCode == 429) {
-        // Too Many Requests
-        console.warn(uuid + " Too many requests");
-        console.warn(body);
-      } else {
-        console.error(uuid + " Unknown error:");
-        console.error(response);
-        console.error(body);
-      }
+      console.error(uuid + " Unknown error:");
+      console.error(response);
+      console.error(body);
       callback(null, null);
     }
   });

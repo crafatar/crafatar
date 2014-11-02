@@ -35,7 +35,7 @@ router.get('/:uuid', function(req, res) {
         }
       } else if (status == 1 || status == 2) {
         sendimage(200, status == 1, image);
-      } else if (status == 3) {
+      } else if (status == 0 || status == 3) {
         handle_404(def);
       } else {
         console.error("unexpected error/status");
