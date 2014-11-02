@@ -8,5 +8,5 @@ for uuid in `cat "$dir/uuids.txt"`; do
   if [ "$(( ((RANDOM<<15)|RANDOM) % 2 ))" -eq "1" ]; then
     helm="&helm"
   fi
-  curl -sS -o /dev/null -w "%{url_effective} %{http_code} %{time_total}s\\n" "http://127.0.0.1:3000/avatars/$uuid?size=$size$helm" || exit 1
+  curl -sS -o /dev/null -w "%{url_effective} %{http_code} %{time_total}s\\n" "http://crafatar.com/avatars/$uuid?size=$size$helm" || exit 1
 done

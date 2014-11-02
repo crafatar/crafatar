@@ -2,7 +2,10 @@ language: node_js
 node_js:
   - "0.10"
 notifications:
-  irc: "irc.esper.net#spongy"
+  irc: 
+    channels:
+      - "irc.esper.net#spongy"
+    skip_join: true
 services:
   - redis-server
 skip_join: true
