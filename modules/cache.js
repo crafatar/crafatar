@@ -1,5 +1,26 @@
 var config = require("./config");
-var redis = require("redis").createClient();
+var redis = null;
+
+
+function connect_redis() {
+  console.log("connecting to redis");
+  if (process.env.REDISTOGO_URL) {
+    var rtg   = require("url").parse(process.env.REDISTOGO_URL);
+    redis = require("redis").createClient(rtg.port, rtg.hostname);
+    redis.auth(rtg.auth.split(":")[1]);
+  } else {
+    redis = require("redis").createClient();
+  }
+  redis.on("ready", function() {
+    console.log("Redis connection established.");
+  });
+  redis.on("error", function (err) {
+    console.error(err);
+  });
+  redis.on("end", function () {
+    console.warn("Redis connection lost!");
+  });
+}
 
 var exp = {};
 
@@ -26,4 +47,5 @@ exp.get_details = function(uuid, callback) {
   });
 };
 
+connect_redis();
 module.exports = exp;
