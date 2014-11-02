@@ -4,7 +4,7 @@ var config = require('../modules/config');
 var skins = require('../modules/skins');
 
 /* GET avatar request. */
-router.get('/:uuid', function(req, res) {
+router.get('/:uuid.:ext?', function(req, res) {
   var uuid = req.params.uuid;
   var size = req.query.size || config.default_size;
   var def = req.query.default;
