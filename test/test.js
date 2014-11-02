@@ -5,7 +5,7 @@ var networking = require('../modules/networking');
 var helpers = require('../modules/helpers');
 var config = require('../modules/config');
 var skins = require('../modules/skins');
-var redis = require("redis").createClient();
+var redis = require("../modules/cache");
 
 var uuids = fs.readFileSync('test/uuids.txt').toString().split("\r\n");
 // Get a random UUID in order to prevent rate limiting

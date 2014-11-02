@@ -5,3 +5,4 @@ notifications:
   irc: "irc.esper.net#spongy"
 services:
   - redis-server
+script: "mocha"
