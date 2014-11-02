@@ -5,7 +5,10 @@ var networking = require('../modules/networking');
 var helpers = require('../modules/helpers');
 var config = require('../modules/config');
 var skins = require('../modules/skins');
-var redis = require('redis').createClient();
+var url = require('url');
+var redisURL = url.parse(process.env.REDISCLOUD_URL);
+var redis = require("redis").createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+redis.auth(redisURL.auth.split(":")[1]);
 
 var uuids = fs.readFileSync('test/uuids.txt').toString().split("\r\n");
 // Get a random UUID in order to prevent rate limiting
