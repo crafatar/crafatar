@@ -1,4 +1,4 @@
-skins/
+skins/*.png
 *.log
 node_modules/
 .DS_Store
