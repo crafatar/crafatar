@@ -31,8 +31,8 @@ function store_images(uuid, details, callback) {
         } else {
           // hash has changed
           console.log(uuid + "new hash: " + hash);
-          var facepath = config.faces_dir + hash + ".png";
-          var helmpath = config.helms_dir + hash + ".png";
+          var facepath = __dirname + '/../' + config.faces_dir + hash + ".png";
+          var helmpath = __dirname + '/../' + config.helms_dir + hash + ".png";
           // download skin, extract face/helm
           networking.skin_file(skinurl, facepath, helmpath, function(err) {
             if (err) {
@@ -114,7 +114,7 @@ exp.get_avatar = function(uuid, helm, size, callback) {
   console.log("\nrequest: " + uuid);
   get_image_hash(uuid, function(err, status, hash) {
     if (hash) {
-      var filepath = (helm ? config.helms_dir : config.faces_dir) + hash + ".png";
+      var filepath = __dirname + '/../' + (helm ? config.helms_dir : config.faces_dir) + hash + ".png";
       skins.resize_img(filepath, size, function(img_err, result) {
         if (img_err) {
           callback(img_err, -1, null);
