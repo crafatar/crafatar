@@ -4,7 +4,7 @@ var redis = null;
 
 function connect_redis() {
   console.log("connecting to redis");
-  if (process.env.REDISTOGO_URL) {
+  if (process.env.REDISCLOUD_URL) {
     var redisURL = require("url").parse(process.env.REDISCLOUD_URL);
     redis = require("redis").createClient(redisURL.port, redisURL.hostname);
     redis.auth(redisURL.auth.split(":")[1]);
