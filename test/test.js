@@ -1,6 +1,5 @@
 var assert = require('assert');
 var fs = require('fs')
-var should = require('should')
 
 var networking = require('../modules/networking');
 var helpers = require('../modules/helpers');
