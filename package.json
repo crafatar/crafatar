@@ -19,7 +19,8 @@
     "avatar"
   ],
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node_modules/.bin/mocha -w"
   },
   "dependencies": {
     "express": "~4.9.0",

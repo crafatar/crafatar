@@ -1,10 +1,15 @@
-var request = require('supertest');
-var asset = require('assert');
-var should = require('should');
+var assert = require('assert');
 var fs = require('fs')
-var uuids = fs.readFileSync('uuids.txt').toString().split("\n");
+var should = require('should')
+
+var networking = require('../modules/networking');
+var helpers = require('../modules/helpers');
+var config = require('../modules/config');
+var skins = require('../modules/skins');
+
+var uuids = fs.readFileSync('test/uuids.txt').toString().split("\r\n");
 // Get a random UUID in order to prevent rate limiting
-var uuid = uuids[Math.floor((Math.random() * 200) + 1)]; 
+var uuid = uuids[Math.floor((Math.random() * 200) + 1)]
 
 // Only deletes files, doesn't delete directory.
 var deleteFolderRecursive = function(path) {
@@ -22,70 +27,39 @@ var deleteFolderRecursive = function(path) {
 
 describe('Avatar Serving', function(){
 	before(function() {
-		deleteFolderRecursive('../skins/');
+		deleteFolderRecursive('skins/');
 	})
 	describe('UUID', function(){
-		it("should respond with a 422", function(done){
-			request('http://localhost:3000')
-			.get('/avatars/invaliduuid')
-			.expect(422)
-			.end(function(err,res) {
-				if (err) throw err;
-				res.statusCode.should.eql(422);
+		it("should be an invalid uuid", function(done){
+			assert.equal(helpers.uuid_valid("invaliduuid"), false);
+			done();
+		});
+		it("should be a valid uuid", function(done){
+			assert.equal(helpers.uuid_valid("0098cb60fa8e427cb299793cbd302c9a"), true);
+			done();
+		});
+	});
+	describe('Avatar', function(){
+		it("should be downloaded", function(done) {
+			helpers.get_avatar(uuid, false, 180, function(err, status, image) {
+				assert.equal(status, 2);
 				done();
 			});
 		});
-		it("should respond with a 404", function(done){
-			request('http://localhost:3000')
-			.get('/avatars/2d5aa9cdaeb049189930461fc9b91dd5')
-			.expect(404)
-			.end(function(err,res) {
-				if (err) throw err;
-				res.statusCode.should.eql(404);
+		it("should be local", function(done) {
+			helpers.get_avatar(uuid, false, 180, function(err, status, image) {
+				assert.equal(status, 1);
 				done();
 			});
 		});
-		it("should be downloaded", function(done){
-			request('http://localhost:3000')
-			.get('/avatars/' + uuid)
-			.expect(200)
-			.expect('X-Storage-Type', "downloaded")
-			.end(function(err,res) {
-				if (err) throw err;
-				res.statusCode.should.eql(200);
-				done();
-			});
-		});
-		it("should respond with a valid avatar", function(done){
-			request('http://localhost:3000')
-			.get('/avatars/' + uuid)
-			.expect(200)
-			.expect('Content-Type', "image/png")
-			.end(function(err,res) {
-				if (err) throw err;
-				res.statusCode.should.eql(200);
-				done();
-			});
-		});
-		it("should should be locally saved", function(done){
-			request('http://localhost:3000')
-			.get('/avatars/' + uuid)
-			.expect(200)
-			.expect('X-Storage-Type', "local")
-			.end(function(err,res) {
-				if (err) throw err;
-				res.statusCode.should.eql(200);
-				done();
-			});
-		});
-		it("should should be rate limited", function(done){
-			deleteFolderRecursive('../skins/');
-			request('http://localhost:3000')
-			.get('/avatars/' + uuid)
-			.expect(404)
-			.end(function(err,res) {
-				if (err) throw err;
-				res.statusCode.should.eql(404);
+	});
+	describe('Mojang Errors', function(){
+		before(function() {
+			deleteFolderRecursive('skins/');
+		})
+		it("should be rate limited", function(done) {
+			helpers.get_avatar(uuid, false, 180, function(err, status, image) {
+				assert.equal(err, null);
 				done();
 			});
 		});
