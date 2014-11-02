@@ -2,7 +2,6 @@ var networking = require('./networking');
 var config = require('./config');
 var cache = require('./cache');
 var skins = require('./skins');
-var fs = require('fs');
 
 var valid_uuid = /^[0-9a-f]{32}$/;
 var hash_pattern = /[0-9a-f]+$/;
@@ -88,7 +87,7 @@ function get_image_hash(uuid, callback) {
         console.log("uuid not known or too old");
         store_images(uuid, details, function(err, hash) {
           if (err) {
-            callback(err, -1, null);
+            callback(err, -1, details && details.h);
           } else {
             console.log("hash: " + hash);
             callback(null, (hash ? 2 : 3), hash);
@@ -114,22 +113,20 @@ exp.uuid_valid = function(uuid) {
 exp.get_avatar = function(uuid, helm, size, callback) {
   console.log("\nrequest: " + uuid);
   get_image_hash(uuid, function(err, status, hash) {
-    if (err) {
-      callback(err, -1, null);
+    if (hash) {
+      var filepath = (helm ? config.helms_dir : config.faces_dir) + hash + ".png";
+      skins.resize_img(filepath, size, function(img_err, result) {
+        if (img_err) {
+          callback(img_err, -1, null);
+        } else {
+          // we might have a hash although an error occured
+          // (e.g. Mojang servers not reachable, using outdated hash)
+          callback(err, (err ? -1 : status), result);
+        }
+      });
     } else {
-      if (hash) {
-        var filepath = (helm ? config.helms_dir : config.faces_dir) + hash + ".png";
-        skins.resize_img(filepath, size, function(err, result) {
-          if (err) {
-            callback(err, -1, null);
-          } else {
-            callback(null, status, result);
-          }
-        });
-      } else {
-        // hash is null when uuid has no skin
-        callback(null, status, null);
-      }
+      // hash is null when uuid has no skin
+      callback(err, status, null);
     }
   });
 

@@ -1,6 +1,5 @@
 var config = require("./config");
 var redis = require("redis").createClient();
-var fs = require("fs");
 
 var exp = {};
 

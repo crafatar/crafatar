@@ -1,9 +1,7 @@
-var networking = require('../modules/networking');
 var helpers = require('../modules/helpers');
 var router = require('express').Router();
 var config = require('../modules/config');
 var skins = require('../modules/skins');
-var fs = require('fs');
 
 /* GET avatar request. */
 router.get('/:uuid', function(req, res) {
@@ -29,15 +27,20 @@ router.get('/:uuid', function(req, res) {
       console.log(uuid + " - " + status);
       if (err) {
         console.error(err);
-        handle_404(def);
+        if (image) {
+          console.warn("error occured, image found anyway");
+          sendimage(200, status, image);
+        } else {
+          handle_404(def);
+        }
       } else if (status == 1 || status == 2) {
         sendimage(200, status == 1, image);
       } else if (status == 3) {
         handle_404(def);
       } else {
-        console.error("wat");
-        console.error(err);
-        console.error(status);
+        console.error("unexpected error/status");
+        console.error("error: " + err);
+        console.error("status: " + status);
         handle_404(def);
       }
     });
