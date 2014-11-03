@@ -2,7 +2,7 @@
 
 https://crafatar.com
 
-Crafatar serves Minecraft skins and heads for use in external applications.
+Crafatar serves Minecraft avatars based on the skin for use in external applications.
 Inspired by [Gravatar](https://gravatar.com) (hence the name) and [Minotar](https://minotar.net).
 
 Image manipulation is done by [lwip](https://github.com/EyalAr/lwip)
