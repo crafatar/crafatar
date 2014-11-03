@@ -27,6 +27,7 @@ mark.green {
 
 .code {
   font-family: monospace;
+  word-wrap: break-word;
 }
 .sideface {
   width: 180px;
