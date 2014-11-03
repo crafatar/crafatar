@@ -27,13 +27,13 @@ describe('Avatar Serving', function(){
   });
   describe('Avatar', function(){
     it("should be downloaded", function(done) {
-      helpers.get_avatar(uuid, false, 180, function(err, status, image) {
+      helpers.get_avatar(uuid, false, 160, function(err, status, image) {
         assert.equal(status, 2);
         done();
       });
     });
     it("should be local", function(done) {
-      helpers.get_avatar(uuid, false, 180, function(err, status, image) {
+      helpers.get_avatar(uuid, false, 160, function(err, status, image) {
         assert.equal(status, 1);
         done();
       });
@@ -44,7 +44,7 @@ describe('Avatar Serving', function(){
       cache.get_redis().flushall();
     });
     it("should be rate limited", function(done) {
-      helpers.get_avatar(uuid, false, 180, function(err, status, image) {
+      helpers.get_avatar(uuid, false, 160, function(err, status, image) {
         assert.equal(err, null);
         done();
       });

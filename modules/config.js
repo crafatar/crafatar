@@ -1,7 +1,7 @@
 var config = {
   min_size: 0,               // < 0 will (obviously) cause crash
   max_size: 512,             // too big values might lead to slow response time or DoS
-  default_size: 180,         // size to be used when no size given
+  default_size: 160,         // size to be used when no size given
   local_cache_time: 3600,    // seconds until we will check if the image changed
   browser_cache_time: 3600,  // seconds until browser will request image again
   http_timeout: 1000,        // ms until connection to mojang is dropped
