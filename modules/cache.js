@@ -1,9 +1,10 @@
 var config = require("./config");
 var redis = null;
+var fs = require("fs");
 
 
 function connect_redis() {
-  console.log("connecting to redis");
+  console.log("connecting to redis...");
   if (process.env.REDISCLOUD_URL) {
     var redisURL = require("url").parse(process.env.REDISCLOUD_URL);
     redis = require("redis").createClient(redisURL.port, redisURL.hostname);
@@ -12,7 +13,7 @@ function connect_redis() {
     redis = require("redis").createClient();
   }
   redis.on("ready", function() {
-    console.log("Redis connection established.");
+    console.log("Redis connection established. Flushing all data.");
     redis.flushall();
   });
   redis.on("error", function (err) {
@@ -23,17 +24,37 @@ function connect_redis() {
   });
 }
 
+// sets the date of the face file belonging to +hash+ to now
+function update_file_date(hash) {
+  if (hash) {
+    var path = config.faces_dir + hash + ".png";
+    fs.exists(path, function(exists) {
+      if (exists) {
+        var date = new Date();
+        fs.utimes("path", date, date, function(err){
+          if (err) {
+            console.error(err);
+          }
+        });
+      } else {
+        console.error("Tried to update " + path + " date, but it doesn't exist");
+      }
+    });
+  }
+}
+
 var exp = {};
 
 exp.get_redis = function() {
   return redis;
 };
 
-// sets the timestamp for +uuid+ to now
-exp.update_timestamp = function(uuid) {
+// sets the timestamp for +uuid+ and its face file's date to now
+exp.update_timestamp = function(uuid, hash) {
   console.log(uuid + " cache: updating timestamp");
   var time = new Date().getTime();
   redis.hmset(uuid, "t", time);
+  update_file_date(hash);
 };
 
 // create the key +uuid+, store +hash+ and time

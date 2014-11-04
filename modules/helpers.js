@@ -30,7 +30,7 @@ function store_images(uuid, details, callback) {
         if (details && details.hash == hash) {
           // hash hasn't changed
           console.log(uuid + " hash has not changed");
-          cache.update_timestamp(uuid);
+          cache.update_timestamp(uuid, hash);
           callback(null, hash);
         } else {
           // hash has changed
