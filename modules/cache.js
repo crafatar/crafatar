@@ -31,7 +31,7 @@ function update_file_date(hash) {
     fs.exists(path, function(exists) {
       if (exists) {
         var date = new Date();
-        fs.utimes("path", date, date, function(err){
+        fs.utimes(path, date, date, function(err){
           if (err) {
             console.error(err);
           }
