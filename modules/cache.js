@@ -73,7 +73,7 @@ exp.get_details = function(uuid, callback) {
     if (data) {
       details = {
         hash: (data.h == "null" ? null : data.h),
-        time: data.t
+        time: Number(data.t)
       };
     }
     callback(err, details);
