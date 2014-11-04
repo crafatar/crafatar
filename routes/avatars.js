@@ -12,7 +12,7 @@ router.get('/:uuid.:ext?', function(req, res) {
   var start = new Date();
 
   // Prevent app from crashing/freezing
-  if (size <= config.min_size || size > config.max_size) {
+  if (size < config.min_size || size > config.max_size) {
     // "Unprocessable Entity", valid request, but semantically erroneous:
     // https://tools.ietf.org/html/rfc4918#page-78
     res.status(422).send("422 Invalid size");
