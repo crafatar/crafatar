@@ -83,7 +83,7 @@ function get_image_hash(uuid, callback) {
     if (err) {
       callback(err, -1, null);
     } else {
-      if (details && details.time + config.local_cache_time >= new Date().getTime()) {
+      if (details && details.time + config.local_cache_time * 1000 >= new Date().getTime()) {
         // uuid known + recently updated
         console.log(uuid + " uuid known & recently updated");
         callback(null, (details.hash ? 1 : 0), details.hash);
