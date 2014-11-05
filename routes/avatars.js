@@ -29,35 +29,34 @@ router.get('/:uuid.:ext?', function(req, res) {
         console.error(err);
         if (image) {
           console.warn("error occured, image found anyway");
-          sendimage(200, status, image);
+          sendimage(503, true, image);
         } else {
-          handle_404(def);
+          handle_default(404);
         }
       } else if (status == 1 || status == 2) {
         sendimage(200, status == 1, image);
-      } else if (status == 0 || status == 3) {
-        handle_404(def);
+      } else if (status === 0 || status == 3) {
+        handle_default(404);
       } else {
         console.error("unexpected error/status");
         console.error("error: " + err);
         console.error("status: " + status);
-        handle_404(def);
+        handle_default(404);
       }
     });
   } catch(e) {
     console.error("Error!");
     console.error(e);
-    res.status(500).send("500 Internal server error");
+    handle_default(500);
   }
 
-  function handle_404(def) {
-    if (def == "alex" || def == "steve") {
-      skins.resize_img("public/images/" + def + ".png", size, function(err, image) {
-        sendimage(404, true, image);
-      });
-    } else {
-      res.status(404).send('404 Not found');
+  function handle_default(status) {
+    if (def != "steve" && def != "alex") {
+      def = skins.default_skin(uuid);
     }
+    skins.resize_img("public/images/" + def + ".png", size, function(err, image) {
+      sendimage(status, true, image);
+    });
   }
 
   function sendimage(status, local, image) {
