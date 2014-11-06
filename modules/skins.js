@@ -78,4 +78,13 @@ exp.resize_img = function(inname, size, callback) {
   });
 };
 
+// returns "alex" or "steve" calculated by the +uuid+
+exp.default_skin = function(uuid) {
+  if (Number("0x" + uuid[31]) % 2 === 0) {
+    return "alex";
+  } else {
+    return "steve";
+  }
+};
+
 module.exports = exp;

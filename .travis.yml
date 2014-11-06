@@ -8,3 +8,4 @@ notifications:
     skip_join: true
 services:
   - redis-server
+skip_join: true

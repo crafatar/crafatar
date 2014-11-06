@@ -23,13 +23,13 @@ block content
 
         h3 Parameters
         h4 size
-        p The size of the image in pixels, 1 - 512. <br> Default is 180.
+        p The size of the image in pixels, 1 - 512. <br> Default is 160.
         h4 default
         p The image to be returned when the uuid has no skin. <br> Valid options are 
           a(href="/avatars/00000000000000000000000000000000?default=steve") steve
           |  or 
           a(href="/avatars/00000000000000000000000000000000?default=alex") alex
-          | .<br> Otherwise, a 404 with no content is returned.
+          | .<br> The default is calculated based on the UUID (even = alex, odd = steve)
         h4 helm
         p Get an avatar with the second (helmet) layer applied. <br> The content of this parameter is ignored
 
@@ -41,7 +41,7 @@ block content
         p Either 'local' or 'downloaded'. Local means that Crafatar already had the image on disk, while downloaded means that it was retrieved from Mojang's skin servers.
 
         h3 Examples
-        p Get jeb_'s avatar, 180 × 180 pixels
+        p Get jeb_'s avatar, 160 × 160 pixels
         img(src="/avatars/853c80ef3c3749fdaa49938b674adae6")
         .well.code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6"&gt;
         p Get jeb_'s avatar, 64 × 64 pixels
@@ -59,6 +59,3 @@ block content
         .sideface.Notch(title="Notch")
         .sideface.sk89q(title="sk89q")
         .sideface.md_5(title="md_5")
-    hr
-    small Site version 
-    a(href="https://github.com/Jake0oo0/crafatar/commit/#{commit}") #{commit}

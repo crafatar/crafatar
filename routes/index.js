@@ -5,9 +5,7 @@ var router = express.Router();
 router.get('/', function(req, res) {
   res.render('index', {
     title: 'Crafatar',
-    domain: "https://" + req.headers.host,
-    // see http://stackoverflow.com/a/14924922/2517068
-    commit: process.env.HEAD_HASH || "unknown"
+    domain: "https://" + req.headers.host
   });
 });
 
