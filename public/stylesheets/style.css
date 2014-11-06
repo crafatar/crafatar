@@ -11,10 +11,23 @@ a {
 }
 
 a.forkme {
-  position: fixed;
   top: 0;
   right: 0;
   z-index: 1040;
+  position: fixed;
+  display: inline-block;
+  background: #008000;
+  box-shadow: 0 0 5px #000;
+  color: #fff;
+  font-weight: bold;
+  padding: 3px 40px;
+  border: 2px solid #006400;
+  -webkit-transform: rotate(45deg) translate(65px);
+  transform: rotate(45deg) translate(65px);
+}
+a.forkme:hover {
+  color: #ddd;
+  text-decoration: none;
 }
 
 mark.green {
