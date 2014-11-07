@@ -2,7 +2,7 @@ var config = require("./config");
 var redis = null;
 var fs = require("fs");
 
-
+// sets up redis connection, calls clear_cache
 function connect_redis() {
   console.log("connecting to redis...");
   if (process.env.REDISCLOUD_URL) {
@@ -13,8 +13,8 @@ function connect_redis() {
     redis = require("redis").createClient();
   }
   redis.on("ready", function() {
-    console.log("Redis connection established. Flushing all data.");
-    redis.flushall();
+    console.log("Redis connection established.");
+    clear_cache();
   });
   redis.on("error", function (err) {
     console.error(err);
@@ -24,7 +24,39 @@ function connect_redis() {
   });
 }
 
+
+// flushes redis, deletes faces + helms
+function clear_cache() {
+  console.log("Flushing redis");
+  redis.flushall();
+  console.log("Deleting all faces + helms...");
+  fs.readdir(config.faces_dir, function(err, files) {
+    if (err) {
+      console.error(err);
+    } else {
+      for (var i in files) {
+        var file = files[i];
+        if (file[0] != ".") {
+          // delete face file
+          fs.unlink(config.faces_dir + file, function(err){
+            if (err) {
+              console.error(err);
+            }
+          });
+          // delete helm file, we assume this exists as well
+          fs.unlink(config.helms_dir + file, function(err){
+            if (err) {
+              console.error(err);
+            }
+          });
+        }
+      }
+    }
+  });
+}
+
 // sets the date of the face file belonging to +hash+ to now
+// the helms file is ignored because we only need 1 file to read/write from
 function update_file_date(hash) {
   if (hash) {
     var path = config.faces_dir + hash + ".png";
