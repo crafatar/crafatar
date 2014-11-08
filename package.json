@@ -22,7 +22,7 @@
   ],
   "scripts": {
     "start": "node server.js",
-    "test": "make test"
+    "test": "mocha | coveralls",
   },
   "dependencies": {
     "body-parser": "~1.8.1",
