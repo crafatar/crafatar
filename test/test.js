@@ -7,7 +7,7 @@ var config = require('../modules/config');
 var skins = require('../modules/skins');
 var cache = require("../modules/cache");
 
-var uuids = fs.readFileSync('test/uuids.txt').toString().split("\r\n");
+var uuids = fs.readFileSync('test/uuids.txt').toString().split("\n");
 // Get a random UUID in order to prevent rate limiting
 var uuid = uuids[Math.floor((Math.random() * 200) + 1)];
 
