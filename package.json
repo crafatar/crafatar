@@ -22,7 +22,7 @@
   ],
   "scripts": {
     "start": "node server.js",
-    "test": "mocha | coveralls",
+    "test": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "dependencies": {
     "body-parser": "~1.8.1",
@@ -30,6 +30,7 @@
     "coveralls": "^2.11.2",
     "debug": "~2.0.0",
     "express": "~4.9.0",
+    "istanbul": "^0.3.2",
     "jade": "~1.6.0",
     "lwip": "0.0.5",
     "mocha": "2.0.1",

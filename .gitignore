@@ -3,3 +3,4 @@ skins/*/*.png
 node_modules/
 .DS_Store
 *.rdb
+coverage/
