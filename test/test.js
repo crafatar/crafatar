@@ -31,6 +31,7 @@ describe('Avatar Serving', function(){
       });
     });
     it("should exist without skin", function(done) {
+      // profile 'Alex'
       helpers.get_avatar("ec561538f3fd461daff5086b22154bce", false, 160, function(err, status, image) {
         assert.strictEqual(status, 3);
         done();
