@@ -49,6 +49,7 @@ function store_images(uuid, details, callback) {
         }
       } else {
         // profile found, but has no skin
+        cache.save_hash(uuid, null);
         callback(null, null);
       }
     }
