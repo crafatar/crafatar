@@ -76,6 +76,7 @@ function skin_url(profile) {
 // callback contains error, status, hash
 // the status gives information about how the image was received
 //  -1: error
+//   0: cached as null
 //   1: found on disk
 //   2: profile requested/found, skin downloaded from mojang servers
 //   3: profile requested/found, but it has no skin
