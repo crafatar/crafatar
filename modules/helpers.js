@@ -79,7 +79,7 @@ function skin_url(profile) {
 //   0: cached as null
 //   1: found on disk
 //   2: profile requested/found, skin downloaded from mojang servers
-//   3: profile requested/found, but it has no skin
+//   3: profile requested/found, but it has not changed or no skin
 function get_image_hash(uuid, callback) {
   cache.get_details(uuid, function(err, details) {
     if (err) {
@@ -96,7 +96,7 @@ function get_image_hash(uuid, callback) {
             callback(err, -1, details && details.hash);
           } else {
             console.log(uuid + " hash: " + hash);
-            callback(null, (hash ? 2 : 3), hash);
+            callback(null, (hash != (details && details.hash) ? 2 : 3), hash);
           }
         });
       }
