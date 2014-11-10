@@ -1,5 +1,8 @@
 body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-weight: 300;
+  color: #666;
 }
 
 p {
@@ -37,14 +40,42 @@ mark.green {
   padding: 0;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  color: #333;
+  font-weight: normal;
+}
+
+h3 {
+  margin-top: 2em;
+}
+
+h4 {
+  margin-top: 1em;
+}
+
+.center {
+  text-align: center;
+}
+
 .code {
+  display: block;
   font-family: monospace;
   word-wrap: break-word;
+  min-height: 20px;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  background: #fafafa;
+  border-left: 3px solid;
+  border-radius: 0px 4px 4px 0px;
+  box-shadow: 0 0 1px inset;
 }
+
 .sideface {
   width: 160px;
   height: 160px;
+  display: inline-block;
 }
+
 .sideface.Jake0oo0 {
   background:url("/avatars/2d5aa9cdaeb049189930461fc9b91cc5?size=160");
 }
@@ -60,9 +91,10 @@ mark.green {
 .sideface.Notch {
   background:url("/avatars/069a79f444e94726a5befca90e38aaf5?size=160");
 }
+/* Notch please fid your skin -_-
 .sideface.Notch:hover {
   background:url("/avatars/069a79f444e94726a5befca90e38aaf5?size=160&helm=true");
-}
+}*/
 .sideface.sk89q {
   background:url("/avatars/0ea8eca3dbf647cc9d1ac64551ca975c?size=160");
 }
