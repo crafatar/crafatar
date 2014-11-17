@@ -36,7 +36,7 @@ exp.extract_helm = function(facefile, buffer, outname, callback) {
         if (err) {
           callback(err);
         } else {
-          skin.crop(42, 8, 49, 15, function(err, helm_img) {
+          skin.crop(40, 8, 47, 15, function(err, helm_img) {
             if (err) {
               callback(err);
             } else {
