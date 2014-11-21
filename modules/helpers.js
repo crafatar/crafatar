@@ -3,7 +3,7 @@ var config = require('./config');
 var cache = require('./cache');
 var skins = require('./skins');
 
-var valid_uuid = /^[0-9a-f]{32}$/;
+var valid_uuid = /^([0-9a-f]{32}|[a-zA-Z0-9_]{1,16})$/; // uuid|username
 var hash_pattern = /([^\/]+)(?=\.\w{0,16}$)|((?:[a-z][a-z]*[0-9]+[a-z0-9]*))/;
 
 function get_hash(url) {
@@ -117,14 +117,10 @@ function get_image_hash(uuid, callback) {
 
 var exp = {};
 
-// returns true if the +uuid+ is a valid uuid
+// returns true if the +uuid+ is a valid uuid or username
 // the uuid may be not exist, however
 exp.uuid_valid = function(uuid) {
-  var valid = valid_uuid.test(uuid);
-  if (!valid && uuid.length <= 16) {
-    valid = true;
-  }
-  return valid;
+  return valid_uuid.test(uuid);
 };
 
 // handles requests for +uuid+ images with +size+
