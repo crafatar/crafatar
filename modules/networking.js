@@ -70,18 +70,16 @@ exp.skin_file = function(url, facename, helmname, callback) {
         console.error("Error downloading '" + url + "': " + error);
       } else if (response.statusCode == 404) {
         console.warn(url + " texture not found");
-        error = "texture not found" // Setting error
       } else if (response.statusCode == 429) {
         // Too Many Requests
         // Never got this, seems like textures aren't limited
-        error = "too many requests" // Error needs to be set, otherwise null in callback
         console.warn(url + " too many requests");
         console.warn(body);
       } else {
         console.error(url + " unknown error:");
         console.error(response);
         console.error(body);
-        error = "unknown error" // Setting error
+        error = "unknown error"; // Error needs to be set, otherwise null in callback
       }
       callback(error);
     }
