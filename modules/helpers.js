@@ -4,7 +4,7 @@ var cache = require('./cache');
 var skins = require('./skins');
 
 var valid_uuid = /^[0-9a-f]{32}$/;
-var hash_pattern = /[0-9a-f]+$/;
+var hash_pattern = /[A-za-z0-9_-]{1,16}$|((?:[A-za-z][A-za-z]*[0-9]+[A-za-z0-9]*))/;
 
 function get_hash(url) {
   return hash_pattern.exec(url)[0].toLowerCase();
@@ -22,7 +22,15 @@ function store_images(uuid, details, callback) {
     } else if (err) {
       callback(err, null);
     } else {
-      var skinurl = skin_url(profile);
+      var skinurl = null;
+
+      // Username handling
+      if (uuid.length <= 16) {
+        skinurl = "https://skins.minecraft.net/MinecraftSkins/" + uuid + ".png"
+        console.log('is username')
+      } else {
+        skinurl = skin_url(profile);
+      }
       if (skinurl) {
         console.log(uuid + " " + skinurl);
         // set file paths
@@ -107,7 +115,11 @@ var exp = {};
 // returns true if the +uuid+ is a valid uuid
 // the uuid may be not exist, however
 exp.uuid_valid = function(uuid) {
-  return valid_uuid.test(uuid);
+  var valid = valid_uuid.test(uuid);
+  if (!valid && uuid.length <= 16) {
+    valid = true;
+  }
+  return valid;
 };
 
 // handles requests for +uuid+ images with +size+
@@ -133,7 +145,6 @@ exp.get_avatar = function(uuid, helm, size, callback) {
       callback(err, status, null);
     }
   });
-
 };
 
 module.exports = exp;

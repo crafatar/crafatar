@@ -9,6 +9,10 @@ var exp = {};
 // download the Mojang profile for +uuid+
 // callback contains error, profile object
 exp.get_profile = function(uuid, callback) {
+  if (uuid.length <= 16) {
+    callback(null, null);
+    return;
+  }
   request.get({
     url: session_url + uuid,
     timeout: config.http_timeout // ms

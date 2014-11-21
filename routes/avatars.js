@@ -2,6 +2,7 @@ var helpers = require('../modules/helpers');
 var router = require('express').Router();
 var config = require('../modules/config');
 var skins = require('../modules/skins');
+var networking = require('../modules/networking')
 
 /* GET avatar request. */
 router.get('/:uuid.:ext?', function(req, res) {
@@ -10,7 +11,7 @@ router.get('/:uuid.:ext?', function(req, res) {
   var def = req.query.default;
   var helm = req.query.hasOwnProperty('helm');
   var start = new Date();
-
+  
   // Prevent app from crashing/freezing
   if (size < config.min_size || size > config.max_size) {
     // "Unprocessable Entity", valid request, but semantically erroneous:

@@ -1,4 +1,4 @@
-# Crafatar [![travis](https://api.travis-ci.org/Jake0oo0/Spongy.svg)](https://travis-ci.org/Jake0oo0/Spongy/)
+# Crafatar [![travis](https://api.travis-ci.org/Jake0oo0/Crafatar.svg)](https://travis-ci.org/Jake0oo0/Crafatar/)
 
 https://crafatar.com
 
