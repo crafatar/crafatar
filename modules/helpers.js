@@ -4,7 +4,7 @@ var cache = require('./cache');
 var skins = require('./skins');
 
 var valid_uuid = /^[0-9a-f]{32}$/;
-var hash_pattern = /[A-za-z0-9_-]{1,16}$|((?:[A-za-z][A-za-z]*[0-9]+[A-za-z0-9]*))/;
+var hash_pattern = /([^\/]+)(?=\.\w{0,16}$)|((?:[a-z][a-z]*[0-9]+[a-z0-9]*))/;
 
 function get_hash(url) {
   return hash_pattern.exec(url)[0].toLowerCase();
@@ -48,6 +48,9 @@ function store_images(uuid, details, callback) {
           // download skin, extract face/helm
           networking.skin_file(skinurl, facepath, helmpath, function(err) {
             if (err) {
+              if (uuid.length <= 16) {
+                cache.save_hash(uuid, null);
+              }
               callback(err, null);
             } else {
               cache.save_hash(uuid, hash);
