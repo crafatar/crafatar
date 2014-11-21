@@ -4,6 +4,14 @@ var config = require('../modules/config');
 var skins = require('../modules/skins');
 var networking = require('../modules/networking')
 
+var human_status = {
+  0: "none",
+  1: "cached",
+  2: "checked",
+  3: "downloaded",
+  "-1": "error"
+};
+
 /* GET avatar request. */
 router.get('/:uuid.:ext?', function(req, res) {
   var uuid = req.params.uuid;
@@ -25,47 +33,37 @@ router.get('/:uuid.:ext?', function(req, res) {
 
   try {
     helpers.get_avatar(uuid, helm, size, function(err, status, image) {
-      console.log(uuid + " - " + status);
+      console.log(uuid + " - " + human_status[status]);
       if (err) {
         console.error(err);
-        if (image) {
-          console.warn("error occured, image found anyway");
-          sendimage(503, true, image);
-        } else {
-          handle_default(404);
-        }
-      } else if (status == 1 || status == 2) {
-        sendimage(200, status == 1, image);
-      } else if (status === 0 || status == 3) {
-        handle_default(404);
+      }
+      if (image) {
+        sendimage(err ? 503 : 200, status, image);
       } else {
-        console.error("unexpected error/status");
-        console.error("error: " + err);
-        console.error("status: " + status);
-        handle_default(404);
+        handle_default(404, status);
       }
     });
   } catch(e) {
     console.error("Error!");
     console.error(e);
-    handle_default(500);
+    handle_default(500, status);
   }
 
-  function handle_default(status) {
+  function handle_default(http_status, img_status) {
     if (def != "steve" && def != "alex") {
       def = skins.default_skin(uuid);
     }
     skins.resize_img("public/images/" + def + ".png", size, function(err, image) {
-      sendimage(status, true, image);
+      sendimage(http_status, img_status, image);
     });
   }
 
-  function sendimage(status, local, image) {
-    res.writeHead(status, {
+  function sendimage(http_status, img_status, image) {
+    res.writeHead(http_status, {
       'Content-Type': 'image/png',
       'Cache-Control': 'max-age=' + config.browser_cache_time + ', public',
       'Response-Time': new Date() - start,
-      'X-Storage-Type': local ? 'local' : 'downloaded'
+      'X-Storage-Type': human_status[img_status]
     });
     res.end(image);
   }

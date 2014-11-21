@@ -1,22 +1,22 @@
 extends layout
 
 block content
-  .container(style= "margin-top: 30px;")
+  .container(style= "margin-top: 70px;")
     .row
       .col-md-10
         h1 Crafatar
         hr
         p Welcome to Crafatar, an API for Minecraft's faces!
 
-        h2 API
         hr
+        h2 Documentation
 
         h3 Endpoint
         p
           | Replace 
           mark.green uuid
           |  with a Mojang UUID to get the related head. All images are PNGs.
-        .well.code
+        .code
           | &lt;img src="#{domain}/avatars/
           mark.green uuid
           | "&gt;
@@ -25,11 +25,11 @@ block content
         h4 size
         p The size of the image in pixels, 1 - 512. <br> Default is 160.
         h4 default
-        p The image to be returned when the uuid has no skin. <br> Valid options are 
+        p The image to be returned when the uuid has no skin (404). <br> Valid options are 
           a(href="/avatars/00000000000000000000000000000000?default=steve") steve
           |  or 
           a(href="/avatars/00000000000000000000000000000000?default=alex") alex
-          | .<br> The default is calculated based on the UUID (even = alex, odd = steve)
+          | .<br> The standard value is calculated based on the UUID (even = alex, odd = steve)
         h4 helm
         p Get an avatar with the second (helmet) layer applied. <br> The content of this parameter is ignored
 
@@ -38,22 +38,22 @@ block content
         h4 Response-Time
         p The time, in milliseconds, it took Crafatar to process the request.
         h4 X-Storage-Type
-        p Either 'local' or 'downloaded'. Local means that Crafatar already had the image on disk, while downloaded means that it was retrieved from Mojang's skin servers.
+        ul
+          li <b>none</b>: No external requests. Cached: User has no skin.
+          li <b>cached</b>: No external requests. Skin cached and stored locally.
+          li <b>checked</b>: 1 external request. Skin cached, checked for updates, no skin downloaded.<br>
+          | This happens either when the user has no skin or it didn't change.
+          li <b>downloaded</b>: 2 external requests. Skin changed or unknown, downloaded.
+          li <b>error</b>: This can happen, for example, when Mojang's servers are down. If possible, an outdated image will be served instead.
 
         h3 Examples
         p Get jeb_'s avatar, 160 × 160 pixels
-        img(src="/avatars/853c80ef3c3749fdaa49938b674adae6")
-        .well.code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6"&gt;
+        .code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6"&gt;
         p Get jeb_'s avatar, 64 × 64 pixels
-        img(src="/avatars/853c80ef3c3749fdaa49938b674adae6?size=64")
-        .well.code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64"&gt;
+        .code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64"&gt;
         p Get jeb_'s helmet avatar, 64 × 64 pixels
-        img(src="/avatars/853c80ef3c3749fdaa49938b674adae6?size=64&helm")
-        .well.code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64&amp;helm"&gt;
-        p Get jeb_'s avatar, 64 × 64 pixels, or fall back to steve if his avatar is not found
-        img(src="/avatars/00000000000000000000000000000000?default=steve&size=64")
-        .well.code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?default=steve&amp;size=64"&gt;
-      .col-md-2
+        .code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64&amp;helm"&gt;
+      .col-md-2.center
         .sideface.redstone_sheep(title="redstone_sheep")
         .sideface.Jake0oo0(title="Jake0oo0")
         .sideface.Notch(title="Notch")
