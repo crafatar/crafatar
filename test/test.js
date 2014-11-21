@@ -17,7 +17,7 @@ describe('Avatar Serving', function(){
   });
   describe('UUID', function(){
     it("should be an invalid uuid", function(done){
-      assert.strictEqual(helpers.uuid_valid("invaliduuid"), false);
+      assert.strictEqual(helpers.uuid_valid("invaliduuidexample"), false);
       done();
     });
     it("should be a valid uuid", function(done){
