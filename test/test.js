@@ -17,11 +17,35 @@ describe('Avatar Serving', function(){
   });
   describe('UUID', function(){
     it("should be an invalid uuid", function(done){
-      assert.strictEqual(helpers.uuid_valid("invaliduuidexample"), false);
+      assert.strictEqual(helpers.uuid_valid("g098cb60fa8e427cb299793cbd302c9a"), false);
+      done();
+    });
+    it("should be an invalid uuid", function(done){
+      assert.strictEqual(helpers.uuid_valid(""), false);
+      done();
+    });
+    it("should be an invalid uuid", function(done){
+      assert.strictEqual(helpers.uuid_valid("0098cb60-fa8e-427c-b299-793cbd302c9a"), false);
+      done();
+    });
+    it("should be an invalid username", function(done){
+      assert.strictEqual(helpers.uuid_valid("usernäme"), false);
+      done();
+    });
+    it("should be an invalid username", function(done){
+      assert.strictEqual(helpers.uuid_valid("user-name"), false);
+      done();
+    });
+    it("should be an invalid username", function(done){
+      assert.strictEqual(helpers.uuid_valid("ThisNameIsTooLong"), false);
       done();
     });
     it("should be a valid uuid", function(done){
       assert.strictEqual(helpers.uuid_valid("0098cb60fa8e427cb299793cbd302c9a"), true);
+      done();
+    });
+    it("should be a valid username", function(done){
+      assert.strictEqual(helpers.uuid_valid("__niceUs3rname__"), true);
       done();
     });
     it("should not exist", function(done){
