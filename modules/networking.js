@@ -45,7 +45,7 @@ exp.get_profile = function(uuid, callback) {
 // downloads skin file from +url+
 // stores face image as +facename+
 // stores helm image as +helmname+
-// callback is forwarded from skins/extract_face or skins/extract_helm
+// callback contains error
 exp.skin_file = function(url, facename, helmname, callback) {
   if (fs.existsSync(facename) && fs.existsSync(facename)) {
     console.log("Images already exist, not downloading.");
