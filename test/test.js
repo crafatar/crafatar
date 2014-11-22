@@ -8,8 +8,10 @@ var skins = require('../modules/skins');
 var cache = require("../modules/cache");
 
 var uuids = fs.readFileSync('test/uuids.txt').toString().split("\n");
-// Get a random UUID in order to prevent rate limiting
-var uuid = uuids[Math.floor((Math.random() * 200) + 1)];
+var usernames = fs.readFileSync('test/usernames.txt').toString().split("\n");
+// Get a random UUID + username in order to prevent rate limiting
+var uuid = uuids[Math.round(Math.random() * (uuids.length - 1))];
+var username = usernames[Math.round(Math.random() * (usernames.length - 1))];
 
 describe('Avatar Serving', function(){
   before(function() {
@@ -63,14 +65,26 @@ describe('Avatar Serving', function(){
     });
   });
   describe('Avatar', function(){
-    it("should be downloaded", function(done) {
+    it("should be downloaded (uuid)", function(done) {
       helpers.get_avatar(uuid, false, 160, function(err, status, image) {
         assert.strictEqual(status, 2);
         done();
       });
     });
-    it("should be local", function(done) {
+    it("should be local (uuid)", function(done) {
       helpers.get_avatar(uuid, false, 160, function(err, status, image) {
+        assert.strictEqual(status, 1);
+        done();
+      });
+    });
+    it("should be downloaded (username)", function(done) {
+      helpers.get_avatar(username, false, 160, function(err, status, image) {
+        assert.strictEqual(status, 2);
+        done();
+      });
+    });
+    it("should be local (username)", function(done) {
+      helpers.get_avatar(username, false, 160, function(err, status, image) {
         assert.strictEqual(status, 1);
         done();
       });
