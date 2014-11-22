@@ -2,7 +2,8 @@ var config = require("./config");
 var redis = null;
 var fs = require("fs");
 
-// sets up redis connection, calls clear_cache
+// sets up redis connection
+// flushes redis when running on heroku (files aren't kept between pushes)
 function connect_redis() {
   console.log("connecting to redis...");
   if (process.env.REDISCLOUD_URL) {
@@ -14,45 +15,16 @@ function connect_redis() {
   }
   redis.on("ready", function() {
     console.log("Redis connection established.");
-    clear_cache();
+    if(process.env.HEROKU) {
+      console.log("Running on heroku, flushing redis");
+      redis.flushall();
+    }
   });
   redis.on("error", function (err) {
     console.error(err);
   });
   redis.on("end", function () {
     console.warn("Redis connection lost!");
-  });
-}
-
-
-// flushes redis, deletes faces + helms
-// useful for heroku, files aren't kept between pushes
-function clear_cache() {
-  console.log("Flushing redis");
-  redis.flushall();
-  console.log("Deleting all faces + helms...");
-  fs.readdir(config.faces_dir, function(err, files) {
-    if (err) {
-      console.error(err);
-    } else {
-      for (var i in files) {
-        var file = files[i];
-        if (file[0] != ".") {
-          // delete face file
-          fs.unlink(config.faces_dir + file, function(err){
-            if (err) {
-              console.error(err);
-            }
-          });
-          // delete helm file, we assume this exists as well
-          fs.unlink(config.helms_dir + file, function(err){
-            if (err) {
-              console.error(err);
-            }
-          });
-        }
-      }
-    }
   });
 }
 
