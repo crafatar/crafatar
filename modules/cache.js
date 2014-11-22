@@ -26,6 +26,7 @@ function connect_redis() {
 
 
 // flushes redis, deletes faces + helms
+// useful for heroku, files aren't kept between pushes
 function clear_cache() {
   console.log("Flushing redis");
   redis.flushall();
