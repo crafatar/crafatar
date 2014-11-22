@@ -42,7 +42,7 @@ function store_images(uuid, details, callback) {
           callback(null, hash);
         } else {
           // hash has changed
-          console.log(uuid + "new hash: " + hash);
+          console.log(uuid + " new hash: " + hash);
           var facepath = __dirname + '/../' + config.faces_dir + hash + ".png";
           var helmpath = __dirname + '/../' + config.helms_dir + hash + ".png";
           // download skin, extract face/helm
