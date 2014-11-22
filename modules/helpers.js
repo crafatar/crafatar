@@ -27,7 +27,7 @@ function store_images(uuid, details, callback) {
       // Username handling
       if (uuid.length <= 16) {
         skinurl = "https://skins.minecraft.net/MinecraftSkins/" + uuid + ".png";
-        console.log('is username');
+        console.log(uuid + " is a username");
       } else {
         skinurl = skin_url(profile);
       }
