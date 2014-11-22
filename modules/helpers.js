@@ -26,8 +26,8 @@ function store_images(uuid, details, callback) {
 
       // Username handling
       if (uuid.length <= 16) {
-        skinurl = "https://skins.minecraft.net/MinecraftSkins/" + uuid + ".png"
-        console.log('is username')
+        skinurl = "https://skins.minecraft.net/MinecraftSkins/" + uuid + ".png";
+        console.log('is username');
       } else {
         skinurl = skin_url(profile);
       }
@@ -48,9 +48,6 @@ function store_images(uuid, details, callback) {
           // download skin, extract face/helm
           networking.skin_file(skinurl, facepath, helmpath, function(err) {
             if (err) {
-              if (uuid.length <= 16) {
-                cache.save_hash(uuid, null);
-              }
               callback(err, null);
             } else {
               cache.save_hash(uuid, hash);
