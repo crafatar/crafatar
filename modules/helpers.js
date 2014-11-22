@@ -3,7 +3,8 @@ var config = require('./config');
 var cache = require('./cache');
 var skins = require('./skins');
 
-var valid_uuid = /^([0-9a-f]{32}|[a-zA-Z0-9_]{1,16})$/; // uuid|username
+// 0098cb60-fa8e-427c-b299-793cbd302c9a
+var valid_uuid = /^([0-9a-f-]{32,36}|[a-zA-Z0-9_]{1,16})$/; // uuid|username
 var hash_pattern = /([^\/]+)(?=\.\w{0,16}$)|((?:[a-z][a-z]*[0-9]+[a-z0-9]*))/;
 
 function get_hash(url) {
