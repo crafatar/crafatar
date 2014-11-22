@@ -1,6 +1,7 @@
 var request = require('request');
 var config = require('./config');
 var skins = require('./skins');
+var fs = require("fs");
 
 var session_url = "https://sessionserver.mojang.com/session/minecraft/profile/";
 
@@ -46,6 +47,11 @@ exp.get_profile = function(uuid, callback) {
 // stores helm image as +helmname+
 // callback is forwarded from skins/extract_face or skins/extract_helm
 exp.skin_file = function(url, facename, helmname, callback) {
+  if (fs.existsSync(facename) && fs.existsSync(facename)) {
+    console.log("Images already exist, not downloading.");
+    callback(null);
+    return;
+  }
   request.get({
     url: url,
     encoding: null, // encoding must be null so we get a buffer
