@@ -7,6 +7,9 @@ var config = require('../modules/config');
 var skins = require('../modules/skins');
 var cache = require("../modules/cache");
 
+// we don't want tests to fail because of slow internet
+config.http_timeout = 3000;
+
 var uuids = fs.readFileSync('test/uuids.txt').toString().split("\n");
 var usernames = fs.readFileSync('test/usernames.txt').toString().split("\n");
 // Get a random UUID + username in order to prevent rate limiting
