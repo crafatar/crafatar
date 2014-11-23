@@ -6,8 +6,8 @@ var skins = require('../modules/skins');
 var human_status = {
   0: "none",
   1: "cached",
-  2: "checked",
-  3: "downloaded",
+  2: "downloaded",
+  3: "checked",
   "-1": "error"
 };
 
