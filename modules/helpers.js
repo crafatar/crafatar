@@ -1,4 +1,5 @@
 var networking = require('./networking');
+var logging = require('./logging');
 var config = require('./config');
 var cache = require('./cache');
 var skins = require('./skins');
@@ -20,17 +21,17 @@ function store_images(uuid, details, callback) {
       callback(err, null);
     } else {
       if (skin_url) {
-        console.log(uuid + " " + skin_url);
+        logging.log(uuid + " " + skin_url);
         // set file paths
         var hash = get_hash(skin_url);
         if (details && details.hash == hash) {
           // hash hasn't changed
-          console.log(uuid + " hash has not changed");
+          logging.log(uuid + " hash has not changed");
           cache.update_timestamp(uuid, hash);
           callback(null, hash);
         } else {
           // hash has changed
-          console.log(uuid + " new hash: " + hash);
+          logging.log(uuid + " new hash: " + hash);
           var facepath = __dirname + '/../' + config.faces_dir + hash + ".png";
           var helmpath = __dirname + '/../' + config.helms_dir + hash + ".png";
           // download skin, extract face/helm
@@ -67,18 +68,18 @@ function get_image_hash(uuid, callback) {
     } else {
       if (details && details.time + config.local_cache_time * 1000 >= new Date().getTime()) {
         // uuid known + recently updated
-        console.log(uuid + " uuid known & recently updated");
+        logging.log(uuid + " uuid known & recently updated");
         callback(null, (details.hash ? 1 : 0), details.hash);
       } else {
-        console.log(uuid + " uuid not known or too old");
-        console.log("details:");
-        console.log(details);
-        console.log("/details");
+        logging.log(uuid + " uuid not known or too old");
+        logging.log("details:");
+        logging.log(details);
+        logging.log("/details");
         store_images(uuid, details, function(err, hash) {
           if (err) {
             callback(err, -1, details && details.hash);
           } else {
-            console.log(uuid + " hash: " + hash);
+            logging.log(uuid + " hash: " + hash);
             var oldhash = details && details.hash;
             var status = hash !== oldhash ? 2 : 3;
             callback(null, status, hash);
@@ -102,7 +103,7 @@ exp.uuid_valid = function(uuid) {
 // image is the user's face+helm when helm is true, or the face otherwise
 // for status, see get_image_hash
 exp.get_avatar = function(uuid, helm, size, callback) {
-  console.log("\nrequest: " + uuid);
+  logging.log("\nrequest: " + uuid);
   get_image_hash(uuid, function(err, status, hash) {
     if (hash) {
       var filepath = __dirname + '/../' + (helm ? config.helms_dir : config.faces_dir) + hash + ".png";
