@@ -53,6 +53,16 @@ function store_images(uuid, details, callback) {
   });
 }
 
+
+var exp = {};
+
+// returns true if the +uuid+ is a valid uuid or username
+// the uuid may be not exist, however
+exp.uuid_valid = function(uuid) {
+  return valid_uuid.test(uuid);
+};
+
+
 // decides whether to get an image from disk or to download it
 // callback contains error, status, hash
 // the status gives information about how the image was received
@@ -61,7 +71,7 @@ function store_images(uuid, details, callback) {
 //   1: "cached" - found on disk
 //   2: "downloaded" - profile downloaded, skin downloaded from mojang servers
 //   3: "checked" - profile re-downloaded (was too old), but it has either not changed or has no skin
-function get_image_hash(uuid, callback) {
+exp.get_image_hash = function(uuid, callback) {
   cache.get_details(uuid, function(err, details) {
     if (err) {
       callback(err, -1, null);
@@ -72,9 +82,6 @@ function get_image_hash(uuid, callback) {
         callback(null, (details.hash ? 1 : 0), details.hash);
       } else {
         logging.log(uuid + " uuid not known or too old");
-        logging.log("details:");
-        logging.log(details);
-        logging.log("/details");
         store_images(uuid, details, function(err, hash) {
           if (err) {
             callback(err, -1, details && details.hash);
@@ -88,15 +95,8 @@ function get_image_hash(uuid, callback) {
       }
     }
   });
-}
-
-var exp = {};
-
-// returns true if the +uuid+ is a valid uuid or username
-// the uuid may be not exist, however
-exp.uuid_valid = function(uuid) {
-  return valid_uuid.test(uuid);
 };
+
 
 // handles requests for +uuid+ images with +size+
 // callback contains error, status, image buffer
@@ -104,7 +104,7 @@ exp.uuid_valid = function(uuid) {
 // for status, see get_image_hash
 exp.get_avatar = function(uuid, helm, size, callback) {
   logging.log("\nrequest: " + uuid);
-  get_image_hash(uuid, function(err, status, hash) {
+  exp.get_image_hash(uuid, function(err, status, hash) {
     if (hash) {
       var filepath = __dirname + '/../' + (helm ? config.helms_dir : config.faces_dir) + hash + ".png";
       skins.resize_img(filepath, size, function(img_err, result) {
