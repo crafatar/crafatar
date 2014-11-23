@@ -144,10 +144,19 @@ describe('Crafatar', function() {
         done();
       });
     });
-    it("should time out on profile download", function(done) {
+    it("should time out on uuid info download", function(done) {
       var original_timeout = config.http_timeout;
       config.http_timeout = 1;
-      networking.get_skin_url("069a79f444e94726a5befca90e38aaf5", function(err, profile) {
+      networking.get_skin_url("069a79f444e94726a5befca90e38aaf5", function(err, skin_url) {
+        assert.strictEqual(err.code, "ETIMEDOUT");
+        config.http_timeout = original_timeout;
+        done();
+      });
+    });
+    it("should time out on username info download", function(done) {
+      var original_timeout = config.http_timeout;
+      config.http_timeout = 1;
+      networking.get_skin_url("redstone_sheep", function(err, skin_url) {
         assert.strictEqual(err.code, "ETIMEDOUT");
         config.http_timeout = original_timeout;
         done();
