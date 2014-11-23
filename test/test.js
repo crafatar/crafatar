@@ -144,7 +144,7 @@ describe('Crafatar', function() {
     });
   });
 
-  describe('Mojang Errors', function() {
+  describe('Errors', function() {
     before(function() {
       cache.get_redis().flushall();
     });
@@ -186,6 +186,12 @@ describe('Crafatar', function() {
         assert.strictEqual(err, null); // no error here, but it shouldn't throw exceptions
         done();
       });
+    });
+    it("should handle file updates on invalid files", function(done) {
+      assert.doesNotThrow(function() {
+        cache.update_timestamp("0123456789abcdef0123456789abcdef", "invalid-file.png");
+      });
+      done();
     });
   });
 });
