@@ -30,10 +30,6 @@ describe('UUID/username', function() {
       assert.strictEqual(helpers.uuid_valid(""), false);
       done();
     });
-    it("should be an invalid uuid", function(done) {
-      assert.strictEqual(helpers.uuid_valid("0098cb60-fa8e-427c-b299-793cbd302c9a"), false);
-      done();
-    });
     it("should be an invalid username", function(done) {
       assert.strictEqual(helpers.uuid_valid("usernäme"), false);
       done();
@@ -50,8 +46,16 @@ describe('UUID/username', function() {
       assert.strictEqual(helpers.uuid_valid("0098cb60fa8e427cb299793cbd302c9a"), true);
       done();
     });
+    it("should be a valid uuid", function(done) {
+      assert.strictEqual(helpers.uuid_valid("0098cb60-fa8e-427c-b299-793cbd302c9a"), true);
+      done();
+    });
     it("should be a valid username", function(done) {
       assert.strictEqual(helpers.uuid_valid("__niceUs3rname__"), true);
+      done();
+    });
+    it("should be a valid username", function(done) {
+      assert.strictEqual(helpers.uuid_valid("a"), true);
       done();
     });
     it("should not exist", function(done) {
@@ -75,6 +79,15 @@ describe('UUID/username', function() {
         done();
       });
     });
+    it("should be checked (uuid)", function(done) {
+      var original_cache_time = config.local_cache_time;
+      config.local_cache_time = 0;
+      helpers.get_avatar(uuid, false, 160, function(err, status, image) {
+        assert.strictEqual(status, 2);
+        config.local_cache_time = original_cache_time;
+        done();
+      });
+    });
     it("should be downloaded (username)", function(done) {
       helpers.get_avatar(username, false, 160, function(err, status, image) {
         assert.strictEqual(status, 2);
@@ -84,6 +97,15 @@ describe('UUID/username', function() {
     it("should be local (username)", function(done) {
       helpers.get_avatar(username, false, 160, function(err, status, image) {
         assert.strictEqual(status, 1);
+        done();
+      });
+    });
+    it("should be checked (username)", function(done) {
+      var original_cache_time = config.local_cache_time;
+      config.local_cache_time = 0;
+      helpers.get_avatar(username, false, 160, function(err, status, image) {
+        assert.strictEqual(status, 2);
+        config.local_cache_time = original_cache_time;
         done();
       });
     });
