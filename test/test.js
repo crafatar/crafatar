@@ -171,5 +171,11 @@ describe('Crafatar', function() {
         done();
       });
     });
+    it("should not find the skin", function(done) {
+      networking.skin_file("http://textures.minecraft.net/texture/this-does-not-exist", "face.png", "helm.png", function(err) {
+        assert.strictEqual(err, null); // no error here, but it shouldn't throw exceptions
+        done();
+      });
+    });
   });
 });
