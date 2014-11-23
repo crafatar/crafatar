@@ -20,5 +20,6 @@ You can [join us](https://webchat.esper.net/?channels=spongy) in #spongy on irc.
 * Clone the repository
 * `npm install`
 * `redis-server`
+* `cp "modules/config.example.js" "modules/config.js"`
 * `npm start`
 * Access [http://localhost:3000](http://localhost:3000)
