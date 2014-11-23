@@ -124,6 +124,16 @@ describe('Crafatar', function() {
         done();
       });
     });
+    it("should already have the files / not download", function(done) {
+      fs.openSync("face.png", "w");
+      fs.openSync("helm.png", "w");
+      networking.skin_file("http://textures.minecraft.net/texture/477be35554684c28bdeee4cf11c591d3c88afb77e0b98da893fd7bc318c65184", "face.png", "helm.png", function(err) {
+        assert.strictEqual(err, null); // no error here, but it shouldn't throw exceptions
+        fs.unlinkSync("face.png");
+        fs.unlinkSync("helm.png");
+        done();
+      });
+    });
     it("should default to Alex", function(done) {
       assert.strictEqual(skins.default_skin("ec561538f3fd461daff5086b22154bce"), "alex");
       done();
