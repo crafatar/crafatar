@@ -116,6 +116,14 @@ describe('UUID/username', function() {
         done();
       });
     });
+    it("should default to Alex", function(done) {
+      assert.strictEqual(skins.default_skin("ec561538f3fd461daff5086b22154bce"), "alex");
+      done();
+    });
+    it("should default to Steve", function(done) {
+      assert.strictEqual(skins.default_skin("b8ffc3d37dbf48278f69475f6690aabd"), "steve");
+      done();
+    });
   });
 
   describe('Mojang Errors', function() {
