@@ -31,7 +31,8 @@ router.get('/skins/:uuid.:ext?', function(req, res) {
           'Cache-Control': 'max-age=' + config.browser_cache_time + ', public',
           'Response-Time': new Date() - start,
           'X-Storage-Type': human_status[status],
-          'Access-Control-Allow-Origin': "*"
+          'Access-Control-Allow-Origin': "*",
+          'Origin': 'https://crafatar.com'
         });
         res.end();
       } else if (!err) {
