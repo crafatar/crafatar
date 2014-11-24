@@ -4,14 +4,20 @@ block content
   .container(style= "margin-top: 70px;")
     .row
       .col-md-10
-        h1 Crafatar
+        a(name="crafatar", class="anchor")
+        a(href="#crafatar")
+          h1 Crafatar
         hr
         p Welcome to Crafatar, an API for Minecraft's faces!
 
         hr
-        h2 Documentation
+        a(name="documentation", class="anchor")
+        a(href="#documentation")
+          h2 Documentation
 
-        h3 Avatars
+        a(name="avatars", class="anchor")
+        a(href="#avatars")
+          h3 Avatars
         p
           | Replace 
           mark.green id
@@ -21,19 +27,29 @@ block content
           mark.green id
           | "&gt;
 
-        h3 Parameters
-        h4 size
-        p The size of the image in pixels, 1 - 512. <br> Default is 160.
-        h4 default
+        a(name="parameters", class="anchor")
+        a(href="#parameters")
+          h3 Parameters
+        a(name="size", class="anchor")
+        a(href="#size")
+          h4 size
+        p The size of the image in pixels, #{config.min_size} - #{config.max_size}. <br> Default is #{config.default_size}.
+        a(name="default", class="anchor")
+        a(href="#default")
+          h4 default
         p The image to be returned when the id has no skin (404). <br> Valid options are 
           a(href="/avatars/00000000000000000000000000000000?default=steve") steve
           |  or 
           a(href="/avatars/00000000000000000000000000000000?default=alex") alex
           | .<br> The standard value is calculated based on the id (even = alex, odd = steve)
-        h4 helm
+        a(name="helm", class="anchor")
+        a(href="#helm")
+          h4 helm
         p Get an avatar with the second (helmet) layer applied. <br> The content of this parameter is ignored
 
-        h3 Skins
+        a(name="skins", class="anchor")
+        a(href="#skins")
+          h3 Skins
         p You can also get the full skin file from name or id. <br>
           | Replace 
           mark.green id 
@@ -44,11 +60,17 @@ block content
           mark.green id
           | "&gt;
 
-        h3 HTTP headers
+        a(name="http-headers", class="anchor")
+        a(href="#http-headers")
+          h3 HTTP headers
         p Responses come with these HTTP headers, useful for debugging.
-        h4 Response-Time
+        a(name="response-time", class="anchor")
+        a(href="#response-time")
+          h4 Response-Time
         p The time, in milliseconds, it took Crafatar to process the request.
-        h4 X-Storage-Type
+        a(name="x-storage-type", class="anchor")
+        a(href="#x-storage-type")
+          h4 X-Storage-Type
         ul
           li <b>none</b>: No external requests. Cached: User has no skin.
           li <b>cached</b>: No external requests. Skin cached and stored locally.
@@ -58,16 +80,28 @@ block content
           li <b>error</b>: This can happen, for example, when Mojang's servers are down.<br>
           | If possible, an outdated image is be served instead.
 
-        h3 About usernames
+        a(name="about-usernames", class="anchor")
+        a(href="#about-usernames")
+          h3 About usernames
         p We strongly advise you to use UUIDs instead of usernames in production.
         | Usernames are deprecated by Mojang and you should only use usernames for testing.<br>
         | Invalid usernames are rejected and a 422 is returned.
 
-        h3 About UUIDs
+        a(name="about-uuids", class="anchor")
+        a(href="#about-uuids")
+          h3 About UUIDs
         p UUIDs may use the raw or dashed format.<br>
         | Invalid UUIDs are rejected and a 422 is returned.
 
-        h3 Examples
+        a(name="about-caching", class="anchor")
+        a(href="#about-caching")
+          h3 About caching
+        p Crafatar caches keeps skins for #{config.local_cache_time} seconds until they are checked for changes.<br>
+        | Images should be cached in browsers for #{config.browser_cache_time} seconds until a new request to Crafatar is made.
+
+        a(name="examples", class="anchor")
+        a(href="#examples")
+          h3 Examples
         p Get jeb_'s avatar, 160 × 160 pixels
         .code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6"&gt;
         p Get jeb_'s avatar, 64 × 64 pixels
