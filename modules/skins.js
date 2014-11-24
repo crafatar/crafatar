@@ -1,4 +1,6 @@
+var logging = require('./logging');
 var lwip = require('lwip');
+var fs = require('fs');
 
 var exp = {};
 
@@ -28,7 +30,7 @@ exp.extract_face = function(buffer, outname, callback) {
 // result is saved to a file called +outname+
 // +callback+ contains error
 exp.extract_helm = function(facefile, buffer, outname, callback) {
-  lwip.open(buffer, "png", function(err, skin) {
+  lwip.open(buffer, "png", function(err, skin_img) {
     if (err) {
       callback(err);
     } else {
@@ -36,25 +38,29 @@ exp.extract_helm = function(facefile, buffer, outname, callback) {
         if (err) {
           callback(err);
         } else {
-          skin.crop(40, 8, 47, 15, function(err, helm_img) {
-            if (err) {
-              callback(err);
-            } else {
-              face_img.paste(0, 0, helm_img, function(err, face_helm_img) {
-                if (err) {
-                  callback(err);
-                } else {
-                  face_helm_img.writeFile(outname, function(err) {
-                    if (err) {
-                      callback(err);
-                    } else {
-                      callback(null);
-                      // JavaScript callback hell <3
-                    }
-                  });
-                }
-              });
-            }
+          face_img.toBuffer("png", {compression: "none"}, function(err, face_buffer) {
+            skin_img.crop(40, 8, 47, 15, function(err, helm_img) {
+              if (err) {
+                callback(err);
+              } else {
+                face_img.paste(0, 0, helm_img, function(err, face_helm_img) {
+                  if (err) {
+                    callback(err);
+                  } else {
+                    face_helm_img.toBuffer("png", {compression: "none"}, function(err, face_helm_buffer) {
+                      if (face_helm_buffer.toString() !== face_buffer.toString()) {
+                        face_helm_img.writeFile(outname, function(err) {
+                          callback(err);
+                        });
+                      } else {
+                        logging.log("Helm image is the same as face image, not storing!");
+                        callback(null);
+                      }
+                    });
+                  }
+                });
+              }
+            });
           });
         }
       });
