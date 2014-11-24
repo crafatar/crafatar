@@ -100,7 +100,7 @@ exp.get_image_hash = function(uuid, callback) {
 
 
 // handles requests for +uuid+ images with +size+
-// callback contains error, status, image buffer
+// callback contains error, status, image buffer, hash
 // image is the user's face+helm when helm is true, or the face otherwise
 // for status, see get_image_hash
 exp.get_avatar = function(uuid, helm, size, callback) {
@@ -115,16 +115,16 @@ exp.get_avatar = function(uuid, helm, size, callback) {
       }
       skins.resize_img(filepath, size, function(img_err, result) {
         if (img_err) {
-          callback(img_err, -1, null);
+          callback(img_err, -1, null, hash);
         } else {
           // we might have a hash although an error occured
           // (e.g. Mojang servers not reachable, using outdated hash)
-          callback(err, (err ? -1 : status), result);
+          callback(err, (err ? -1 : status), result, hash);
         }
       });
     } else {
       // hash is null when uuid has no skin
-      callback(err, status, null);
+      callback(err, status, null, null);
     }
   });
 };

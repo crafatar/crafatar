@@ -58,6 +58,7 @@ router.get('/avatars/:uuid.:ext?', function(req, res) {
   var def = req.query.default;
   var helm = req.query.hasOwnProperty('helm');
   var start = new Date();
+  var etag = null;
 
   // Prevent app from crashing/freezing
   if (size < config.min_size || size > config.max_size) {
@@ -74,13 +75,23 @@ router.get('/avatars/:uuid.:ext?', function(req, res) {
   uuid = uuid.replace(/-/g, "");
 
   try {
-    helpers.get_avatar(uuid, helm, size, function(err, status, image) {
+    helpers.get_avatar(uuid, helm, size, function(err, status, image, hash) {
       logging.log(uuid + " - " + human_status[status]);
       if (err) {
         logging.error(err);
       }
+      etag = hash && hash.substr(0, 32) + (helm ? "-helm-" : "-face-") + size || "none";
+      var matches = req.get("If-None-Match") == '"' + etag + '"';
       if (image) {
-        sendimage(err ? 503 : 200, status, image);
+        var http_status = 200;
+        if (matches) {
+          http_status = 304;
+        } else if (err) {
+          http_status = 503;
+        }
+        console.log("matches: " + matches);
+        console.log("status: " + http_status);
+        sendimage(http_status, status, image);
       } else {
         handle_default(404, status);
       }
@@ -113,9 +124,10 @@ router.get('/avatars/:uuid.:ext?', function(req, res) {
       'Content-Type': 'image/png',
       'Cache-Control': 'max-age=' + config.browser_cache_time + ', public',
       'Response-Time': new Date() - start,
-      'X-Storage-Type': human_status[img_status]
+      'X-Storage-Type': human_status[img_status],
+      'Etag': '"' + etag + '"'
     });
-    res.end(image);
+    res.end(http_status == 304 ? null : image);
   }
 });
 
