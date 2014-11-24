@@ -42,7 +42,8 @@ block content
           a(href="/avatars/00000000000000000000000000000000?default=steve") steve
           |  or 
           a(href="/avatars/00000000000000000000000000000000?default=alex") alex
-          | .<br> The standard value is calculated based on the id (even = alex, odd = steve)
+          | .<br> A URL is also accepted. <br>
+          | The standard value is calculated based on the id (even = alex, odd = steve)
         a(id="helm", class="anchor")
         a(href="#helm")
           h4 helm
@@ -115,6 +116,10 @@ block content
         .code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64"&gt;
         p Get jeb_'s helmet avatar, 64 × 64 pixels
         .code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64&amp;helm"&gt;
+        p Get jeb_'s avatar or fall back to steve
+        .code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?default=steve"&gt;
+        p Get jeb_'s avatar or fall back to a custom image
+        .code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?default=https%3A%2F%2Fi.imgur.com%2FozszMZV.png"&gt;
         p Get jeb_'s avatar by username, 160 x 160 pixels
         .code &lt;img src="#{domain}/avatars/jeb_"&gt;
         p Get jeb_'s skin
