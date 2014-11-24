@@ -4,55 +4,128 @@ block content
   .container(style= "margin-top: 70px;")
     .row
       .col-md-10
-        h1 Crafatar
+        a(id="crafatar", class="anchor")
+        a(href="#crafatar")
+          h1 Crafatar
         hr
         p Welcome to Crafatar, an API for Minecraft's faces!
 
         hr
-        h2 Documentation
+        a(id="documentation", class="anchor")
+        a(href="#documentation")
+          h2 Documentation
 
-        h3 Endpoint
+        a(id="avatars", class="anchor")
+        a(href="#avatars")
+          h3 Avatars
         p
           | Replace 
-          mark.green uuid
-          |  with a Mojang UUID to get the related head. All images are PNGs.
+          mark.green id
+          |  with a Mojang UUID or username to get the related head. All images are PNGs.
         .code
           | &lt;img src="#{domain}/avatars/
-          mark.green uuid
+          mark.green id
           | "&gt;
 
-        h3 Parameters
-        h4 size
-        p The size of the image in pixels, 1 - 512. <br> Default is 160.
-        h4 default
-        p The image to be returned when the uuid has no skin (404). <br> Valid options are 
+        a(id="parameters", class="anchor")
+        a(href="#parameters")
+          h3 Parameters
+        a(id="size", class="anchor")
+        a(href="#size")
+          h4 size
+        p The size of the image in pixels, #{config.min_size} - #{config.max_size}. <br> Default is #{config.default_size}.
+        a(id="default", class="anchor")
+        a(href="#default")
+          h4 default
+        p
+          | The image to be returned when the id has no skin (404). <br> Valid options are 
           a(href="/avatars/00000000000000000000000000000000?default=steve") steve
           |  or 
           a(href="/avatars/00000000000000000000000000000000?default=alex") alex
-          | .<br> The standard value is calculated based on the UUID (even = alex, odd = steve)
-        h4 helm
+          | .<br> A URL is also accepted. <br>
+          | The standard value is calculated based on the id (even = alex, odd = steve)
+        a(id="helm", class="anchor")
+        a(href="#helm")
+          h4 helm
         p Get an avatar with the second (helmet) layer applied. <br> The content of this parameter is ignored
 
-        h3 HTTP headers
-        p Images will come with these HTTP headers, useful for debugging.
-        h4 Response-Time
+        a(id="skins", class="anchor")
+        a(href="#skins")
+          h3 Skins
+        p
+          | You can also get the full skin file from name or id. <br>
+          | Replace 
+          mark.green id 
+          | with a Mojang UUID or username to get the related skin.
+          | You are redirected to the textures URL, or a 404 is returned.
+        .code
+          | &lt;img src="#{domain}/skins/
+          mark.green id
+          | "&gt;
+
+        a(id="http-headers", class="anchor")
+        a(href="#http-headers")
+          h3 HTTP headers
+        p Responses come with these HTTP headers, useful for debugging.
+        a(id="response-time", class="anchor")
+        a(href="#response-time")
+          h4 Response-Time
         p The time, in milliseconds, it took Crafatar to process the request.
-        h4 X-Storage-Type
+        a(id="x-storage-type", class="anchor")
+        a(href="#x-storage-type")
+          h4 X-Storage-Type
         ul
           li <b>none</b>: No external requests. Cached: User has no skin.
           li <b>cached</b>: No external requests. Skin cached and stored locally.
-          li <b>checked</b>: 1 external request. Skin cached, checked for updates, no skin downloaded.<br>
-          | This happens either when the user has no skin or it didn't change.
+          li
+            | <b>checked</b>: 1 external request. Skin cached, checked for updates, no skin downloaded.<br>
+            | This happens either when the user removed their skin or when it didn't change.
           li <b>downloaded</b>: 2 external requests. Skin changed or unknown, downloaded.
-          li <b>error</b>: This can happen, for example, when Mojang's servers are down. If possible, an outdated image will be served instead.
+          li
+            | <b>error</b>: This can happen, for example, when Mojang's servers are down.<br>
+            | If possible, an outdated image is be served instead.
 
-        h3 Examples
+        a(id="about-usernames", class="anchor")
+        a(href="#about-usernames")
+          h3 About usernames
+        p
+          | We strongly advise you to use UUIDs instead of usernames in production.
+          | Usernames are deprecated by Mojang and you should only use usernames for testing.<br>
+          | Invalid usernames are rejected and a 422 is returned.
+
+        a(id="about-uuids", class="anchor")
+        a(href="#about-uuids")
+          h3 About UUIDs
+        p
+          | UUIDs may use the raw or dashed format.<br>
+          | Invalid UUIDs are rejected and a 422 is returned.
+
+        a(id="about-caching", class="anchor")
+        a(href="#about-caching")
+          h3 About caching
+        p
+          | Crafatar caches keeps skins for #{config.local_cache_time} seconds until they are checked for changes.<br>
+          | Images should be cached in browsers for #{config.browser_cache_time} seconds until a new request to Crafatar is made.
+
+        a(id="examples", class="anchor")
+        a(href="#examples")
+          h3 Examples
         p Get jeb_'s avatar, 160 × 160 pixels
         .code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6"&gt;
         p Get jeb_'s avatar, 64 × 64 pixels
         .code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64"&gt;
         p Get jeb_'s helmet avatar, 64 × 64 pixels
         .code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64&amp;helm"&gt;
+        p Get jeb_'s avatar or fall back to steve
+        .code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?default=steve"&gt;
+        p Get jeb_'s avatar or fall back to a custom image
+        .code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?default=https%3A%2F%2Fi.imgur.com%2FozszMZV.png"&gt;
+        p Get jeb_'s avatar by username, 160 x 160 pixels
+        .code &lt;img src="#{domain}/avatars/jeb_"&gt;
+        p Get jeb_'s skin
+        .code &lt;img src="#{domain}/skins/853c80ef3c3749fdaa49938b674adae6"&gt;
+        p Get jeb_'s skin by username
+        .code &lt;img src="#{domain}/skins/jeb_"&gt;
       .col-md-2.center
         .sideface.redstone_sheep(title="redstone_sheep")
         .sideface.Jake0oo0(title="Jake0oo0")

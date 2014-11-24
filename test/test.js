@@ -3,6 +3,7 @@ var fs = require('fs');
 
 var networking = require('../modules/networking');
 var helpers = require('../modules/helpers');
+var logging = require('../modules/logging');
 var config = require('../modules/config');
 var skins = require('../modules/skins');
 var cache = require("../modules/cache");
@@ -10,18 +11,21 @@ var cache = require("../modules/cache");
 // we don't want tests to fail because of slow internet
 config.http_timeout = 3000;
 
+// no spam
+logging.log = function(){};
+
 var uuids = fs.readFileSync('test/uuids.txt').toString().split("\n");
 var usernames = fs.readFileSync('test/usernames.txt').toString().split("\n");
 // Get a random UUID + username in order to prevent rate limiting
 var uuid = uuids[Math.round(Math.random() * (uuids.length - 1))];
 var username = usernames[Math.round(Math.random() * (usernames.length - 1))];
 
-describe('UUID/username', function() {
+describe('Crafatar', function() {
   before(function() {
     cache.get_redis().flushall();
   });
 
-  describe('UUID', function() {
+  describe('UUID/username', function() {
     it("should be an invalid uuid", function(done) {
       assert.strictEqual(helpers.uuid_valid("g098cb60fa8e427cb299793cbd302c9a"), false);
       done();
@@ -58,43 +62,51 @@ describe('UUID/username', function() {
       assert.strictEqual(helpers.uuid_valid("a"), true);
       done();
     });
-    it("should not exist", function(done) {
-      networking.get_profile("00000000000000000000000000000000", function(err, profile) {
+    it("should not exist (uuid)", function(done) {
+      networking.get_skin_url("00000000000000000000000000000000", function(err, profile) {
+        assert.strictEqual(err, 0);
+        done();
+      });
+    });
+    it("should not exist (username)", function(done) {
+      networking.get_skin_url("Steve", function(err, profile) {
         assert.strictEqual(err, 0);
         done();
       });
     });
   });
 
-  describe('Avatar', function() {
+  describe('Networking: Avatar', function() {
     it("should be downloaded (uuid)", function(done) {
       helpers.get_avatar(uuid, false, 160, function(err, status, image) {
         assert.strictEqual(status, 2);
         done();
       });
     });
-    it("should be local (uuid)", function(done) {
+    it("should be cached (uuid)", function(done) {
       helpers.get_avatar(uuid, false, 160, function(err, status, image) {
         assert.strictEqual(status, 1);
         done();
       });
     });
+    /* We can't test this because of mojang's rate limits :(
     it("should be checked (uuid)", function(done) {
       var original_cache_time = config.local_cache_time;
       config.local_cache_time = 0;
       helpers.get_avatar(uuid, false, 160, function(err, status, image) {
-        assert.strictEqual(status, 2);
+        assert.strictEqual(status, 3);
         config.local_cache_time = original_cache_time;
         done();
       });
     });
+    */
     it("should be downloaded (username)", function(done) {
       helpers.get_avatar(username, false, 160, function(err, status, image) {
         assert.strictEqual(status, 2);
         done();
       });
     });
-    it("should be local (username)", function(done) {
+    it("should be cached (username)", function(done) {
       helpers.get_avatar(username, false, 160, function(err, status, image) {
         assert.strictEqual(status, 1);
         done();
@@ -104,7 +116,7 @@ describe('UUID/username', function() {
       var original_cache_time = config.local_cache_time;
       config.local_cache_time = 0;
       helpers.get_avatar(username, false, 160, function(err, status, image) {
-        assert.strictEqual(status, 2);
+        assert.strictEqual(status, 3);
         config.local_cache_time = original_cache_time;
         done();
       });
@@ -114,6 +126,18 @@ describe('UUID/username', function() {
       helpers.get_avatar("ec561538f3fd461daff5086b22154bce", false, 160, function(err, status, image) {
         assert.strictEqual(status, 3);
         done();
+      });
+    });
+    it("should already have the files / not download", function(done) {
+      assert.doesNotThrow(function() {
+        fs.openSync("face.png", "w");
+        fs.openSync("helm.png", "w");
+        networking.skin_file("http://textures.minecraft.net/texture/477be35554684c28bdeee4cf11c591d3c88afb77e0b98da893fd7bc318c65184", "face.png", "helm.png", function(err) {
+          assert.strictEqual(err, null); // no error here, but it shouldn't throw exceptions
+          fs.unlinkSync("face.png");
+          fs.unlinkSync("helm.png");
+          done();
+        });
       });
     });
     it("should default to Alex", function(done) {
@@ -126,7 +150,7 @@ describe('UUID/username', function() {
     });
   });
 
-  describe('Mojang Errors', function() {
+  describe('Errors', function() {
     before(function() {
       cache.get_redis().flushall();
     });
@@ -136,21 +160,46 @@ describe('UUID/username', function() {
         done();
       });
     });
-    it("should time out on profile download", function(done) {
+    it("should time out on uuid info download", function(done) {
+      var original_timeout = config.http_timeout;
       config.http_timeout = 1;
-      networking.get_profile("069a79f444e94726a5befca90e38aaf5", function(err, profile) {
+      networking.get_skin_url("069a79f444e94726a5befca90e38aaf5", function(err, skin_url) {
         assert.strictEqual(err.code, "ETIMEDOUT");
-        config.http_timeout = 3000;
+        config.http_timeout = original_timeout;
+        done();
+      });
+    });
+    it("should time out on username info download", function(done) {
+      var original_timeout = config.http_timeout;
+      config.http_timeout = 1;
+      networking.get_skin_url("redstone_sheep", function(err, skin_url) {
+        assert.strictEqual(err.code, "ETIMEDOUT");
+        config.http_timeout = original_timeout;
         done();
       });
     });
     it("should time out on skin download", function(done) {
+      var original_timeout = config.http_timeout;
       config.http_timeout = 1;
       networking.skin_file("http://textures.minecraft.net/texture/477be35554684c28bdeee4cf11c591d3c88afb77e0b98da893fd7bc318c65184", "face.png", "helm.png", function(err) {
         assert.strictEqual(err.code, "ETIMEDOUT");
-        config.http_timeout = 3000;
+        config.http_timeout = original_timeout;
         done();
       });
+    });
+    it("should not find the skin", function(done) {
+      assert.doesNotThrow(function() {
+        networking.skin_file("http://textures.minecraft.net/texture/this-does-not-exist", "face.png", "helm.png", function(err) {
+          assert.strictEqual(err, null); // no error here, but it shouldn't throw exceptions
+          done();
+        });
+      });
+    });
+    it("should handle file updates on invalid files", function(done) {
+      assert.doesNotThrow(function() {
+        cache.update_timestamp("0123456789abcdef0123456789abcdef", "invalid-file.png");
+      });
+      done();
     });
   });
 });

@@ -1,3 +1,5 @@
+var networking = require('../modules/networking');
+var logging = require('../modules/logging');
 var helpers = require('../modules/helpers');
 var router = require('express').Router();
 var config = require('../modules/config');
@@ -6,13 +8,51 @@ var skins = require('../modules/skins');
 var human_status = {
   0: "none",
   1: "cached",
-  2: "checked",
-  3: "downloaded",
+  2: "downloaded",
+  3: "checked",
   "-1": "error"
 };
 
+router.get('/skins/:uuid.:ext?', function(req, res) {
+  var uuid = req.params.uuid;
+  var start = new Date();
+
+  if (!helpers.uuid_valid(uuid)) {
+    res.status(422).send("422 Invalid UUID");
+    return;
+  }
+  // strip dashes
+  uuid = uuid.replace(/-/g, "");
+  try {
+    helpers.get_image_hash(uuid, function(err, status, hash) {
+      if (hash) {
+        res.writeHead(301, {
+          'Location': "http://textures.minecraft.net/texture/" + hash,
+          'Cache-Control': 'max-age=' + config.browser_cache_time + ', public',
+          'Response-Time': new Date() - start,
+          'X-Storage-Type': human_status[status]
+        });
+        res.end();
+      } else if (!err) {
+        res.writeHead(404, {
+          'Cache-Control': 'max-age=' + config.browser_cache_time + ', public',
+          'Response-Time': new Date() - start,
+          'X-Storage-Type': human_status[status]
+        });
+        res.end("404 Not found");
+      } else {
+        res.status(500).send("500 Internal server error");
+      }
+    });
+  } catch(e) {
+    logging.error("Error!");
+    logging.error(e);
+    res.status(500).send("500 Internal server error");
+  }
+});
+
 /* GET avatar request. */
-router.get('/:uuid.:ext?', function(req, res) {
+router.get('/avatars/:uuid.:ext?', function(req, res) {
   var uuid = req.params.uuid;
   var size = req.query.size || config.default_size;
   var def = req.query.default;
@@ -35,9 +75,9 @@ router.get('/:uuid.:ext?', function(req, res) {
 
   try {
     helpers.get_avatar(uuid, helm, size, function(err, status, image) {
-      console.log(uuid + " - " + human_status[status]);
+      logging.log(uuid + " - " + human_status[status]);
       if (err) {
-        console.error(err);
+        logging.error(err);
       }
       if (image) {
         sendimage(err ? 503 : 200, status, image);
@@ -46,18 +86,26 @@ router.get('/:uuid.:ext?', function(req, res) {
       }
     });
   } catch(e) {
-    console.error("Error!");
-    console.error(e);
+    logging.error("Error!");
+    logging.error(e);
     handle_default(500, status);
   }
 
   function handle_default(http_status, img_status) {
-    if (def != "steve" && def != "alex") {
-      def = skins.default_skin(uuid);
+    if (def && def != "steve" && def != "alex") {
+      res.writeHead(301, {
+        'Cache-Control': 'max-age=' + config.browser_cache_time + ', public',
+        'Response-Time': new Date() - start,
+        'X-Storage-Type': human_status[img_status],
+        'Location': def
+      });
+      res.end();
+    } else {
+      def = def || skins.default_skin(uuid);
+      skins.resize_img("public/images/" + def + ".png", size, function(err, image) {
+        sendimage(http_status, img_status, image);
+      });
     }
-    skins.resize_img("public/images/" + def + ".png", size, function(err, image) {
-      sendimage(http_status, img_status, image);
-    });
   }
 
   function sendimage(http_status, img_status, image) {

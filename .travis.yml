@@ -1,6 +1,8 @@
 language: node_js
 node_js:
   - "0.10"
+before_script:
+  - cp "modules/config.example.js" "modules/config.js"
 notifications:
   irc:
     channels:
@@ -8,4 +10,3 @@ notifications:
     skip_join: true
 services:
   - redis-server
-skip_join: true

@@ -1,3 +1,4 @@
+var logging = require('./logging');
 var config = require("./config");
 var redis = null;
 var fs = require("fs");
@@ -5,7 +6,7 @@ var fs = require("fs");
 // sets up redis connection
 // flushes redis when running on heroku (files aren't kept between pushes)
 function connect_redis() {
-  console.log("connecting to redis...");
+  logging.log("connecting to redis...");
   if (process.env.REDISCLOUD_URL) {
     var redisURL = require("url").parse(process.env.REDISCLOUD_URL);
     redis = require("redis").createClient(redisURL.port, redisURL.hostname);
@@ -14,17 +15,17 @@ function connect_redis() {
     redis = require("redis").createClient();
   }
   redis.on("ready", function() {
-    console.log("Redis connection established.");
+    logging.log("Redis connection established.");
     if(process.env.HEROKU) {
-      console.log("Running on heroku, flushing redis");
+      logging.log("Running on heroku, flushing redis");
       redis.flushall();
     }
   });
   redis.on("error", function (err) {
-    console.error(err);
+    logging.error(err);
   });
   redis.on("end", function () {
-    console.warn("Redis connection lost!");
+    logging.warn("Redis connection lost!");
   });
 }
 
@@ -38,11 +39,11 @@ function update_file_date(hash) {
         var date = new Date();
         fs.utimes(path, date, date, function(err){
           if (err) {
-            console.error(err);
+            logging.error(err);
           }
         });
       } else {
-        console.error("Tried to update " + path + " date, but it doesn't exist");
+        logging.error("Tried to update " + path + " date, but it doesn't exist");
       }
     });
   }
@@ -56,7 +57,7 @@ exp.get_redis = function() {
 
 // sets the timestamp for +uuid+ and its face file's date to now
 exp.update_timestamp = function(uuid, hash) {
-  console.log(uuid + " cache: updating timestamp");
+  logging.log(uuid + " cache: updating timestamp");
   var time = new Date().getTime();
   redis.hmset(uuid, "t", time);
   update_file_date(hash);
@@ -64,7 +65,7 @@ exp.update_timestamp = function(uuid, hash) {
 
 // create the key +uuid+, store +hash+ and time
 exp.save_hash = function(uuid, hash) {
-  console.log(uuid + " cache: saving hash");
+  logging.log(uuid + " cache: saving hash");
   var time = new Date().getTime();
   redis.hmset(uuid, "h", hash, "t", time);
 };

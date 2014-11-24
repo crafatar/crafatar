@@ -20,7 +20,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/avatars', avatars);
+app.use('/', avatars);
 
 
 // catch 404 and forward to error handler

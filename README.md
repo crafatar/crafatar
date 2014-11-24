@@ -11,10 +11,15 @@ Image manipulation is done by [lwip](https://github.com/EyalAr/lwip)
 
 See the [API Usage](https://crafatar.com)
 
+## Contact
+
+You can [join us](https://webchat.esper.net/?channels=spongy) in #spongy on irc.esper.net.
+
 ## Install
 
 * Clone the repository
 * `npm install`
 * `redis-server`
+* `cp "modules/config.example.js" "modules/config.js"`
 * `npm start`
 * Access [http://localhost:3000](http://localhost:3000)
