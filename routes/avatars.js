@@ -30,6 +30,7 @@ router.get('/skins/:uuid.:ext?', function(req, res) {
           'Location': "http://textures.minecraft.net/texture/" + hash,
           'Cache-Control': 'max-age=' + config.browser_cache_time + ', public',
           'Response-Time': new Date() - start,
+          'Access-Control-Allow-Origin': '*',
           'X-Storage-Type': human_status[status]
         });
         res.end();
@@ -37,6 +38,7 @@ router.get('/skins/:uuid.:ext?', function(req, res) {
         res.writeHead(404, {
           'Cache-Control': 'max-age=' + config.browser_cache_time + ', public',
           'Response-Time': new Date() - start,
+          'Access-Control-Allow-Origin': '*',
           'X-Storage-Type': human_status[status]
         });
         res.end("404 Not found");
@@ -108,6 +110,7 @@ router.get('/avatars/:uuid.:ext?', function(req, res) {
         'Cache-Control': 'max-age=' + config.browser_cache_time + ', public',
         'Response-Time': new Date() - start,
         'X-Storage-Type': human_status[img_status],
+        'Access-Control-Allow-Origin': '*',
         'Location': def
       });
       res.end();
@@ -125,6 +128,7 @@ router.get('/avatars/:uuid.:ext?', function(req, res) {
       'Cache-Control': 'max-age=' + config.browser_cache_time + ', public',
       'Response-Time': new Date() - start,
       'X-Storage-Type': human_status[img_status],
+      'Access-Control-Allow-Origin': '*',
       'Etag': '"' + etag + '"'
     });
     res.end(http_status == 304 ? null : image);
