@@ -93,11 +93,19 @@ router.get('/avatars/:uuid.:ext?', function(req, res) {
 
   function handle_default(http_status, img_status) {
     if (def != "steve" && def != "alex") {
-      def = skins.default_skin(uuid);
+      res.writeHead(301, {
+        'Cache-Control': 'max-age=' + config.browser_cache_time + ', public',
+        'Response-Time': new Date() - start,
+        'X-Storage-Type': human_status[img_status],
+        'Location': def
+      });
+      res.end();
+    } else {
+      def = def || skins.default_skin;
+      skins.resize_img("public/images/" + def + ".png", size, function(err, image) {
+        sendimage(http_status, img_status, image);
+      });
     }
-    skins.resize_img("public/images/" + def + ".png", size, function(err, image) {
-      sendimage(http_status, img_status, image);
-    });
   }
 
   function sendimage(http_status, img_status, image) {
