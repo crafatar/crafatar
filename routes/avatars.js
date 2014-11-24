@@ -65,7 +65,8 @@ router.get('/:uuid.:ext?', function(req, res) {
       'Content-Type': 'image/png',
       'Cache-Control': 'max-age=' + config.browser_cache_time + ', public',
       'Response-Time': new Date() - start,
-      'X-Storage-Type': human_status[img_status]
+      'X-Storage-Type': human_status[img_status],
+      'Access-Control-Allow-Origin': "*"
     });
     res.end(image);
   }
