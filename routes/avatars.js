@@ -92,7 +92,7 @@ router.get('/avatars/:uuid.:ext?', function(req, res) {
   }
 
   function handle_default(http_status, img_status) {
-    if (def != "steve" && def != "alex") {
+    if (def && def != "steve" && def != "alex") {
       res.writeHead(301, {
         'Cache-Control': 'max-age=' + config.browser_cache_time + ', public',
         'Response-Time': new Date() - start,
@@ -101,7 +101,7 @@ router.get('/avatars/:uuid.:ext?', function(req, res) {
       });
       res.end();
     } else {
-      def = def || skins.default_skin;
+      def = def || skins.default_skin(uuid);
       skins.resize_img("public/images/" + def + ".png", size, function(err, image) {
         sendimage(http_status, img_status, image);
       });
