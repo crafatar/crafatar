@@ -4,18 +4,18 @@ block content
   .container(style= "margin-top: 70px;")
     .row
       .col-md-10
-        a(name="crafatar", class="anchor")
+        a(id="crafatar", class="anchor")
         a(href="#crafatar")
           h1 Crafatar
         hr
         p Welcome to Crafatar, an API for Minecraft's faces!
 
         hr
-        a(name="documentation", class="anchor")
+        a(id="documentation", class="anchor")
         a(href="#documentation")
           h2 Documentation
 
-        a(name="avatars", class="anchor")
+        a(id="avatars", class="anchor")
         a(href="#avatars")
           h3 Avatars
         p
@@ -27,30 +27,32 @@ block content
           mark.green id
           | "&gt;
 
-        a(name="parameters", class="anchor")
+        a(id="parameters", class="anchor")
         a(href="#parameters")
           h3 Parameters
-        a(name="size", class="anchor")
+        a(id="size", class="anchor")
         a(href="#size")
           h4 size
         p The size of the image in pixels, #{config.min_size} - #{config.max_size}. <br> Default is #{config.default_size}.
-        a(name="default", class="anchor")
+        a(id="default", class="anchor")
         a(href="#default")
           h4 default
-        p The image to be returned when the id has no skin (404). <br> Valid options are 
+        p
+          | The image to be returned when the id has no skin (404). <br> Valid options are 
           a(href="/avatars/00000000000000000000000000000000?default=steve") steve
           |  or 
           a(href="/avatars/00000000000000000000000000000000?default=alex") alex
           | .<br> The standard value is calculated based on the id (even = alex, odd = steve)
-        a(name="helm", class="anchor")
+        a(id="helm", class="anchor")
         a(href="#helm")
           h4 helm
         p Get an avatar with the second (helmet) layer applied. <br> The content of this parameter is ignored
 
-        a(name="skins", class="anchor")
+        a(id="skins", class="anchor")
         a(href="#skins")
           h3 Skins
-        p You can also get the full skin file from name or id. <br>
+        p
+          | You can also get the full skin file from name or id. <br>
           | Replace 
           mark.green id 
           | with a Mojang UUID or username to get the related skin.
@@ -60,46 +62,51 @@ block content
           mark.green id
           | "&gt;
 
-        a(name="http-headers", class="anchor")
+        a(id="http-headers", class="anchor")
         a(href="#http-headers")
           h3 HTTP headers
         p Responses come with these HTTP headers, useful for debugging.
-        a(name="response-time", class="anchor")
+        a(id="response-time", class="anchor")
         a(href="#response-time")
           h4 Response-Time
         p The time, in milliseconds, it took Crafatar to process the request.
-        a(name="x-storage-type", class="anchor")
+        a(id="x-storage-type", class="anchor")
         a(href="#x-storage-type")
           h4 X-Storage-Type
         ul
           li <b>none</b>: No external requests. Cached: User has no skin.
           li <b>cached</b>: No external requests. Skin cached and stored locally.
-          li <b>checked</b>: 1 external request. Skin cached, checked for updates, no skin downloaded.<br>
-          | This happens either when the user removed their skin or when it didn't change.
+          li
+            | <b>checked</b>: 1 external request. Skin cached, checked for updates, no skin downloaded.<br>
+            | This happens either when the user removed their skin or when it didn't change.
           li <b>downloaded</b>: 2 external requests. Skin changed or unknown, downloaded.
-          li <b>error</b>: This can happen, for example, when Mojang's servers are down.<br>
-          | If possible, an outdated image is be served instead.
+          li
+            | <b>error</b>: This can happen, for example, when Mojang's servers are down.<br>
+            | If possible, an outdated image is be served instead.
 
-        a(name="about-usernames", class="anchor")
+        a(id="about-usernames", class="anchor")
         a(href="#about-usernames")
           h3 About usernames
-        p We strongly advise you to use UUIDs instead of usernames in production.
-        | Usernames are deprecated by Mojang and you should only use usernames for testing.<br>
-        | Invalid usernames are rejected and a 422 is returned.
+        p
+          | We strongly advise you to use UUIDs instead of usernames in production.
+          | Usernames are deprecated by Mojang and you should only use usernames for testing.<br>
+          | Invalid usernames are rejected and a 422 is returned.
 
-        a(name="about-uuids", class="anchor")
+        a(id="about-uuids", class="anchor")
         a(href="#about-uuids")
           h3 About UUIDs
-        p UUIDs may use the raw or dashed format.<br>
-        | Invalid UUIDs are rejected and a 422 is returned.
+        p
+          | UUIDs may use the raw or dashed format.<br>
+          | Invalid UUIDs are rejected and a 422 is returned.
 
-        a(name="about-caching", class="anchor")
+        a(id="about-caching", class="anchor")
         a(href="#about-caching")
           h3 About caching
-        p Crafatar caches keeps skins for #{config.local_cache_time} seconds until they are checked for changes.<br>
-        | Images should be cached in browsers for #{config.browser_cache_time} seconds until a new request to Crafatar is made.
+        p
+          | Crafatar caches keeps skins for #{config.local_cache_time} seconds until they are checked for changes.<br>
+          | Images should be cached in browsers for #{config.browser_cache_time} seconds until a new request to Crafatar is made.
 
-        a(name="examples", class="anchor")
+        a(id="examples", class="anchor")
         a(href="#examples")
           h3 Examples
         p Get jeb_'s avatar, 160 × 160 pixels
