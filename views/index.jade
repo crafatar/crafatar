@@ -23,9 +23,9 @@ block content
           mark.green id
           |  with a Mojang UUID or username to get the related head. All images are PNGs.
         .code
-          | &lt;img src="#{domain}/avatars/
+          | #{domain}/avatars/
           mark.green id
-          | "&gt;
+          | 
 
         a(id="parameters", class="anchor")
         a(href="#parameters")
@@ -59,9 +59,8 @@ block content
           | with a Mojang UUID or username to get the related skin.
           | You are redirected to the textures URL, or a 404 is returned.
         .code
-          | &lt;img src="#{domain}/skins/
+          | #{domain}/skins/
           mark.green id
-          | "&gt;
 
         a(id="http-headers", class="anchor")
         a(href="#http-headers")
@@ -110,22 +109,24 @@ block content
         a(id="examples", class="anchor")
         a(href="#examples")
           h3 Examples
-        p Get jeb_'s avatar, 160 × 160 pixels
-        .code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6"&gt;
+        p Get jeb_'s avatar
+        .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6
         p Get jeb_'s avatar, 64 × 64 pixels
-        .code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64"&gt;
+        .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64
         p Get jeb_'s helmet avatar, 64 × 64 pixels
-        .code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64&amp;helm"&gt;
+        .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64&amp;helm
         p Get jeb_'s avatar or fall back to steve
-        .code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?default=steve"&gt;
-        p Get jeb_'s avatar or fall back to a custom image
-        .code &lt;img src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?default=https%3A%2F%2Fi.imgur.com%2FozszMZV.png"&gt;
-        p Get jeb_'s avatar by username, 160 x 160 pixels
-        .code &lt;img src="#{domain}/avatars/jeb_"&gt;
+        .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?default=steve
+        p
+          | Get jeb_'s avatar or fall back to 
+          a(href="https://i.imgur.com/ozszMZV.png") a custom image
+        .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?default=https%3A%2F%2Fi.imgur.com%2FozszMZV.png
+        p Get jeb_'s avatar by username
+        .code #{domain}/avatars/jeb_
         p Get jeb_'s skin
-        .code &lt;img src="#{domain}/skins/853c80ef3c3749fdaa49938b674adae6"&gt;
+        .code #{domain}/skins/853c80ef3c3749fdaa49938b674adae6
         p Get jeb_'s skin by username
-        .code &lt;img src="#{domain}/skins/jeb_"&gt;
+        .code #{domain}/skins/jeb_
       .col-md-2.center
         .sideface.redstone_sheep(title="redstone_sheep")
         .sideface.Jake0oo0(title="Jake0oo0")
