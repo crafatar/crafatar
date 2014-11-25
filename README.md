@@ -7,9 +7,10 @@ Inspired by [Gravatar](https://gravatar.com) (hence the name) and [Minotar](http
 
 Image manipulation is done by [lwip](https://github.com/EyalAr/lwip)
 
-## Usage
+![redstone_sheep's avatar](https://crafatar.com/avatars/ae795aa86327408e92ab25c8a59f3ba1?size=128) ![Jake0oo0's avatar](https://crafatar.com/avatars/2d5aa9cdaeb049189930461fc9b91cc5?size=128) ![Notch's avatar](https://crafatar.com/avatars/069a79f444e94726a5befca90e38aaf5?size=128) ![sk89q's avatar](https://crafatar.com/avatars/0ea8eca3dbf647cc9d1ac64551ca975c?size=128) ![md_5's avatar](https://crafatar.com/avatars/af74a02d19cb445bb07f6866a861f783?size=128) 
+## Usage / Documentation
 
-See the [API Usage](https://crafatar.com)
+Please [visit the website](https://crafatar.com) for details.
 
 ## Contact
 
