@@ -91,8 +91,9 @@ router.get('/avatars/:uuid.:ext?', function(req, res) {
         } else if (err) {
           http_status = 503;
         }
-        console.log("matches: " + matches);
-        console.log("status: " + http_status);
+        logging.log("matches: " + matches);
+        logging.log("Etag: " + req.get("If-None-Match"));
+        logging.log("status: " + http_status);
         sendimage(http_status, status, image);
       } else {
         handle_default(404, status);
