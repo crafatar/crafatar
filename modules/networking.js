@@ -102,10 +102,10 @@ exp.get_skin_url = function(uuid, callback) {
 // stores face image as +facename+
 // stores helm image as +helmname+
 // callback contains error
-exp.skin_file = function(url, facename, helmname, callback) {
-  if (fs.existsSync(facename) && fs.existsSync(facename)) {
+exp.skin_file = function(url, facename, callback) {
+  if (facename && fs.existsSync(facename)) {
     logging.log("Images already exist, not downloading.");
-    callback(null);
+    callback(null, null);
     return;
   }
   request.get({
@@ -116,7 +116,7 @@ exp.skin_file = function(url, facename, helmname, callback) {
     if (!error && response.statusCode == 200) {
       // skin downloaded successfully
       logging.log(url + " skin downloaded");
-      callback(error, body);
+      callback(null, body);
     } else {
       if (error) {
         logging.error("Error downloading '" + url + "': " + error);

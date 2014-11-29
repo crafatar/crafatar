@@ -1,7 +1,7 @@
+var router = require('express').Router();
 var networking = require('../modules/networking');
 var logging = require('../modules/logging');
 var helpers = require('../modules/helpers');
-var router = require('express').Router();
 var config = require('../modules/config');
 var skins = require('../modules/skins');
 
@@ -13,48 +13,8 @@ var human_status = {
   "-1": "error"
 };
 
-router.get('/skins/:uuid.:ext?', function(req, res) {
-  var uuid = req.params.uuid;
-  var start = new Date();
-
-  if (!helpers.uuid_valid(uuid)) {
-    res.status(422).send("422 Invalid UUID");
-    return;
-  }
-  // strip dashes
-  uuid = uuid.replace(/-/g, "");
-  try {
-    helpers.get_image_hash(uuid, function(err, status, hash) {
-      if (hash) {
-        res.writeHead(301, {
-          'Location': "http://textures.minecraft.net/texture/" + hash,
-          'Cache-Control': 'max-age=' + config.browser_cache_time + ', public',
-          'Response-Time': new Date() - start,
-          'Access-Control-Allow-Origin': '*',
-          'X-Storage-Type': human_status[status]
-        });
-        res.end();
-      } else if (!err) {
-        res.writeHead(404, {
-          'Cache-Control': 'max-age=' + config.browser_cache_time + ', public',
-          'Response-Time': new Date() - start,
-          'Access-Control-Allow-Origin': '*',
-          'X-Storage-Type': human_status[status]
-        });
-        res.end("404 Not found");
-      } else {
-        res.status(500).send("500 Internal server error");
-      }
-    });
-  } catch(e) {
-    logging.error("Error!");
-    logging.error(e);
-    res.status(500).send("500 Internal server error");
-  }
-});
-
 /* GET avatar request. */
-router.get('/avatars/:uuid.:ext?', function(req, res) {
+router.get('/:uuid.:ext?', function(req, res) {
   var uuid = req.params.uuid;
   var size = req.query.size || config.default_size;
   var def = req.query.default;

@@ -36,7 +36,7 @@ function store_images(uuid, details, callback) {
           var facepath = __dirname + '/../' + config.faces_dir + hash + ".png";
           var helmpath = __dirname + '/../' + config.helms_dir + hash + ".png";
           // download skin, extract face/helm
-          networking.skin_file(skin_url, facepath, helmpath, function(err, img) {
+          networking.skin_file(skin_url, facepath, function(err, img) {
             if (err) {
               callback(err, null);
             } else {
@@ -139,6 +139,24 @@ exp.get_avatar = function(uuid, helm, size, callback) {
     } else {
       // hash is null when uuid has no skin
       callback(err, status, null, null);
+    }
+  });
+};
+
+exp.get_skin = function(uuid, callback) {
+  logging.log("\nskin request: " + uuid);
+  exp.get_image_hash(uuid, function(err, status, hash) {
+    if (hash) {
+      var skinurl = "http://textures.minecraft.net/texture/" + hash;
+      networking.skin_file(skinurl, null, function(err, img) {
+        if (err) {
+          logging.log("\nerror while downloading skin");
+          callback(err, hash, null);
+        } else {
+          logging.log("\nreturning skin");
+          callback(null, hash, img);
+        }
+      });
     }
   });
 };

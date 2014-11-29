@@ -16,7 +16,7 @@ function connect_redis() {
   }
   redis.on("ready", function() {
     logging.log("Redis connection established.");
-    if(process.env.HEROKU) {
+    if(process.env.HEROKU || true) {
       logging.log("Running on heroku, flushing redis");
       redis.flushall();
     }
