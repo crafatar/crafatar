@@ -36,12 +36,22 @@ function store_images(uuid, details, callback) {
           var facepath = __dirname + '/../' + config.faces_dir + hash + ".png";
           var helmpath = __dirname + '/../' + config.helms_dir + hash + ".png";
           // download skin, extract face/helm
-          networking.skin_file(skin_url, facepath, helmpath, function(err) {
+          networking.skin_file(skin_url, facepath, helmpath, function(err, img) {
             if (err) {
               callback(err, null);
             } else {
-              cache.save_hash(uuid, hash);
-              callback(null, hash);
+              skins.extract_face(img, facepath, function(err) {
+                if (err) {
+                  callback(err);
+                } else {
+                  logging.log(facepath + " face extracted");
+                  skins.extract_helm(facepath, img, helmpath, function(err) {
+                    logging.log(helmpath + " helm extracted.");
+                    cache.save_hash(uuid, hash);
+                    callback(err, hash);
+                  });
+                }
+              });
             }
           });
         }

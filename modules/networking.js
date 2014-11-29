@@ -116,17 +116,7 @@ exp.skin_file = function(url, facename, helmname, callback) {
     if (!error && response.statusCode == 200) {
       // skin downloaded successfully
       logging.log(url + " skin downloaded");
-      skins.extract_face(body, facename, function(err) {
-        if (err) {
-          callback(err);
-        } else {
-          logging.log(facename + " face extracted");
-          skins.extract_helm(facename, body, helmname, function(err) {
-            logging.log(helmname + " helm extracted.");
-            callback(err);
-          });
-        }
-      });
+      callback(error, body);
     } else {
       if (error) {
         logging.error("Error downloading '" + url + "': " + error);
@@ -143,7 +133,7 @@ exp.skin_file = function(url, facename, helmname, callback) {
         logging.error(body);
         error = "unknown error"; // Error needs to be set, otherwise null in callback
       }
-      callback(error);
+      callback(error, null);
     }
   });
 };
