@@ -152,4 +152,22 @@ exp.get_avatar = function(uuid, helm, size, callback) {
   });
 };
 
+exp.get_skin = function(uuid, callback) {
+  logging.log("\nskin request: " + uuid);
+  exp.get_image_hash(uuid, function(err, status, hash) {
+    if (hash) {
+      var skinurl = "http://textures.minecraft.net/texture/" + hash;
+      networking.get_skin(skinurl, function(err, img) {
+        if (err) {
+          logging.log("\nerror while downloading skin");
+          callback(err, hash, null);
+        } else {
+          logging.log("\nreturning skin");
+          callback(null, hash, img);
+        }
+      });
+    }
+  });
+};
+
 module.exports = exp;
