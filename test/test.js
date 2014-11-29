@@ -9,7 +9,7 @@ var skins = require('../modules/skins');
 var cache = require("../modules/cache");
 
 // we don't want tests to fail because of slow internet
-config.http_timeout = 3000;
+config.http_timeout *= 3;
 
 // no spam
 logging.log = function(){};
@@ -18,7 +18,9 @@ var uuids = fs.readFileSync('test/uuids.txt').toString().split("\n");
 var usernames = fs.readFileSync('test/usernames.txt').toString().split("\n");
 // Get a random UUID + username in order to prevent rate limiting
 var uuid = uuids[Math.round(Math.random() * (uuids.length - 1))];
+console.log("using uuid '" + uuid + "'");
 var username = usernames[Math.round(Math.random() * (usernames.length - 1))];
+console.log("using username '" + username + "'");
 
 describe('Crafatar', function() {
   before(function() {
