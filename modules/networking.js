@@ -108,7 +108,8 @@ exp.get_skin = function(url, callback) {
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       // skin downloaded successfully
-      logging.log(url + " skin downloaded");
+      logging.log("downloaded skin");
+      logging.debug(url);
       callback(null, body);
     } else {
       if (error) {

@@ -35,26 +35,34 @@ function store_images(uuid, details, callback) {
           logging.log(uuid + " new hash: " + hash);
           var facepath = __dirname + '/../' + config.faces_dir + hash + ".png";
           var helmpath = __dirname + '/../' + config.helms_dir + hash + ".png";
-          // download skin
-          networking.get_skin(skin_url, function(err, img) {
-            if (err || !img) {
-              callback(err, null);
-            } else {
-              // extract face / helm
-              skins.extract_face(img, facepath, function(err) {
-                if (err) {
-                  callback(err);
-                } else {
-                  logging.log(facepath + " face extracted");
-                  skins.extract_helm(facepath, img, helmpath, function(err) {
-                    logging.log(helmpath + " helm extracted.");
-                    cache.save_hash(uuid, hash);
-                    callback(err, hash);
-                  });
-                }
-              });
-            }
-          });
+
+          if (fs.existsSync(facepath)) {
+            logging.log(uuid + " Avatar already exists, not downloading");
+            callback(null, hash);
+          } else {
+            // download skin
+            networking.get_skin(skin_url, function(err, img) {
+              if (err || !img) {
+                callback(err, null);
+              } else {
+                // extract face / helm
+                skins.extract_face(img, facepath, function(err) {
+                  if (err) {
+                    callback(err);
+                  } else {
+                    logging.log(uuid + " face extracted");
+                    logging.debug(facepath);
+                    skins.extract_helm(facepath, img, helmpath, function(err) {
+                      logging.log(uuid + " helm extracted");
+                      logging.debug(helmpath);
+                      cache.save_hash(uuid, hash);
+                      callback(err, hash);
+                    });
+                  }
+                });
+              }
+            });
+          }
         }
       } else {
         // profile found, but has no skin
@@ -140,24 +148,6 @@ exp.get_avatar = function(uuid, helm, size, callback) {
     } else {
       // hash is null when uuid has no skin
       callback(err, status, null, null);
-    }
-  });
-};
-
-exp.get_skin = function(uuid, callback) {
-  logging.log("\nskin request: " + uuid);
-  exp.get_image_hash(uuid, function(err, status, hash) {
-    if (hash) {
-      var skinurl = "http://textures.minecraft.net/texture/" + hash;
-      networking.get_skin(skinurl, null, function(err, img) {
-        if (err) {
-          logging.log("\nerror while downloading skin");
-          callback(err, hash, null);
-        } else {
-          logging.log("\nreturning skin");
-          callback(null, hash, img);
-        }
-      });
     }
   });
 };
