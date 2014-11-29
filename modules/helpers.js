@@ -38,6 +38,7 @@ function store_images(uuid, details, callback) {
 
           if (fs.existsSync(facepath)) {
             logging.log(uuid + " Avatar already exists, not downloading");
+            cache.save_hash(uuid, hash);
             callback(null, hash);
           } else {
             // download skin
@@ -110,9 +111,10 @@ exp.get_image_hash = function(uuid, callback) {
           if (err) {
             callback(err, -1, details && details.hash);
           } else {
+            var oldhash = details && details.hash || "none";
+            logging.debug(uuid + " old hash: " + oldhash);
             logging.log(uuid + " hash: " + hash);
-            var oldhash = details && details.hash;
-            var status = hash !== oldhash ? 2 : 3;
+            var status = hash == oldhash ? 3 : 2;
             callback(null, status, hash);
           }
         });
