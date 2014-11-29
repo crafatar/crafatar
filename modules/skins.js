@@ -1,6 +1,6 @@
-var logging = require('./logging');
-var lwip = require('lwip');
-var fs = require('fs');
+var logging = require("./logging");
+var lwip = require("lwip");
+var fs = require("fs");
 
 var exp = {};
 
@@ -77,7 +77,7 @@ exp.resize_img = function(inname, size, callback) {
     } else {
       image.batch()
       .resize(size, size, "nearest-neighbor") // nearest-neighbor doesn't blur
-      .toBuffer('png', function(err, buffer) {
+      .toBuffer("png", function(err, buffer) {
         callback(null, buffer);
       });
     }

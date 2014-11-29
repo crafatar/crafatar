@@ -1,11 +1,11 @@
-var assert = require('assert');
-var fs = require('fs');
+var assert = require("assert");
+var fs = require("fs");
 
-var networking = require('../modules/networking');
-var helpers = require('../modules/helpers');
-var logging = require('../modules/logging');
-var config = require('../modules/config');
-var skins = require('../modules/skins');
+var networking = require("../modules/networking");
+var helpers = require("../modules/helpers");
+var logging = require("../modules/logging");
+var config = require("../modules/config");
+var skins = require("../modules/skins");
 var cache = require("../modules/cache");
 
 // we don't want tests to fail because of slow internet
@@ -14,15 +14,15 @@ config.http_timeout *= 3;
 // no spam
 logging.log = function(){};
 
-var uuids = fs.readFileSync('test/uuids.txt').toString().split(/\r?\n/);
-var usernames = fs.readFileSync('test/usernames.txt').toString().split(/\r?\n/);
+var uuids = fs.readFileSync("test/uuids.txt").toString().split(/\r?\n/);
+var usernames = fs.readFileSync("test/usernames.txt").toString().split(/\r?\n/);
 // Get a random UUID + username in order to prevent rate limiting
 var uuid = uuids[Math.round(Math.random() * (uuids.length - 1))];
 console.log("using uuid '" + uuid + "'");
 var username = usernames[Math.round(Math.random() * (usernames.length - 1))];
 console.log("using username '" + username + "'");
 
-describe('Crafatar', function() {
+describe("Crafatar", function() {
   // we might have to make 2 HTTP requests
   this.timeout(config.http_timeout * 2 + 50);
 
@@ -30,7 +30,7 @@ describe('Crafatar', function() {
     cache.get_redis().flushall();
   });
 
-  describe('UUID/username', function() {
+  describe("UUID/username", function() {
     it("should be an invalid uuid", function(done) {
       assert.strictEqual(helpers.uuid_valid("g098cb60fa8e427cb299793cbd302c9a"), false);
       done();
@@ -81,7 +81,7 @@ describe('Crafatar', function() {
     });
   });
 
-  describe('Networking: Avatar', function() {
+  describe("Networking: Avatar", function() {
     it("should be downloaded (uuid)", function(done) {
       helpers.get_avatar(uuid, false, 160, function(err, status, image) {
         assert.strictEqual(status, 2);
@@ -127,7 +127,7 @@ describe('Crafatar', function() {
       });
     });
     it("should not exist (but account does)", function(done) {
-      // profile 'Alex'
+      // profile "Alex"
       helpers.get_avatar("ec561538f3fd461daff5086b22154bce", false, 160, function(err, status, image) {
         assert.strictEqual(status, 2);
         done();
@@ -143,7 +143,7 @@ describe('Crafatar', function() {
     });
   });
 
-  describe('Errors', function() {
+  describe("Errors", function() {
     before(function() {
       cache.get_redis().flushall();
     });

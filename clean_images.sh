@@ -9,7 +9,7 @@ amount="50000" # about 20MB
 # max free MB (on /) to trigger deletion
 trigger="50"
 
-available=`df -m / | awk 'NR==2 { print $4 }'` # MB available on /
+available=`df -m / | awk "NR==2 { print $4 }"` # MB available on /
 if [ "$available" -le "$trigger" ]; then
   echo "Deleting old images"
   for file in `ls -1tr "/app/skins/faces" | head -n $amount`; do

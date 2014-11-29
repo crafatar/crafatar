@@ -1,9 +1,9 @@
-var router = require('express').Router();
-var networking = require('../modules/networking');
-var logging = require('../modules/logging');
-var helpers = require('../modules/helpers');
-var config = require('../modules/config');
-var skins = require('../modules/skins');
+var router = require("express").Router();
+var networking = require("../modules/networking");
+var logging = require("../modules/logging");
+var helpers = require("../modules/helpers");
+var config = require("../modules/config");
+var skins = require("../modules/skins");
 
 var human_status = {
   0: "none",
@@ -14,11 +14,11 @@ var human_status = {
 };
 
 /* GET avatar request. */
-router.get('/:uuid.:ext?', function(req, res) {
+router.get("/:uuid.:ext?", function(req, res) {
   var uuid = req.params.uuid;
   var size = req.query.size || config.default_size;
   var def = req.query.default;
-  var helm = req.query.hasOwnProperty('helm');
+  var helm = req.query.hasOwnProperty("helm");
   var start = new Date();
   var etag = null;
 
@@ -43,7 +43,7 @@ router.get('/:uuid.:ext?', function(req, res) {
         logging.error(err);
       }
       etag = hash && hash.substr(0, 32) || "none";
-      var matches = req.get("If-None-Match") == '"' + etag + '"';
+      var matches = req.get("If-None-Match") == "'" + etag + "'";
       if (image) {
         var http_status = 200;
         if (matches) {
@@ -68,11 +68,11 @@ router.get('/:uuid.:ext?', function(req, res) {
   function handle_default(http_status, img_status) {
     if (def && def != "steve" && def != "alex") {
       res.writeHead(301, {
-        'Cache-Control': 'max-age=' + config.browser_cache_time + ', public',
-        'Response-Time': new Date() - start,
-        'X-Storage-Type': human_status[img_status],
-        'Access-Control-Allow-Origin': '*',
-        'Location': def
+        "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
+        "Response-Time": new Date() - start,
+        "X-Storage-Type": human_status[img_status],
+        "Access-Control-Allow-Origin": "*",
+        "Location": def
       });
       res.end();
     } else {
@@ -85,12 +85,12 @@ router.get('/:uuid.:ext?', function(req, res) {
 
   function sendimage(http_status, img_status, image) {
     res.writeHead(http_status, {
-      'Content-Type': 'image/png',
-      'Cache-Control': 'max-age=' + config.browser_cache_time + ', public',
-      'Response-Time': new Date() - start,
-      'X-Storage-Type': human_status[img_status],
-      'Access-Control-Allow-Origin': '*',
-      'Etag': '"' + etag + '"'
+      "Content-Type": "image/png",
+      "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
+      "Response-Time": new Date() - start,
+      "X-Storage-Type": human_status[img_status],
+      "Access-Control-Allow-Origin": "*",
+      "Etag": '"' + etag + '"'
     });
     res.end(http_status == 304 ? null : image);
   }

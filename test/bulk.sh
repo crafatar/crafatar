@@ -7,7 +7,7 @@ fi
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 rm -f "$dir/../skins/"*.png || exit 1
 for uuid in `cat "$dir/uuids.txt"`; do
-  uuid=`echo "$uuid" | tr -d '\r'`
+  uuid=`echo "$uuid" | tr -d "\r"`
   size=$(( ((RANDOM<<15)|RANDOM) % 514 - 1 )) # random number from -1 to 513
   helm=""
   if [ "$(( ((RANDOM<<15)|RANDOM) % 2 ))" -eq "1" ]; then

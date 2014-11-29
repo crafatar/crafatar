@@ -5,8 +5,8 @@ var config = {
   local_cache_time: 30,      // seconds until we will check if the image changed. should be > 60 to prevent mojang 429 response
   browser_cache_time: 30,    // seconds until browser will request image again
   http_timeout: 3000,        // ms until connection to mojang is dropped
-  faces_dir: 'skins/faces/', // directory where faces are kept. should have trailing '/'
-  helms_dir: 'skins/helms/', // directory where helms are kept. should have trailing '/'
+  faces_dir: "skins/faces/", // directory where faces are kept. should have trailing "/"
+  helms_dir: "skins/helms/", // directory where helms are kept. should have trailing "/"
   debug_enabled: true        // enables logging.debug
 };
 

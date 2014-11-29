@@ -1,9 +1,9 @@
-var networking = require('./networking');
-var logging = require('./logging');
-var config = require('./config');
-var cache = require('./cache');
-var skins = require('./skins');
-var fs = require('fs');
+var networking = require("./networking");
+var logging = require("./logging");
+var config = require("./config");
+var cache = require("./cache");
+var skins = require("./skins");
+var fs = require("fs");
 
 // 0098cb60-fa8e-427c-b299-793cbd302c9a
 var valid_uuid = /^([0-9a-f-]{32,36}|[a-zA-Z0-9_]{1,16})$/; // uuid|username
@@ -33,8 +33,8 @@ function store_images(uuid, details, callback) {
         } else {
           // hash has changed
           logging.log(uuid + " new hash: " + hash);
-          var facepath = __dirname + '/../' + config.faces_dir + hash + ".png";
-          var helmpath = __dirname + '/../' + config.helms_dir + hash + ".png";
+          var facepath = __dirname + "/../" + config.faces_dir + hash + ".png";
+          var helmpath = __dirname + "/../" + config.helms_dir + hash + ".png";
 
           if (fs.existsSync(facepath)) {
             logging.log(uuid + " Avatar already exists, not downloading");
@@ -132,8 +132,8 @@ exp.get_avatar = function(uuid, helm, size, callback) {
   logging.log("\nrequest: " + uuid);
   exp.get_image_hash(uuid, function(err, status, hash) {
     if (hash) {
-      var facepath = __dirname + '/../' + config.faces_dir + hash + ".png";
-      var helmpath = __dirname + '/../' + config.helms_dir + hash + ".png";
+      var facepath = __dirname + "/../" + config.faces_dir + hash + ".png";
+      var helmpath = __dirname + "/../" + config.helms_dir + hash + ".png";
       var filepath = facepath;
       if (helm && fs.existsSync(helmpath)) {
         filepath = helmpath;

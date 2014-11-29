@@ -1,7 +1,7 @@
-var logging = require('./logging');
-var request = require('request');
-var config = require('./config');
-var skins = require('./skins');
+var logging = require("./logging");
+var request = require("request");
+var config = require("./config");
+var skins = require("./skins");
 var fs = require("fs");
 
 var session_url = "https://sessionserver.mojang.com/session/minecraft/profile/";
@@ -13,8 +13,8 @@ function extract_skin_url(profile) {
   var url = null;
   if (profile && profile.properties) {
     profile.properties.forEach(function(prop) {
-      if (prop.name == 'textures') {
-        var json = Buffer(prop.value, 'base64').toString();
+      if (prop.name == "textures") {
+        var json = Buffer(prop.value, "base64").toString();
         var props = JSON.parse(json);
         url = props && props.textures && props.textures.SKIN && props.textures.SKIN.url || null;
       }

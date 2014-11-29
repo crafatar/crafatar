@@ -1,4 +1,4 @@
-var logging = require('./logging');
+var logging = require("./logging");
 var config = require("./config");
 var redis = null;
 var fs = require("fs");
@@ -43,7 +43,7 @@ function update_file_date(hash) {
           }
         });
       } else {
-        logging.error("Tried to update " + path + " date, but it doesn't exist");
+        logging.error("Tried to update " + path + " date, but it does not exist");
       }
     });
   }
