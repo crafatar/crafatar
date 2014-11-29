@@ -1,4 +1,4 @@
-# Crafatar [![travis](https://api.travis-ci.org/Jake0oo0/crafatar.svg)](https://travis-ci.org/Jake0oo0/crafatar/) [![Coverage Status](https://img.shields.io/coveralls/Jake0oo0/crafatar.svg)](https://coveralls.io/r/Jake0oo0/crafatar)
+# Crafatar [![travis](https://img.shields.io/travis/Jake0oo0/crafatar.svg?style=flat)](https://travis-ci.org/Jake0oo0/crafatar/) [![Coverage Status](https://img.shields.io/coveralls/Jake0oo0/crafatar.svg?style=flat)](https://coveralls.io/r/Jake0oo0/crafatar)
 
 https://crafatar.com
 
