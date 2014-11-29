@@ -134,7 +134,7 @@ describe('Crafatar', function() {
       assert.doesNotThrow(function() {
         fs.openSync("face.png", "w");
         fs.openSync("helm.png", "w");
-        networking.skin_file("http://textures.minecraft.net/texture/477be35554684c28bdeee4cf11c591d3c88afb77e0b98da893fd7bc318c65184", "face.png", "helm.png", function(err) {
+        networking.skin_file("http://textures.minecraft.net/texture/477be35554684c28bdeee4cf11c591d3c88afb77e0b98da893fd7bc318c65184", "face.png", function(err) {
           assert.strictEqual(err, null); // no error here, but it shouldn't throw exceptions
           fs.unlinkSync("face.png");
           fs.unlinkSync("helm.png");
@@ -189,7 +189,7 @@ describe('Crafatar', function() {
     it("should time out on skin download", function(done) {
       var original_timeout = config.http_timeout;
       config.http_timeout = 1;
-      networking.skin_file("http://textures.minecraft.net/texture/477be35554684c28bdeee4cf11c591d3c88afb77e0b98da893fd7bc318c65184", "face.png", "helm.png", function(err) {
+      networking.skin_file("http://textures.minecraft.net/texture/477be35554684c28bdeee4cf11c591d3c88afb77e0b98da893fd7bc318c65184", "face.png", function(err) {
         assert.strictEqual(err.code, "ETIMEDOUT");
         config.http_timeout = original_timeout;
         done();
@@ -197,7 +197,7 @@ describe('Crafatar', function() {
     });
     it("should not find the skin", function(done) {
       assert.doesNotThrow(function() {
-        networking.skin_file("http://textures.minecraft.net/texture/this-does-not-exist", "face.png", "helm.png", function(err) {
+        networking.skin_file("http://textures.minecraft.net/texture/this-does-not-exist", "face.png", function(err) {
           assert.strictEqual(err, null); // no error here, but it shouldn't throw exceptions
           done();
         });
