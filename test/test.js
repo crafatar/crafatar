@@ -64,13 +64,13 @@ describe('Crafatar', function() {
     });
     it("should not exist (uuid)", function(done) {
       networking.get_skin_url("00000000000000000000000000000000", function(err, profile) {
-        assert.strictEqual(err, 0);
+        assert.strictEqual(err, null);
         done();
       });
     });
     it("should not exist (username)", function(done) {
       networking.get_skin_url("Steve", function(err, profile) {
-        assert.strictEqual(err, 0);
+        assert.strictEqual(err, null);
         done();
       });
     });
@@ -154,8 +154,14 @@ describe('Crafatar', function() {
     before(function() {
       cache.get_redis().flushall();
     });
-    it("should be rate limited", function(done) {
+    it("should be rate limited (uuid)", function(done) {
       helpers.get_avatar(uuid, false, 160, function(err, status, image) {
+        assert.strictEqual(JSON.parse(err).error, "TooManyRequestsException");
+        done();
+      });
+    });
+    it("should NOT be rate limited (username)", function(done) {
+      helpers.get_avatar(username, false, 160, function(err, status, image) {
         assert.strictEqual(err, null);
         done();
       });

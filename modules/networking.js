@@ -38,20 +38,18 @@ var get_username_url = function(name, callback) {
     } else if (error) {
       callback(error, null);
     } else if (response.statusCode == 404) {
-      // skin doesn't exist
+      // skin (or user) doesn't exist
       logging.log(name + " has no skin");
-      callback(0, null);
+      callback(null, null);
     } else if (response.statusCode == 429) {
       // Too Many Requests
       // Never got this, seems like skins aren't limited
-      logging.warn(name + " Too many requests");
-      logging.warn(body);
+      logging.warn(body || "Too many requests");
       callback(null, null);
     } else {
       logging.error(name + " Unknown error:");
       logging.error(response);
-      logging.error(body);
-      callback(null, null);
+      callback(body || "Unknown error", null);
     }
   });
 };
@@ -72,17 +70,14 @@ var get_uuid_url = function(uuid, callback) {
     } else if (response.statusCode == 204 || response.statusCode == 404) {
       // we get 204 No Content when UUID doesn't exist (including 404 in case they change that)
       logging.log(uuid + " uuid does not exist");
-      callback(0, null);
+      callback(null, null);
     } else if (response.statusCode == 429) {
       // Too Many Requests
-      logging.warn(uuid + " Too many requests");
-      logging.warn(body);
-      callback(null, null);
+      callback(body || "Too many requests", null);
     } else {
       logging.error(uuid + " Unknown error:");
       logging.error(response);
-      logging.error(body);
-      callback(null, null);
+      callback(body || "Unknown error", null);
     }
   });
 };
