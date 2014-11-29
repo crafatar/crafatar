@@ -6,7 +6,7 @@ var router = express.Router();
 router.get('/', function(req, res) {
   res.render('index', {
     title: 'Crafatar',
-    domain: req.secure ? "https" : "http" + "://" + req.headers.host,
+    domain: "https://" + req.headers.host,
     config: config
   });
 });
