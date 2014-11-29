@@ -79,10 +79,14 @@ exp.get_image_hash = function(uuid, callback) {
     } else {
       if (details && details.time + config.local_cache_time * 1000 >= new Date().getTime()) {
         // uuid known + recently updated
-        logging.log(uuid + " uuid known & recently updated");
+        logging.log(uuid + " uuid cached & recently updated");
         callback(null, (details.hash ? 1 : 0), details.hash);
       } else {
-        logging.log(uuid + " uuid not known or too old");
+        if (details) {
+          logging.log(uuid + " uuid cached, but too old");
+        } else {
+          logging.log(uuid + " uuid not cached");
+        }
         store_images(uuid, details, function(err, hash) {
           if (err) {
             callback(err, -1, details && details.hash);
