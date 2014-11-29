@@ -149,7 +149,7 @@ exp.get_skin = function(uuid, callback) {
   exp.get_image_hash(uuid, function(err, status, hash) {
     if (hash) {
       var skinurl = "http://textures.minecraft.net/texture/" + hash;
-      networking.get_skin(skinurl, null, function(err, img) {
+      networking.get_skin(skinurl, function(err, img) {
         if (err) {
           logging.log("\nerror while downloading skin");
           callback(err, hash, null);
