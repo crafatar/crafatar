@@ -23,6 +23,9 @@ var username = usernames[Math.round(Math.random() * (usernames.length - 1))];
 console.log("using username '" + username + "'");
 
 describe('Crafatar', function() {
+  // we might have to make 2 HTTP requests
+  this.timeout(config.http_timeout * 2 + 50);
+
   before(function() {
     cache.get_redis().flushall();
   });
@@ -131,10 +134,15 @@ describe('Crafatar', function() {
       });
     });
     it("should already have the files / not download", function(done) {
+
+      // FIXME: implement & remove this line
+      throw("Please re-implement this and add a new test");
+
+
       assert.doesNotThrow(function() {
         fs.openSync("face.png", "w");
         fs.openSync("helm.png", "w");
-        networking.skin_file("http://textures.minecraft.net/texture/477be35554684c28bdeee4cf11c591d3c88afb77e0b98da893fd7bc318c65184", "face.png", function(err) {
+        networking.get_skin("http://textures.minecraft.net/texture/477be35554684c28bdeee4cf11c591d3c88afb77e0b98da893fd7bc318c65184", function(err, img) {
           assert.strictEqual(err, null); // no error here, but it shouldn't throw exceptions
           fs.unlinkSync("face.png");
           fs.unlinkSync("helm.png");
@@ -189,7 +197,7 @@ describe('Crafatar', function() {
     it("should time out on skin download", function(done) {
       var original_timeout = config.http_timeout;
       config.http_timeout = 1;
-      networking.skin_file("http://textures.minecraft.net/texture/477be35554684c28bdeee4cf11c591d3c88afb77e0b98da893fd7bc318c65184", "face.png", function(err) {
+      networking.get_skin("http://textures.minecraft.net/texture/477be35554684c28bdeee4cf11c591d3c88afb77e0b98da893fd7bc318c65184", function(err, img) {
         assert.strictEqual(err.code, "ETIMEDOUT");
         config.http_timeout = original_timeout;
         done();
@@ -197,7 +205,7 @@ describe('Crafatar', function() {
     });
     it("should not find the skin", function(done) {
       assert.doesNotThrow(function() {
-        networking.skin_file("http://textures.minecraft.net/texture/this-does-not-exist", "face.png", function(err) {
+        networking.get_skin("http://textures.minecraft.net/texture/this-does-not-exist", function(err, img) {
           assert.strictEqual(err, null); // no error here, but it shouldn't throw exceptions
           done();
         });
@@ -210,4 +218,13 @@ describe('Crafatar', function() {
       done();
     });
   });
+
+  after(function() {
+    try {
+      // these files could be here if a test failed
+      fs.unlinkSync("face.png");
+      fs.unlinkSync("helm.png");
+    } catch(e){}
+  });
+
 });

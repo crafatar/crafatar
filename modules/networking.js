@@ -99,15 +99,8 @@ exp.get_skin_url = function(uuid, callback) {
 };
 
 // downloads skin file from +url+
-// stores face image as +facename+
-// stores helm image as +helmname+
-// callback contains error
-exp.skin_file = function(url, facename, callback) {
-  if (facename && fs.existsSync(facename)) {
-    logging.log("Images already exist, not downloading.");
-    callback(null, null);
-    return;
-  }
+// callback contains error, image
+exp.get_skin = function(url, callback) {
   request.get({
     url: url,
     encoding: null, // encoding must be null so we get a buffer

@@ -35,11 +35,12 @@ function store_images(uuid, details, callback) {
           logging.log(uuid + " new hash: " + hash);
           var facepath = __dirname + '/../' + config.faces_dir + hash + ".png";
           var helmpath = __dirname + '/../' + config.helms_dir + hash + ".png";
-          // download skin, extract face/helm
-          networking.skin_file(skin_url, facepath, function(err, img) {
-            if (err) {
+          // download skin
+          networking.get_skin(skin_url, function(err, img) {
+            if (err || !img) {
               callback(err, null);
             } else {
+              // extract face / helm
               skins.extract_face(img, facepath, function(err) {
                 if (err) {
                   callback(err);
@@ -148,7 +149,7 @@ exp.get_skin = function(uuid, callback) {
   exp.get_image_hash(uuid, function(err, status, hash) {
     if (hash) {
       var skinurl = "http://textures.minecraft.net/texture/" + hash;
-      networking.skin_file(skinurl, null, function(err, img) {
+      networking.get_skin(skinurl, null, function(err, img) {
         if (err) {
           logging.log("\nerror while downloading skin");
           callback(err, hash, null);
