@@ -14,8 +14,8 @@ config.http_timeout *= 3;
 // no spam
 logging.log = function(){};
 
-var uuids = fs.readFileSync('test/uuids.txt').toString().split("\n");
-var usernames = fs.readFileSync('test/usernames.txt').toString().split("\n");
+var uuids = fs.readFileSync('test/uuids.txt').toString().split("\r\n");
+var usernames = fs.readFileSync('test/usernames.txt').toString().split("\r\n");
 // Get a random UUID + username in order to prevent rate limiting
 var uuid = uuids[Math.round(Math.random() * (uuids.length - 1))];
 console.log("using uuid '" + uuid + "'");
