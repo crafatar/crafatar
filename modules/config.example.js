@@ -4,7 +4,7 @@ var config = {
   default_size: 160,         // size to be used when no size given
   local_cache_time: 3600,    // seconds until we will check if the image changed. should be > 60 to prevent mojang 429 response
   browser_cache_time: 3600,  // seconds until browser will request image again
-  cleaning_interval: 1800000,   // ms interval: deleting images if disk size at limit
+  cleaning_interval: 1800,   // seconds interval: deleting images if disk size at limit
   cleaning_limit: 10240,     // minumum required available KB on disk to trigger cleaning
   cleaning_amount: 50000,    // amount of avatar (and their helm) files to clean
   http_timeout: 1000,        // ms until connection to mojang is dropped

@@ -32,8 +32,11 @@ exp.run = function() {
       var helmdir = __dirname + "/../" + config.helms_dir;
       var files = fs.readdirSync(skindir);
       for (var i = 0; i < Math.min(files.length, config.cleaning_amount); i++) {
-        fs.unlink(skindir + files[i], function(){});
-        fs.unlink(helmdir + files[i], function(){});
+        var filename = files[i];
+        if (filename[0] != ".") {
+          fs.unlink(skindir + filename, function(){});
+          fs.unlink(helmdir + filename, function(){});
+        }
       }
     } else {
       logging.log("ImageCleaner: Nothing to clean");

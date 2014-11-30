@@ -11,4 +11,4 @@ var server = app.listen(app.get("port"), function() {
 });
 
 // cleaning worker
-setInterval(clean.run, config.cleaning_interval);
+setInterval(clean.run, config.cleaning_interval * 1000);
