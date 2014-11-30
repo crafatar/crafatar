@@ -51,8 +51,8 @@ router.get("/:uuid.:ext?", function(req, res) {
         } else if (err) {
           http_status = 503;
         }
-        logging.log("matches: " + matches);
-        logging.log("Etag: " + req.get("If-None-Match"));
+        logging.debug("Etag: " + req.get("If-None-Match"));
+        logging.debug("matches: " + matches);
         logging.log("status: " + http_status);
         sendimage(http_status, status, image);
       } else {
