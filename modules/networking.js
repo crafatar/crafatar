@@ -28,6 +28,9 @@ function extract_skin_url(profile) {
 var get_username_url = function(name, callback) {
   request.get({
     url: skins_url + name + ".png",
+    headers: {
+      "User-Agent": "https://crafatar.com"
+    },
     timeout: config.http_timeout,
     followRedirect: false
   }, function(error, response, body) {
@@ -59,6 +62,9 @@ var get_username_url = function(name, callback) {
 var get_uuid_url = function(uuid, callback) {
   request.get({
     url: session_url + uuid,
+    headers: {
+      "User-Agent": "https://crafatar.com"
+    },
     timeout: config.http_timeout // ms
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
@@ -103,6 +109,9 @@ exp.get_skin_url = function(uuid, callback) {
 exp.get_skin = function(url, callback) {
   request.get({
     url: url,
+    headers: {
+      "User-Agent": "https://crafatar.com"
+    },
     encoding: null, // encoding must be null so we get a buffer
     timeout: config.http_timeout // ms
   }, function (error, response, body) {
