@@ -14,9 +14,13 @@ function should_clean(callback) {
     isDisplayPrefixMultiplier: false,
     precision: 2
   }, function (err, response) {
-    var available = response[0].available;
-    console.log("ImageCleaner: " + available + "KB available");
-    callback(err, available < config.cleaning_limit);
+    if (err) {
+      callback(err, false);
+    } else {
+      var available = response[0].available;
+      console.log("ImageCleaner: " + available + "KB available");
+      callback(err, available < config.cleaning_limit);
+    }
   });
 }
 
@@ -25,6 +29,7 @@ function should_clean(callback) {
 exp.run = function() {
   should_clean(function(err, clean) {
     if (err) {
+      logging.error("Failed to run ImageCleaner");
       logging.error(err);
     } else if (clean) {
       logging.warn("ImageCleaner: Disk limit reached! Cleaning images now");
