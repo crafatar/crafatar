@@ -2,7 +2,7 @@ var config = {
   min_size: 1,               // < 1 will (obviously) cause crash
   max_size: 512,             // too big values might lead to slow response time or DoS
   default_size: 160,         // size to be used when no size given
-  local_cache_time: 3600,    // seconds until we will check if the image changed. should be > 60 to prevent mojang 429 response
+  local_cache_time: 1200,    // seconds until we will check if the image changed. should be > 60 to prevent mojang 429 response
   browser_cache_time: 3600,  // seconds until browser will request image again
   cleaning_interval: 1800,   // seconds interval: deleting images if disk size at limit
   cleaning_limit: 10240,     // minumum required available KB on disk to trigger cleaning
