@@ -124,7 +124,7 @@ exp.get_image_hash = function(uuid, callback) {
 };
 
 
-// handles requests for +uuid+ images with +size+
+// handles requests for +uuid+ avatars with +size+
 // callback contains error, status, image buffer, hash
 // image is the user's face+helm when helm is true, or the face otherwise
 // for status, see get_image_hash
@@ -154,20 +154,23 @@ exp.get_avatar = function(uuid, helm, size, callback) {
   });
 };
 
+// handles requests for +uuid+ skins
+// callback contains error, hash, image buffer
 exp.get_skin = function(uuid, callback) {
-  logging.log("\nskin request: " + uuid);
+  logging.log(uuid + " skin request");
   exp.get_image_hash(uuid, function(err, status, hash) {
     if (hash) {
       var skinurl = "http://textures.minecraft.net/texture/" + hash;
       networking.get_skin(skinurl, function(err, img) {
         if (err) {
-          logging.log("\nerror while downloading skin");
+          logging.error("error while downloading skin");
           callback(err, hash, null);
         } else {
-          logging.log("\nreturning skin");
           callback(null, hash, img);
         }
       });
+    } else {
+      callback(err, null, null);
     }
   });
 };

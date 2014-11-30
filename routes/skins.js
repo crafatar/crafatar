@@ -4,6 +4,7 @@ var helpers = require("../modules/helpers");
 var config = require("../modules/config");
 var router = require("express").Router();
 var skins = require("../modules/skins");
+var lwip = require("lwip");
 
 /* GET skin request. */
 router.get("/:uuid.:ext?", function(req, res) {
@@ -61,8 +62,10 @@ router.get("/:uuid.:ext?", function(req, res) {
       res.end();
     } else {
       def = def || skins.default_skin(uuid);
-      skins.resize_img("public/images/" + def + ".png", size, function(err, image) {
-        sendimage(http_status, image);
+      lwip.open("public/images/" + def + "_skin.png", function(err, image) {
+        image.toBuffer("png", function(err, buffer) {
+          sendimage(http_status, buffer);
+        });
       });
     }
   }
