@@ -143,6 +143,21 @@ describe("Crafatar", function() {
     });
   });
 
+  describe("Networking: Skin", function() {
+    it("should not fail (uuid)", function(done) {
+      helpers.get_skin(uuid, function(err, hash, img) {
+        assert.strictEqual(err, null);
+        done();
+      });
+    });
+    it("should not fail (username)", function(done) {
+      helpers.get_skin(username, function(err, hash, img) {
+        assert.strictEqual(err, null);
+        done();
+      });
+    });
+  });
+
   describe("Errors", function() {
     before(function() {
       cache.get_redis().flushall();
