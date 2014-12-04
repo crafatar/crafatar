@@ -21,7 +21,7 @@ block content
         p
           | Replace 
           mark.green id
-          |  with a Mojang UUID or username to get the related head. All images are PNGs.
+          |  with a Mojang <b>UUID</b> or <b>username</b> to get the related head. All images are PNGs.
         .code
           | #{domain}/avatars/
           mark.green id
@@ -33,34 +33,37 @@ block content
         a(id="size", class="anchor")
         a(href="#size")
           h4 size
-        p The size of the image in pixels, #{config.min_size} - #{config.max_size}. <br> Default is #{config.default_size}.
+        p
+          | The size of the image in pixels, #{config.min_size} - #{config.max_size}.<br>
+          | Default is #{config.default_size}.
         a(id="default", class="anchor")
         a(href="#default")
           h4 default
         p
-          | The image to be returned when the id has no skin (404). <br> Valid options are 
+          | The image to be served when the id has no skin (404).<br>
+          | Valid options are 
           a(href="/avatars/00000000000000000000000000000000?default=steve") steve
-          |  or 
+          | , 
           a(href="/avatars/00000000000000000000000000000000?default=alex") alex
-          | .<br> A URL is also accepted. <br>
+          | , or a custom URL.<br>
           | The standard value is calculated based on the id (even = alex, odd = steve)
         a(id="helm", class="anchor")
         a(href="#helm")
           h4 helm
         p
-          | Get an avatar with the second (helmet) layer applied. <br>
-          | The content of this parameter can be anything. <br>
+          | Get an avatar with the "second" (hat) layer applied.<br>
+          | The content of this parameter can be anything.<br>
           | If you want to get the face only, remove the parameter.
 
         a(id="skins", class="anchor")
         a(href="#skins")
           h3 Skins
         p
-          | You can also get the full skin file from name or id. <br>
+          | You can also get the full skin file from name or id.<br>
           | Replace 
           mark.green id 
-          | with a Mojang UUID or username to get the related skin.
-          | You are redirected to the textures URL, or a 404 is returned. <br>
+          | with a Mojang <b>UUID</b> or <b>username</b> to get the related skin.
+          | You are redirected to the textures URL, or the default image is served.<br>
           | You can use the default parameter here as well.
         .code
           | #{domain}/skins/
@@ -69,7 +72,10 @@ block content
         a(id="http-headers", class="anchor")
         a(href="#http-headers")
           h3 HTTP headers
-        p Responses come with these HTTP headers, useful for debugging.
+        p
+          | Responses come with these HTTP headers, useful for debugging.<br>
+          | Please note that these headers are cached by CloudFlare <small>(CF-Cache-Status: HIT)</small>.
+
         a(id="response-time", class="anchor")
         a(href="#response-time")
           h4 Response-Time
@@ -92,44 +98,45 @@ block content
         a(href="#about-usernames")
           h3 About usernames
         p
-          | We strongly advise you to use UUIDs instead of usernames in production.
+          | We strongly advise you to use UUIDs instead of usernames in production.<br>
           | Usernames are deprecated by Mojang and you should only use usernames for testing.<br>
-          | Invalid usernames are rejected and a 422 is returned.
+          | Malformed usernames are rejected.
 
         a(id="about-uuids", class="anchor")
         a(href="#about-uuids")
           h3 About UUIDs
         p
-          | UUIDs may use the raw or dashed format.<br>
-          | Invalid UUIDs are rejected and a 422 is returned.
+          | UUIDs may use the blank or dashed format.<br>
+          | Malformed UUIDs are rejected.
 
         a(id="about-caching", class="anchor")
         a(href="#about-caching")
           h3 About caching
         p
-          | Crafatar caches skins for #{config.local_cache_time} seconds until they are checked for changes.<br>
-          | Images should be cached in browsers for #{config.browser_cache_time} seconds until a new request to Crafatar is made.
+          | Crafatar caches skins for #{config.local_cache_time/60} minutes before checking for skin changes.<br>
+          | Images are cached in your browser for #{config.browser_cache_time/60} minutes until a new request to Crafatar is made.<br>
+          | When you changed your skin you can try clearing your browser cache to see the change faster.
 
         a(id="examples", class="anchor")
         a(href="#examples")
           h3 Examples
-        p Get jeb_'s avatar
+        p Jeb's avatar by username, default size
+        .code #{domain}/avatars/jeb_
+        p Jeb's avatar by UUID, default size
         .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6
-        p Get jeb_'s avatar, 64 × 64 pixels
+        p Jeb's avatar, 64 × 64
         .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64
-        p Get jeb_'s helmet avatar, 64 × 64 pixels
+        p Jeb's avatar, 64 × 64, with helm
         .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64&amp;helm
-        p Get jeb_'s avatar or fall back to steve
+        p Jeb's avatar, or fall back to steve
         .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?default=steve
         p
-          | Get jeb_'s avatar or fall back to 
+          | Jeb's avatar, or fall back to 
           a(href="https://i.imgur.com/ozszMZV.png") a custom image
         .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?default=https%3A%2F%2Fi.imgur.com%2FozszMZV.png
-        p Get jeb_'s avatar by username
-        .code #{domain}/avatars/jeb_
-        p Get jeb_'s skin
+        p Jeb's skin
         .code #{domain}/skins/853c80ef3c3749fdaa49938b674adae6
-        p Get jeb_'s skin by username
+        p Jeb's skin by username
         .code #{domain}/skins/jeb_
       .col-md-2.center
         .sideface.redstone_sheep(title="redstone_sheep")
