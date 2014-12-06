@@ -4,4 +4,5 @@ block content
   .container.errmsg
     h1= message
     h2= error.status
-    pre #{error.stack}
+    if error.stack
+      pre #{error.stack}
