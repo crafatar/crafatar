@@ -7,6 +7,7 @@ var logging = require("../modules/logging");
 var config = require("../modules/config");
 var skins = require("../modules/skins");
 var cache = require("../modules/cache");
+var renders = require("../modules/renders")
 
 // we don't want tests to fail because of slow internet
 config.http_timeout *= 3;
@@ -161,7 +162,36 @@ describe("Crafatar", function() {
       });
     });
   });
-
+  describe("Networking: Renders", function() {
+    describe("Head", function() {
+      it("should not fail (username)", function(done) {
+        renders.draw_model(username, 6, true, false, function(err, status, hash, img) {
+          assert.strictEqual(err, null);
+          done();
+        });
+      });
+      it("should not fail (uuid)", function(done) {
+        renders.draw_model(username, 6, true, false, function(err, status, hash, img) {
+          assert.strictEqual(err, null);
+          done();
+        });
+      });
+    });
+    describe("Body", function() {
+      it("should not fail (username)", function(done) {
+        renders.draw_model(username, 6, true, true, function(err, status, hash, img) {
+          assert.strictEqual(err, null);
+          done();
+        });
+      });
+      it("should not fail (uuid)", function(done) {
+        renders.draw_model(username, 6, true, true, function(err, status, hash, img) {
+          assert.strictEqual(err, null);
+          done();
+        });
+      });
+    })
+  });
   describe("Errors", function() {
     before(function() {
       cache.get_redis().flushall();

@@ -3,6 +3,7 @@
 // Permission to use & distribute https://github.com/confuser/serverless-mc-skin-viewer/blob/master/LICENSE
 
 var helpers = require('./helpers');
+var logging = require('./logging');
 
 var exp = {};
 
@@ -88,7 +89,7 @@ exp.draw_model = function(uuid, scale, helm, body, callback) {
     var skin_ctx = skin_canvas.getContext('2d');
 
     image.onerror = function(err) {
-      console.log("render error: " + err);
+      logging.error("render error: " + err);
       callback(err, 2, null, hash);
     };
 
@@ -97,13 +98,13 @@ exp.draw_model = function(uuid, scale, helm, body, callback) {
       //Scale it
       scale_image(skin_ctx.getImageData(0,0,64,64), skin_ctx, 0, 0, scale);
       if (body) {
-        console.log("drawing body");
+        logging.log("drawing body");
         exp.draw_body(skin_canvas, model_ctx, scale);
       }
-      console.log("drawing head");
+      logging.log("drawing head");
       exp.draw_head(skin_canvas, model_ctx, scale);
       if (helm) {
-        console.log("drawing helmet");
+        logging.log("drawing helmet");
         exp.draw_helmet(skin_canvas, model_ctx, scale);
       }
 
