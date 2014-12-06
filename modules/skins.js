@@ -1,7 +1,6 @@
 var logging = require("./logging");
 var lwip = require("lwip");
 var fs = require("fs");
-var config = require("./config");
 
 var exp = {};
 
@@ -94,8 +93,8 @@ exp.default_skin = function(uuid) {
   }
 };
 
-exp.open_skin = function(hash, callback) {
-  fs.readFile(__dirname + "/../" + config.skins_dir + hash + ".png", function (err, buf) {
+exp.open_skin = function(skinpath, callback) {
+  fs.readFile(skinpath, function (err, buf) {
     if (err) {
       logging.error("error while opening skin file: " + err);
     }

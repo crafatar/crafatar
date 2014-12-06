@@ -163,7 +163,7 @@ exp.get_skin = function(uuid, callback) {
     var skinpath = __dirname + "/../" + config.skins_dir + hash + ".png";
     if (fs.existsSync(skinpath)) {
       logging.log("skin already exists, not downloading");
-      skins.open_skin(hash, function(err, img) {
+      skins.open_skin(skinpath, function(err, img) {
         callback(err, hash, img);
       });
       return;
