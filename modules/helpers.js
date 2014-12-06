@@ -190,7 +190,7 @@ exp.get_render = function(uuid, scale, helm, body, callback) {
         return;
       }
       console.log("TYPE: " + get_type(helm, body))
-      var renderpath = __dirname + "/../" + config.renders_dir + hash + "-" + scale + "-" + "-" + get_type(helm, body) + ".png"; 
+      var renderpath = __dirname + "/../" + config.renders_dir + hash + "-" + scale + "-" + get_type(helm, body) + ".png"; 
       if (fs.existsSync(renderpath)) {
         renders.open_render(renderpath, function(err, img) {
           callback(err, 1, hash, img);
