@@ -4,6 +4,8 @@
 
 var helpers = require('./helpers');
 var logging = require('./logging');
+var config = require('./config');
+var fs = require('fs');
 
 var exp = {};
 
@@ -117,6 +119,15 @@ exp.draw_model = function(uuid, img, scale, helm, body, callback) {
 
   image.src = img;
 }
+
+exp.open_render = function(hash, scale, callback) {
+  fs.readFile(__dirname + "/../" + config.renders_dir + hash + "-" + scale + ".png", function (err, buf) {
+    if (err) {
+      logging.error("error while opening skin file: " + err);
+    }
+    callback(err, buf);
+  });
+};
 
 function scale_image(imageData, context, d_x, d_y, scale) {
   var width = imageData.width;

@@ -160,19 +160,17 @@ exp.get_avatar = function(uuid, helm, size, callback) {
 exp.get_skin = function(uuid, callback) {
   logging.log(uuid + " skin request");
   exp.get_image_hash(uuid, function(err, status, hash) {
-    if (hash) {
-      var skinurl = "http://textures.minecraft.net/texture/" + hash;
-      networking.get_skin(skinurl, function(err, img) {
-        if (err) {
-          logging.error("error while downloading skin");
-          callback(err, hash, null);
-        } else {
-          callback(null, hash, img);
-        }
+    var skinpath = __dirname + "/../" + config.skins_dir + hash + ".png";
+    if (fs.existsSync(skinpath)) {
+      logging.log("skin already exists, not downloading");
+      skins.open_skin(hash, function(err, img) {
+        callback(err, hash, img);
       });
-    } else {
-      callback(err, null, null);
+      return;
     }
+    networking.save_skin(uuid, hash, skinpath, function(err, img) {
+      callback(err, hash, img);
+    });
   });
 };
 
@@ -180,19 +178,37 @@ exp.get_skin = function(uuid, callback) {
 // callback contanis error, hash, image buffer
 exp.get_render = function(uuid, scale, helm, body, callback) {
   logging.log(uuid + " render request");
-  exp.get_skin(uuid, function(err, hash, img) {
-    if (!img) {
-      callback(err, 0, hash, null);
-      return;
-    }
-    renders.draw_model(uuid, img, scale, helm, body, function(err, img) {
-      if (err) {
+  exp.get_image_hash(uuid, function(err, status, hash) {
+    exp.get_skin(uuid, function(err, hash, img) {
+      if (!hash) {
         callback(err, -1, hash, null);
-      } else if (!img) {
-        callback(null, 0, hash, null);
-      } else {
-        callback(null, 2, hash, img);
+        return;
       }
+      var renderpath = __dirname + "/../" + config.renders_dir + hash + "-" + scale + ".png"; 
+      if (fs.existsSync(renderpath)) {
+        renders.open_render(hash, scale, function(err, img) {
+          callback(err, 1, hash, img);
+        });
+        return;
+      }
+      if (!img) {
+        callback(err, 0, hash, null);
+        return;
+      }
+      renders.draw_model(uuid, img, scale, helm, body, function(err, img) {
+        if (err) {
+          callback(err, -1, hash, null);
+        } else if (!img) {
+          callback(null, 0, hash, null);
+        } else {
+          fs.writeFile(renderpath, img, 'binary', function(err){
+            if (err) {
+              logging.log(err);
+            }
+            callback(null, 2, hash, img);
+          });
+        }
+      });
     });
   });
 };
