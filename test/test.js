@@ -165,13 +165,13 @@ describe("Crafatar", function() {
   describe("Networking: Renders", function() {
     describe("Head", function() {
       it("should not fail (username)", function(done) {
-        renders.draw_model(username, 6, true, false, function(err, status, hash, img) {
+        helpers.get_render(username, 6, true, false, function(err, status, hash, img) {
           assert.strictEqual(err, null);
           done();
         });
       });
       it("should not fail (uuid)", function(done) {
-        renders.draw_model(username, 6, true, false, function(err, status, hash, img) {
+        helpers.get_render(username, 6, true, false, function(err, status, hash, img) {
           assert.strictEqual(err, null);
           done();
         });
@@ -179,13 +179,13 @@ describe("Crafatar", function() {
     });
     describe("Body", function() {
       it("should not fail (username)", function(done) {
-        renders.draw_model(username, 6, true, true, function(err, status, hash, img) {
+        helpers.get_render(username, 6, true, true, function(err, status, hash, img) {
           assert.strictEqual(err, null);
           done();
         });
       });
       it("should not fail (uuid)", function(done) {
-        renders.draw_model(username, 6, true, true, function(err, status, hash, img) {
+        helpers.get_render(username, 6, true, true, function(err, status, hash, img) {
           assert.strictEqual(err, null);
           done();
         });
