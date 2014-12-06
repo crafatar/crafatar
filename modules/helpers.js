@@ -181,7 +181,12 @@ exp.get_skin = function(uuid, callback) {
 exp.get_render = function(uuid, scale, helm, body, callback) {
   logging.log(uuid + " render request");
   exp.get_skin(uuid, function(err, hash, img) {
+    if (!img) {
+      callback(err, 0, hash, null);
+      return;
+    }
     renders.draw_model(uuid, img, scale, helm, body, function(err, img) {
+      console.log("thing" + img);
       if (err) {
         callback(err, -1, hash, null);
       } else if (!img) {

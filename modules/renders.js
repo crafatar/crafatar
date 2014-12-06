@@ -108,6 +108,9 @@ exp.draw_model = function(uuid, img, scale, helm, body, callback) {
     }
 
     model_canvas.toBuffer(function(err, buf){
+      if (err) {
+        logging.log("error creating buffer: " + err);
+      }
       callback(err, buf);
     });
   };

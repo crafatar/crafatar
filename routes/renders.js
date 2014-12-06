@@ -30,7 +30,7 @@ router.get('/:type/:uuid.:ext?', function(req, res) {
 
   var body = raw_type == "head" ? false : true
   var uuid = req.params.uuid;
-  var def = req.params.def;
+  var def = req.query.default;
   var scale = parseInt(req.query.scale) || config.default_scale;
   var helm = req.query.hasOwnProperty('helm');
   var start = new Date();
@@ -67,6 +67,7 @@ router.get('/:type/:uuid.:ext?', function(req, res) {
         logging.log("status: " + http_status);
         sendimage(http_status, status, image);
       } else {
+        logging.log("image not found, using default.")
         handle_default(404, status);
       }
     });
@@ -88,11 +89,15 @@ router.get('/:type/:uuid.:ext?', function(req, res) {
       res.end();
     } else {
       def = def || skins.default_skin(uuid);
-      fs.readFile("public/images/" + def + ".png", function (err, buf) {
-        if (err) throw err;
-        console.log(buf);
-        renders.draw_model(uuid, buf, scale, helm, body, function(err, status, image) {
-          sendimage(http_status, img_status, image);
+      fs.readFile("public/images/" + def + "_skin.png", function (err, buf) {
+        if (err) {
+          logging.error("error rendering default image: " + err);
+        }
+        renders.draw_model(uuid, buf, scale, helm, body, function(err, def_img) {
+          if (err) {
+            logging.log("error while rendering default image: " + err);
+          }
+          sendimage(http_status, img_status, def_img);
         });
       });
     }
