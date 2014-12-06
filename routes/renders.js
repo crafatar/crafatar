@@ -1,5 +1,4 @@
 var router = require('express').Router();
-var networking = require('../modules/networking');
 var logging = require('../modules/logging');
 var helpers = require('../modules/helpers');
 var config = require('../modules/config');
