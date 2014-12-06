@@ -78,43 +78,41 @@ exp.draw_body = function(skin_canvas, model_ctx, scale) {
   model_ctx.drawImage(skin_canvas, 44*scale, 16*scale, 4*scale, 4*scale, -16*scale, 16*scale, 4*scale, 4*scale);
 }
 
-exp.draw_model = function(uuid, scale, helm, body, callback) {
-  helpers.get_skin(uuid, function(err, hash, img) {
-    var image = new Image;
-    var width = 64 * scale;
-    var height = 64 * scale;
-    var model_canvas = new Canvas(20 * scale, (body ? 44.8 : 17.6) * scale);
-    var skin_canvas = new Canvas(width, height);
-    var model_ctx = model_canvas.getContext('2d');
-    var skin_ctx = skin_canvas.getContext('2d');
+exp.draw_model = function(uuid, img, scale, helm, body, callback) {
+  var image = new Image;
+  var width = 64 * scale;
+  var height = 64 * scale;
+  var model_canvas = new Canvas(20 * scale, (body ? 44.8 : 17.6) * scale);
+  var skin_canvas = new Canvas(width, height);
+  var model_ctx = model_canvas.getContext('2d');
+  var skin_ctx = skin_canvas.getContext('2d');
 
-    image.onerror = function(err) {
-      logging.error("render error: " + err);
-      callback(err, 2, null, hash);
-    };
+  image.onerror = function(err) {
+    logging.error("render error: " + err);
+    callback(err, null);
+  };
 
-    image.onload = function() {
-      skin_ctx.drawImage(image,0,0,64,64,0,0,64,64);
-      //Scale it
-      scale_image(skin_ctx.getImageData(0,0,64,64), skin_ctx, 0, 0, scale);
-      if (body) {
-        logging.log("drawing body");
-        exp.draw_body(skin_canvas, model_ctx, scale);
-      }
-      logging.log("drawing head");
-      exp.draw_head(skin_canvas, model_ctx, scale);
-      if (helm) {
-        logging.log("drawing helmet");
-        exp.draw_helmet(skin_canvas, model_ctx, scale);
-      }
+  image.onload = function() {
+    skin_ctx.drawImage(image,0,0,64,64,0,0,64,64);
+    //Scale it
+    scale_image(skin_ctx.getImageData(0,0,64,64), skin_ctx, 0, 0, scale);
+    if (body) {
+      logging.log("drawing body");
+      exp.draw_body(skin_canvas, model_ctx, scale);
+    }
+    logging.log("drawing head");
+    exp.draw_head(skin_canvas, model_ctx, scale);
+    if (helm) {
+      logging.log("drawing helmet");
+      exp.draw_helmet(skin_canvas, model_ctx, scale);
+    }
 
-      model_canvas.toBuffer(function(err, buf){
-        callback(err, 2, buf, hash);
-      });
-    };
+    model_canvas.toBuffer(function(err, buf){
+      callback(err, buf);
+    });
+  };
 
-    image.src = img;
-  });
+  image.src = img;
 }
 
 function scale_image(imageData, context, d_x, d_y, scale) {

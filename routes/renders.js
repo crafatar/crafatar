@@ -5,6 +5,7 @@ var helpers = require('../modules/helpers');
 var config = require('../modules/config');
 var skins = require('../modules/skins');
 var renders = require('../modules/renders');
+var fs = require('fs');
 
 var human_status = {
   0: "none",
@@ -47,7 +48,7 @@ router.get('/:type/:uuid.:ext?', function(req, res) {
   uuid = uuid.replace(/-/g, "");
 
   try {
-    renders.draw_model(uuid, scale, helm, body, function(err, status, image, hash) {
+    helpers.get_render(uuid, scale, helm, body, function(err, status, hash, image) {
       logging.log(uuid + " - " + human_status[status]);
       if (err) {
         logging.error(err);
@@ -66,13 +67,13 @@ router.get('/:type/:uuid.:ext?', function(req, res) {
         logging.log("status: " + http_status);
         sendimage(http_status, status, image);
       } else {
-        //handle_default(404, status);
+        handle_default(404, status);
       }
     });
   } catch(e) {
     logging.error("Error!");
     logging.error(e);
-    //handle_default(500, status);
+    handle_default(500, status);
   }
 
   function handle_default(http_status, img_status) {
@@ -87,8 +88,12 @@ router.get('/:type/:uuid.:ext?', function(req, res) {
       res.end();
     } else {
       def = def || skins.default_skin(uuid);
-      skins.resize_img("public/images/" + def + ".png", size, function(err, image) {
-        sendimage(http_status, img_status, image);
+      fs.readFile("public/images/" + def + ".png", function (err, buf) {
+        if (err) throw err;
+        console.log(buf);
+        renders.draw_model(uuid, buf, scale, helm, body, function(err, status, image) {
+          sendimage(http_status, img_status, image);
+        });
       });
     }
   }

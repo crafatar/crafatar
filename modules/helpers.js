@@ -3,6 +3,7 @@ var logging = require("./logging");
 var config = require("./config");
 var cache = require("./cache");
 var skins = require("./skins");
+var renders = require("./renders")
 var fs = require("fs");
 
 // 0098cb60-fa8e-427c-b299-793cbd302c9a
@@ -172,6 +173,23 @@ exp.get_skin = function(uuid, callback) {
     } else {
       callback(err, null, null);
     }
+  });
+};
+
+// handles creations of skin renders
+// callback contanis error, hash, image buffer
+exp.get_render = function(uuid, scale, helm, body, callback) {
+  logging.log(uuid + " render request");
+  exp.get_skin(uuid, function(err, hash, img) {
+    renders.draw_model(uuid, img, scale, helm, body, function(err, img) {
+      if (err) {
+        callback(err, -1, hash, null);
+      } else if (!img) {
+        callback(null, 0, hash, null);
+      } else {
+        callback(null, 2, hash, img);
+      }
+    });
   });
 };
 
