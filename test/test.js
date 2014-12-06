@@ -56,6 +56,10 @@ describe("Crafatar", function() {
       done();
     });
     it("should be a valid uuid", function(done) {
+      assert.strictEqual(helpers.uuid_valid("1DCEF164FF0A47F2B9A691385C774EE7"), true);
+      done();
+    });
+    it("should be a valid uuid", function(done) {
       assert.strictEqual(helpers.uuid_valid("0098cb60-fa8e-427c-b299-793cbd302c9a"), true);
       done();
     });
