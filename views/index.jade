@@ -63,11 +63,41 @@ block content
           | Replace 
           mark.green id 
           | with a Mojang <b>UUID</b> or <b>username</b> to get the related skin.
-          | You are redirected to the textures URL, or the default image is served.<br>
+          | The user's skin will be returned, or the default image is served.<br>
           | You can use the default parameter here as well.
         .code
           | #{domain}/skins/
           mark.green id
+
+        a(id="renders", class="anchor")
+        a(href="renders")
+          h3 3D Renders
+        p
+          | Crafatar also provides support for 3D renders of Minecraft skins.
+          | Replace
+          mark.green id
+          | with a Mojang <b>UUID</b> or <b>username</b> to get an render for the skin.
+        .code
+          | #{domain}/renders/head/
+          mark.green id
+        .code
+          | #{domain}/renders/body/
+          mark.green id
+        | The <b>default</b> parameter can also be used here. The scale factor will not be applied.
+        | Using the <b>helm</b> parameter is also allowed, which will be overlayed onto the head.
+        | The <b>head</b> render type will return only a render of the skin's head, while the
+        | <b>body</b> render will return a render of the entire skin.
+
+        a(id="#render-parameters", class="#render-anchor")
+        a(href="#render-parameters")
+          h3 Render Parameters
+        a(id="scale", class="anchor")
+        a(href="#scale")
+          h4 scale
+        p
+          | The scale factor of the image #{config.min_scale} - #{config.max_scale}.<br>
+          | Default is #{config.default_scale}. The actual size differs between the type of render.
+
 
         a(id="http-headers", class="anchor")
         a(href="#http-headers")
@@ -126,7 +156,7 @@ block content
         .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6
         p Jeb's avatar, 64 × 64
         .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64
-        p Jeb's avatar, 64 × 64, with helm
+        p Jeb's avatar, 64 × 64, with helmet
         .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64&amp;helm
         p Jeb's avatar, or fall back to steve
         .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?default=steve
@@ -138,6 +168,10 @@ block content
         .code #{domain}/skins/853c80ef3c3749fdaa49938b674adae6
         p Jeb's skin by username
         .code #{domain}/skins/jeb_
+        p Render of Jeb's Head
+        .code #{domain}/renders/head/853c80ef3c3749fdaa49938b674adae6
+        p Render of Jeb's Body, with helmet, by username
+        .code #{domain}/renders/body/jeb_?helm
       .col-md-2.center
         .sideface.redstone_sheep(title="redstone_sheep")
         .sideface.Jake0oo0(title="Jake0oo0")
