@@ -112,3 +112,7 @@ h4 {
 .sideface.md_5:hover {
   background:url("/avatars/af74a02d19cb445bb07f6866a861f783?size=160&helm=true");
 }
+
+.errmsg {
+  margin-top: 50px;
+}
