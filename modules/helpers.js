@@ -174,6 +174,11 @@ exp.get_skin = function(uuid, callback) {
   });
 };
 
+function get_type(helm, body) {
+  var text = body ? "body" : "head"
+  return helm ? text+"helm" : text
+}
+
 // handles creations of skin renders
 // callback contanis error, hash, image buffer
 exp.get_render = function(uuid, scale, helm, body, callback) {
@@ -184,9 +189,10 @@ exp.get_render = function(uuid, scale, helm, body, callback) {
         callback(err, -1, hash, null);
         return;
       }
-      var renderpath = __dirname + "/../" + config.renders_dir + hash + "-" + scale + ".png"; 
+      console.log("TYPE: " + get_type(helm, body))
+      var renderpath = __dirname + "/../" + config.renders_dir + hash + "-" + scale + "-" + "-" + get_type(helm, body) + ".png"; 
       if (fs.existsSync(renderpath)) {
-        renders.open_render(hash, scale, function(err, img) {
+        renders.open_render(renderpath, function(err, img) {
           callback(err, 1, hash, img);
         });
         return;
