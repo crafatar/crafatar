@@ -186,7 +186,6 @@ exp.get_render = function(uuid, scale, helm, body, callback) {
       return;
     }
     renders.draw_model(uuid, img, scale, helm, body, function(err, img) {
-      console.log("thing" + img);
       if (err) {
         callback(err, -1, hash, null);
       } else if (!img) {
