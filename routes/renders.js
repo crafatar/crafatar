@@ -43,8 +43,8 @@ router.get('/:type/:uuid.:ext?', function(req, res) {
     return;
   }
 
-  // strip dashes, to lowercase
-  uuid = uuid.replace(/-/g, "").toLowerCase();
+  // strip dashes
+  uuid = uuid.replace(/-/g, "");
 
   try {
     helpers.get_render(uuid, scale, helm, body, function(err, status, hash, image) {
