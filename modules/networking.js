@@ -154,7 +154,7 @@ exp.save_skin = function(uuid, hash, outpath, callback) {
             logging.log(err);
           }
           callback(null, img);
-        })
+        });
       }
     });
   } else {

@@ -3,7 +3,7 @@ var logging = require("./logging");
 var config = require("./config");
 var cache = require("./cache");
 var skins = require("./skins");
-var renders = require("./renders")
+var renders = require("./renders");
 var fs = require("fs");
 
 // 0098cb60-fa8e-427c-b299-793cbd302c9a
@@ -175,8 +175,8 @@ exp.get_skin = function(uuid, callback) {
 };
 
 function get_type(helm, body) {
-  var text = body ? "body" : "head"
-  return helm ? text+"helm" : text
+  var text = body ? "body" : "head";
+  return helm ? text+"helm" : text;
 }
 
 // handles creations of skin renders
@@ -189,8 +189,8 @@ exp.get_render = function(uuid, scale, helm, body, callback) {
         callback(err, -1, hash, null);
         return;
       }
-      console.log("TYPE: " + get_type(helm, body))
-      var renderpath = __dirname + "/../" + config.renders_dir + hash + "-" + scale + "-" + get_type(helm, body) + ".png"; 
+      console.log("TYPE: " + get_type(helm, body));
+      var renderpath = __dirname + "/../" + config.renders_dir + hash + "-" + scale + "-" + get_type(helm, body) + ".png";
       if (fs.existsSync(renderpath)) {
         renders.open_render(renderpath, function(err, img) {
           callback(err, 1, hash, img);

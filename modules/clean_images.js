@@ -47,8 +47,8 @@ exp.run = function() {
         }
       }
       files = fs.readdirSync(renderdir);
-      for (var i = 0; i < Math.min(files.length, config.cleaning_amount); i++) {
-        var filename = files[i];
+      for (var j = 0; j < Math.min(files.length, config.cleaning_amount); j++) {
+        var filename = files[j];
         if (filename[0] != ".") {
           fs.unlink(renderdir + filename, function(){});
         }
