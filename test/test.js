@@ -7,7 +7,7 @@ var logging = require("../modules/logging");
 var config = require("../modules/config");
 var skins = require("../modules/skins");
 var cache = require("../modules/cache");
-var renders = require("../modules/renders")
+var renders = require("../modules/renders");
 
 // we don't want tests to fail because of slow internet
 config.http_timeout *= 3;
@@ -190,7 +190,7 @@ describe("Crafatar", function() {
           done();
         });
       });
-    })
+    });
   });
   describe("Errors", function() {
     before(function() {
