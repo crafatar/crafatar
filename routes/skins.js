@@ -18,8 +18,8 @@ router.get("/:uuid.:ext?", function(req, res) {
     return;
   }
 
-  // strip dashes, to lower case
-  uuid = uuid.replace(/-/g, "").toLowerCase();
+  // strip dashes
+  uuid = uuid.replace(/-/g, "");
 
   try {
     helpers.get_skin(uuid, function(err, hash, image) {
