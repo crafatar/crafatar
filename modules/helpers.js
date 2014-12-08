@@ -111,10 +111,11 @@ exp.get_image_hash = function(uuid, callback) {
           if (err) {
             callback(err, -1, details && details.hash);
           } else {
-            var oldhash = details && details.hash || "none";
-            logging.debug(uuid + " old hash: " + oldhash);
+            // skin is only checked (3) when uuid known AND hash didn't change
+            // in all other cases the skin is downloaded (2)
+            var status = details && (details.hash == hash) ? 3 : 2;
+            logging.debug(uuid + " old hash: " + (details && details.hash));
             logging.log(uuid + " hash: " + hash);
-            var status = hash == oldhash ? 3 : 2;
             callback(null, status, hash);
           }
         });
