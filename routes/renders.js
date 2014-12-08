@@ -27,7 +27,7 @@ router.get('/:type/:uuid.:ext?', function(req, res) {
     return;
   }
 
-  var body = raw_type == "head" ? false : true
+  var body = raw_type == "body";
   var uuid = req.params.uuid;
   var def = req.query.default;
   var scale = parseInt(req.query.scale) || config.default_scale;
@@ -66,7 +66,7 @@ router.get('/:type/:uuid.:ext?', function(req, res) {
         logging.log("status: " + http_status);
         sendimage(http_status, status, image);
       } else {
-        logging.log("image not found, using default.")
+        logging.log("image not found, using default.");
         handle_default(404, status);
       }
     });
