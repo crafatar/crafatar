@@ -15,7 +15,7 @@ var human_status = {
 
 /* GET avatar request. */
 router.get("/:uuid.:ext?", function(req, res) {
-  var uuid = req.params.uuid;
+  var uuid = (req.params.uuid || "").toLowerCase();
   var size = parseInt(req.query.size) || config.default_size;
   var def = req.query.default;
   var helm = req.query.hasOwnProperty("helm");

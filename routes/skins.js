@@ -8,7 +8,7 @@ var lwip = require("lwip");
 
 /* GET skin request. */
 router.get("/:uuid.:ext?", function(req, res) {
-  var uuid = req.params.uuid;
+  var uuid = (req.params.uuid || "").toLowerCase();
   var def = req.query.default;
   var start = new Date();
   var etag = null;
