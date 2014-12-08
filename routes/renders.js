@@ -16,7 +16,7 @@ var human_status = {
 
 // valid types: head, body. helmet is query param
 
-// The Type logic should be two separate GET 
+// The Type logic should be two separate GET
 // functions once response methods are extracted
 router.get('/:type/:uuid.:ext?', function(req, res) {
   var raw_type = req.params.type;
@@ -35,7 +35,7 @@ router.get('/:type/:uuid.:ext?', function(req, res) {
   var start = new Date();
   var etag = null;
 
-  if (scale > config.maximum_scale) {
+  if (scale < config.min_scale || scale > config.max_scale) {
     // Preventing from OOM crashes.
     res.status(422).send("422 Invalid Size");
   } else if (!helpers.uuid_valid(uuid)) {
