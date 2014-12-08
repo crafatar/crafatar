@@ -14,7 +14,7 @@ var config = {
   renders_dir: 'skins/renders', // Directory where rendered skins are kept. should have trailing '/'
   debug_enabled: false,      // enables logging.debug
   default_scale: 6,          // the scale of rendered avatars
-  maximum_sale: 10           // the maximum scale of rendered avatars
+  maximum_scale: 10           // the maximum scale of rendered avatars
 };
 
 module.exports = config;
