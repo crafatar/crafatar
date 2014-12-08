@@ -67,6 +67,8 @@ exp.update_timestamp = function(uuid, hash) {
 exp.save_hash = function(uuid, hash) {
   logging.log(uuid + " cache: saving hash");
   var time = new Date().getTime();
+  // store shorter null byte instead of "null"
+  hash = hash || ".";
   // store uuid in lower case if not null
   uuid = uuid && uuid.toLowerCase();
   redis.hmset(uuid, "h", hash, "t", time);
@@ -80,7 +82,7 @@ exp.get_details = function(uuid, callback) {
     var details = null;
     if (data) {
       details = {
-        hash: (data.h == "null" ? null : data.h),
+        hash: (data.h == "." ? null : data.h),
         time: Number(data.t)
       };
     }
