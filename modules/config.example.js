@@ -11,7 +11,7 @@ var config = {
   faces_dir: 'skins/faces/', // directory where faces are kept. should have trailing '/'
   helms_dir: 'skins/helms/', // directory where helms are kept. should have trailing '/'
   skins_dir: 'skins/skins/', // directory where skins are kept. should have trailing '/'
-  renders_dir: 'skins/renders', // Directory where rendered skins are kept. should have trailing '/'
+  renders_dir: 'skins/renders/', // Directory where rendered skins are kept. should have trailing '/'
   debug_enabled: false,      // enables logging.debug
   default_scale: 6,          // the scale of rendered avatars
   maximum_scale: 10           // the maximum scale of rendered avatars
