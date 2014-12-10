@@ -59,6 +59,8 @@ exp.get_redis = function() {
 exp.update_timestamp = function(uuid, hash) {
   logging.log(uuid + " cache: updating timestamp");
   var time = new Date().getTime();
+  // store uuid in lower case if not null
+  uuid = uuid && uuid.toLowerCase();
   redis.hmset(uuid, "t", time);
   update_file_date(hash);
 };
@@ -78,6 +80,8 @@ exp.save_hash = function(uuid, hash) {
 // {hash: "0123456789abcdef", time: 1414881524512}
 // null when uuid unkown
 exp.get_details = function(uuid, callback) {
+  // get uuid in lower case if not null
+  uuid = uuid && uuid.toLowerCase();
   redis.hgetall(uuid, function(err, data) {
     var details = null;
     if (data) {
