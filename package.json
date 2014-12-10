@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "author": "Jake0oo0",
-  "description": "A NodeJS application to server Minecraft avatars.",
+  "description": "A Minecraft avatar service with support for avatars, skins, and even renders!",
   "contributors": [
     {
       "name": "jomo"
