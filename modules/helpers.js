@@ -72,6 +72,45 @@ function store_images(uuid, details, callback) {
       }
     }
   });
+
+  networking.get_cape_url(uuid, function(err, cape_url) {
+    if (err) {
+      callback(err, null);
+    } else {
+      if (cape_url) {
+        logging.log(uuid + " " + cape_url);
+        // set file paths
+        var hash = get_hash(cape_url);
+        if (details && details.hash == hash) {
+          // hash hasn't changed
+          logging.log(uuid + " hash has not changed");
+          cache.update_timestamp(uuid, hash);
+          callback(null, hash);
+        } else {
+          // hash has changed
+          logging.log(uuid + " new hash: " + hash);
+          var capepath = __dirname + "/../" + config.capes_dir + hash + ".png";
+
+          if (fs.existsSync(capepath)) {
+            logging.log(uuid + " Cape already exists, not downloading");
+            cache.save_hash(uuid, hash);
+            callback(null, hash);
+          } else {
+            // download cape
+            networking.get_cape(cape_url, function(err, img) {
+              if (err || !img) {
+                callback(err, null);
+              }
+            });
+          }
+        }
+      } else {
+        // profile found, but has no cape
+        cache.save_hash(uuid, null);
+        callback(null, null);
+      }
+    }
+  });
 }
 
 
@@ -122,6 +161,19 @@ exp.get_image_hash = function(uuid, callback) {
       }
     }
   });
+};
+
+exp.get_cape_hash = function(uuid, callback) {
+  cache.get_details(uuid, function(err, details) {
+    if (err) {
+      callback(err, -1, null);
+    } else {
+      if (details && details.time + config.local_cache_time * 1000 >= new Date().getTime()) {
+        logging.log(uuid + " uuid cached & recently updated");
+
+      }
+    }
+  })
 };
 
 
