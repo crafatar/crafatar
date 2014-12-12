@@ -13,6 +13,7 @@ var config = {
   helms_dir: "images/helms/",    // directory where helms are kept. should have trailing "/"
   skins_dir: "images/skins/",    // directory where skins are kept. should have trailing "/"
   renders_dir: "images/renders/",// Directory where rendered skins are kept. should have trailing "/"
+  capes_dir: "images/capes/",     // directory where capes are kept. should have trailing "/"
   debug_enabled: false,          // enables logging.debug
   min_scale: 1,                  // for renders
   max_scale: 10,                 // for renders; too big values might lead to slow response time or DoS
