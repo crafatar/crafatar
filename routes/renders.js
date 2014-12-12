@@ -37,7 +37,8 @@ router.get('/:type/:uuid.:ext?', function(req, res) {
 
   if (scale < config.min_scale || scale > config.max_scale) {
     // Preventing from OOM crashes.
-    res.status(422).send("422 Invalid Size");
+    res.status(422).send("422 Invalid Scale");
+    return;
   } else if (!helpers.uuid_valid(uuid)) {
     res.status(422).send("422 Invalid UUID");
     return;
