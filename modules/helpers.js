@@ -176,4 +176,23 @@ exp.get_skin = function(uuid, callback) {
   });
 };
 
+exp.get_cape = function(uuid, callback) {
+  logging.log(uuid + " cape request");
+  exp.get_image_hash(uuid, function(err, status, hash) {
+    if (hash) {
+      var capeurl = "http://textures.minecraft.net/texture/" + hash;
+      networking.get_cape(capeurl, function(err, img) {
+        if (err) {
+          logging.error("error while downloading cape");
+          callback(err, hash, null);
+        } else {
+          callback(null, hash, img);
+        }
+      });
+    } else {
+      callback(err, null, null);
+    }
+  });
+};
+
 module.exports = exp;
