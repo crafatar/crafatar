@@ -59,7 +59,7 @@ exp.draw_body = function(skin_canvas, model_ctx, scale) {
   model_ctx.drawImage(skin_canvas, 44*scale, 20*scale, 4*scale, 12*scale, -20*scale, 20/1.2*scale, 4*scale, 12*scale);
   //Arm Left - Top
   model_ctx.setTransform(-1,0.5,1,0.5,0,0);
-  model_ctx.drawImage(skin_canvas, 44*scale, 16*scale, 4*scale, 4*scale, 0, 16*scale, 4*scale, 4*scale);
+  model_ctx.drawImage(skin_canvas, 44*scale, 16*scale, 4*scale, 4*scale, 0, 16.4*scale, 4*scale, 4.3*scale);
 
   //Body
   //Body - Front
@@ -76,7 +76,7 @@ exp.draw_body = function(skin_canvas, model_ctx, scale) {
   //Arm Right - Top
   model_ctx.setTransform(-1,0.5,1,0.5,0,0);
   model_ctx.scale(-1,1);
-  model_ctx.drawImage(skin_canvas, 44*scale, 16*scale, 4*scale, 4*scale, -16*scale, 16*scale, 4*scale, 4*scale);
+  model_ctx.drawImage(skin_canvas, 44*scale, 16*scale, 4*scale, 4*scale, -16.4*scale, 16*scale, 4*scale, 4.3*scale);
 };
 
 exp.draw_model = function(uuid, img, scale, helm, body, callback) {
