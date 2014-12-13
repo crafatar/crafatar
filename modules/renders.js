@@ -64,7 +64,7 @@ exp.draw_body = function(skin_canvas, model_ctx, scale) {
   //Body
   //Body - Front
   model_ctx.setTransform(1,-0.5,0,1.2,0,0);
-  model_ctx.drawImage(skin_canvas, 20*scale, 20*scale, 8*scale, 12*scale, 8*scale, 20/1.2*scale, 8*scale, 12*scale);
+  model_ctx.drawImage(skin_canvas, 20*scale, 20*scale, 8*scale, 12*scale, 8*scale, 20/1.2*scale, 8*scale, 12.15*scale);
 
   //Arm Right
   //Arm Right - Right
