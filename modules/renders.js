@@ -34,7 +34,7 @@ exp.draw_head = function(skin_canvas, model_ctx, scale) {
   //Head - Top
   model_ctx.setTransform(-1,0.5,1,0.5,0,0);
   model_ctx.scale(-1,1);
-  model_ctx.drawImage(skin_canvas, 8*scale, 0, 8*scale, 8*scale, -3.19*scale, 5.04*scale, 8.2*scale, 8.1*scale);
+  model_ctx.drawImage(skin_canvas, 8*scale, 0, 8*scale, 8*scale, -3.24*scale, 5.08*scale, 8.13*scale, 8.14*scale);
 };
 
 exp.draw_body = function(skin_canvas, model_ctx, scale) {

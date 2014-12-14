@@ -31,7 +31,7 @@ exp.run = function() {
     if (err) {
       logging.error("Failed to run ImageCleaner");
       logging.error(err);
-    } else if (clean) {
+    } else if (clean || true) {
       logging.warn("ImageCleaner: Disk limit reached! Cleaning images now");
       var facesdir = __dirname + "/../" + config.faces_dir;
       var helmdir = __dirname + "/../" + config.helms_dir;
