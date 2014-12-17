@@ -15,7 +15,7 @@ exp.draw_helmet = function(skin_canvas, model_ctx, scale) {
   model_ctx.drawImage(skin_canvas, 40*scale, 8*scale, 8*scale, 8*scale, 10*scale, 13/1.2*scale, 8*scale, 8*scale);
   //Helmet - Right
   model_ctx.setTransform(1,0.5,0,1.2,0,0);
-  model_ctx.drawImage(skin_canvas, 32*scale, 8*scale, 8*scale, 8*scale, 2*scale, 1/1.2*scale, 8*scale, 8*scale);
+  model_ctx.drawImage(skin_canvas, 32*scale, 8*scale, 8*scale, 8*scale, 2*scale, 3/1.2*scale, 8*scale, 8*scale);
   //Helmet - Top
   model_ctx.setTransform(-1,0.5,1,0.5,0,0);
   model_ctx.scale(-1,1);
