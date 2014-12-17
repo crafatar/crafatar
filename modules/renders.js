@@ -14,27 +14,27 @@ var Image = Canvas.Image;
 exp.draw_helmet = function(skin_canvas, model_ctx, scale) {
   //Helmet - Front
   model_ctx.setTransform(1,-0.5,0,1.2,0,0);
-  model_ctx.drawImage(skin_canvas, 40*scale, 8*scale, 8*scale, 8*scale, 10*scale, 31/3*scale, 8*scale, 8*scale);
+  model_ctx.drawImage(skin_canvas, 40*scale, 8*scale, 8*scale, 8*scale, 10*scale, 13/1.2*scale, 8*scale, 8*scale);
   //Helmet - Right
   model_ctx.setTransform(1,0.5,0,1.2,0,0);
-  model_ctx.drawImage(skin_canvas, 32*scale, 8*scale, 8*scale, 8*scale, 2*scale, 2*scale, 8*scale, 8*scale);
+  model_ctx.drawImage(skin_canvas, 32*scale, 8*scale, 8*scale, 8*scale, 2*scale, 1/1.2*scale, 8*scale, 8*scale);
   //Helmet - Top
   model_ctx.setTransform(-1,0.5,1,0.5,0,0);
   model_ctx.scale(-1,1);
-  model_ctx.drawImage(skin_canvas, 40*scale, 0, 8*scale, 8*scale, -2.4*scale, 4.4*scale, 8*scale, 8*scale);
+  model_ctx.drawImage(skin_canvas, 40*scale, 0, 8*scale, 8*scale, -3*scale, 5*scale, 8*scale, 8*scale);
 };
 
 exp.draw_head = function(skin_canvas, model_ctx, scale) {
   //Head - Front
   model_ctx.setTransform(1,-0.5,0,1.2,0,0);
-  model_ctx.drawImage(skin_canvas, 8*scale, 8*scale, 8*scale, 8*scale, 10*scale, 31/3*scale, 8*scale, 8*scale);
+  model_ctx.drawImage(skin_canvas, 8*scale, 8*scale, 8*scale, 8*scale, 10*scale, 13/1.2*scale, 8*scale, 8*scale);
   //Head - Right
   model_ctx.setTransform(1,0.5,0,1.2,0,0);
-  model_ctx.drawImage(skin_canvas, 0, 8*scale, 8*scale, 8*scale, 2*scale, 2*scale, 8*scale, 8*scale);
+  model_ctx.drawImage(skin_canvas, 0, 8*scale, 8*scale, 8*scale, 2*scale, 3/1.2*scale, 8*scale, 8*scale);
   //Head - Top
   model_ctx.setTransform(-1,0.5,1,0.5,0,0);
   model_ctx.scale(-1,1);
-  model_ctx.drawImage(skin_canvas, 8*scale, 0, 8*scale, 8*scale, -2.4*scale, 4.4*scale, 8*scale, 8*scale);
+  model_ctx.drawImage(skin_canvas, 8*scale, 0, 8*scale, 8*scale, -3*scale, 5*scale, 8*scale, 8*scale);
 };
 
 exp.draw_body = function(skin_canvas, model_ctx, scale) {
@@ -59,12 +59,12 @@ exp.draw_body = function(skin_canvas, model_ctx, scale) {
   model_ctx.drawImage(skin_canvas, 44*scale, 20*scale, 4*scale, 12*scale, -20*scale, 20/1.2*scale, 4*scale, 12*scale);
   //Arm Left - Top
   model_ctx.setTransform(-1,0.5,1,0.5,0,0);
-  model_ctx.drawImage(skin_canvas, 44*scale, 16*scale, 4*scale, 4*scale, 0, 16.4*scale, 4*scale, 4.3*scale);
+  model_ctx.drawImage(skin_canvas, 44*scale, 16*scale, 4*scale, 4*scale, 0, 16*scale, 4*scale, 4*scale);
 
   //Body
   //Body - Front
   model_ctx.setTransform(1,-0.5,0,1.2,0,0);
-  model_ctx.drawImage(skin_canvas, 20*scale, 20*scale, 8*scale, 12*scale, 8*scale, 20/1.2*scale, 8*scale, 12.15*scale);
+  model_ctx.drawImage(skin_canvas, 20*scale, 20*scale, 8*scale, 12*scale, 8*scale, 20/1.2*scale, 8*scale, 12*scale);
 
   //Arm Right
   //Arm Right - Right
@@ -76,7 +76,7 @@ exp.draw_body = function(skin_canvas, model_ctx, scale) {
   //Arm Right - Top
   model_ctx.setTransform(-1,0.5,1,0.5,0,0);
   model_ctx.scale(-1,1);
-  model_ctx.drawImage(skin_canvas, 44*scale, 16*scale, 4*scale, 4*scale, -16.4*scale, 16*scale, 4*scale, 4.3*scale);
+  model_ctx.drawImage(skin_canvas, 44*scale, 16*scale, 4*scale, 4*scale, -16*scale, 16*scale, 4*scale, 4*scale);
 };
 
 exp.draw_model = function(uuid, img, scale, helm, body, callback) {
