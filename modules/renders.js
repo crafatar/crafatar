@@ -5,12 +5,10 @@
 var helpers = require('./helpers');
 var logging = require('./logging');
 var fs = require('fs');
-
-var exp = {};
-
 var Canvas = require('canvas');
 var Image = Canvas.Image;
 
+var exp = {};
 exp.draw_helmet = function(skin_canvas, model_ctx, scale) {
   //Helmet - Front
   model_ctx.setTransform(1,-0.5,0,1.2,0,0);
@@ -87,6 +85,10 @@ exp.draw_model = function(uuid, img, scale, helm, body, callback) {
   var skin_canvas = new Canvas(width, height);
   var model_ctx = model_canvas.getContext('2d');
   var skin_ctx = skin_canvas.getContext('2d');
+  model_ctx.patternQuality = "nearest";
+  model_ctx.filter = "nearest";
+  skin_ctx.patternQuality = "nearest";
+  skin_ctx.filter = "nearest";
 
   image.onerror = function(err) {
     logging.error("render error: " + err);
