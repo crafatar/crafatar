@@ -36,7 +36,7 @@ exp.draw_head = function(skin_canvas, model_ctx, scale) {
 };
 
 exp.draw_body = function(skin_canvas, model_ctx, scale) {
-  if (skin_canvas.height == 32) {
+  if (skin_canvas.height == 32 * scale) {
     logging.log("old skin");
     //Left Leg
     //Left Leg - Front
@@ -123,12 +123,6 @@ exp.draw_body = function(skin_canvas, model_ctx, scale) {
 
 exp.draw_model = function(uuid, img, scale, helm, body, callback) {
   var image = new Image();
-  var width = 64 * scale;
-  var height = 64 * scale;
-  var model_canvas = new Canvas(20 * scale, (body ? 44.8 : 17.6) * scale);
-  var skin_canvas = new Canvas(width, height);
-  var model_ctx = model_canvas.getContext('2d');
-  var skin_ctx = skin_canvas.getContext('2d');
 
   image.onerror = function(err) {
     logging.error("render error: " + err);
@@ -136,6 +130,13 @@ exp.draw_model = function(uuid, img, scale, helm, body, callback) {
   };
 
   image.onload = function() {
+    var width = 64 * scale;
+    var height = (image.height == 32 ? 32 : 64) * scale;
+    var model_canvas = new Canvas(20 * scale, (body ? 44.8 : 17.6) * scale);
+    var skin_canvas = new Canvas(width, height);
+    var model_ctx = model_canvas.getContext('2d');
+    var skin_ctx = skin_canvas.getContext('2d');
+
     skin_ctx.drawImage(image,0,0,64,64,0,0,64,64);
     //Scale it
     scale_image(skin_ctx.getImageData(0,0,64,64), skin_ctx, 0, 0, scale);
