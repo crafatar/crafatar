@@ -36,45 +36,89 @@ exp.draw_head = function(skin_canvas, model_ctx, scale) {
 };
 
 exp.draw_body = function(skin_canvas, model_ctx, scale) {
-  //Left Leg
-  //Left Leg - Front
-  model_ctx.setTransform(1,-0.5,0,1.2,0,0);
-  model_ctx.scale(-1,1);
-  model_ctx.drawImage(skin_canvas, 4*scale, 20*scale, 4*scale, 12*scale, -16*scale, 34.4/1.2*scale, 4*scale, 12*scale);
+  if (skin_canvas.height == 32) {
+    logging.log("old skin");
+    //Left Leg
+    //Left Leg - Front
+    model_ctx.setTransform(1,-0.5,0,1.2,0,0);
+    model_ctx.scale(-1,1);
+    model_ctx.drawImage(skin_canvas, 4*scale, 20*scale, 4*scale, 12*scale, -16*scale, 34.4/1.2*scale, 4*scale, 12*scale);
 
-  //Right Leg
-  //Right Leg - Right
-  model_ctx.setTransform(1,0.5,0,1.2,0,0);
-  model_ctx.drawImage(skin_canvas, 0*scale, 20*scale, 4*scale, 12*scale, 4*scale, 26.4/1.2*scale, 4*scale, 12*scale);
-  //Right Leg - Front
-  model_ctx.setTransform(1,-0.5,0,1.2,0,0);
-  model_ctx.drawImage(skin_canvas, 4*scale, 20*scale, 4*scale, 12*scale, 8*scale, 34.4/1.2*scale, 4*scale, 12*scale);
+    //Right Leg
+    //Right Leg - Right
+    model_ctx.setTransform(1,0.5,0,1.2,0,0);
+    model_ctx.drawImage(skin_canvas, 0*scale, 20*scale, 4*scale, 12*scale, 4*scale, 26.4/1.2*scale, 4*scale, 12*scale);
+    //Right Leg - Front
+    model_ctx.setTransform(1,-0.5,0,1.2,0,0);
+    model_ctx.drawImage(skin_canvas, 4*scale, 20*scale, 4*scale, 12*scale, 8*scale, 34.4/1.2*scale, 4*scale, 12*scale);
 
-  //Arm Left
-  //Arm Left - Front
-  model_ctx.setTransform(1,-0.5,0,1.2,0,0);
-  model_ctx.scale(-1,1);
-  model_ctx.drawImage(skin_canvas, 44*scale, 20*scale, 4*scale, 12*scale, -20*scale, 20/1.2*scale, 4*scale, 12*scale);
-  //Arm Left - Top
-  model_ctx.setTransform(-1,0.5,1,0.5,0,0);
-  model_ctx.drawImage(skin_canvas, 44*scale, 16*scale, 4*scale, 4*scale, 0, 16*scale, 4*scale, 4*scale);
+    //Arm Left
+    //Arm Left - Front
+    model_ctx.setTransform(1,-0.5,0,1.2,0,0);
+    model_ctx.scale(-1,1);
+    model_ctx.drawImage(skin_canvas, 44*scale, 20*scale, 4*scale, 12*scale, -20*scale, 20/1.2*scale, 4*scale, 12*scale);
+    //Arm Left - Top
+    model_ctx.setTransform(-1,0.5,1,0.5,0,0);
+    model_ctx.drawImage(skin_canvas, 44*scale, 16*scale, 4*scale, 4*scale, 0, 16*scale, 4*scale, 4*scale);
 
-  //Body
-  //Body - Front
-  model_ctx.setTransform(1,-0.5,0,1.2,0,0);
-  model_ctx.drawImage(skin_canvas, 20*scale, 20*scale, 8*scale, 12*scale, 8*scale, 20/1.2*scale, 8*scale, 12*scale);
+    //Body
+    //Body - Front
+    model_ctx.setTransform(1,-0.5,0,1.2,0,0);
+    model_ctx.drawImage(skin_canvas, 20*scale, 20*scale, 8*scale, 12*scale, 8*scale, 20/1.2*scale, 8*scale, 12*scale);
 
-  //Arm Right
-  //Arm Right - Right
-  model_ctx.setTransform(1,0.5,0,1.2,0,0);
-  model_ctx.drawImage(skin_canvas, 40*scale, 20*scale, 4*scale, 12*scale, 0, 16/1.2*scale, 4*scale, 12*scale);
-  //Arm Right - Front
-  model_ctx.setTransform(1,-0.5,0,1.2,0,0);
-  model_ctx.drawImage(skin_canvas, 44*scale, 20*scale, 4*scale, 12*scale, 4*scale, 20/1.2*scale, 4*scale, 12*scale);
-  //Arm Right - Top
-  model_ctx.setTransform(-1,0.5,1,0.5,0,0);
-  model_ctx.scale(-1,1);
-  model_ctx.drawImage(skin_canvas, 44*scale, 16*scale, 4*scale, 4*scale, -16*scale, 16*scale, 4*scale, 4*scale);
+    //Arm Right
+    //Arm Right - Right
+    model_ctx.setTransform(1,0.5,0,1.2,0,0);
+    model_ctx.drawImage(skin_canvas, 40*scale, 20*scale, 4*scale, 12*scale, 0, 16/1.2*scale, 4*scale, 12*scale);
+    //Arm Right - Front
+    model_ctx.setTransform(1,-0.5,0,1.2,0,0);
+    model_ctx.drawImage(skin_canvas, 44*scale, 20*scale, 4*scale, 12*scale, 4*scale, 20/1.2*scale, 4*scale, 12*scale);
+    //Arm Right - Top
+    model_ctx.setTransform(-1,0.5,1,0.5,0,0);
+    model_ctx.scale(-1,1);
+    model_ctx.drawImage(skin_canvas, 44*scale, 16*scale, 4*scale, 4*scale, -16*scale, 16*scale, 4*scale, 4*scale);
+  } else {
+    logging.log("new skin");
+    //Left Leg
+    //Left Leg - Front
+    model_ctx.setTransform(1,-0.5,0,1.2,0,0);
+    model_ctx.scale(-1,1);
+    model_ctx.drawImage(skin_canvas, 20*scale, 52*scale, 4*scale, 12*scale, -16*scale, 34.4/1.2*scale, 4*scale, 12*scale);
+
+    //Right Leg
+    //Right Leg - Right
+    model_ctx.setTransform(1,0.5,0,1.2,0,0);
+    model_ctx.drawImage(skin_canvas, 0*scale, 20*scale, 4*scale, 12*scale, 4*scale, 26.4/1.2*scale, 4*scale, 12*scale);
+    //Right Leg - Front
+    model_ctx.setTransform(1,-0.5,0,1.2,0,0);
+    model_ctx.drawImage(skin_canvas, 4*scale, 20*scale, 4*scale, 12*scale, 8*scale, 34.4/1.2*scale, 4*scale, 12*scale);
+
+    //Arm Left
+    //Arm Left - Front
+    model_ctx.setTransform(1,-0.5,0,1.2,0,0);
+    model_ctx.scale(-1,1);
+    model_ctx.drawImage(skin_canvas, 36*scale, 52*scale, 4*scale, 12*scale, -20*scale, 20/1.2*scale, 4*scale, 12*scale);
+    //Arm Left - Top
+    model_ctx.setTransform(-1,0.5,1,0.5,0,0);
+    model_ctx.drawImage(skin_canvas, 36*scale, 48*scale, 4*scale, 4*scale, 0, 16*scale, 4*scale, 4*scale);
+
+    //Body
+    //Body - Front
+    model_ctx.setTransform(1,-0.5,0,1.2,0,0);
+    model_ctx.drawImage(skin_canvas, 20*scale, 20*scale, 8*scale, 12*scale, 8*scale, 20/1.2*scale, 8*scale, 12*scale);
+
+    //Arm Right
+    //Arm Right - Right
+    model_ctx.setTransform(1,0.5,0,1.2,0,0);
+    model_ctx.drawImage(skin_canvas, 32*scale, 52*scale, 4*scale, 12*scale, 0, 16/1.2*scale, 4*scale, 12*scale);
+    //Arm Right - Front
+    model_ctx.setTransform(1,-0.5,0,1.2,0,0);
+    model_ctx.drawImage(skin_canvas, 36*scale, 52*scale, 4*scale, 12*scale, 4*scale, 20/1.2*scale, 4*scale, 12*scale);
+    //Arm Right - Top
+    model_ctx.setTransform(-1,0.5,1,0.5,0,0);
+    model_ctx.scale(-1,1);
+    model_ctx.drawImage(skin_canvas, 36*scale, 48*scale, 4*scale, 4*scale, -16*scale, 16*scale, 4*scale, 4*scale);
+  }
 };
 
 exp.draw_model = function(uuid, img, scale, helm, body, callback) {
