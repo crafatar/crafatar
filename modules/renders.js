@@ -110,14 +110,14 @@ exp.draw_body = function(skin_canvas, model_ctx, scale) {
     //Arm Right
     //Arm Right - Right
     model_ctx.setTransform(1,0.5,0,1.2,0,0);
-    model_ctx.drawImage(skin_canvas, 32*scale, 52*scale, 4*scale, 12*scale, 0, 16/1.2*scale, 4*scale, 12*scale);
+    model_ctx.drawImage(skin_canvas, 40*scale, 20*scale, 4*scale, 12*scale, 0, 16/1.2*scale, 4*scale, 12*scale);
     //Arm Right - Front
     model_ctx.setTransform(1,-0.5,0,1.2,0,0);
-    model_ctx.drawImage(skin_canvas, 36*scale, 52*scale, 4*scale, 12*scale, 4*scale, 20/1.2*scale, 4*scale, 12*scale);
+    model_ctx.drawImage(skin_canvas, 44*scale, 20*scale, 4*scale, 12*scale, 4*scale, 20/1.2*scale, 4*scale, 12*scale);
     //Arm Right - Top
     model_ctx.setTransform(-1,0.5,1,0.5,0,0);
     model_ctx.scale(-1,1);
-    model_ctx.drawImage(skin_canvas, 36*scale, 48*scale, 4*scale, 4*scale, -16*scale, 16*scale, 4*scale, 4*scale);
+    model_ctx.drawImage(skin_canvas, 44*scale, 16*scale, 4*scale, 4*scale, -16*scale, 16*scale, 4*scale, 4*scale);
   }
 };
 
