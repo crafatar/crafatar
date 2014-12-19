@@ -137,7 +137,7 @@ exp.draw_model = function(uuid, img, scale, helm, body, callback) {
     var model_ctx = model_canvas.getContext('2d');
     var skin_ctx = skin_canvas.getContext('2d');
 
-    skin_ctx.drawImage(image,0,0,64,64,0,0,64,64);
+    skin_ctx.drawImage(image,0,0,64,64);
     //Scale it
     scale_image(skin_ctx.getImageData(0,0,64,64), skin_ctx, 0, 0, scale);
     if (body) {
