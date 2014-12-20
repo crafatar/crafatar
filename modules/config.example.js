@@ -10,6 +10,7 @@ var config = {
   http_timeout: 1000,        // ms until connection to mojang is dropped
   faces_dir: "skins/faces/", // directory where faces are kept. should have trailing "/"
   helms_dir: "skins/helms/", // directory where helms are kept. should have trailing "/"
+  capes_dir: "skins/capes/", // directory where capes are kept. should have trailing "/"
   debug_enabled: false       // enables logging.debug
 };
 
