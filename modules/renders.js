@@ -131,15 +131,16 @@ exp.draw_model = function(uuid, img, scale, helm, body, callback) {
 
   image.onload = function() {
     var width = 64 * scale;
-    var height = (image.height == 32 ? 32 : 64) * scale;
+    var original_height = (image.height == 32 ? 32 : 64);
+    var height = original_height * scale;
     var model_canvas = new Canvas(20 * scale, (body ? 44.8 : 17.6) * scale);
     var skin_canvas = new Canvas(width, height);
     var model_ctx = model_canvas.getContext('2d');
     var skin_ctx = skin_canvas.getContext('2d');
 
-    skin_ctx.drawImage(image,0,0,64,64);
+    skin_ctx.drawImage(image,0,0,64,original_height);
     //Scale it
-    scale_image(skin_ctx.getImageData(0,0,64,64), skin_ctx, 0, 0, scale);
+    scale_image(skin_ctx.getImageData(0,0,64,original_height), skin_ctx, 0, 0, scale);
     if (body) {
       logging.log("drawing body");
       exp.draw_body(skin_canvas, model_ctx, scale);
