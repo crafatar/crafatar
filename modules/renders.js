@@ -1,4 +1,4 @@
-// Skin locations are based on the work of Confuser
+// Skin locations are based on the work of Confuser, with 1.8 updates by Jake0oo0
 // https://github.com/confuser/serverless-mc-skin-viewer
 // Permission to use & distribute https://github.com/confuser/serverless-mc-skin-viewer/blob/master/LICENSE
 
@@ -126,6 +126,10 @@ exp.draw_body = function(skin_canvas, model_ctx, scale) {
   }
 };
 
+// sets up the necessary components to draw the skin model
+// uses the +img+ skin from the +uuid+ with options of drawing
+// the +helm+ and the +body+
+// callback contains error, image buffer
 exp.draw_model = function(uuid, img, scale, helm, body, callback) {
   var image = new Image();
 
@@ -168,6 +172,8 @@ exp.draw_model = function(uuid, img, scale, helm, body, callback) {
   image.src = img;
 };
 
+// helper method to open a render from +renderpath+
+// callback contains error, image buffer
 exp.open_render = function(renderpath, callback) {
   fs.readFile(renderpath, function (err, buf) {
     if (err) {
@@ -177,6 +183,8 @@ exp.open_render = function(renderpath, callback) {
   });
 };
 
+// scales an image from the +imagedata+ onto the +context+
+// scaled by a factor of +scale+ with options +d_x+ and +d_y+
 function scale_image(imageData, context, d_x, d_y, scale) {
   var width = imageData.width;
   var height = imageData.height;

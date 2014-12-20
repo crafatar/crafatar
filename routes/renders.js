@@ -77,6 +77,9 @@ router.get('/:type/:uuid.:ext?', function(req, res) {
     handle_default(500, status);
   }
 
+
+  // default alex/steve images can be rendered, but
+  // custom images will not be
   function handle_default(http_status, img_status) {
     if (def && def != "steve" && def != "alex") {
       res.writeHead(301, {
@@ -91,8 +94,10 @@ router.get('/:type/:uuid.:ext?', function(req, res) {
       def = def || skins.default_skin(uuid);
       fs.readFile("public/images/" + def + "_skin.png", function (err, buf) {
         if (err) {
-          logging.error("error rendering default image: " + err);
+          // errored while loading the default image, continuing with null image
+          logging.error("error loading default render image: " + err);
         }
+        // we render the default skins, but not custom images
         renders.draw_model(uuid, buf, scale, helm, body, function(err, def_img) {
           if (err) {
             logging.log("error while rendering default image: " + err);
