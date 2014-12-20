@@ -7,8 +7,10 @@ var logging = require('./logging');
 var fs = require('fs');
 var Canvas = require('canvas');
 var Image = Canvas.Image;
-
 var exp = {};
+
+// draws the helmet on to the +skin_canvas+
+// using the skin from the +model_ctx+ at the +scale+
 exp.draw_helmet = function(skin_canvas, model_ctx, scale) {
   //Helmet - Front
   model_ctx.setTransform(1,-0.5,0,1.2,0,0);
@@ -22,6 +24,8 @@ exp.draw_helmet = function(skin_canvas, model_ctx, scale) {
   model_ctx.drawImage(skin_canvas, 40*scale, 0, 8*scale, 8*scale, -3*scale, 5*scale, 8*scale, 8*scale);
 };
 
+// draws the head on to the +skin_canvas+
+// using the skin from the +model_ctx+ at the +scale+
 exp.draw_head = function(skin_canvas, model_ctx, scale) {
   //Head - Front
   model_ctx.setTransform(1,-0.5,0,1.2,0,0);
@@ -35,6 +39,9 @@ exp.draw_head = function(skin_canvas, model_ctx, scale) {
   model_ctx.drawImage(skin_canvas, 8*scale, 0, 8*scale, 8*scale, -3*scale, 5*scale, 8*scale, 8*scale);
 };
 
+// draws the body on to the +skin_canvas+
+// using the skin from the +model_ctx+ at the +scale+
+// parts are labeled as if drawn from the skin's POV
 exp.draw_body = function(skin_canvas, model_ctx, scale) {
   if (skin_canvas.height == 32 * scale) {
     logging.log("old skin");
@@ -82,13 +89,12 @@ exp.draw_body = function(skin_canvas, model_ctx, scale) {
     //Left Leg
     //Left Leg - Front
     model_ctx.setTransform(1,-0.5,0,1.2,0,0);
-    model_ctx.scale(-1,1);
-    model_ctx.drawImage(skin_canvas, 20*scale, 52*scale, 4*scale, 12*scale, -16*scale, 34.4/1.2*scale, 4*scale, 12*scale);
+    model_ctx.drawImage(skin_canvas, 20*scale, 52*scale, 4*scale, 12*scale, 12*scale, 34.4/1.2*scale, 4*scale, 12*scale);
 
     //Right Leg
     //Right Leg - Right
     model_ctx.setTransform(1,0.5,0,1.2,0,0);
-    model_ctx.drawImage(skin_canvas, 0*scale, 20*scale, 4*scale, 12*scale, 4*scale, 26.4/1.2*scale, 4*scale, 12*scale);
+    model_ctx.drawImage(skin_canvas, 0, 20*scale, 4*scale, 12*scale, 4*scale, 26.4/1.2*scale, 4*scale, 12*scale);
     //Right Leg - Front
     model_ctx.setTransform(1,-0.5,0,1.2,0,0);
     model_ctx.drawImage(skin_canvas, 4*scale, 20*scale, 4*scale, 12*scale, 8*scale, 34.4/1.2*scale, 4*scale, 12*scale);
@@ -96,8 +102,7 @@ exp.draw_body = function(skin_canvas, model_ctx, scale) {
     //Arm Left
     //Arm Left - Front
     model_ctx.setTransform(1,-0.5,0,1.2,0,0);
-    model_ctx.scale(-1,1);
-    model_ctx.drawImage(skin_canvas, 36*scale, 52*scale, 4*scale, 12*scale, -20*scale, 20/1.2*scale, 4*scale, 12*scale);
+    model_ctx.drawImage(skin_canvas, 36*scale, 52*scale, 4*scale, 12*scale, 16*scale, 20/1.2*scale, 4*scale, 12*scale);
     //Arm Left - Top
     model_ctx.setTransform(-1,0.5,1,0.5,0,0);
     model_ctx.drawImage(skin_canvas, 36*scale, 48*scale, 4*scale, 4*scale, 0, 16*scale, 4*scale, 4*scale);
