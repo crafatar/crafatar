@@ -206,13 +206,23 @@ describe("Crafatar", function() {
       });
 
       describe("Networking: Render", function() {
-        it("should not fail (uuid)", function(done) {
-          helpers.get_render(id, 6, true, true, function(err, hash, img) {
+        it("should not fail (username, 64x64 skin)", function(done) {
+          helpers.get_render("Jake0oo0", 6, true, true, function(err, hash, img) {
             assert.strictEqual(err, null);
             done();
           });
         });
       });
+
+      describe("Networking: Render", function() {
+        it("should not fail (username, 32x64 skin)", function(done) {
+          helpers.get_render("md_5", 6, true, true, function(err, hash, img) {
+            assert.strictEqual(err, null);
+            done();
+          });
+        });
+      });
+
 
       describe("Errors", function() {
         before(function() {
