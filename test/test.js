@@ -205,6 +205,15 @@ describe("Crafatar", function() {
         });
       });
 
+      describe("Networking: Render", function() {
+        it("should not fail (uuid)", function(done) {
+          helpers.get_render(id, 6, true, true, function(err, hash, img) {
+            assert.strictEqual(err, null);
+            done();
+          });
+        });
+      });
+
       describe("Errors", function() {
         before(function() {
           cache.get_redis().flushall();
