@@ -7,6 +7,7 @@ var logging = require("../modules/logging");
 var config = require("../modules/config");
 var skins = require("../modules/skins");
 var cache = require("../modules/cache");
+var renders = require("../modules/renders");
 
 // we don't want tests to fail because of slow internet
 config.http_timeout *= 3;
@@ -112,7 +113,6 @@ describe("Crafatar", function() {
       done();
     });
   });
-
   describe("Errors", function() {
     it("should time out on uuid info download", function(done) {
       var original_timeout = config.http_timeout;
@@ -204,6 +204,25 @@ describe("Crafatar", function() {
           });
         });
       });
+
+      describe("Networking: Render", function() {
+        it("should not fail (username, 64x64 skin)", function(done) {
+          helpers.get_render("Jake0oo0", 6, true, true, function(err, hash, img) {
+            assert.strictEqual(err, null);
+            done();
+          });
+        });
+      });
+
+      describe("Networking: Render", function() {
+        it("should not fail (username, 32x64 skin)", function(done) {
+          helpers.get_render("md_5", 6, true, true, function(err, hash, img) {
+            assert.strictEqual(err, null);
+            done();
+          });
+        });
+      });
+
 
       describe("Errors", function() {
         before(function() {

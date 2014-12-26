@@ -141,4 +141,25 @@ exp.get_skin = function(url, callback) {
   });
 };
 
+exp.save_skin = function(uuid, hash, outpath, callback) {
+  if (hash) {
+    var skinurl = "http://textures.minecraft.net/texture/" + hash;
+    exp.get_skin(skinurl, function(err, img) {
+      if (err) {
+        logging.error("error while downloading skin");
+        callback(err, null);
+      } else {
+        fs.writeFile(outpath, img, 'binary', function(err){
+          if (err) {
+            logging.log(err);
+          }
+          callback(null, img);
+        });
+      }
+    });
+  } else {
+    callback(null, null);
+  }
+};
+
 module.exports = exp;

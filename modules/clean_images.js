@@ -33,14 +33,24 @@ exp.run = function() {
       logging.error(err);
     } else if (clean) {
       logging.warn("ImageCleaner: Disk limit reached! Cleaning images now");
-      var skindir = __dirname + "/../" + config.faces_dir;
+      var facesdir = __dirname + "/../" + config.faces_dir;
       var helmdir = __dirname + "/../" + config.helms_dir;
-      var files = fs.readdirSync(skindir);
+      var renderdir = __dirname + "/../" + config.renders_dir;
+      var skindir = __dirname + "/../" + config.skins_dir;
+      var files = fs.readdirSync(facesdir);
       for (var i = 0; i < Math.min(files.length, config.cleaning_amount); i++) {
         var filename = files[i];
         if (filename[0] != ".") {
-          fs.unlink(skindir + filename, function(){});
+          fs.unlink(facesdir + filename, function(){});
           fs.unlink(helmdir + filename, function(){});
+          fs.unlink(skindir + filename, function(){});
+        }
+      }
+      files = fs.readdirSync(renderdir);
+      for (var j = 0; j < Math.min(files.length, config.cleaning_amount); j++) {
+        var filename = files[j];
+        if (filename[0] != ".") {
+          fs.unlink(renderdir + filename, function(){});
         }
       }
     } else {

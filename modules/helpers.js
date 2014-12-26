@@ -3,6 +3,7 @@ var logging = require("./logging");
 var config = require("./config");
 var cache = require("./cache");
 var skins = require("./skins");
+var renders = require("./renders");
 var fs = require("fs");
 
 // 0098cb60-fa8e-427c-b299-793cbd302c9a
@@ -160,19 +161,62 @@ exp.get_avatar = function(uuid, helm, size, callback) {
 exp.get_skin = function(uuid, callback) {
   logging.log(uuid + " skin request");
   exp.get_image_hash(uuid, function(err, status, hash) {
-    if (hash) {
-      var skinurl = "http://textures.minecraft.net/texture/" + hash;
-      networking.get_skin(skinurl, function(err, img) {
+    var skinpath = __dirname + "/../" + config.skins_dir + hash + ".png";
+    if (fs.existsSync(skinpath)) {
+      logging.log("skin already exists, not downloading");
+      skins.open_skin(skinpath, function(err, img) {
+        callback(err, hash, img);
+      });
+      return;
+    }
+    networking.save_skin(uuid, hash, skinpath, function(err, img) {
+      callback(err, hash, img);
+    });
+  });
+};
+
+function get_type(helm, body) {
+  var text = body ? "body" : "head";
+  return helm ? text+"helm" : text;
+}
+
+// handles creations of skin renders
+// callback contanis error, hash, image buffer
+exp.get_render = function(uuid, scale, helm, body, callback) {
+  logging.log(uuid + " render request");
+  exp.get_image_hash(uuid, function(err, status, hash) {
+    exp.get_skin(uuid, function(err, hash, img) {
+      if (!hash) {
+        callback(err, -1, hash, null);
+        return;
+      }
+      logging.debug("TYPE: " + get_type(helm, body));
+      var renderpath = __dirname + "/../" + config.renders_dir + hash + "-" + scale + "-" + get_type(helm, body) + ".png";
+      if (fs.existsSync(renderpath)) {
+        renders.open_render(renderpath, function(err, img) {
+          callback(err, 1, hash, img);
+        });
+        return;
+      }
+      if (!img) {
+        callback(err, 0, hash, null);
+        return;
+      }
+      renders.draw_model(uuid, img, scale, helm, body, function(err, img) {
         if (err) {
-          logging.error("error while downloading skin");
-          callback(err, hash, null);
+          callback(err, -1, hash, null);
+        } else if (!img) {
+          callback(null, 0, hash, null);
         } else {
-          callback(null, hash, img);
+          fs.writeFile(renderpath, img, 'binary', function(err){
+            if (err) {
+              logging.log(err);
+            }
+            callback(null, 2, hash, img);
+          });
         }
       });
-    } else {
-      callback(err, null, null);
-    }
+    });
   });
 };
 
