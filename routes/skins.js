@@ -8,7 +8,7 @@ var lwip = require("lwip");
 
 /* GET skin request. */
 router.get("/:uuid.:ext?", function(req, res) {
-  var uuid = req.params.uuid;
+  var uuid = (req.params.uuid || "");
   var def = req.query.default;
   var start = new Date();
   var etag = null;
@@ -18,8 +18,8 @@ router.get("/:uuid.:ext?", function(req, res) {
     return;
   }
 
-  // strip dashes, to lower case
-  uuid = uuid.replace(/-/g, "").toLowerCase();
+  // strip dashes
+  uuid = uuid.replace(/-/g, "");
 
   try {
     helpers.get_skin(uuid, function(err, hash, image) {

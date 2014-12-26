@@ -16,12 +16,18 @@ config.http_timeout *= 3;
 logging.log = function(){};
 
 var uuids = fs.readFileSync("test/uuids.txt").toString().split(/\r?\n/);
-var usernames = fs.readFileSync("test/usernames.txt").toString().split(/\r?\n/);
-// Get a random UUID + username in order to prevent rate limiting
+var names = fs.readFileSync("test/usernames.txt").toString().split(/\r?\n/);
+
+// Get a random UUID + name in order to prevent rate limiting
 var uuid = uuids[Math.round(Math.random() * (uuids.length - 1))];
-console.log("using uuid '" + uuid + "'");
-var username = usernames[Math.round(Math.random() * (usernames.length - 1))];
-console.log("using username '" + username + "'");
+var name = names[Math.round(Math.random() * (names.length - 1))];
+
+var ids = [
+  uuid.toLowerCase(),
+  uuid.toUpperCase(),
+  name.toLowerCase(),
+  name.toUpperCase()
+];
 
 describe("Crafatar", function() {
   // we might have to make 2 HTTP requests
@@ -32,43 +38,43 @@ describe("Crafatar", function() {
   });
 
   describe("UUID/username", function() {
-    it("should be an invalid uuid", function(done) {
+    it("non-hex uuid is invalid", function(done) {
       assert.strictEqual(helpers.uuid_valid("g098cb60fa8e427cb299793cbd302c9a"), false);
       done();
     });
-    it("should be an invalid uuid", function(done) {
+    it("empty id is invalid", function(done) {
       assert.strictEqual(helpers.uuid_valid(""), false);
       done();
     });
-    it("should be an invalid username", function(done) {
+    it("non-alphanumeric username is invalid", function(done) {
       assert.strictEqual(helpers.uuid_valid("usernäme"), false);
       done();
     });
-    it("should be an invalid username", function(done) {
+    it("dashed username is invalid", function(done) {
       assert.strictEqual(helpers.uuid_valid("user-name"), false);
       done();
     });
-    it("should be an invalid username", function(done) {
+    it(">16 length username is invalid", function(done) {
       assert.strictEqual(helpers.uuid_valid("ThisNameIsTooLong"), false);
       done();
     });
-    it("should be a valid uuid", function(done) {
+    it("lowercase uuid is valid", function(done) {
       assert.strictEqual(helpers.uuid_valid("0098cb60fa8e427cb299793cbd302c9a"), true);
       done();
     });
-    it("should be a valid uuid", function(done) {
+    it("uppercase uuid is valid", function(done) {
       assert.strictEqual(helpers.uuid_valid("1DCEF164FF0A47F2B9A691385C774EE7"), true);
       done();
     });
-    it("should be a valid uuid", function(done) {
+    it("dashed uuid is valid", function(done) {
       assert.strictEqual(helpers.uuid_valid("0098cb60-fa8e-427c-b299-793cbd302c9a"), true);
       done();
     });
-    it("should be a valid username", function(done) {
+    it("16 chars, underscored, capital, numbered username is valid", function(done) {
       assert.strictEqual(helpers.uuid_valid("__niceUs3rname__"), true);
       done();
     });
-    it("should be a valid username", function(done) {
+    it("1 char username is valid", function(done) {
       assert.strictEqual(helpers.uuid_valid("a"), true);
       done();
     });
@@ -86,128 +92,28 @@ describe("Crafatar", function() {
     });
   });
 
-  describe("Networking: Avatar", function() {
-    it("should be downloaded (uuid)", function(done) {
-      helpers.get_avatar(uuid, false, 160, function(err, status, image) {
-        assert.strictEqual(status, 2);
-        done();
-      });
-    });
-    it("should be cached (uuid)", function(done) {
-      helpers.get_avatar(uuid, false, 160, function(err, status, image) {
-        assert.strictEqual(status === 0 || status === 1, true);
-        done();
-      });
-    });
-    /* We can't test this because of mojang's rate limits :(
-    it("should be checked (uuid)", function(done) {
-      var original_cache_time = config.local_cache_time;
-      config.local_cache_time = 0;
-      helpers.get_avatar(uuid, false, 160, function(err, status, image) {
-        assert.strictEqual(status, 3);
-        config.local_cache_time = original_cache_time;
-        done();
-      });
-    });
-    */
-    it("should be downloaded (username)", function(done) {
-      helpers.get_avatar(username, false, 160, function(err, status, image) {
-        assert.strictEqual(status, 2);
-        done();
-      });
-    });
-    it("should be cached (username)", function(done) {
-      helpers.get_avatar(username, false, 160, function(err, status, image) {
-        assert.strictEqual(status === 0 || status === 1, true);
-        done();
-      });
-    });
-    it("should be checked (username)", function(done) {
-      var original_cache_time = config.local_cache_time;
-      config.local_cache_time = 0;
-      helpers.get_avatar(username, false, 160, function(err, status, image) {
-        assert.strictEqual(status, 3);
-        config.local_cache_time = original_cache_time;
-        done();
-      });
-    });
-    it("should not exist (but account does)", function(done) {
-      // profile "Alex"
-      helpers.get_avatar("ec561538f3fd461daff5086b22154bce", false, 160, function(err, status, image) {
-        assert.strictEqual(status, 2);
-        done();
-      });
-    });
-    it("should default to Alex", function(done) {
-      assert.strictEqual(skins.default_skin("ec561538f3fd461daff5086b22154bce"), "alex");
-      done();
-    });
-    it("should default to Steve", function(done) {
-      assert.strictEqual(skins.default_skin("b8ffc3d37dbf48278f69475f6690aabd"), "steve");
-      done();
-    });
-  });
+  describe("Avatar", function() {
+    // profile "Alex" - hoping it'll never have a skin
+    var alex_uuid = "ec561538f3fd461daff5086b22154bce";
+    // profile "Steven" (Steve doesn't exist) - hoping it'll never have a skin
+    var steven_uuid = "b8ffc3d37dbf48278f69475f6690aabd";
 
-  describe("Networking: Skin", function() {
-    it("should not fail (uuid)", function(done) {
-      helpers.get_skin(uuid, function(err, hash, img) {
-        assert.strictEqual(err, null);
+    it("uuid's account should exist, but skin should not", function(done) {
+      helpers.get_avatar(alex_uuid, false, 160, function(err, status, image) {
+        assert.strictEqual(status, 2);
         done();
       });
     });
-    it("should not fail (username)", function(done) {
-      helpers.get_skin(username, function(err, hash, img) {
-        assert.strictEqual(err, null);
-        done();
-      });
+    it("odd UUID should default to Alex", function(done) {
+      assert.strictEqual(skins.default_skin(alex_uuid), "alex");
+      done();
     });
-  });
-  describe("Networking: Renders", function() {
-    describe("Head", function() {
-      it("should not fail (username)", function(done) {
-        helpers.get_render(username, 6, true, false, function(err, status, hash, img) {
-          assert.strictEqual(err, null);
-          done();
-        });
-      });
-      it("should not fail (uuid)", function(done) {
-        helpers.get_render(username, 6, true, false, function(err, status, hash, img) {
-          assert.strictEqual(err, null);
-          done();
-        });
-      });
-    });
-    describe("Body", function() {
-      it("should not fail (username)", function(done) {
-        helpers.get_render(username, 6, true, true, function(err, status, hash, img) {
-          assert.strictEqual(err, null);
-          done();
-        });
-      });
-      it("should not fail (uuid)", function(done) {
-        helpers.get_render(username, 6, true, true, function(err, status, hash, img) {
-          assert.strictEqual(err, null);
-          done();
-        });
-      });
+    it("even UUID should default to Steve", function(done) {
+      assert.strictEqual(skins.default_skin(steven_uuid), "steve");
+      done();
     });
   });
   describe("Errors", function() {
-    before(function() {
-      cache.get_redis().flushall();
-    });
-    it("should be rate limited (uuid)", function(done) {
-      helpers.get_avatar(uuid, false, 160, function(err, status, image) {
-        assert.strictEqual(JSON.parse(err).error, "TooManyRequestsException");
-        done();
-      });
-    });
-    it("should NOT be rate limited (username)", function(done) {
-      helpers.get_avatar(username, false, 160, function(err, status, image) {
-        assert.strictEqual(err, null);
-        done();
-      });
-    });
     it("should time out on uuid info download", function(done) {
       var original_timeout = config.http_timeout;
       config.http_timeout = 1;
@@ -243,11 +149,83 @@ describe("Crafatar", function() {
         });
       });
     });
-    it("should handle file updates on invalid files", function(done) {
+    it("should ignore file updates on invalid files", function(done) {
       assert.doesNotThrow(function() {
         cache.update_timestamp("0123456789abcdef0123456789abcdef", "invalid-file.png");
       });
       done();
     });
   });
+
+  // DRY with uuid and username tests
+  for (var i in ids) {
+    var id = ids[i];
+    var id_type = id.length > 16 ? "uuid" : "name";
+    // needs an anonymous function because id and id_type aren't constant
+    (function(id, id_type) {
+      describe("Networking: Avatar", function() {
+        before(function() {
+          cache.get_redis().flushall();
+          console.log("\n\nRunning tests with " + id_type + " '" + id + "'\n\n");
+        });
+
+        it("should be downloaded", function(done) {
+          helpers.get_avatar(id, false, 160, function(err, status, image) {
+            assert.strictEqual(status, 2);
+            done();
+          });
+        });
+        it("should be cached", function(done) {
+          helpers.get_avatar(id, false, 160, function(err, status, image) {
+            assert.strictEqual(status === 0 || status === 1, true);
+            done();
+          });
+        });
+        if (id.length > 16) {
+          console.log("can't run 'checked' test due to Mojang's rate limits :(");
+        } else {
+          it("should be checked", function(done) {
+            var original_cache_time = config.local_cache_time;
+            config.local_cache_time = 0;
+            helpers.get_avatar(id, false, 160, function(err, status, image) {
+              assert.strictEqual(status, 3);
+              config.local_cache_time = original_cache_time;
+              done();
+            });
+          });
+        }
+      });
+
+      describe("Networking: Skin", function() {
+        it("should not fail (uuid)", function(done) {
+          helpers.get_skin(id, function(err, hash, img) {
+            assert.strictEqual(err, null);
+            done();
+          });
+        });
+      });
+
+      describe("Errors", function() {
+        before(function() {
+          cache.get_redis().flushall();
+        });
+
+        if (id_type == "uuid") {
+          it("uuid should be rate limited", function(done) {
+            helpers.get_avatar(id, false, 160, function(err, status, image) {
+              assert.strictEqual(JSON.parse(err).error, "TooManyRequestsException");
+              done();
+            });
+          });
+        } else {
+          it("username should NOT be rate limited (username)", function(done) {
+            helpers.get_avatar(id, false, 160, function(err, status, image) {
+              assert.strictEqual(err, null);
+              done();
+            });
+          });
+        }
+      });
+    })(id, id_type);
+  }
 });
