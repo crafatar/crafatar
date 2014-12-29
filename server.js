@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 var config = require("./modules/config");
 var debug = require("debug")("crafatar");
-var clean = require("./modules/clean_images");
+var clean = require("./modules/cleaner");
 var app = require("./app");
 
 app.set("port", process.env.PORT || 3000);
