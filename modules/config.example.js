@@ -16,8 +16,7 @@ var config = {
   debug_enabled: false,          // enables logging.debug
   min_scale: 1,                  // for renders
   max_scale: 10,                 // for renders; too big values might lead to slow response time or DoS
-  default_scale: 6,              // for renders; scale to be used when no scale given
-  flush_on_start: false          // whether or not to fush Redis when starting the application
+  default_scale: 6               // for renders; scale to be used when no scale given
 };
 
 module.exports = config;
