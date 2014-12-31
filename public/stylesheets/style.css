@@ -38,6 +38,20 @@ a.forkme:hover {
   text-decoration: none;
 }
 
+a.navbar-brand.twitter {
+  color: #55acee;
+  font-size: 16px;
+}
+
+a.navbar-brand.twitter:before {
+  content: "";
+  background: url("/images/twitter.png");
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  vertical-align: middle;
+}
+
 mark.green {
   background: inherit;
   color: #008000;
