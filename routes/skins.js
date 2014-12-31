@@ -28,7 +28,7 @@ router.get("/:uuid.:ext?", function(req, res) {
         logging.error(err);
       }
       etag = hash && hash.substr(0, 32) || "none";
-      var matches = req.get("If-None-Match") == "\"" + etag + "\"";
+      var matches = req.get("If-None-Match") == '"' + etag + '"';
       if (image) {
         var http_status = 200;
         if (matches) {
@@ -77,7 +77,7 @@ router.get("/:uuid.:ext?", function(req, res) {
       "Response-Time": new Date() - start,
       "X-Storage-Type": "downloaded",
       "Access-Control-Allow-Origin": "*",
-      "Etag": "\"" + etag + "\""
+      "Etag": '"' + etag + '"'
     });
     res.end(http_status == 304 ? null : image);
   }

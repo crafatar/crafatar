@@ -43,7 +43,7 @@ router.get("/:uuid.:ext?", function(req, res) {
         logging.error(err);
       }
       etag = hash && hash.substr(0, 32) || "none";
-      var matches = req.get("If-None-Match") == "'" + etag + "'";
+      var matches = req.get("If-None-Match") == '"' + etag + '"';
       if (image) {
         var http_status = 200;
         if (matches) {
