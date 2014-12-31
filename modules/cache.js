@@ -51,8 +51,20 @@ function update_file_date(hash) {
 
 var exp = {};
 
+// returns the redis instance
 exp.get_redis = function() {
   return redis;
+};
+
+
+// updates the redis instance's server_info object
+// callback contains error, info object
+exp.info = function(callback) {
+  redis.info(function (err, res) {
+    // parse the info command and store it in redis.server_info
+    redis.on_info_cmd(err, res);
+    callback(err, redis.server_info);
+  });
 };
 
 // sets the timestamp for +uuid+ and its face file's date to now

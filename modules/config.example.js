@@ -5,7 +5,8 @@ var config = {
   local_cache_time: 1200,        // seconds until we will check if the image changed. should be > 60 to prevent mojang 429 response
   browser_cache_time: 3600,      // seconds until browser will request image again
   cleaning_interval: 1800,       // seconds interval: deleting images if disk size at limit
-  cleaning_limit: 10240,         // minumum required available KB on disk to trigger cleaning
+  cleaning_disk_limit: 10240,    // min allowed available KB on disk to trigger cleaning
+  cleaning_redis_limit: 24576,   // max allowed used KB on redis to trigger redis flush
   cleaning_amount: 50000,        // amount of avatar (and their helm) files to clean
   http_timeout: 1000,            // ms until connection to mojang is dropped
   faces_dir: 'skins/faces/',     // directory where faces are kept. should have trailing '/'

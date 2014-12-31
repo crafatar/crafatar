@@ -27,18 +27,14 @@ block content
           mark.green id
           | 
 
-        a(id="parameters", class="anchor")
-        a(href="#parameters")
-          h3 Parameters
-        a(id="size", class="anchor")
-        a(href="#size")
-          h4 size
+        a(id="avatar-parameters", class="anchor")
+        a(href="#avatar-parameters")
+          h3 Avatar Parameters
+        h4 size
         p
           | The size of the image in pixels, #{config.min_size} - #{config.max_size}.<br>
           | Default is #{config.default_size}.
-        a(id="default", class="anchor")
-        a(href="#default")
-          h4 default
+        h4 default
         p
           | The image to be served when the id has no skin (404).<br>
           | Valid options are 
@@ -46,60 +42,65 @@ block content
           | , 
           a(href="/avatars/00000000000000000000000000000000?default=alex") alex
           | , or a custom URL.<br>
-          | The standard value is calculated based on the id (even = alex, odd = steve)
-        a(id="helm", class="anchor")
-        a(href="#helm")
-          h4 helm
+          | The standard value is calculated based on the UUID (even = alex, odd = steve). Usernames always default to steve.
+        h4 helm
         p
-          | Get an avatar with the "second" (hat) layer applied.<br>
-          | The content of this parameter can be anything.<br>
+          | Apply the "second" (hat) layer to the avatar.<br>
+          | The content of this parameter is ignored.<br>
           | If you want to get the face only, remove the parameter.
 
         a(id="skins", class="anchor")
         a(href="#skins")
           h3 Skins
         p
-          | You can also get the full skin file from name or id.<br>
+          | You can also get the full skin file of a player.<br>
           | Replace 
           mark.green id 
-          | with a Mojang <b>UUID</b> or <b>username</b> to get the related skin.
-          | The user's skin will be returned, or the default image is served.<br>
+          | with a Mojang <b>UUID</b> or <b>username</b> to get the related skin.<br>
+          | The user's skin is returned, or the default image is served.<br>
           | You can use the default parameter here as well.
         .code
           | #{domain}/skins/
           mark.green id
 
+        a(id="skin-parameters", class="anchor")
+        a(href="#skin-parameters")
+          h3 Skin Parameters
+        h4 default
+        p
+          | Same as the default for avatars.
+
         a(id="renders", class="anchor")
-        a(href="renders")
+        a(href="#renders")
           h3 3D Renders
         p
-          | Crafatar also provides support for 3D renders of Minecraft skins.
-          | Replace
-          mark.green id
-          | with a Mojang <b>UUID</b> or <b>username</b> to get an render for the skin.
+          | Crafatar also provides support for 3D renders of Minecraft skins.<br>
+          | Please note that <b>this feature is currently beta</b>!<br>
+          | Replace 
+          mark.green id 
+          | with a Mojang <b>UUID</b> or <b>username</b> to get a render of the skin.
+        | The <b>head</b> render type returns a render of the skin's head.
         .code
           | #{domain}/renders/head/
           mark.green id
+        | The <b>body</b> render returns a render of the entire skin.
         .code
           | #{domain}/renders/body/
           mark.green id
-        | The <b>default</b> parameter can also be used here. Using alex or steve will create a
-        | render with the same parameters. A custom image will not be rendered. A UUID or username
-        | without a skin, will produce a render based on the input id, or the <b>default</b> parameter.
-        | Using the <b>helm</b> parameter is also allowed, which will be overlayed onto the head.
-        | The <b>head</b> render type will return only a render of the skin's head, while the
-        | <b>body</b> render will return a render of the entire skin.
 
-        a(id="#render-parameters", class="#render-anchor")
+        a(id="render-parameters", class="anchor")
         a(href="#render-parameters")
           h3 Render Parameters
-        a(id="scale", class="anchor")
-        a(href="#scale")
-          h4 scale
+        h4 scale
         p
           | The scale factor of the image #{config.min_scale} - #{config.max_scale}.<br>
           | Default is #{config.default_scale}. The actual size differs between the type of render.
-
+        h4 helm
+        p
+          | Same as the helm for avatars, but it does not stand out (as it does ingame).
+        h4 default
+        p
+          | Same as the default for avatars.
 
         a(id="http-headers", class="anchor")
         a(href="#http-headers")
@@ -149,9 +150,12 @@ block content
           | Images are cached in your browser for #{config.browser_cache_time/60} minutes until a new request to Crafatar is made.<br>
           | When you changed your skin you can try clearing your browser cache to see the change faster.
 
+
         a(id="examples", class="anchor")
         a(href="#examples")
           h3 Examples
+
+        h4 Avatars
         p Jeb's avatar by username, default size
         .code #{domain}/avatars/jeb_
         p Jeb's avatar by UUID, default size
@@ -166,14 +170,20 @@ block content
           | Jeb's avatar, or fall back to 
           a(href="https://i.imgur.com/ozszMZV.png") a custom image
         .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?default=https%3A%2F%2Fi.imgur.com%2FozszMZV.png
+
+        h4 Skins
         p Jeb's skin
         .code #{domain}/skins/853c80ef3c3749fdaa49938b674adae6
         p Jeb's skin by username
         .code #{domain}/skins/jeb_
         p Render of Jeb's Head
+
+        h4 Renders
         .code #{domain}/renders/head/853c80ef3c3749fdaa49938b674adae6
         p Render of Jeb's Body, with helmet, by username
         .code #{domain}/renders/body/jeb_?helm
+
+        
       .col-md-2.center
         .sideface.redstone_sheep(title="redstone_sheep")
         .sideface.Jake0oo0(title="Jake0oo0")
