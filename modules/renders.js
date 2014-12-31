@@ -2,10 +2,10 @@
 // https://github.com/confuser/serverless-mc-skin-viewer
 // Permission to use & distribute https://github.com/confuser/serverless-mc-skin-viewer/blob/master/LICENSE
 
-var helpers = require('./helpers');
-var logging = require('./logging');
-var fs = require('fs');
-var Canvas = require('canvas');
+var helpers = require("./helpers");
+var logging = require("./logging");
+var fs = require("fs");
+var Canvas = require("canvas");
 var Image = Canvas.Image;
 var exp = {};
 
@@ -144,8 +144,8 @@ exp.draw_model = function(uuid, img, scale, helm, body, callback) {
     var height = original_height * scale;
     var model_canvas = new Canvas(20 * scale, (body ? 44.8 : 17.6) * scale);
     var skin_canvas = new Canvas(width, height);
-    var model_ctx = model_canvas.getContext('2d');
-    var skin_ctx = skin_canvas.getContext('2d');
+    var model_ctx = model_canvas.getContext("2d");
+    var skin_ctx = skin_canvas.getContext("2d");
 
     skin_ctx.drawImage(image,0,0,64,original_height);
     //Scale it

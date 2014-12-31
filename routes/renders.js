@@ -1,10 +1,10 @@
-var router = require('express').Router();
-var logging = require('../modules/logging');
-var helpers = require('../modules/helpers');
-var config = require('../modules/config');
-var skins = require('../modules/skins');
-var renders = require('../modules/renders');
-var fs = require('fs');
+var router = require("express").Router();
+var logging = require("../modules/logging");
+var helpers = require("../modules/helpers");
+var config = require("../modules/config");
+var skins = require("../modules/skins");
+var renders = require("../modules/renders");
+var fs = require("fs");
 
 var human_status = {
   0: "none",
@@ -18,7 +18,7 @@ var human_status = {
 
 // The Type logic should be two separate GET
 // functions once response methods are extracted
-router.get('/:type/:uuid.:ext?', function(req, res) {
+router.get("/:type/:uuid.:ext?", function(req, res) {
   var raw_type = req.params.type;
 
   // Check valid type for now
@@ -31,7 +31,7 @@ router.get('/:type/:uuid.:ext?', function(req, res) {
   var uuid = req.params.uuid;
   var def = req.query.default;
   var scale = parseInt(req.query.scale) || config.default_scale;
-  var helm = req.query.hasOwnProperty('helm');
+  var helm = req.query.hasOwnProperty("helm");
   var start = new Date();
   var etag = null;
 
@@ -83,11 +83,11 @@ router.get('/:type/:uuid.:ext?', function(req, res) {
   function handle_default(http_status, img_status) {
     if (def && def != "steve" && def != "alex") {
       res.writeHead(301, {
-        'Cache-Control': 'max-age=' + config.browser_cache_time + ', public',
-        'Response-Time': new Date() - start,
-        'X-Storage-Type': human_status[img_status],
-        'Access-Control-Allow-Origin': '*',
-        'Location': def
+        "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
+        "Response-Time": new Date() - start,
+        "X-Storage-Type": human_status[img_status],
+        "Access-Control-Allow-Origin": "*",
+        "Location": def
       });
       res.end();
     } else {
@@ -110,12 +110,12 @@ router.get('/:type/:uuid.:ext?', function(req, res) {
 
   function sendimage(http_status, img_status, image) {
     res.writeHead(http_status, {
-      'Content-Type': 'image/png',
-      'Cache-Control': 'max-age=' + config.browser_cache_time + ', public',
-      'Response-Time': new Date() - start,
-      'X-Storage-Type': human_status[img_status],
-      'Access-Control-Allow-Origin': '*',
-      'Etag': '"' + etag + '"'
+      "Content-Type": "image/png",
+      "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
+      "Response-Time": new Date() - start,
+      "X-Storage-Type": human_status[img_status],
+      "Access-Control-Allow-Origin": "*",
+      "Etag": '"' + etag + '"'
     });
     res.end(http_status == 304 ? null : image);
   }

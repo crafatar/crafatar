@@ -207,7 +207,7 @@ exp.get_render = function(uuid, scale, helm, body, callback) {
         } else if (!img) {
           callback(null, 0, hash, null);
         } else {
-          fs.writeFile(renderpath, img, 'binary', function(err){
+          fs.writeFile(renderpath, img, "binary", function(err){
             if (err) {
               logging.log(err);
             }

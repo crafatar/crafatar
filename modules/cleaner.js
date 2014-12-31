@@ -32,7 +32,7 @@ function should_clean_redis(callback) {
 function should_clean_disk(callback) {
   df({
     file: __dirname + "/../" + config.faces_dir,
-    prefixMultiplier: 'KiB',
+    prefixMultiplier: "KiB",
     isDisplayPrefixMultiplier: false,
     precision: 2
   }, function (err, response) {

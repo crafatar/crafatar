@@ -149,7 +149,7 @@ exp.save_skin = function(uuid, hash, outpath, callback) {
         logging.error("error while downloading skin");
         callback(err, null);
       } else {
-        fs.writeFile(outpath, img, 'binary', function(err){
+        fs.writeFile(outpath, img, "binary", function(err){
           if (err) {
             logging.log(err);
           }
