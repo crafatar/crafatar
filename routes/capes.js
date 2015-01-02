@@ -1,18 +1,27 @@
 var logging = require("../modules/logging");
 var helpers = require("../modules/helpers");
 var config = require("../modules/config");
-var router = require("express").Router();
-var lwip = require("lwip");
 
-/* GET skin request. */
-router.get("/:uuid.:ext?", function (req, res) {
-  var uuid = (req.params.uuid || "");
-  var def = req.query.default;
+var human_status = {
+  0: "none",
+  1: "cached",
+  2: "downloaded",
+  3: "checked",
+  "-1": "error"
+};
+
+// GET cape request
+module.exports = function(req, res) {
   var start = new Date();
+  var uuid = (req.url.pathname.split("/")[2] || "").split(".")[0];
   var etag = null;
 
   if (!helpers.uuid_valid(uuid)) {
-    res.status(422).send("422 Invalid UUID");
+    res.writeHead(422, {
+      "Content-Type": "text/plain",
+      "Response-Time": new Date() - start
+    });
+    res.end("Invalid ID");
     return;
   }
 
@@ -20,13 +29,13 @@ router.get("/:uuid.:ext?", function (req, res) {
   uuid = uuid.replace(/-/g, "");
 
   try {
-    helpers.get_cape(uuid, function (err, hash, image) {
-      logging.log(uuid);
+    helpers.get_cape(uuid, function(err, status, image, hash) {
+      logging.log(uuid + " - " + human_status[status]);
       if (err) {
-        logging.error(err);
+        logging.error(uuid + " " + err);
       }
       etag = hash && hash.substr(0, 32) || "none";
-      var matches = req.get("If-None-Match") == "\"" + etag + "\"";
+      var matches = req.headers["if-none-match"] === '"' + etag + '"';
       if (image) {
         var http_status = 200;
         if (matches) {
@@ -34,33 +43,37 @@ router.get("/:uuid.:ext?", function (req, res) {
         } else if (err) {
           http_status = 503;
         }
-        logging.debug("Etag: " + req.get("If-None-Match"));
+        logging.debug("Etag: " + req.headers["if-none-match"]);
         logging.debug("matches: " + matches);
         logging.log("status: " + http_status);
-        sendimage(http_status, image);
+        sendimage(http_status, status, image);
       } else {
-        res.status(404).send("404 not found");
+        res.writeHead(404, {
+          "Content-Type": "text/plain",
+          "Response-Time": new Date() - start
+        });
+        res.end("404 not found");
       }
     });
-  } catch (e) {
-    logging.error("Error!");
+  } catch(e) {
+    logging.error(uuid + " error:");
     logging.error(e);
-    res.status(500).send("500 error while retrieving cape");
+    res.writeHead(500, {
+      "Content-Type": "text/plain",
+      "Response-Time": new Date() - start
+    });
+    res.end("500 server error");
   }
 
-
-  function sendimage(http_status, image) {
+  function sendimage(http_status, img_status, image) {
     res.writeHead(http_status, {
       "Content-Type": "image/png",
       "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
       "Response-Time": new Date() - start,
-      "X-Storage-Type": "downloaded",
+      "X-Storage-Type": human_status[img_status],
       "Access-Control-Allow-Origin": "*",
-      "Etag": "\"" + etag + "\""
+      "Etag": '"' + etag + '"'
     });
-    res.end(http_status == 304 ? null : image);
+    res.end(http_status === 304 ? null : image);
   }
-});
-
-
-module.exports = router;
+};

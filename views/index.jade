@@ -220,6 +220,34 @@ block content
                 | Hover over the examples for a preview!
             .preview-background
 
+        section
+          a(id="capes" class="anchor")
+          a(href="#capes")
+            h3 Capes
+          p
+            | A cape endpoint is also available to get the active cape of a user.<br>
+            | Replace
+            mark.green  id
+            |  with a Mojang <b>UUID</b> or <b>username</b> to get the related cape.<br>
+            | The user's cape is returned, otherwise a 404 is thrown.<br>
+            .code
+              | #{domain}/skins/
+              mark.green id
+
+          section
+            a(id="cape-examples", class="anchor")
+            a(href="#cape-examples")
+              h4 Cape Examples
+            .code
+              #cape-example-1.example-wrapper
+                .example #{domain}/capes/Dinnerbone
+                p.preview Dinnerbone's Cape <i>Mojang capes are not transparent...</i>
+              #cape-example-2.example-wrapper
+                .example #{domain}/capes/md_5
+                p.preview md_5's Cape
+              p.preview-placeholder
+                | Hover over the examples for a preview!
+            .preview-background
 
         section
           a(id="meta" class="anchor")
@@ -343,4 +371,8 @@ block content
   img.preload(src="/avatars/020242a17b9441799eff511eea1221da?size=64&helm", alt="preloaded image")
   img.preload(src="/avatars/9769ecf6331448f3ace67ae06cec64a3?size=64&helm", alt="preloaded image")
   img.preload(src="/avatars/f8cdb6839e9043eea81939f85d9c5d69?size=64&helm", alt="preloaded image")
+<<<<<<< HEAD
   img.preload(src="/skins/jeb_", alt="preloaded image")
+=======
+  img.preload(src="/skins/jeb_", alt="preloaded image")
+>>>>>>> Network rewrite/major cleanup, major caching changes, etc

@@ -31,7 +31,7 @@ module.exports = function(req, res) {
         logging.error(uuid + " " + err);
       }
       etag = hash && hash.substr(0, 32) || "none";
-      var matches = req.headers["if-none-match"] == '"' + etag + '"';
+      var matches = req.headers["if-none-match"] === '"' + etag + '"';
       if (image) {
         var http_status = 200;
         if (matches) {
@@ -82,6 +82,6 @@ module.exports = function(req, res) {
       "Access-Control-Allow-Origin": "*",
       "Etag": '"' + etag + '"'
     });
-    res.end(http_status == 304 ? null : image);
+    res.end(http_status === 304 ? null : image);
   }
 };

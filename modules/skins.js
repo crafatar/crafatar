@@ -104,4 +104,21 @@ exp.open_skin = function(uuid, skinpath, callback) {
   });
 };
 
+exp.save_image = function(buffer, outpath, callback) {
+  lwip.open(buffer, "png", function(err, image) {
+    if (err) {
+      callback(err);
+    } else {
+      image.batch()
+      .writeFile(outpath, function(err) {
+        if (err) {
+          callback(err);
+        } else {
+          callback(null);
+        }
+      });
+    }
+  });
+};
+
 module.exports = exp;

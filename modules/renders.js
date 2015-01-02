@@ -140,7 +140,7 @@ exp.draw_model = function(uuid, img, scale, helm, body, callback) {
 
   image.onload = function() {
     var width = 64 * scale;
-    var original_height = (image.height == 32 ? 32 : 64);
+    var original_height = (image.height === 32 ? 32 : 64);
     var height = original_height * scale;
     var model_canvas = new Canvas(20 * scale, (body ? 44.8 : 17.6) * scale);
     var skin_canvas = new Canvas(width, height);
