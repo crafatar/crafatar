@@ -1,192 +1,224 @@
 extends layout
 
 block content
-  .container(style= "margin-top: 70px;")
-    .row
-      .col-md-10
-        a(id="crafatar", class="anchor")
-        a(href="#crafatar")
-          h1 Crafatar
-        hr
-        p Welcome to Crafatar, an API for Minecraft's faces!
-
-        hr
-        a(id="documentation", class="anchor")
-        a(href="#documentation")
-          h2 Documentation
-
-        a(id="avatars", class="anchor")
-        a(href="#avatars")
-          h3 Avatars
-        p
-          | Replace 
-          mark.green id
+  .jumbotron
+      .container
+        h1 Crafatar
+        p A blazing fast API for Minecraft faces!
+        img(alt="Jake0oo0's Avatar", height="64", width="64", src="#{domain}/avatars/2d5aa9cdaeb049189930461fc9b91cc5?size=64&helm")
+        img(alt="redstone_sheep's Avatar", height="64", width="64", src="#{domain}/avatars/ae795aa86327408e92ab25c8a59f3ba1?size=64&helm")
+        img(alt="sk89q's Avatar", height="64", width="64", src="#{domain}/avatars/0ea8eca3dbf647cc9d1ac64551ca975c?size=64&helm")
+        img(alt="md_5's Avatar", height="64", width="64", src="#{domain}/avatars/af74a02d19cb445bb07f6866a861f783?size=64&helm")
+        img(alt="Jeb's Avatar", height="64", width="64", src="#{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64&helm")
+        img(alt="Notch's Avatar", height="64", width="64", src="#{domain}/avatars/069a79f444e94726a5befca90e38aaf5?size=64")
+  .container
+    section(id="documentation")
+      h2 Documentation
+      .row
+        section(id="avatars", class="anchor")
+          a(href="#avatars")
+            h3 Avatars
+          | Replace
+          mark.green  id
           |  with a Mojang <b>UUID</b> or <b>username</b> to get the related head. All images are PNGs.
-        .code
-          | #{domain}/avatars/
-          mark.green id
-          | 
+          .code
+            | #{domain}/avatars/
+            mark.green id
 
-        a(id="avatar-parameters", class="anchor")
-        a(href="#avatar-parameters")
-          h3 Avatar Parameters
-        h4 size
-        p
-          | The size of the image in pixels, #{config.min_size} - #{config.max_size}.<br>
-          | Default is #{config.default_size}.
-        h4 default
-        p
-          | The image to be served when the id has no skin (404).<br>
-          | Valid options are 
-          a(href="/avatars/00000000000000000000000000000000?default=steve") steve
-          | , 
-          a(href="/avatars/00000000000000000000000000000000?default=alex") alex
-          | , or a custom URL.<br>
-          | The standard value is calculated based on the UUID (even = alex, odd = steve). Usernames always default to steve.
-        h4 helm
-        p
-          | Apply the "second" (hat) layer to the avatar.<br>
-          | The content of this parameter is ignored.<br>
-          | If you want to get the face only, remove the parameter.
+          section(id="avatars-parameters" class="anchor")
+            a(href="#avatars-parameters")
+              h4 Avatar Parameters
+            table(class="table table-bordered table-striped")
+              thead
+                tr
+                  td parameter
+                  td type
+                  td default
+                  td description
+              tbody
+                tr
+                  td size
+                  td integer
+                  td #{config.default_size}
+                  td The size of the image in pixels, #{config.min_size} - #{config.max_size}.
+                tr
+                  td default
+                  td string
+                  td The standard value is calculated based on the UUID (even = alex, odd = steve). Usernames always default to steve.
+                  td
+                    | The image to be served when the id has no skin (404).<br>
+                    | Valid options are
+                    a(href="/avatars/00000000000000000000000000000000?default=steve") steve
+                    | ,
+                    a(href="/avatars/00000000000000000000000000000000?default=alex") alex
+                    | , or a custom URL.
+                tr
+                  td helm
+                  td mixed
+                  td null
+                  td Apply the "second" (hat) layer to the avatar.
 
-        a(id="skins", class="anchor")
-        a(href="#skins")
-          h3 Skins
-        p
-          | You can also get the full skin file of a player.<br>
-          | Replace 
-          mark.green id 
-          | with a Mojang <b>UUID</b> or <b>username</b> to get the related skin.<br>
-          | The user's skin is returned, or the default image is served.<br>
-          | You can use the default parameter here as well.
-        .code
-          | #{domain}/skins/
-          mark.green id
+          section(id="avatars-examples", class="anchor")
+            a(href="#avatars-examples")
+              h4 Avatars Examples
+            p Jeb's avatar by username, default size
+            .code #{domain}/avatars/jeb_
+            p Jeb's avatar by UUID, default size
+             .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6
+            p Jeb's avatar, 64 × 64
+            .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64
+            p Jeb's avatar, 64 × 64, with helmet
+            .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64&amp;helm
+            p Jeb's avatar, or fall back to steve
+            .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?default=steve
+            p
+              | Jeb's avatar, or fall back to
+              a(href="https://i.imgur.com/ozszMZV.png") a custom image
+            .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?default=https%3A%2F%2Fi.imgur.com%2FozszMZV.png
 
-        a(id="skin-parameters", class="anchor")
-        a(href="#skin-parameters")
-          h3 Skin Parameters
-        h4 default
-        p
-          | Same as the default for avatars.
+        section(id="skins" class="anchor")
+          a(href="#skins")
+            h3 Skins
+          p
+            | You can also get the full skin file of a player.<br>
+            | Replace
+            mark.green  id
+            |  with a Mojang <b>UUID</b> or <b>username</b> to get the related skin.<br>
+            | The user's skin is returned, or the default image is served.<br>
+            | You can use the default parameter here as well.
+            .code
+              | #{domain}/skins/
+              mark.green id
 
-        a(id="renders", class="anchor")
-        a(href="#renders")
-          h3 3D Renders
-        p
-          | Crafatar also provides support for 3D renders of Minecraft skins.<br>
-          | Please note that <b>this feature is currently beta</b>!<br>
-          | Replace 
-          mark.green id 
-          | with a Mojang <b>UUID</b> or <b>username</b> to get a render of the skin.
-        | The <b>head</b> render type returns a render of the skin's head.
-        .code
-          | #{domain}/renders/head/
-          mark.green id
-        | The <b>body</b> render returns a render of the entire skin.
-        .code
-          | #{domain}/renders/body/
-          mark.green id
+          section(id="skins-parameters" class="anchor")
+            a(href="#skins-parameters")
+              h4 Skin Parameters
+            table(class="table table-bordered table-striped")
+              thead
+                tr
+                  td parameter
+                  td type
+                  td default
+                  td description
+              tbody
+                tr
+                  td default
+                  td string
+                  td The standard value is calculated based on the UUID (even = alex, odd = steve). Usernames always default to steve.
+                  td
+                    | The image to be served when the id has no skin (404).<br>
+                    | Valid options are
+                    a(href="/skins/00000000000000000000000000000000?default=steve") steve
+                    | ,
+                    a(href="/skins/00000000000000000000000000000000?default=alex") alex
+                    | , or a custom URL.
 
-        a(id="render-parameters", class="anchor")
-        a(href="#render-parameters")
-          h3 Render Parameters
-        h4 scale
-        p
-          | The scale factor of the image #{config.min_scale} - #{config.max_scale}.<br>
-          | Default is #{config.default_scale}. The actual size differs between the type of render.
-        h4 helm
-        p
-          | Same as the helm for avatars, but it does not stand out (as it does ingame).
-        h4 default
-        p
-          | Same as the default for avatars.
+          section(id="skins-examples", class="anchor")
+            a(href="#skins-examples")
+              h4 Skins Examples
+            p Jeb's skin
+            .code #{domain}/skins/853c80ef3c3749fdaa49938b674adae6
+            p Jeb's skin by username
+            .code #{domain}/skins/jeb_
+            p Render of Jeb's Head
 
-        a(id="http-headers", class="anchor")
-        a(href="#http-headers")
-          h3 HTTP headers
-        p
-          | Responses come with these HTTP headers, useful for debugging.<br>
-          | Please note that these headers are cached by CloudFlare <small>(CF-Cache-Status: HIT)</small>.
+        section(id="renders" class="anchor")
+          a(href="#renders")
+            h3 3D Renders
+          p
+            | Crafatar also provides support for 3D renders of Minecraft skins.<br>
+            | Please note that <b>this feature is currently beta</b>!<br>
+            | Replace
+            mark.green  id
+            |  with a Mojang <b>UUID</b> or <b>username</b> to get a render of the skin.
+            | The <b>head</b> render type returns a render of the skin's head.
+            .code
+              | #{domain}/renders/head/
+              mark.green id
+            | The <b>body</b> render returns a render of the entire skin.
+            .code
+              | #{domain}/renders/body/
+              mark.green id
 
-        a(id="response-time", class="anchor")
-        a(href="#response-time")
-          h4 Response-Time
-        p The time, in milliseconds, it took Crafatar to process the request.
-        a(id="x-storage-type", class="anchor")
-        a(href="#x-storage-type")
-          h4 X-Storage-Type
-        ul
-          li <b>none</b>: No external requests. Cached: User has no skin.
-          li <b>cached</b>: No external requests. Skin cached and stored locally.
-          li
-            | <b>checked</b>: 1 external request. Skin cached, checked for updates, no skin downloaded.<br>
-            | This happens either when the user removed their skin or when it didn't change.
-          li <b>downloaded</b>: 2 external requests. Skin changed or unknown, downloaded.
-          li
-            | <b>error</b>: This can happen, for example, when Mojang's servers are down.<br>
-            | If possible, an outdated image is served instead.
+          section(id="renders-parameters" class="anchor")
+            a(href="#renders-parameters")
+              h4 Render Parameters
+            table(class="table table-bordered table-striped")
+              thead
+                tr
+                  td parameter
+                  td type
+                  td default
+                  td description
+              tbody
+                tr
+                  td scale
+                  td integer
+                  td #{config.default_scale}. The actual size differs between the type of render.
+                  td The scale factor of the image #{config.min_scale} - #{config.max_scale}.
+                tr
+                  td helm
+                  td mixed
+                  td null
+                  td Apply the "second" (hat) layer to the avatar.
 
-        a(id="about-usernames", class="anchor")
-        a(href="#about-usernames")
-          h3 About usernames
-        p
-          | We strongly advise you to use UUIDs instead of usernames in production.<br>
-          | Usernames are deprecated by Mojang and you should only use usernames for testing.<br>
-          | Malformed usernames are rejected.
+          section(id="renders-examples", class="anchor")
+            a(href="#renders-examples")
+              h4 Render Examples
+            .code #{domain}/renders/head/853c80ef3c3749fdaa49938b674adae6
+            p Render of Jeb's Body, with helmet, by username
+            .code #{domain}/renders/body/jeb_?helm
 
-        a(id="about-uuids", class="anchor")
-        a(href="#about-uuids")
-          h3 About UUIDs
-        p
-          | UUIDs may use the blank or dashed format.<br>
-          | Malformed UUIDs are rejected.
+        section(id="meta" class="anchor")
+          section(id="meta-http-headers" class="anchor")
+            a(href="#meta-http-headers")
+              h3 HTTP Headers
+            p
+              | Responses come with these HTTP headers, useful for debugging.<br>
+              | Please note that these headers are cached by CloudFlare <small>(CF-Cache-Status: HIT)</small>.
 
-        a(id="about-caching", class="anchor")
-        a(href="#about-caching")
-          h3 About caching
-        p
-          | Crafatar caches skins for #{config.local_cache_time/60} minutes before checking for skin changes.<br>
-          | Images are cached in your browser for #{config.browser_cache_time/60} minutes until a new request to Crafatar is made.<br>
-          | When you changed your skin you can try clearing your browser cache to see the change faster.
+            section(id="meta-response-time" class="anchor")
+              a(href="#meta-response-time")
+                h4 Response-Time
+              p The time, in milliseconds, it took Crafatar to process the request.
 
+            section(id="meta-x-storage-type" class="anchor")
+              a(href="#meta-x-storage-type")
+                h4 X-Storage-Type
+              ul
+                li <b>none</b>: No external requests. Cached: User has no skin.
+                li <b>cached</b>: No external requests. Skin cached and stored locally.
+                li
+                  | <b>checked</b>: 1 external request. Skin cached, checked for updates, no skin downloaded.<br>
+                  | This happens either when the user removed their skin or when it didn't change.
+                li <b>downloaded</b>: 2 external requests. Skin changed or unknown, downloaded.
+                li
+                  | <b>error</b>: This can happen, for example, when Mojang's servers are down.<br>
+                  | If possible, an outdated image is served instead.
 
-        a(id="examples", class="anchor")
-        a(href="#examples")
-          h3 Examples
+          section(id="meta-about-usernames" class="anchor")
+            a(href="#meta-about-usernames")
+              h3 About Usernames
+            p
+              | We strongly advise you to use UUIDs instead of usernames in production.<br>
+              | Usernames are deprecated by Mojang and you should only use usernames for testing.<br>
+              | Malformed usernames are rejected.
 
-        h4 Avatars
-        p Jeb's avatar by username, default size
-        .code #{domain}/avatars/jeb_
-        p Jeb's avatar by UUID, default size
-        .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6
-        p Jeb's avatar, 64 × 64
-        .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64
-        p Jeb's avatar, 64 × 64, with helmet
-        .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?size=64&amp;helm
-        p Jeb's avatar, or fall back to steve
-        .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?default=steve
-        p
-          | Jeb's avatar, or fall back to 
-          a(href="https://i.imgur.com/ozszMZV.png") a custom image
-        .code #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6?default=https%3A%2F%2Fi.imgur.com%2FozszMZV.png
+          section(id="meta-about-uuids" class="anchor")
+            a(href="#meta-about-uuids")
+              h3 About UUIDs
+            p
+              | UUIDs may use the blank or dashed format.<br>
+              | Malformed UUIDs are rejected.
 
-        h4 Skins
-        p Jeb's skin
-        .code #{domain}/skins/853c80ef3c3749fdaa49938b674adae6
-        p Jeb's skin by username
-        .code #{domain}/skins/jeb_
-        p Render of Jeb's Head
+          section(id="meta-about-caching" class="anchor")
+            a(href="#meta-about-caching")
+              h3 About Caching
+            p
+              | Crafatar caches skins for #{config.local_cache_time/60} minutes before checking for skin changes.<br>
+              | Images are cached in your browser for #{config.browser_cache_time/60} minutes until a new request to Crafatar is made.<br>
+              | When you changed your skin you can try clearing your browser cache to see the change faster.
 
-        h4 Renders
-        .code #{domain}/renders/head/853c80ef3c3749fdaa49938b674adae6
-        p Render of Jeb's Body, with helmet, by username
-        .code #{domain}/renders/body/jeb_?helm
-
-        
-      .col-md-2.center
-        .sideface.redstone_sheep(title="redstone_sheep")
-        .sideface.Jake0oo0(title="Jake0oo0")
-        .sideface.Notch(title="Notch")
-        .sideface.sk89q(title="sk89q")
-        .sideface.md_5(title="md_5")
+    footer
+      hr
+      p(class="pull-right") Copyright Craftatar 2014
