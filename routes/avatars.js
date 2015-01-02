@@ -15,7 +15,7 @@ var human_status = {
 // GET avatar request
 module.exports = function(req, res) {
   var start = new Date();
-  var uuid = (req.url.pathname.split("/")[2] || "");
+  var uuid = (req.url.pathname.split("/")[2] || "").split(".")[0];
   var size = parseInt(req.url.query.size) || config.default_size;
   var def = req.url.query.default;
   var helm = req.url.query.hasOwnProperty("helm");
