@@ -51,7 +51,7 @@ router.get("/:type/:uuid.:ext?", function(req, res) {
     helpers.get_render(uuid, scale, helm, body, function(err, status, hash, image) {
       logging.log(uuid + " - " + human_status[status]);
       if (err) {
-        logging.error(err);
+        logging.error(uuid + " " + err);
       }
       etag = hash && hash.substr(0, 32) || "none";
       var matches = req.get("If-None-Match") == '"' + etag + '"';
@@ -72,7 +72,7 @@ router.get("/:type/:uuid.:ext?", function(req, res) {
       }
     });
   } catch(e) {
-    logging.error("Error!");
+    logging.error(uuid + " error:");
     logging.error(e);
     handle_default(500, status);
   }

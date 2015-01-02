@@ -25,7 +25,7 @@ router.get("/:uuid.:ext?", function(req, res) {
     helpers.get_skin(uuid, function(err, hash, image) {
       logging.log(uuid);
       if (err) {
-        logging.error(err);
+        logging.error(uuid + " " + err);
       }
       etag = hash && hash.substr(0, 32) || "none";
       var matches = req.get("If-None-Match") == '"' + etag + '"';
@@ -45,7 +45,7 @@ router.get("/:uuid.:ext?", function(req, res) {
       }
     });
   } catch(e) {
-    logging.error("Error!");
+    logging.error(uuid + " error:");
     logging.error(e);
     handle_default(500);
   }
