@@ -1,15 +1,17 @@
-var express = require("express");
 var config = require("../modules/config");
-var router = express.Router();
+var jade = require("jade");
 
-/* GET home page. */
-router.get("/", function(req, res) {
-  res.render("index", {
+// compile jade
+var index = jade.compileFile(__dirname + "/../views/index.jade");
+
+module.exports = function(req, res) {
+  var html = index({
     title: "Crafatar",
-    domain: "https://" + req.headers.host,
+    domain: "https://" + "req.hostname",
     config: config
   });
-});
-
-
-module.exports = router;
+  res.writeHead(200, {
+    "Content-Length": html.length
+  });
+  res.end(html);
+};
