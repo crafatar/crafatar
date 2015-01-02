@@ -1,4 +1,3 @@
-var router = require("express").Router();
 var networking = require("../modules/networking");
 var logging = require("../modules/logging");
 var helpers = require("../modules/helpers");
@@ -13,12 +12,13 @@ var human_status = {
   "-1": "error"
 };
 
-/* GET avatar request. */
-router.get("/:uuid.:ext?", function(req, res) {
-  var uuid = (req.params.uuid || "");
-  var size = parseInt(req.query.size) || config.default_size;
-  var def = req.query.default;
-  var helm = req.query.hasOwnProperty("helm");
+// GET avatar request
+module.exports = function(req, res) {
+  logging.debug(req.url.pathname);
+  var uuid = (req.url.pathname.split("/")[2] || "");
+  var size = parseInt(req.url.query.size) || config.default_size;
+  var def = req.url.query.default;
+  var helm = req.url.query.hasOwnProperty("helm");
   var start = new Date();
   var etag = null;
 
@@ -26,10 +26,12 @@ router.get("/:uuid.:ext?", function(req, res) {
   if (size < config.min_size || size > config.max_size) {
     // "Unprocessable Entity", valid request, but semantically erroneous:
     // https://tools.ietf.org/html/rfc4918#page-78
-    res.status(422).send("422 Invalid size");
+    res.writeHead(422);
+    res.end("Invalid size");
     return;
   } else if (!helpers.uuid_valid(uuid)) {
-    res.status(422).send("422 Invalid UUID");
+    res.writeHead(422);
+    res.end("Invalid UUID");
     return;
   }
 
@@ -43,7 +45,7 @@ router.get("/:uuid.:ext?", function(req, res) {
         logging.error(uuid + " " + err);
       }
       etag = hash && hash.substr(0, 32) || "none";
-      var matches = req.get("If-None-Match") == '"' + etag + '"';
+      var matches = req.headers["if-none-match"] == '"' + etag + '"';
       if (image) {
         var http_status = 200;
         if (matches) {
@@ -51,7 +53,7 @@ router.get("/:uuid.:ext?", function(req, res) {
         } else if (err) {
           http_status = 503;
         }
-        logging.debug("Etag: " + req.get("If-None-Match"));
+        logging.debug("Etag: " + req.headers["if-none-match"]);
         logging.debug("matches: " + matches);
         logging.log("status: " + http_status);
         sendimage(http_status, status, image);
@@ -94,7 +96,4 @@ router.get("/:uuid.:ext?", function(req, res) {
     });
     res.end(http_status == 304 ? null : image);
   }
-});
-
-
-module.exports = router;
+};

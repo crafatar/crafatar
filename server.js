@@ -15,7 +15,7 @@ var routes = {
 };
 
 function asset_request(req, res) {
-  var filename = __dirname + "/public/" + req.pathname;
+  var filename = __dirname + "/public/" + req.url.pathname;
   fs.exists(filename, function(exists) {
     if (exists) {
       fs.readFile(filename, function(err, contents) {
@@ -41,27 +41,30 @@ function asset_request(req, res) {
 
 function requestHandler(req, res) {
   var querystring = url.parse(req.url).query;
+  var request = req;
   // we need to use url.parse and give the result to url.parse because nodejs
-  var prequest = url.parse(req.url, querystring);
+  request.url = url.parse(req.url, querystring);
+  request.url.query = request.url.query || {};
 
-  console.log("Request: " + prequest.pathname);
-  console.log("Params: " + JSON.stringify(prequest.query));
+  var local_path = request.url.pathname.split("/")[1];
+  console.log("Request: " + request.url.pathname + " (" + local_path + ")");
+  console.log(request.headers);
 
-  switch (prequest.pathname) {
-    case "/":
-      routes.index(prequest, res);
+  switch (local_path) {
+    case "":
+      routes.index(request, res);
       break;
-    case "/avatars":
-      routes.avatars(prequest, res);
+    case "avatars":
+      routes.avatars(request, res);
       break;
-    case "/skins":
-      routes.skins(prequest, res);
+    case "skins":
+      routes.skins(request, res);
       break;
-    case "/renders":
-      routes.renders(prequest, res);
+    case "renders":
+      routes.renders(request, res);
       break;
     default:
-      asset_request(prequest, res);
+      asset_request(request, res);
   }
 }
 
