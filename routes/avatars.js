@@ -14,23 +14,28 @@ var human_status = {
 
 // GET avatar request
 module.exports = function(req, res) {
-  logging.debug(req.url.pathname);
+  var start = new Date();
   var uuid = (req.url.pathname.split("/")[2] || "");
   var size = parseInt(req.url.query.size) || config.default_size;
   var def = req.url.query.default;
   var helm = req.url.query.hasOwnProperty("helm");
-  var start = new Date();
   var etag = null;
 
   // Prevent app from crashing/freezing
   if (size < config.min_size || size > config.max_size) {
     // "Unprocessable Entity", valid request, but semantically erroneous:
     // https://tools.ietf.org/html/rfc4918#page-78
-    res.writeHead(422);
+    res.writeHead(422, {
+      "Content-Type": "text/plain",
+      "Response-Time": new Date() - start
+    });
     res.end("Invalid size");
     return;
   } else if (!helpers.uuid_valid(uuid)) {
-    res.writeHead(422);
+    res.writeHead(422, {
+      "Content-Type": "text/plain",
+      "Response-Time": new Date() - start
+    });
     res.end("Invalid UUID");
     return;
   }
