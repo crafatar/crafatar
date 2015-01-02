@@ -5,7 +5,7 @@ node_js:
 before_script:
   - cp "modules/config.example.js" "modules/config.js"
 before_install:
-  - sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
+  - apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
 notifications:
   irc:
     channels:
