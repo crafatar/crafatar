@@ -2,19 +2,22 @@ var networking = require("../modules/networking");
 var logging = require("../modules/logging");
 var helpers = require("../modules/helpers");
 var config = require("../modules/config");
-var router = require("express").Router();
 var skins = require("../modules/skins");
 var lwip = require("lwip");
 
-/* GET skin request. */
-router.get("/:uuid.:ext?", function(req, res) {
-  var uuid = (req.params.uuid || "");
-  var def = req.query.default;
+// GET skin request
+module.exports = function(req, res) {
   var start = new Date();
+  var uuid = (req.url.pathname.split("/")[2] || "").split(".")[0];
+  var def = req.url.query.default;
   var etag = null;
 
   if (!helpers.uuid_valid(uuid)) {
-    res.status(422).send("422 Invalid UUID");
+    res.writeHead(422, {
+      "Content-Type": "text/plain",
+      "Response-Time": new Date() - start
+    });
+    res.end("Invalid UUID");
     return;
   }
 
@@ -28,7 +31,7 @@ router.get("/:uuid.:ext?", function(req, res) {
         logging.error(uuid + " " + err);
       }
       etag = hash && hash.substr(0, 32) || "none";
-      var matches = req.get("If-None-Match") == '"' + etag + '"';
+      var matches = req.headers["if-none-match"] == '"' + etag + '"';
       if (image) {
         var http_status = 200;
         if (matches) {
@@ -36,7 +39,7 @@ router.get("/:uuid.:ext?", function(req, res) {
         } else if (err) {
           http_status = 503;
         }
-        logging.debug("Etag: " + req.get("If-None-Match"));
+        logging.debug("Etag: " + req.headers["if-none-match"]);
         logging.debug("matches: " + matches);
         logging.log("status: " + http_status);
         sendimage(http_status, image);
@@ -81,7 +84,4 @@ router.get("/:uuid.:ext?", function(req, res) {
     });
     res.end(http_status == 304 ? null : image);
   }
-});
-
-
-module.exports = router;
+};

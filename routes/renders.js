@@ -1,4 +1,3 @@
-var router = require("express").Router();
 var logging = require("../modules/logging");
 var helpers = require("../modules/helpers");
 var config = require("../modules/config");
@@ -14,33 +13,45 @@ var human_status = {
   "-1": "error"
 };
 
-// valid types: head, body. helmet is query param
+// valid types: head, body
+// helmet is query param
+// TODO: The Type logic should be two separate GET functions once response methods are extracted
 
-// The Type logic should be two separate GET
-// functions once response methods are extracted
-router.get("/:type/:uuid.:ext?", function(req, res) {
-  var raw_type = req.params.type;
+// GET render request
+module.exports = function(req, res) {
+  var start = new Date();
+  var raw_type = (req.url.pathname.split("/")[2] || "");
 
-  // Check valid type for now
+  // validate type
   if (raw_type != "body" && raw_type != "head") {
-    res.status(404).send("404 Invalid Render Type");
+    res.writeHead(422, {
+      "Content-Type": "text/plain",
+      "Response-Time": new Date() - start
+    });
+    res.end("Invalid Render Type");
     return;
   }
 
   var body = raw_type == "body";
-  var uuid = req.params.uuid;
-  var def = req.query.default;
-  var scale = parseInt(req.query.scale) || config.default_scale;
-  var helm = req.query.hasOwnProperty("helm");
-  var start = new Date();
+  var uuid = (req.url.pathname.split("/")[3] || "").split(".")[0];
+  var def = req.url.query.default;
+  var scale = parseInt(req.url.query.scale) || config.default_scale;
+  var helm = req.url.query.hasOwnProperty("helm");
   var etag = null;
 
   if (scale < config.min_scale || scale > config.max_scale) {
-    // Preventing from OOM crashes.
-    res.status(422).send("422 Invalid Scale");
+    res.writeHead(422, {
+      "Content-Type": "text/plain",
+      "Response-Time": new Date() - start
+    });
+    res.end("422 Invalid Scale");
     return;
   } else if (!helpers.uuid_valid(uuid)) {
-    res.status(422).send("422 Invalid UUID");
+    res.writeHead(422, {
+      "Content-Type": "text/plain",
+      "Response-Time": new Date() - start
+    });
+    res.end("422 Invalid UUID");
     return;
   }
 
@@ -54,7 +65,7 @@ router.get("/:type/:uuid.:ext?", function(req, res) {
         logging.error(uuid + " " + err);
       }
       etag = hash && hash.substr(0, 32) || "none";
-      var matches = req.get("If-None-Match") == '"' + etag + '"';
+      var matches = req.headers["if-none-match"] == '"' + etag + '"';
       if (image) {
         var http_status = 200;
         if (matches) {
@@ -63,7 +74,7 @@ router.get("/:type/:uuid.:ext?", function(req, res) {
           http_status = 503;
         }
         logging.log("matches: " + matches);
-        logging.log("Etag: " + req.get("If-None-Match"));
+        logging.log("Etag: " + req.headers["if-none-match"]);
         logging.log("status: " + http_status);
         sendimage(http_status, status, image);
       } else {
@@ -119,6 +130,4 @@ router.get("/:type/:uuid.:ext?", function(req, res) {
     });
     res.end(http_status == 304 ? null : image);
   }
-});
-
-module.exports = router;
+};
