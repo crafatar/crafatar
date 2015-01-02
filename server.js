@@ -48,31 +48,37 @@ function requestHandler(req, res) {
 
   var local_path = request.url.pathname.split("/")[1];
   console.log(request.method + " " + request.url.pathname);
-
-  try {
-    switch (local_path) {
-      case "":
-        routes.index(request, res);
-        break;
-      case "avatars":
-        routes.avatars(request, res);
-        break;
-      case "skins":
-        routes.skins(request, res);
-        break;
-      case "renders":
-        routes.renders(request, res);
-        break;
-      default:
-        asset_request(request, res);
+  if (request.method == "GET" || request.method == "HEAD") {
+    try {
+      switch (local_path) {
+        case "":
+          routes.index(request, res);
+          break;
+        case "avatars":
+          routes.avatars(request, res);
+          break;
+        case "skins":
+          routes.skins(request, res);
+          break;
+        case "renders":
+          routes.renders(request, res);
+          break;
+        default:
+          asset_request(request, res);
+      }
+    } catch(e) {
+      var error = JSON.stringify(req.headers) + "\n" + e.stack;
+      logging.error("Error: " + error);
+      res.writeHead(500, {
+        "Content-Type": "text/plain"
+      });
+      res.end(config.debug_enabled ? error : "Internal server error");
     }
-  } catch(e) {
-    var error = JSON.stringify(req.headers) + "\n" + e.stack;
-    logging.error("Error: " + error);
-    res.writeHead(500, {
+  } else {
+    res.writeHead(405, {
       "Content-Type": "text/plain"
     });
-    res.end(config.debug_enabled ? error : "Internal server error");
+    res.end("Method not allowed");
   }
 }
 
