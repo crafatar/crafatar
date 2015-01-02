@@ -1,9 +1,10 @@
+sudo: false
 language: node_js
 node_js:
   - "0.10"
 before_script:
   - cp "modules/config.example.js" "modules/config.js"
-before_install: 
+before_install:
   - sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
 notifications:
   irc:
