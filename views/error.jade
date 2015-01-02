@@ -1,8 +1,0 @@
-extends layout
-
-block content
-  .container.errmsg
-    h1= message
-    h2= error.status
-    if error.stack
-      pre #{error.stack}
