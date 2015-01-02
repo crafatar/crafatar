@@ -21,7 +21,7 @@ function asset_request(req, res) {
       fs.readFile(filename, function(err, contents) {
         if (err) {
           res.writeHead(500, {"Content-type" : "text/plain"});
-          res.end("Internal server error");
+          res.end("Internal Server Error");
         } else {
           res.writeHead(200, {
             "Content-type" : mime.lookup(filename),
@@ -34,7 +34,7 @@ function asset_request(req, res) {
       res.writeHead(404, {
         "Content-type" : "text/plain"
       });
-      res.end("Not found");
+      res.end("Not Found");
     }
   });
 }
@@ -72,13 +72,13 @@ function requestHandler(req, res) {
       res.writeHead(500, {
         "Content-Type": "text/plain"
       });
-      res.end(config.debug_enabled ? error : "Internal server error");
+      res.end(config.debug_enabled ? error : "Internal Server Error");
     }
   } else {
     res.writeHead(405, {
       "Content-Type": "text/plain"
     });
-    res.end("Method not allowed");
+    res.end("Method Not Allowed");
   }
 }
 
