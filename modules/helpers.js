@@ -131,7 +131,7 @@ exp.get_image_hash = function(uuid, callback) {
 // image is the user's face+helm when helm is true, or the face otherwise
 // for status, see get_image_hash
 exp.get_avatar = function(uuid, helm, size, callback) {
-  logging.log("\nrequest: " + uuid);
+  logging.log("request: " + uuid);
   exp.get_image_hash(uuid, function(err, status, hash) {
     if (hash) {
       var facepath = __dirname + "/../" + config.faces_dir + hash + ".png";
