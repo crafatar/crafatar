@@ -18,16 +18,16 @@ function asset_request(req, res) {
   var filename = __dirname + "/public/" + req.url.pathname;
   fs.exists(filename, function(exists) {
     if (exists) {
-      fs.readFile(filename, function(err, contents) {
+      fs.readFile(filename, function(err, file_buffer) {
         if (err) {
           res.writeHead(500, {"Content-type" : "text/plain"});
           res.end("Internal Server Error");
         } else {
           res.writeHead(200, {
             "Content-type" : mime.lookup(filename),
-            "Content-Length": contents.length
+            "Content-Length": file_buffer.length
           });
-          res.end(contents);
+          res.end(file_buffer);
         }
       });
     } else {
