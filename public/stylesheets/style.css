@@ -167,6 +167,11 @@ h4 {
   margin: 5px;
 }
 
+.avatar-wrapper {
+  height: 64px;
+  overflow: hidden;
+}
+
 .avatar {
   width: 64px;
   height: 64px;
@@ -174,42 +179,62 @@ h4 {
   margin-right: 0.5em;
 }
 
-.avatar.redstone_sheep {
-  background-image: url("/avatars/ae795aa86327408e92ab25c8a59f3ba1?size=64");
-}
-.avatar.redstone_sheep:hover {
-  background-image: url("/avatars/ae795aa86327408e92ab25c8a59f3ba1?size=64&helm");
-}
+.avatar.redstone_sheep {background-image: url("/avatars/ae795aa86327408e92ab25c8a59f3ba1?size=64")}
+.avatar.redstone_sheep:hover {background-image: url("/avatars/ae795aa86327408e92ab25c8a59f3ba1?size=64&helm")}
 
-.avatar.jake0oo0 {
-  background-image: url("/avatars/2d5aa9cdaeb049189930461fc9b91cc5?size=64");
-}
-.avatar.jake0oo0:hover {
-  background-image: url("/avatars/2d5aa9cdaeb049189930461fc9b91cc5?size=64&helm");
-}
+.avatar.jake0oo0 {background-image: url("/avatars/2d5aa9cdaeb049189930461fc9b91cc5?size=64")}
+.avatar.jake0oo0:hover {background-image: url("/avatars/2d5aa9cdaeb049189930461fc9b91cc5?size=64&helm")}
 
-.avatar.sk89q {
-  background-image: url("/avatars/0ea8eca3dbf647cc9d1ac64551ca975c?size=64");
-}
-.avatar.sk89q:hover {
-  background-image: url("/avatars/0ea8eca3dbf647cc9d1ac64551ca975c?size=64&helm");
-}
+.avatar.sk89q {background-image: url("/avatars/0ea8eca3dbf647cc9d1ac64551ca975c?size=64")}
+.avatar.sk89q:hover {background-image: url("/avatars/0ea8eca3dbf647cc9d1ac64551ca975c?size=64&helm")}
 
-.avatar.md_5 {
-  background-image: url("/avatars/af74a02d19cb445bb07f6866a861f783?size=64");
-}
-.avatar.md_5:hover {
-  background-image: url("/avatars/af74a02d19cb445bb07f6866a861f783?size=64&helm");
-}
+.avatar.md_5 {background-image: url("/avatars/af74a02d19cb445bb07f6866a861f783?size=64")}
+.avatar.md_5:hover {background-image: url("/avatars/af74a02d19cb445bb07f6866a861f783?size=64&helm")}
 
-.avatar.jeb {
-  background-image: url("/avatars/853c80ef3c3749fdaa49938b674adae6?size=64");
-}
-.avatar.jeb:hover {
-  background-image: url("/avatars/853c80ef3c3749fdaa49938b674adae6?size=64&helm");
-}
+.avatar.jeb {background-image: url("/avatars/853c80ef3c3749fdaa49938b674adae6?size=64")}
+.avatar.jeb:hover {background-image: url("/avatars/853c80ef3c3749fdaa49938b674adae6?size=64&helm")}
 
-.avatar.notch {
-  background-image: url("/avatars/069a79f444e94726a5befca90e38aaf5?size=64");
-}
+.avatar.notch {background-image: url("/avatars/069a79f444e94726a5befca90e38aaf5?size=64")}
 /* Notch fucked up his helm */
+
+.avatar.dinnerbone {background-image: url("/avatars/61699b2ed3274a019f1e0ea8c3f06bc6?size=64")}
+.avatar.dinnerbone:hover {background-image: url("/avatars/61699b2ed3274a019f1e0ea8c3f06bc6?size=64&helm")}
+
+.avatar.ez {background-image: url("/avatars/7d043c7389524696bfba571c05b6aec0?size=64")}
+.avatar.ez:hover {background-image: url("/avatars/7d043c7389524696bfba571c05b6aec0?size=64&helm")}
+
+.avatar.grumm {background-image: url("/avatars/e6b5c088068044df9e1b9bf11792291b?size=64")}
+.avatar.grumm:hover {background-image: url("/avatars/e6b5c088068044df9e1b9bf11792291b?size=64&helm")}
+
+.avatar.themogmimer {background-image: url("/avatars/1c1bd09a6a0f4928a7914102a35d2670?size=64")}
+.avatar.themogmimer:hover {background-image: url("/avatars/1c1bd09a6a0f4928a7914102a35d2670?size=64&helm")}
+
+.avatar.marc {background-image: url("/avatars/b05881186e75410db2db4d3066b223f7?size=64")}
+.avatar.marc:hover {background-image: url("/avatars/b05881186e75410db2db4d3066b223f7?size=64&helm")}
+
+.avatar.searge {background-image: url("/avatars/696a82ce41f44b51aa31b8709b8686f0?size=64")}
+.avatar.searge:hover {background-image: url("/avatars/696a82ce41f44b51aa31b8709b8686f0?size=64&helm")}
+
+.avatar.xlson {background-image: url("/avatars/b9583ca43e64488a9c8c4ab27e482255?size=64")}
+.avatar.xlson:hover {background-image: url("/avatars/b9583ca43e64488a9c8c4ab27e482255?size=64&helm")}
+
+.avatar.minecraftchick {background-image: url("/avatars/c9b54008fd8047428b238787b5f2401c?size=64")}
+.avatar.minecraftchick:hover {background-image: url("/avatars/c9b54008fd8047428b238787b5f2401c?size=64&helm")}
+
+.avatar.kappe {background-image: url("/avatars/d8f9a4340f2d415f9acfcd70341c75ec?size=64")}
+.avatar.kappe:hover {background-image: url("/avatars/d8f9a4340f2d415f9acfcd70341c75ec?size=64&helm")}
+
+.avatar.krisjelbring {background-image: url("/avatars/7125ba8b1c864508b92bb5c042ccfe2b?size=64")}
+.avatar.krisjelbring:hover {background-image: url("/avatars/7125ba8b1c864508b92bb5c042ccfe2b?size=64&helm")}
+
+.avatar.thinkofdeath {background-image: url("/avatars/4566e69fc90748ee8d71d7ba5aa00d20?size=64")}
+.avatar.thinkofdeath:hover {background-image: url("/avatars/4566e69fc90748ee8d71d7ba5aa00d20?size=64&helm")}
+
+.avatar.evilseph {background-image: url("/avatars/020242a17b9441799eff511eea1221da?size=64")}
+.avatar.evilseph:hover {background-image: url("/avatars/020242a17b9441799eff511eea1221da?size=64&helm")}
+
+.avatar.mollstam {background-image: url("/avatars/9769ecf6331448f3ace67ae06cec64a3?size=64")}
+.avatar.mollstam:hover {background-image: url("/avatars/9769ecf6331448f3ace67ae06cec64a3?size=64&helm")}
+
+.avatar.mollstam {background-image: url("/avatars/f8cdb6839e9043eea81939f85d9c5d69?size=64")}
+.avatar.mollstam:hover {background-image: url("/avatars/f8cdb6839e9043eea81939f85d9c5d69?size=64&helm")}
