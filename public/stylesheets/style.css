@@ -81,7 +81,9 @@ h4 {
   margin-top: 1em;
 }
 
-code {
+.code {
+  display: block;
+  font-family: monospace;
   word-wrap: break-word;
   min-height: 20px;
   padding: 10px 20px;
@@ -93,11 +95,11 @@ code {
   position: relative;
 }
 
-code .example {
+.code .example {
   cursor: pointer;
 }
 
-code .example:hover {
+.code .example:hover {
   color: #000;
   text-decoration: underline;
 }
@@ -107,7 +109,7 @@ code .example:hover {
   height: 220px;
 }
 
-code .example-wrapper .preview, code .preview-placeholder {
+.code .example-wrapper .preview, .code .preview-placeholder {
   display: none;
   left: 0;
   right: 0;
@@ -123,25 +125,25 @@ code .example-wrapper .preview, code .preview-placeholder {
   color: #666;
 }
 
-code .preview-placeholder {
+.code .preview-placeholder {
   display: block;
   font-weight: bold;
 }
 
-code .preview-placeholder:hover {
+.code .preview-placeholder:hover {
   /* fixes glitchy blinking */
   display: block !important;
 }
 
-code:hover .preview-placeholder {
+.code:hover .preview-placeholder {
   display: none;
 }
 
-code .example-wrapper .preview i {
+.code .example-wrapper .preview i {
   color: #aaa;
 }
 
-code .example-wrapper:hover .preview {
+.code .example-wrapper:hover .preview {
   display: block;
 }
 

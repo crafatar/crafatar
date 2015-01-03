@@ -37,7 +37,7 @@ block content
           | Replace
           mark.green  id
           |  with a Mojang <b>UUID</b> or <b>username</b> to get the related head. All images are PNGs.
-          code
+          .code
             | #{domain}/avatars/
             mark.green id
 
@@ -81,7 +81,7 @@ block content
             a(id="avatar-examples", class="anchor")
             a(href="#avatar-examples")
               h4 Avatar Examples
-            code
+            .code
               #avatar-example-1.example-wrapper
                 .example #{domain}/avatars/jeb_
                 p.preview Jeb's avatar
@@ -117,11 +117,11 @@ block content
             mark.green  id
             |  with a Mojang <b>UUID</b> or <b>username</b> to get a render of the skin.
             | The <b>head</b> render type returns a render of the skin's head.
-            code
+            .code
               | #{domain}/renders/head/
               mark.green id
             | The <b>body</b> render returns a render of the entire skin.
-            code
+            .code
               | #{domain}/renders/body/
               mark.green id
 
@@ -152,7 +152,7 @@ block content
             a(id="render-examples", class="anchor")
             a(href="#render-examples")
               h4 Render Examples
-            code
+            .code
               #render-example-1.example-wrapper
                 .example #{domain}/renders/body/jeb_?helm&amp;scale=4
                 p.preview Jeb's body, with helmet, scale 4
@@ -175,7 +175,7 @@ block content
             |  with a Mojang <b>UUID</b> or <b>username</b> to get the related skin.<br>
             | The user's skin is returned, or the default image is served.<br>
             | You can use the default parameter here as well.
-            code
+            .code
               | #{domain}/skins/
               mark.green id
 
@@ -209,7 +209,7 @@ block content
             a(id="skin-examples", class="anchor")
             a(href="#skin-examples")
               h4 Skin Examples
-            code
+            .code
               #skin-example-1.example-wrapper
                 .example #{domain}/skins/jeb_
                 p.preview Jeb's skin
