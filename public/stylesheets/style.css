@@ -180,6 +180,16 @@ h4 {
   margin-top: 50px;
 }
 
+img.preload {
+  /*
+    preload hover images
+    browsers don't load 0x0 images
+  */
+  position: fixed;
+  top: -9999px;
+  left: -9999px;
+}
+
 .jumbotron img {
   margin: 5px;
 }
