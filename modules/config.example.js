@@ -9,10 +9,10 @@ var config = {
   cleaning_redis_limit: 24576,   // max allowed used KB on redis to trigger redis flush
   cleaning_amount: 50000,        // amount of avatar (and their helm) files to clean
   http_timeout: 1000,            // ms until connection to mojang is dropped
-  faces_dir: "skins/faces/",     // directory where faces are kept. should have trailing "/"
-  helms_dir: "skins/helms/",     // directory where helms are kept. should have trailing "/"
-  skins_dir: "skins/skins/",     // directory where skins are kept. should have trailing "/"
-  renders_dir: "skins/renders/", // Directory where rendered skins are kept. should have trailing "/"
+  faces_dir: "images/faces/",    // directory where faces are kept. should have trailing "/"
+  helms_dir: "images/helms/",    // directory where helms are kept. should have trailing "/"
+  skins_dir: "images/skins/",    // directory where skins are kept. should have trailing "/"
+  renders_dir: "images/renders/",// Directory where rendered skins are kept. should have trailing "/"
   debug_enabled: false,          // enables logging.debug
   min_scale: 1,                  // for renders
   max_scale: 10,                 // for renders; too big values might lead to slow response time or DoS
