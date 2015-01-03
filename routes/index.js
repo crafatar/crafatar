@@ -7,7 +7,7 @@ var index = jade.compileFile(__dirname + "/../views/index.jade");
 module.exports = function(req, res) {
   var html = index({
     title: "Crafatar",
-    domain: "https://" + "req.hostname",
+    domain: "https://" + req.headers.host,
     config: config
   });
   res.writeHead(200, {
