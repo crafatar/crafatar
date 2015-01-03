@@ -108,7 +108,7 @@ h4 {
   height: 220px;
 }
 
-.code .example-wrapper .preview {
+.code .example-wrapper .preview, .code .preview-placeholder {
   display: none;
   width: 100%;
   position: absolute;
@@ -120,6 +120,19 @@ h4 {
   font-family: "Helvetica Neue", Arial, sans-serif;
   font-weight: 300;
   color: #666;
+}
+
+.code .preview-placeholder {
+  display: block;
+}
+
+.code .preview-placeholder:hover {
+  /* fixes glitchy blinking */
+  display: block !important;
+}
+
+.code:hover .preview-placeholder {
+  display: none;
 }
 
 .code .example-wrapper .preview i {
