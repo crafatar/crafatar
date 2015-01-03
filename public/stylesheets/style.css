@@ -63,6 +63,11 @@ thead {
   font-weight: bold;
 }
 
+.row {
+  margin-right: auto;
+  margin-left: auto;
+}
+
 h1, h2, h3, h4, h5, h6 {
   color: #333;
   font-weight: normal;
