@@ -34,6 +34,7 @@
     "mocha-lcov-reporter": "0.0.1",
     "redis": "0.12.1",
     "request": "2.51.0",
-    "node-df": "0.1.1"
+    "node-df": "0.1.1",
+    "mime": "1.2.11"
   }
 }
