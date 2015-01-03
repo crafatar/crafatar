@@ -96,3 +96,50 @@ h4 {
 .jumbotron img {
   margin: 5px;
 }
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  display: inline-block;
+  margin-right: 0.5em;
+}
+
+.avatar.redstone_sheep {
+  background-image: url("/avatars/ae795aa86327408e92ab25c8a59f3ba1?size=64");
+}
+.avatar.redstone_sheep:hover {
+  background-image: url("/avatars/ae795aa86327408e92ab25c8a59f3ba1?size=64&helm");
+}
+
+.avatar.jake0oo0 {
+  background-image: url("/avatars/2d5aa9cdaeb049189930461fc9b91cc5?size=64");
+}
+.avatar.jake0oo0:hover {
+  background-image: url("/avatars/2d5aa9cdaeb049189930461fc9b91cc5?size=64&helm");
+}
+
+.avatar.sk89q {
+  background-image: url("/avatars/0ea8eca3dbf647cc9d1ac64551ca975c?size=64");
+}
+.avatar.sk89q:hover {
+  background-image: url("/avatars/0ea8eca3dbf647cc9d1ac64551ca975c?size=64&helm");
+}
+
+.avatar.md_5 {
+  background-image: url("/avatars/af74a02d19cb445bb07f6866a861f783?size=64");
+}
+.avatar.md_5:hover {
+  background-image: url("/avatars/af74a02d19cb445bb07f6866a861f783?size=64&helm");
+}
+
+.avatar.jeb {
+  background-image: url("/avatars/853c80ef3c3749fdaa49938b674adae6?size=64");
+}
+.avatar.jeb:hover {
+  background-image: url("/avatars/853c80ef3c3749fdaa49938b674adae6?size=64&helm");
+}
+
+.avatar.notch {
+  background-image: url("/avatars/069a79f444e94726a5befca90e38aaf5?size=64");
+}
+/* Notch fucked up his helm */
