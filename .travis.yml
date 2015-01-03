@@ -8,7 +8,7 @@ before_install:
 notifications:
   irc:
     channels:
-      - "irc.esper.net#spongy"
+      - "irc.esper.net#crafatar"
     skip_join: true
 services:
   - redis-server
