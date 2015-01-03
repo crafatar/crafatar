@@ -47,7 +47,7 @@ function requestHandler(req, res) {
   request.url.query = request.url.query || {};
 
   var local_path = request.url.pathname.split("/")[1];
-  console.log(request.method + " " + request.url.pathname);
+  console.log(request.method + " " + request.url.href);
   if (request.method == "GET" || request.method == "HEAD") {
     try {
       switch (local_path) {
