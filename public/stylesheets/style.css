@@ -115,7 +115,8 @@ h4 {
 
 .code .example-wrapper .preview, .code .preview-placeholder {
   display: none;
-  width: 100%;
+  left: 0;
+  right: 0;
   position: absolute;
   bottom: -240px;
   padding-top: 200px;
