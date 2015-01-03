@@ -12,7 +12,7 @@ module.exports = function(req, res) {
   });
   res.writeHead(200, {
     "Content-Length": html.length,
-     "Content-Type": "text/html; charset=utf-8"
+    "Content-Type": "text/html; charset=utf-8"
   });
   res.end(html);
 };
