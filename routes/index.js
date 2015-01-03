@@ -11,7 +11,7 @@ module.exports = function(req, res) {
     config: config
   });
   res.writeHead(200, {
-    "Content-Length": html.length,
+    "Content-Length": Buffer.byteLength(html, "UTF-8"),
     "Content-Type": "text/html; charset=utf-8"
   });
   res.end(html);
