@@ -119,8 +119,9 @@ h4 {
   right: 0;
   position: absolute;
   bottom: -240px;
+  padding-left: 10px;
   padding-top: 200px;
-  background-position: left center;
+  background-position: 10px center;
   background-repeat: no-repeat;
   font-size: 14px;
   font-family: "Helvetica Neue", Arial, sans-serif;
@@ -130,6 +131,7 @@ h4 {
 
 .code .preview-placeholder {
   display: block;
+  font-weight: bold;
 }
 
 .code .preview-placeholder:hover {
