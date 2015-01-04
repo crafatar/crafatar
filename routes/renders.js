@@ -20,7 +20,7 @@ var human_status = {
 // GET render request
 module.exports = function(req, res) {
   var start = new Date();
-  var raw_type = (req.url.pathname.split("/")[2] || "");
+  var raw_type = (req.url.path_list[2] || "");
 
   // validate type
   if (raw_type != "body" && raw_type != "head") {
@@ -33,7 +33,7 @@ module.exports = function(req, res) {
   }
 
   var body = raw_type == "body";
-  var uuid = (req.url.pathname.split("/")[3] || "").split(".")[0];
+  var uuid = (req.url.path_list[3] || "").split(".")[0];
   var def = req.url.query.default;
   var scale = parseInt(req.url.query.scale) || config.default_scale;
   var helm = req.url.query.hasOwnProperty("helm");

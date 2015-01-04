@@ -8,7 +8,7 @@ var lwip = require("lwip");
 // GET skin request
 module.exports = function(req, res) {
   var start = new Date();
-  var uuid = (req.url.pathname.split("/")[2] || "").split(".")[0];
+  var uuid = (req.url.path_list[2] || "").split(".")[0];
   var def = req.url.query.default;
   var etag = null;
 

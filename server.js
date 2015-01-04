@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-var config = require("./modules/config");
 var logging = require("./modules/logging");
+var querystring = require("querystring");
+var config = require("./modules/config");
 var clean = require("./modules/cleaner");
 var http = require("http");
 var mime = require("mime");
@@ -16,7 +17,7 @@ var routes = {
 };
 
 function asset_request(req, res) {
-  var filename = __dirname + "/public/" + req.url.pathname;
+  var filename = __dirname + "/public/" + req.url.path_list.join("/");
   fs.exists(filename, function(exists) {
     if (exists) {
       fs.readFile(filename, function(err, file_buffer) {
@@ -41,16 +42,21 @@ function asset_request(req, res) {
 }
 
 function requestHandler(req, res) {
-  var querystring = url.parse(req.url).query;
+  var query = url.parse(req.url).query;
   var request = req;
   // we need to use url.parse and give the result to url.parse because nodejs
-  request.url = url.parse(req.url, querystring);
+  request.url = url.parse(req.url, query);
   request.url.query = request.url.query || {};
 
   // remove trailing and double slashes + other junk
-  request.url.pathname = path.resolve(request.url.pathname);
+  var path_list = path.resolve(request.url.pathname).split("/");
+  for (var i = 0; i < path_list.length; i++) {
+    // URL decode
+    path_list[i] = querystring.unescape(path_list[i]);
+  }
+  request.url.path_list = path_list;
 
-  var local_path = request.url.pathname.split("/")[1];
+  var local_path = request.url.path_list[1];
   console.log(request.method + " " + request.url.href);
   if (request.method == "GET" || request.method == "HEAD") {
     try {
