@@ -184,37 +184,35 @@ function get_type(helm, body) {
 // callback contanis error, hash, image buffer
 exp.get_render = function(uuid, scale, helm, body, callback) {
   logging.log(uuid + " render request");
-  exp.get_image_hash(uuid, function(err, status, hash) {
-    exp.get_skin(uuid, function(err, hash, img) {
-      if (!hash) {
-        callback(err, -1, hash, null);
-        return;
-      }
-      var renderpath = __dirname + "/../" + config.renders_dir + hash + "-" + scale + "-" + get_type(helm, body) + ".png";
-      if (fs.existsSync(renderpath)) {
-        renders.open_render(renderpath, function(err, img) {
-          callback(err, 1, hash, img);
-        });
-        return;
-      }
-      if (!img) {
-        callback(err, 0, hash, null);
-        return;
-      }
-      renders.draw_model(uuid, img, scale, helm, body, function(err, img) {
-        if (err) {
-          callback(err, -1, hash, null);
-        } else if (!img) {
-          callback(null, 0, hash, null);
-        } else {
-          fs.writeFile(renderpath, img, "binary", function(err){
-            if (err) {
-              logging.log(err);
-            }
-            callback(null, 2, hash, img);
-          });
-        }
+  exp.get_skin(uuid, function(err, hash, img) {
+    if (!hash) {
+      callback(err, -1, hash, null);
+      return;
+    }
+    var renderpath = __dirname + "/../" + config.renders_dir + hash + "-" + scale + "-" + get_type(helm, body) + ".png";
+    if (fs.existsSync(renderpath)) {
+      renders.open_render(renderpath, function(err, img) {
+        callback(err, 1, hash, img);
       });
+      return;
+    }
+    if (!img) {
+      callback(err, 0, hash, null);
+      return;
+    }
+    renders.draw_model(uuid, img, scale, helm, body, function(err, img) {
+      if (err) {
+        callback(err, -1, hash, null);
+      } else if (!img) {
+        callback(null, 0, hash, null);
+      } else {
+        fs.writeFile(renderpath, img, "binary", function(err){
+          if (err) {
+            logging.log(err);
+          }
+          callback(null, 2, hash, img);
+        });
+      }
     });
   });
 };
