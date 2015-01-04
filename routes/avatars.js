@@ -49,7 +49,7 @@ module.exports = function(req, res) {
       if (err) {
         logging.error(uuid + " " + err);
       }
-      etag = hash && hash.substr(0, 32) || "none";
+      etag = !err && hash && hash.substr(0, 32) || "none";
       var matches = req.headers["if-none-match"] == '"' + etag + '"';
       if (image) {
         var http_status = 200;
