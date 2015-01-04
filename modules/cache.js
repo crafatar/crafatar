@@ -61,8 +61,27 @@ exp.get_redis = function() {
 // callback contains error, info object
 exp.info = function(callback) {
   redis.info(function (err, res) {
+
     // parse the info command and store it in redis.server_info
-    redis.on_info_cmd(err, res);
+
+    // this code block was taken from mranney/node_redis#on_info_cmd
+    // http://git.io/LBUNbg
+    var lines = res.toString().split("\r\n");
+    var obj = {};
+    lines.forEach(function (line) {
+      var parts = line.split(':');
+      if (parts[1]) {
+        obj[parts[0]] = parts[1];
+      }
+    });
+    obj.versions = [];
+    if( obj.redis_version ){
+      obj.redis_version.split('.').forEach(function (num) {
+        obj.versions.push(+num);
+      });
+    }
+    redis.server_info = obj;
+
     callback(err, redis.server_info);
   });
 };
