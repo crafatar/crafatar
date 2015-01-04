@@ -41,7 +41,7 @@ function store_images(uuid, details, callback) {
             cache.update_timestamp(uuid, hash);
             callback(null, hash);
           } else {
-            if (!exists) {
+            if (details && details.hash && !exists) {
               logging.warn(uuid + " File was deleted! Downloading again.");
             } else {
               // hash has changed

@@ -107,6 +107,11 @@ exp.save_hash = function(uuid, hash) {
   redis.hmset(uuid, "h", hash, "t", time);
 };
 
+exp.remove_hash = function(uuid) {
+  logging.log(uuid + " cache: deleting hash");
+  redis.del(uuid.toLowerCase(), "h", "t");
+};
+
 // get a details object for +uuid+
 // {hash: "0123456789abcdef", time: 1414881524512}
 // null when uuid unkown

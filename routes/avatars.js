@@ -3,6 +3,7 @@ var logging = require("../modules/logging");
 var helpers = require("../modules/helpers");
 var config = require("../modules/config");
 var skins = require("../modules/skins");
+var cache = require("../modules/cache");
 
 var human_status = {
   0: "none",
@@ -48,6 +49,10 @@ module.exports = function(req, res) {
       logging.log(uuid + " - " + human_status[status]);
       if (err) {
         logging.error(uuid + " " + err);
+        if (err.code == "ENOENT") {
+          logging.warn("Deleting " + uuid + " from cache!");
+          cache.remove_hash(uuid);
+        }
       }
       etag = image && hash && hash.substr(0, 32) || "none";
       var matches = req.headers["if-none-match"] == '"' + etag + '"';
