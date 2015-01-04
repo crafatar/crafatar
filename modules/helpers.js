@@ -24,48 +24,59 @@ function store_images(uuid, details, callback) {
     } else {
       if (skin_url) {
         logging.log(uuid + " " + skin_url);
-        // set file paths
         var hash = get_hash(skin_url);
-        if (details && details.hash == hash) {
-          // hash hasn't changed
-          logging.log(uuid + " hash has not changed");
-          cache.update_timestamp(uuid, hash);
-          callback(null, hash);
-        } else {
-          // hash has changed
-          logging.log(uuid + " new hash: " + hash);
-          var facepath = __dirname + "/../" + config.faces_dir + hash + ".png";
-          var helmpath = __dirname + "/../" + config.helms_dir + hash + ".png";
+        // set file paths
+        var facepath = __dirname + "/../" + config.faces_dir + hash + ".png";
+        var helmpath = __dirname + "/../" + config.helms_dir + hash + ".png";
 
-          if (fs.existsSync(facepath)) {
-            logging.log(uuid + " Avatar already exists, not downloading");
-            cache.save_hash(uuid, hash);
+        // make sure the file is still there
+        fs.exists(facepath, function(err, face_exists) {
+          if (err) {
+            logging.error(uuid + "error: " + err);
+          }
+          var exists = !err && face_exists;
+
+          if (exists && details && details.hash == hash) {
+            logging.log(uuid + " hash has not changed");
+            cache.update_timestamp(uuid, hash);
             callback(null, hash);
           } else {
-            // download skin
-            networking.get_skin(skin_url, function(err, img) {
-              if (err || !img) {
-                callback(err, null);
-              } else {
-                // extract face / helm
-                skins.extract_face(img, facepath, function(err) {
-                  if (err) {
-                    callback(err);
-                  } else {
-                    logging.log(uuid + " face extracted");
-                    logging.debug(facepath);
-                    skins.extract_helm(facepath, img, helmpath, function(err) {
-                      logging.log(uuid + " helm extracted");
-                      logging.debug(helmpath);
-                      cache.save_hash(uuid, hash);
-                      callback(err, hash);
-                    });
-                  }
-                });
-              }
-            });
+            if (!exists) {
+              logging.warn(uuid + " File was deleted! Downloading again.");
+            } else {
+              // hash has changed
+              logging.log(uuid + " new hash: " + hash);
+            }
+            if (exists) {
+              logging.log(uuid + " Avatar already exists, not downloading");
+              cache.save_hash(uuid, hash);
+              callback(null, hash);
+            } else {
+              // download skin
+              networking.get_skin(skin_url, function(err, img) {
+                if (err || !img) {
+                  callback(err, null);
+                } else {
+                  // extract face / helm
+                  skins.extract_face(img, facepath, function(err) {
+                    if (err) {
+                      callback(err);
+                    } else {
+                      logging.log(uuid + " face extracted");
+                      logging.debug(facepath);
+                      skins.extract_helm(facepath, img, helmpath, function(err) {
+                        logging.log(uuid + " helm extracted");
+                        logging.debug(helmpath);
+                        cache.save_hash(uuid, hash);
+                        callback(err, hash);
+                      });
+                    }
+                  });
+                }
+              });
+            }
           }
-        }
+        });
       } else {
         // profile found, but has no skin
         cache.save_hash(uuid, null);
