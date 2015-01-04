@@ -60,7 +60,6 @@ module.exports = function(req, res) {
         }
         logging.debug("Etag: " + req.headers["if-none-match"]);
         logging.debug("matches: " + matches);
-        logging.log("status: " + http_status);
         sendimage(http_status, status, image);
       } else {
         handle_default(404, status);
@@ -74,6 +73,7 @@ module.exports = function(req, res) {
 
   function handle_default(http_status, img_status) {
     if (def && def != "steve" && def != "alex") {
+      logging.log("status: 301");
       res.writeHead(301, {
         "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
         "Response-Time": new Date() - start,
@@ -91,6 +91,7 @@ module.exports = function(req, res) {
   }
 
   function sendimage(http_status, img_status, image) {
+    logging.log("status: " + http_status);
     res.writeHead(http_status, {
       "Content-Type": "image/png",
       "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
