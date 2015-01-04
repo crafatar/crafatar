@@ -4,6 +4,7 @@ var logging = require("./modules/logging");
 var clean = require("./modules/cleaner");
 var http = require("http");
 var mime = require("mime");
+var path = require("path");
 var url = require("url");
 var fs = require("fs");
 
@@ -45,6 +46,9 @@ function requestHandler(req, res) {
   // we need to use url.parse and give the result to url.parse because nodejs
   request.url = url.parse(req.url, querystring);
   request.url.query = request.url.query || {};
+
+  // remove trailing and double slashes + other junk
+  request.url.pathname = path.resolve(request.url.pathname);
 
   var local_path = request.url.pathname.split("/")[1];
   console.log(request.method + " " + request.url.href);
