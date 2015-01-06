@@ -69,14 +69,14 @@ exp.info = function(callback) {
     var lines = res.toString().split("\r\n");
     var obj = {};
     lines.forEach(function (line) {
-      var parts = line.split(':');
+      var parts = line.split(":");
       if (parts[1]) {
         obj[parts[0]] = parts[1];
       }
     });
     obj.versions = [];
     if( obj.redis_version ){
-      obj.redis_version.split('.').forEach(function (num) {
+      obj.redis_version.split(".").forEach(function (num) {
         obj.versions.push(+num);
       });
     }
