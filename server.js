@@ -20,18 +20,8 @@ function asset_request(req, res) {
   var filename = __dirname + "/public/" + req.url.path_list.join("/");
   fs.exists(filename, function(exists) {
     if (exists) {
-      fs.readFile(filename, function(err, file_buffer) {
-        if (err) {
-          res.writeHead(500, {"Content-type" : "text/plain"});
-          res.end("Internal Server Error");
-        } else {
-          res.writeHead(200, {
-            "Content-type" : mime.lookup(filename),
-            "Content-Length": file_buffer.length
-          });
-          res.end(file_buffer);
-        }
-      });
+      res.writeHead(200, { "Content-type" : mime.lookup(filename) });
+      fs.createReadStream(filename).pipe(res);
     } else {
       res.writeHead(404, {
         "Content-type" : "text/plain"
