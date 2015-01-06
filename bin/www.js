@@ -1,6 +1,7 @@
-var cluster = require('cluster');
+var logging = require ("../modules/logging");
 var cleaner = require('../modules/cleaner');
 var config = require('../modules/config');
+var cluster = require('cluster');
 
 if (cluster.isMaster) {
     var cores = require("os").cpus().length;
@@ -9,7 +10,7 @@ if (cluster.isMaster) {
     }
 
     cluster.on('exit', function (worker, code, signal) {
-        console.error('Worker died. Rebooting a new one.');
+        logging.error('Worker died. Rebooting a new one.');
         cluster.fork();
     });
 
