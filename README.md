@@ -19,10 +19,9 @@ Please [visit the website](https://crafatar.com) for details.
 
 ## Install
 
-* Clone the repository
-* Install [node-canvas](https://github.com/Automattic/node-canvas/wiki#desktop) dependencies.
+* Clone the repository.
 * `npm install`
-* `redis-server`
 * `cp "modules/config.example.js" "modules/config.js"`
+* Ensure a `redis-server` is running
 * `node server.js`
 * Access [http://localhost:3000](http://localhost:3000)
