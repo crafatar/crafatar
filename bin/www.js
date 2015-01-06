@@ -5,6 +5,7 @@ var cluster = require("cluster");
 
 if (cluster.isMaster) {
   var cores = require("os").cpus().length;
+  logging.log("Starting " + cores + " workers");
   for (var i = cores; i > 0; i--) {
     cluster.fork();
   }
