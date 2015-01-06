@@ -92,7 +92,13 @@ function requestHandler(req, res) {
   }
 }
 
-http.createServer(requestHandler).listen(process.env.PORT || 3000);
+var boot = module.exports = function () {
+  http.createServer(requestHandler).listen(process.env.PORT || 3000);
+};
 
-// cleaning worker
-setInterval(clean.run, config.cleaning_interval * 1000);
+if (require.main === module) {
+  boot();
+
+  // cleaning worker
+  setInterval(clean.run, config.cleaning_interval * 1000);
+}
