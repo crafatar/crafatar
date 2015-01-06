@@ -42,10 +42,8 @@ function asset_request(req, res) {
 }
 
 function requestHandler(req, res) {
-  var query = url.parse(req.url).query;
   var request = req;
-  // we need to use url.parse and give the result to url.parse because nodejs
-  request.url = url.parse(req.url, query);
+  request.url = url.parse(req.url, true);
   request.url.query = request.url.query || {};
 
   // remove trailing and double slashes + other junk
