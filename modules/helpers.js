@@ -37,34 +37,36 @@ function store_images(uuid, details, callback) {
           var facepath = __dirname + "/../" + config.faces_dir + hash + ".png";
           var helmpath = __dirname + "/../" + config.helms_dir + hash + ".png";
 
-          if (fs.existsSync(facepath)) {
-            logging.log(uuid + " Avatar already exists, not downloading");
-            cache.save_hash(uuid, hash);
-            callback(null, hash);
-          } else {
-            // download skin
-            networking.get_skin(skin_url, function(err, img) {
-              if (err || !img) {
-                callback(err, null);
-              } else {
-                // extract face / helm
-                skins.extract_face(img, facepath, function(err) {
-                  if (err) {
-                    callback(err);
-                  } else {
-                    logging.log(uuid + " face extracted");
-                    logging.debug(facepath);
-                    skins.extract_helm(facepath, img, helmpath, function(err) {
-                      logging.log(uuid + " helm extracted");
-                      logging.debug(helmpath);
-                      cache.save_hash(uuid, hash);
-                      callback(err, hash);
-                    });
-                  }
-                });
-              }
-            });
-          }
+          fs.exists(facepath, function (exists) {
+            if (exists) {
+              logging.log(uuid + " Avatar already exists, not downloading");
+              cache.save_hash(uuid, hash);
+              callback(null, hash);
+            } else {
+              // download skin
+              networking.get_skin(skin_url, function(err, img) {
+                if (err || !img) {
+                  callback(err, null);
+                } else {
+                  // extract face / helm
+                  skins.extract_face(img, facepath, function(err) {
+                    if (err) {
+                      callback(err);
+                    } else {
+                      logging.log(uuid + " face extracted");
+                      logging.debug(facepath);
+                      skins.extract_helm(facepath, img, helmpath, function(err) {
+                        logging.log(uuid + " helm extracted");
+                        logging.debug(helmpath);
+                        cache.save_hash(uuid, hash);
+                        callback(err, hash);
+                      });
+                    }
+                  });
+                }
+              });
+            }
+          });
         }
       } else {
         // profile found, but has no skin
@@ -137,17 +139,21 @@ exp.get_avatar = function(uuid, helm, size, callback) {
       var facepath = __dirname + "/../" + config.faces_dir + hash + ".png";
       var helmpath = __dirname + "/../" + config.helms_dir + hash + ".png";
       var filepath = facepath;
-      if (helm && fs.existsSync(helmpath)) {
-        filepath = helmpath;
-      }
-      skins.resize_img(filepath, size, function(img_err, result) {
-        if (img_err) {
-          callback(img_err, -1, null, hash);
-        } else {
-          // we might have a hash although an error occured
-          // (e.g. Mojang servers not reachable, using outdated hash)
-          callback(err, (err ? -1 : status), result, hash);
+
+      fs.exists(helmpath, function (exists) {
+        if (helm && exists) {
+          filepath = helmpath;
         }
+
+        skins.resize_img(filepath, size, function(img_err, result) {
+          if (img_err) {
+            callback(img_err, -1, null, hash);
+          } else {
+            // we might have a hash although an error occured
+            // (e.g. Mojang servers not reachable, using outdated hash)
+            callback(err, (err ? -1 : status), result, hash);
+          }
+        });
       });
     } else {
       // hash is null when uuid has no skin
@@ -162,15 +168,17 @@ exp.get_skin = function(uuid, callback) {
   logging.log(uuid + " skin request");
   exp.get_image_hash(uuid, function(err, status, hash) {
     var skinpath = __dirname + "/../" + config.skins_dir + hash + ".png";
-    if (fs.existsSync(skinpath)) {
-      logging.log("skin already exists, not downloading");
-      skins.open_skin(skinpath, function(err, img) {
-        callback(err, hash, img);
-      });
-      return;
-    }
-    networking.save_skin(uuid, hash, skinpath, function(err, img) {
-      callback(err, hash, img);
+    fs.exists(skinpath, function (exists) {
+      if (exists) {
+        logging.log("skin already exists, not downloading");
+        skins.open_skin(skinpath, function(err, img) {
+          callback(err, hash, img);
+        });
+      } else {
+        networking.save_skin(uuid, hash, skinpath, function(err, img) {
+          callback(err, hash, img);
+        });
+      }
     });
   });
 };
@@ -190,29 +198,31 @@ exp.get_render = function(uuid, scale, helm, body, callback) {
       return;
     }
     var renderpath = __dirname + "/../" + config.renders_dir + hash + "-" + scale + "-" + get_type(helm, body) + ".png";
-    if (fs.existsSync(renderpath)) {
-      renders.open_render(renderpath, function(err, img) {
-        callback(err, 1, hash, img);
-      });
-      return;
-    }
-    if (!img) {
-      callback(err, 0, hash, null);
-      return;
-    }
-    renders.draw_model(uuid, img, scale, helm, body, function(err, img) {
-      if (err) {
-        callback(err, -1, hash, null);
-      } else if (!img) {
-        callback(null, 0, hash, null);
-      } else {
-        fs.writeFile(renderpath, img, "binary", function(err){
-          if (err) {
-            logging.log(err);
-          }
-          callback(null, 2, hash, img);
+    fs.exists(renderpath, function (exists) {
+      if (exists) {
+        renders.open_render(renderpath, function(err, img) {
+          callback(err, 1, hash, img);
         });
+        return;
       }
+      if (!img) {
+        callback(err, 0, hash, null);
+        return;
+      }
+      renders.draw_model(uuid, img, scale, helm, body, function(err, img) {
+        if (err) {
+          callback(err, -1, hash, null);
+        } else if (!img) {
+          callback(null, 0, hash, null);
+        } else {
+          fs.writeFile(renderpath, img, "binary", function(err){
+            if (err) {
+              logging.log(err);
+            }
+            callback(null, 2, hash, img);
+          });
+        }
+      });
     });
   });
 };
