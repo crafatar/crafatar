@@ -19,6 +19,7 @@ Please [visit the website](https://crafatar.com) for details.
 
 ## Install
 
+* Ensure Cairo is [installed](https://github.com/Automattic/node-canvas/wiki).
 * Clone the repository.
 * `npm install`
 * `cp "modules/config.example.js" "modules/config.js"`
