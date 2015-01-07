@@ -71,26 +71,31 @@ exp.run = function() {
       var helmdir = __dirname + "/../" + config.helms_dir;
       var renderdir = __dirname + "/../" + config.renders_dir;
       var skindir = __dirname + "/../" + config.skins_dir;
-      var files = fs.readdirSync(facesdir);
-      for (var i = 0; i < Math.min(files.length, config.cleaning_amount); i++) {
-        var filename = files[i];
-        if (filename[0] != ".") {
-          fs.unlink(facesdir + filename, function(){});
-          fs.unlink(helmdir + filename, function(){});
-          fs.unlink(skindir + filename, function(){});
+
+      fs.readdir(facesdir, function (err, files) {
+        for (var i = 0, l = Math.min(files.length, config.cleaning_amount); i < l; i++) {
+          var filename = files[i];
+          if (filename[0] !== ".") {
+            fs.unlink(facesdir + filename, nil);
+            fs.unlink(helmdir + filename, nil);
+            fs.unlink(skindir + filename, nil);
+          }
         }
-      }
-      files = fs.readdirSync(renderdir);
-      for (var j = 0; j < Math.min(files.length, config.cleaning_amount); j++) {
-        var filename = files[j];
-        if (filename[0] != ".") {
-          fs.unlink(renderdir + filename, function(){});
+      });
+      fs.readdir(renderdir, function (err, files) {
+        for (var j = 0, l = Math.min(files.length, config.cleaning_amount); j < l; j++) {
+          var filename = files[j];
+          if (filename[0] !== ".") {
+            fs.unlink(renderdir + filename, nil);
+          }
         }
-      }
+      });
     } else {
       logging.log("DiskCleaner: Nothing to clean");
     }
   });
 };
+
+function nil () {}
 
 module.exports = exp;
