@@ -26,15 +26,17 @@
   },
   "dependencies": {
     "canvas": "1.1.6",
-    "coveralls": "^2.11.2",
-    "istanbul": "^0.3.2",
     "jade": "~1.8.2",
     "lwip": "0.0.6",
-    "mocha": "2.1.0",
-    "mocha-lcov-reporter": "0.0.1",
     "redis": "0.12.1",
     "request": "2.51.0",
     "node-df": "0.1.1",
     "mime": "1.2.11"
+  },
+  "devDependencies": {
+    "coveralls": "^2.11.2",
+    "istanbul": "^0.3.2",
+    "mocha": "2.1.0",
+    "mocha-lcov-reporter": "0.0.1"
   }
 }
