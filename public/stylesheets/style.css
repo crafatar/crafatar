@@ -265,3 +265,8 @@ img.preload {
 
 .avatar.mollstam {background-image: url("/avatars/f8cdb6839e9043eea81939f85d9c5d69?size=64")}
 .avatar.mollstam:hover {background-image: url("/avatars/f8cdb6839e9043eea81939f85d9c5d69?size=64&helm")}
+
+.avatar.flipped {
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
