@@ -19,6 +19,7 @@ Please [visit the website](https://crafatar.com) for details.
 
 ## Install
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 * Ensure Cairo is [installed](https://github.com/Automattic/node-canvas/wiki).
 * Clone the repository.
 * `npm install`
