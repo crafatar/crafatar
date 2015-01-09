@@ -13,5 +13,5 @@ for uuid in `cat "$dir/uuids.txt"`; do
   if [ "$(( ((RANDOM<<15)|RANDOM) % 2 ))" -eq "1" ]; then
     helm="&helm"
   fi
-  curl -sSL -o /dev/null -w "%{url_effective} %{http_code} %{time_total}s\\n" "http://$host/avatars/$uuid?size=$size$helm" &
+  curl -sSL -o /dev/null -w "%{url_effective} %{http_code} %{time_total}s\\n" "http://$host/avatars/$uuid?size=$size$helm"
 done
