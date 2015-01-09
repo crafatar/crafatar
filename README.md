@@ -24,5 +24,5 @@ Please [visit the website](https://crafatar.com) for details.
 * `npm install`
 * `cp "modules/config.example.js" "modules/config.js"`
 * Ensure a `redis-server` is running
-* `node server.js`
+* `npm start`
 * Access [http://localhost:3000](http://localhost:3000)

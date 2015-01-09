@@ -1,1 +1,1 @@
-web: cp "modules/config.example.js" "modules/config.js" && node server.js
+web: cp "modules/config.example.js" "modules/config.js" && npm start
