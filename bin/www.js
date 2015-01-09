@@ -12,7 +12,7 @@ if (cluster.isMaster) {
 
   cluster.on("exit", function (worker, code, signal) {
     logging.error("Worker died. Rebooting a new one.");
-    cluster.fork();
+    setTimeout(cluster.fork, 100);
   });
 
   setInterval(cleaner.run, config.cleaning_interval * 1000);
