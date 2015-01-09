@@ -1,18 +1,24 @@
 var logging = require("./logging");
+var node_redis = require("redis");
 var config = require("./config");
-var redis = null;
+var url = require("url");
 var fs = require("fs");
+
+var redis = null;
 
 // sets up redis connection
 // flushes redis when running on heroku (files aren't kept between pushes)
 function connect_redis() {
   logging.log("connecting to redis...");
-  if (process.env.REDISCLOUD_URL) {
-    var redisURL = require("url").parse(process.env.REDISCLOUD_URL);
-    redis = require("redis").createClient(redisURL.port, redisURL.hostname);
-    redis.auth(redisURL.auth.split(":")[1]);
-  } else {
-    redis = require("redis").createClient();
+  // parse redis env
+  var redis_env = (process.env.REDISCLOUD_URL || process.env.REDIS_URL);
+  var redis_url = redis_env ? url.parse(redis_env) : {};
+  redis_url.port = redis_url.port || 6379;
+  redis_url.hostname = redis_url.hostname || "localhost";
+  // connect to redis
+  redis = node_redis.createClient(redis_url.port, redis_url.hostname);
+  if (redis_url.auth) {
+    redis.auth(redis_url.auth.split(":")[1]);
   }
   redis.on("ready", function() {
     logging.log("Redis connection established.");
