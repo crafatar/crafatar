@@ -48,6 +48,11 @@ a.sponsor {
   margin: 5px 10px;
 }
 
+.container > .navbar-header {
+  display: inline-block;
+  margin: inherit;
+}
+
 a.navbar-brand.twitter {
   color: #55acee;
   font-size: 16px;
