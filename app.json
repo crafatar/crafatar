@@ -1,0 +1,15 @@
+{
+    "name": "Crafatar",
+    "description": "A Minecraft Avatar API written in NodeJS",
+    "repository": "https://github.com/Jake0oo0/crafatar",
+    "keywords": [
+        "node",
+        "minecraft",
+        "avatar",
+        "redis"
+    ],
+    "website": "https://crafatar.com/",
+    "addons": [
+        "rediscloud"
+    ]
+}
