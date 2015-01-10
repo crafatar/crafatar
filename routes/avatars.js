@@ -65,20 +65,20 @@ module.exports = function(req, res) {
         }
         logging.debug("Etag: " + req.headers["if-none-match"]);
         logging.debug("matches: " + matches);
-        sendimage(http_status, status, image);
+        sendimage(http_status, status, image, uuid);
       } else {
-        handle_default(404, status);
+        handle_default(404, status, uuid);
       }
     });
   } catch(e) {
     logging.error(uuid + " error:");
     logging.error(e);
-    handle_default(500, status);
+    handle_default(500, status, uuid);
   }
 
-  function handle_default(http_status, img_status) {
+  function handle_default(http_status, img_status, uuid) {
     if (def && def != "steve" && def != "alex") {
-      logging.log("status: 301");
+      logging.log(uuid + " status: 301");
       res.writeHead(301, {
         "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
         "Response-Time": new Date() - start,
@@ -90,13 +90,13 @@ module.exports = function(req, res) {
     } else {
       def = def || skins.default_skin(uuid);
       skins.resize_img("public/images/" + def + ".png", size, function(err, image) {
-        sendimage(http_status, img_status, image);
+        sendimage(http_status, img_status, image, uuid);
       });
     }
   }
 
-  function sendimage(http_status, img_status, image) {
-    logging.log("status: " + http_status);
+  function sendimage(http_status, img_status, image, uuid) {
+    logging.log(uuid + " status: " + http_status);
     res.writeHead(http_status, {
       "Content-Type": "image/png",
       "Cache-Control": "max-age=" + config.browser_cache_time + ", public",

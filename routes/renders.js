@@ -75,24 +75,24 @@ module.exports = function(req, res) {
         }
         logging.log("matches: " + matches);
         logging.log("Etag: " + req.headers["if-none-match"]);
-        sendimage(http_status, status, image);
+        sendimage(http_status, status, image, uuid);
       } else {
         logging.log("image not found, using default.");
-        handle_default(404, status);
+        handle_default(404, status, uuid);
       }
     });
   } catch(e) {
     logging.error(uuid + " error:");
     logging.error(e);
-    handle_default(500, status);
+    handle_default(500, status, uuid);
   }
 
 
   // default alex/steve images can be rendered, but
   // custom images will not be
-  function handle_default(http_status, img_status) {
+  function handle_default(http_status, img_status, uuid) {
     if (def && def != "steve" && def != "alex") {
-      logging.log("status: 301");
+      logging.log(uuid + " status: 301");
       res.writeHead(301, {
         "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
         "Response-Time": new Date() - start,
@@ -113,14 +113,14 @@ module.exports = function(req, res) {
           if (err) {
             logging.log("error while rendering default image: " + err);
           }
-          sendimage(http_status, img_status, def_img);
+          sendimage(http_status, img_status, def_img, uuid);
         });
       });
     }
   }
 
-  function sendimage(http_status, img_status, image) {
-    logging.log("status: " + http_status);
+  function sendimage(http_status, img_status, image, uuid) {
+    logging.log(uuid + " status: " + http_status);
     res.writeHead(http_status, {
       "Content-Type": "image/png",
       "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
