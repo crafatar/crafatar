@@ -38,6 +38,16 @@ a.forkme:hover {
   text-decoration: none;
 }
 
+a.sponsor {
+  position: fixed;
+  right: 0px;
+  top: 0px;
+  height: 40px;
+  width: 40px;
+  z-index: 1041;
+  margin: 5px 10px;
+}
+
 a.navbar-brand.twitter {
   color: #55acee;
   font-size: 16px;
