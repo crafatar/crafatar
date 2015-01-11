@@ -2,15 +2,19 @@ var config = require("./config");
 
 var exp = {};
 
-function debug() {
-  if (config.debug_enabled) {
-    console.log(Array.prototype.slice.call(arguments).join(" "));
-  }
+function log() {
+  var time = new Date().toISOString();
+  var text = Array.prototype.slice.call(arguments).join(" ");
+  console.log(time + ": " + text);
 }
 
-exp.log = console.log;
-exp.warn = console.warn;
-exp.error = console.error;
-exp.debug = debug;
+exp.log = log;
+exp.warn = log;
+exp.error = log;
+if (config.debug_enabled) {
+  exp.debug = log;
+} else {
+  exp.debug = function(){};
+}
 
 module.exports = exp;
