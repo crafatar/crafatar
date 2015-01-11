@@ -11,7 +11,6 @@ mapfile ids <<< $id_file
 
 bench() {
   for id in $ids; do
-    id=`echo "$id" | tr -d "\r"`
     curl -sSL -o /dev/null -w "%{url_effective} %{http_code} %{time_total}s\\n" "$host/avatars/$id?helm"
   done
 }
