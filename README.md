@@ -17,13 +17,17 @@ Please [visit the website](https://crafatar.com) for details.
 * You can follow us on [![t](https://favicons.githubusercontent.com/twitter.com)@crafatar](https://twitter.com/crafatar)
 * You can [join us](https://webchat.esper.net/?channels=crafatar) in #crafatar on irc.esper.net.
 
-## Install
+## Installation
 
+#### Heroku
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-* Ensure Cairo is [installed](https://github.com/Automattic/node-canvas/wiki).
-* Clone the repository.
+
+#### Dokku
+Deploy with [dokku-redis](https://github.com/ohardy/dokku-redis#redis-plugin-for-dokku) installed.
+
+#### Local
+* [Install](https://github.com/Automattic/node-canvas/wiki) Cairo.
 * `npm install`
-* `cp "modules/config.example.js" "modules/config.js"`
-* Ensure a `redis-server` is running
+* Start `redis-server`
 * `npm start`
 * Access [http://localhost:3000](http://localhost:3000)
