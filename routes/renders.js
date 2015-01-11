@@ -73,17 +73,16 @@ module.exports = function(req, res) {
         } else if (err) {
           http_status = 503;
         }
-        logging.log("matches: " + matches);
-        logging.log("Etag: " + req.headers["if-none-match"]);
+        logging.debug(uuid + " etag: " + req.headers["if-none-match"]);
+        logging.debug(uuid + " matches: " + matches);
         sendimage(http_status, status, image, uuid);
       } else {
-        logging.log("image not found, using default.");
+        logging.log(uuid + " image not found, using default.");
         handle_default(404, status, uuid);
       }
     });
   } catch(e) {
-    logging.error(uuid + " error:");
-    logging.error(e);
+    logging.error(uuid + " error: " + e);
     handle_default(500, status, uuid);
   }
 
@@ -106,12 +105,12 @@ module.exports = function(req, res) {
       fs.readFile("public/images/" + def + "_skin.png", function (err, buf) {
         if (err) {
           // errored while loading the default image, continuing with null image
-          logging.error("error loading default render image: " + err);
+          logging.error(uuid + "error loading default render image: " + err);
         }
         // we render the default skins, but not custom images
         renders.draw_model(uuid, buf, scale, helm, body, function(err, def_img) {
           if (err) {
-            logging.log("error while rendering default image: " + err);
+            logging.log(uuid + "error while rendering default image: " + err);
           }
           sendimage(http_status, img_status, def_img, uuid);
         });

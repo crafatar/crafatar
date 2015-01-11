@@ -50,7 +50,6 @@ module.exports = function(req, res) {
       if (err) {
         logging.error(uuid + " " + err);
         if (err.code == "ENOENT") {
-          logging.warn("Deleting " + uuid + " from cache!");
           cache.remove_hash(uuid);
         }
       }
@@ -63,16 +62,15 @@ module.exports = function(req, res) {
         } else if (err) {
           http_status = 503;
         }
-        logging.debug("Etag: " + req.headers["if-none-match"]);
-        logging.debug("matches: " + matches);
+        logging.debug(uuid + " etag: " + req.headers["if-none-match"]);
+        logging.debug(uuid + " matches: " + matches);
         sendimage(http_status, status, image, uuid);
       } else {
         handle_default(404, status, uuid);
       }
     });
   } catch(e) {
-    logging.error(uuid + " error:");
-    logging.error(e);
+    logging.error(uuid + " error: " + e);
     handle_default(500, status, uuid);
   }
 

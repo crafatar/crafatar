@@ -47,11 +47,11 @@ var get_username_url = function(name, callback) {
     } else if (response.statusCode == 429) {
       // Too Many Requests
       // Never got this, seems like skins aren't limited
-      logging.warn(body || "Too many requests");
+      logging.warn(name + body || "Too many requests");
       callback(null, null);
     } else {
       logging.error(name + " Unknown error:");
-      logging.error(response);
+      logging.error(name + " " + response);
       callback(body || "Unknown error", null);
     }
   });
@@ -82,7 +82,7 @@ var get_uuid_url = function(uuid, callback) {
       callback(body || "Too many requests", null);
     } else {
       logging.error(uuid + " Unknown error:");
-      logging.error(response);
+      logging.error(uuid + " " + response);
       callback(body || "Unknown error", null);
     }
   });
@@ -106,7 +106,7 @@ exp.get_skin_url = function(uuid, callback) {
 
 // downloads skin file from +url+
 // callback contains error, image
-exp.get_skin = function(url, callback) {
+exp.get_skin = function(url, uuid, callback) {
   request.get({
     url: url,
     headers: {
@@ -117,23 +117,23 @@ exp.get_skin = function(url, callback) {
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       // skin downloaded successfully
-      logging.log("downloaded skin");
-      logging.debug(url);
+      logging.log(uuid + " downloaded skin");
+      logging.debug(uuid + " " + url);
       callback(null, body);
     } else {
       if (error) {
-        logging.error("Error downloading '" + url + "': " + error);
+        logging.error(uuid + " error downloading '" + url + "': " + error);
       } else if (response.statusCode == 404) {
-        logging.warn("texture not found (404): " + url);
+        logging.warn(uuid + " texture not found (404): " + url);
       } else if (response.statusCode == 429) {
         // Too Many Requests
         // Never got this, seems like textures aren't limited
-        logging.warn("too many requests for " + url);
-        logging.warn(body);
+        logging.warn(uuid + " too many requests for " + url);
+        logging.warn(uuid + " " + body);
       } else {
-        logging.error("unknown error for " + url);
-        logging.error(response);
-        logging.error(body);
+        logging.error(uuid + " unknown error for " + url);
+        logging.error(uuid + " " + response);
+        logging.error(uuid + " " + body);
         error = "unknown error"; // Error needs to be set, otherwise null in callback
       }
       callback(error, null);
@@ -144,14 +144,14 @@ exp.get_skin = function(url, callback) {
 exp.save_skin = function(uuid, hash, outpath, callback) {
   if (hash) {
     var skinurl = "http://textures.minecraft.net/texture/" + hash;
-    exp.get_skin(skinurl, function(err, img) {
+    exp.get_skin(skinurl, uuid, function(err, img) {
       if (err) {
-        logging.error("error while downloading skin");
+        logging.error(uuid + " error while downloading skin");
         callback(err, null);
       } else {
         fs.writeFile(outpath, img, "binary", function(err){
           if (err) {
-            logging.log(err);
+            logging.log(uuid + " error: " + err);
           }
           callback(null, img);
         });

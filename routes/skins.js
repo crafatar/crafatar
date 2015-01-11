@@ -39,16 +39,15 @@ module.exports = function(req, res) {
         } else if (err) {
           http_status = 503;
         }
-        logging.debug("Etag: " + req.headers["if-none-match"]);
-        logging.debug("matches: " + matches);
+        logging.debug(uuid + " etag: " + req.headers["if-none-match"]);
+        logging.debug(uuid + " matches: " + matches);
         sendimage(http_status, image, uuid);
       } else {
         handle_default(404, uuid);
       }
     });
   } catch(e) {
-    logging.error(uuid + " error:");
-    logging.error(e);
+    logging.error(uuid + " error: " + e);
     handle_default(500, uuid);
   }
 

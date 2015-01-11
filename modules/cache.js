@@ -37,7 +37,7 @@ function connect_redis() {
 
 // sets the date of the face file belonging to +hash+ to now
 // the helms file is ignored because we only need 1 file to read/write from
-function update_file_date(hash) {
+function update_file_date(hash, uuid) {
   if (hash) {
     var path = config.faces_dir + hash + ".png";
     fs.exists(path, function(exists) {
@@ -45,11 +45,11 @@ function update_file_date(hash) {
         var date = new Date();
         fs.utimes(path, date, date, function(err){
           if (err) {
-            logging.error(err);
+            logging.error(uuid + " Error: " + err);
           }
         });
       } else {
-        logging.error("Tried to update " + path + " date, but it does not exist");
+        logging.error(uuid + " tried to update " + path + " date, but it does not exist");
       }
     });
   }
@@ -99,7 +99,7 @@ exp.update_timestamp = function(uuid, hash) {
   // store uuid in lower case if not null
   uuid = uuid && uuid.toLowerCase();
   redis.hmset(uuid, "t", time);
-  update_file_date(hash);
+  update_file_date(hash, uuid);
 };
 
 // create the key +uuid+, store +hash+ and time

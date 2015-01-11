@@ -42,9 +42,9 @@ exp.draw_head = function(skin_canvas, model_ctx, scale) {
 // draws the body on to the +skin_canvas+
 // using the skin from the +model_ctx+ at the +scale+
 // parts are labeled as if drawn from the skin's POV
-exp.draw_body = function(skin_canvas, model_ctx, scale) {
+exp.draw_body = function(uuid, skin_canvas, model_ctx, scale) {
   if (skin_canvas.height == 32 * scale) {
-    logging.log("old skin");
+    logging.log(uuid + " old skin");
     //Left Leg
     //Left Leg - Front
     model_ctx.setTransform(1,-0.5,0,1.2,0,0);
@@ -85,7 +85,7 @@ exp.draw_body = function(skin_canvas, model_ctx, scale) {
     model_ctx.scale(-1,1);
     model_ctx.drawImage(skin_canvas, 44*scale, 16*scale, 4*scale, 4*scale, -16*scale, 16*scale, 4*scale, 4*scale);
   } else {
-    logging.log("new skin");
+    logging.log(uuid + " new skin");
     //Left Leg
     //Left Leg - Front
     model_ctx.setTransform(1,-0.5,0,1.2,0,0);
@@ -134,7 +134,7 @@ exp.draw_model = function(uuid, img, scale, helm, body, callback) {
   var image = new Image();
 
   image.onerror = function(err) {
-    logging.error("render error: " + err);
+    logging.error(uuid + " render error: " + err);
     callback(err, null);
   };
 
@@ -151,19 +151,19 @@ exp.draw_model = function(uuid, img, scale, helm, body, callback) {
     //Scale it
     scale_image(skin_ctx.getImageData(0,0,64,original_height), skin_ctx, 0, 0, scale);
     if (body) {
-      logging.log("drawing body");
-      exp.draw_body(skin_canvas, model_ctx, scale);
+      logging.log(uuid + " drawing body");
+      exp.draw_body(uuid, skin_canvas, model_ctx, scale);
     }
-    logging.log("drawing head");
+    logging.log(uuid + " drawing head");
     exp.draw_head(skin_canvas, model_ctx, scale);
     if (helm) {
-      logging.log("drawing helmet");
+      logging.log(uuid + " drawing helmet");
       exp.draw_helmet(skin_canvas, model_ctx, scale);
     }
 
     model_canvas.toBuffer(function(err, buf){
       if (err) {
-        logging.log("error creating buffer: " + err);
+        logging.log(uuid + " error creating buffer: " + err);
       }
       callback(err, buf);
     });
@@ -174,10 +174,10 @@ exp.draw_model = function(uuid, img, scale, helm, body, callback) {
 
 // helper method to open a render from +renderpath+
 // callback contains error, image buffer
-exp.open_render = function(renderpath, callback) {
+exp.open_render = function(uuid, renderpath, callback) {
   fs.readFile(renderpath, function (err, buf) {
     if (err) {
-      logging.error("error while opening skin file: " + err);
+      logging.error(uuid + " error while opening skin file: " + err);
     }
     callback(err, buf);
   });
