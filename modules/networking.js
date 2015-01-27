@@ -1,5 +1,5 @@
 var logging = require("./logging");
-var request = require("requestretry");
+var request = require("request");
 var config = require("./config");
 var fs = require("fs");
 
@@ -41,7 +41,8 @@ exp.extract_cape_url = function(profile) {
 // specified. +callback+ contains the body, response,
 // and error buffer. get_from helper method is available
 exp.get_from_options = function(url, options, callback) {
-  request({
+  console.log("HERE: " + config.http_timeout)
+  request.get({
     url: url,
     headers: {
       "User-Agent": "https://crafatar.com"
@@ -49,9 +50,7 @@ exp.get_from_options = function(url, options, callback) {
     timeout: (options.timeout || config.http_timeout),
     encoding: (options.encoding || null),
     followRedirect: (options.folow_redirect || false),
-    maxAttempts: 2,
-    retryDelay: 2000,
-    retryStrategy: request.RetryStrategies.NetworkError
+    maxAttempts: (options.max_attempts || 2)
   }, function(error, response, body) {
     // 200 or 301 depending on content type
     if (!error && (response.statusCode === 200 || response.statusCode === 301)) {
@@ -61,7 +60,7 @@ exp.get_from_options = function(url, options, callback) {
     } else if (error) {
       callback(body || null, response, error);
     } else if (response.statusCode === 404) {
-      // page doesn't exist
+      // page does not exist
       logging.log(url + " url does not exist");
       callback(null, response, null);
     } else if (response.statusCode === 429) {
@@ -120,13 +119,11 @@ exp.get_profile = function(uuid, callback) {
   if (!uuid) {
     callback(null, null);
   } else {
-    exp.get_from_options(session_url + uuid, {encoding: "utf8"}, function(body, response, err) {
-      callback(err !== null ? err : null, (body !== null ? JSON.parse(body) : null));
+    exp.get_from_options(session_url + uuid, { encoding: "utf8" }, function(body, response, err) {
+      callback(err || null, (body !== null ? JSON.parse(body) : null));
     }); 
   }
 };
-
-// todo remove middleman
 
 // +uuid+ is likely a username and if so
 // +uuid+ is used to get the url, otherwise
@@ -161,7 +158,7 @@ function getUrl(uuid, profile, type, callback) {
 
 // downloads skin file from +url+
 // callback contains error, image
-exp.get_skin = function(url, callback) {
+exp.get_skin = function(url, uuid, callback) {
   exp.get_from(url, function(body, response, err) {
     callback(body, err);
   });

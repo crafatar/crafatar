@@ -82,7 +82,7 @@ exp.info = function(callback) {
     });
     obj.versions = [];
     if( obj.redis_version ){
-      obj.redis_version.split(".").forEach(function (num) {
+      obj.redis_version.split(".").forEach(function(num) {
         obj.versions.push(+num);
       });
     }

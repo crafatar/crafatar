@@ -172,27 +172,28 @@ exp.get_image_hash = function(uuid, raw_type, callback) {
     if (err) {
       callback(err, -1, null);
     } else {
-      if (details && details.time + config.local_cache_time * 1000 >= new Date().getTime()) {logging.log(uuid + " uuid cached & recently updated");
-      callback(null, (type ? 1 : 0), type);
-    } else {
-      if (details) {
-        logging.log(uuid + " uuid cached, but too old");
+      if (details && details.time + config.local_cache_time * 1000 >= new Date().getTime()) {
+        logging.log(uuid + " uuid cached & recently updated");
+        callback(null, (type ? 1 : 0), type);
       } else {
-        logging.log(uuid + " uuid not cached");
-      }
-      store_images(uuid, details, raw_type, function(err, hash) {
-        if (err) {
-          callback(err, -1, details && type);
+        if (details) {
+          logging.log(uuid + " uuid cached, but too old");
         } else {
-          var status = details && (type === hash) ? 3 : 2;
-          logging.debug(uuid + " old hash: " + (details && type));
-          logging.log(uuid + " hash: " + hash);
-          callback(null, status, hash);
+          logging.log(uuid + " uuid not cached");
         }
-      });
+        store_images(uuid, details, raw_type, function(err, hash) {
+          if (err) {
+            callback(err, -1, details && type);
+          } else {
+            var status = details && (type === hash) ? 3 : 2;
+            logging.debug(uuid + " old hash: " + (details && type));
+            logging.log(uuid + " hash: " + hash);
+            callback(null, status, hash);
+          }
+        });
+      }
     }
-  }
-});
+  });
 };
 
 

@@ -29,8 +29,8 @@ function getRandomInt(min, max) {
 
 var ids = [
   uuid.toLowerCase(),
-  uuid.toUpperCase(),
   name.toLowerCase(),
+  uuid.toUpperCase(),
   name.toUpperCase()
 ];
 
@@ -145,8 +145,8 @@ describe("Crafatar", function() {
     it("should time out on skin download", function(done) {
       var original_timeout = config.http_timeout;
       config.http_timeout = 1;
-      networking.get_skin("http://textures.minecraft.net/texture/477be35554684c28bdeee4cf11c591d3c88afb77e0b98da893fd7bc318c65184", uuid, function(err, img) {
-        assert.strictEqual(err.code, "ETIMEDOUT");
+      networking.get_from("http://textures.minecraft.net/texture/477be35554684c28bdeee4cf11c591d3c88afb77e0b98da893fd7bc318c65184", function(body, res, error) {
+        assert.strictEqual(error.code, "ETIMEDOUT");
         config.http_timeout = original_timeout;
         done();
       });
