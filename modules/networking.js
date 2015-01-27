@@ -41,7 +41,7 @@ exp.extract_cape_url = function(profile) {
 // specified. +callback+ contains the body, response,
 // and error buffer. get_from helper method is available
 exp.get_from_options = function(url, options, callback) {
-  request.get({
+  request({
     url: url,
     headers: {
       "User-Agent": "https://crafatar.com"

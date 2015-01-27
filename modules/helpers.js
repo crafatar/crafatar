@@ -41,7 +41,7 @@ function store_skin(uuid, profile, details, callback) {
                     callback(err, null);
                   } else {
                     logging.log(uuid + " face extracted");
-                    skins.extract_helm(facepath, img, helmpath, function(err) {
+                    skins.extract_helm(uuid, facepath, img, helmpath, function(err) {
                       logging.log(uuid + " helm extracted");
                       logging.debug(helmpath);
                       callback(err, hash);
@@ -241,7 +241,7 @@ exp.get_skin = function(uuid, callback) {
           callback(err, hash, img);
         });
       } else {
-        networking.save_skin(uuid, hash, skinpath, function(err, img) {
+        networking.save_texture(uuid, hash, skinpath, function(err, img) {
           callback(err, hash, img);
         });
       }
@@ -303,7 +303,7 @@ exp.get_skin = function(uuid, callback) {
     fs.exists(skinpath, function(exists) {
       if (exists) {
         logging.log("skin already exists, not downloading");
-        skins.open_skin(skinpath, function(err, img) {
+        skins.open_skin(uuid, skinpath, function(err, img) {
           callback(err, hash, img);
         });
       } else {
@@ -328,7 +328,7 @@ exp.get_cape = function(uuid, callback) {
     fs.exists(capepath, function(exists) {
       if (exists) {
         logging.log("cape already exists, not downloading");
-        skins.open_skin(capepath, function(err, img) {
+        skins.open_skin(uuid, capepath, function(err, img) {
           callback(err, hash, img);
         });
       } else {
