@@ -195,6 +195,13 @@ h4 {
   background-image: url("/skins/0?default=alex");
 }
 
+#cape-example-1:hover .preview {
+  background-image: url("/capes/Dinnerbone");
+}
+#cape-example-2:hover .preview {
+  background-image: url("/capes/md_5");
+}
+
 img.preload {
   /*
     preload hover images

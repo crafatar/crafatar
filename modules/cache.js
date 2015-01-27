@@ -82,7 +82,7 @@ exp.info = function(callback) {
     });
     obj.versions = [];
     if( obj.redis_version ){
-      obj.redis_version.split(".").forEach(function (num) {
+      obj.redis_version.split(".").forEach(function(num) {
         obj.versions.push(+num);
       });
     }
@@ -103,14 +103,16 @@ exp.update_timestamp = function(uuid, hash) {
 };
 
 // create the key +uuid+, store +hash+ and time
-exp.save_hash = function(uuid, hash) {
+exp.save_hash = function(uuid, skin, cape) {
   logging.log(uuid + " cache: saving hash");
+  logging.log("skin:" + skin + " cape:" + cape);
   var time = new Date().getTime();
   // store shorter null byte instead of "null"
-  hash = hash || ".";
+  skin = skin || ".";
+  cape = cape || ".";
   // store uuid in lower case if not null
   uuid = uuid && uuid.toLowerCase();
-  redis.hmset(uuid, "h", hash, "t", time);
+  redis.hmset(uuid, "s", skin, "c", cape, "t", time);
 };
 
 exp.remove_hash = function(uuid) {
@@ -119,7 +121,7 @@ exp.remove_hash = function(uuid) {
 };
 
 // get a details object for +uuid+
-// {hash: "0123456789abcdef", time: 1414881524512}
+// {skin: "0123456789abcdef", cape: "gs1gds1g5d1g5ds1", time: 1414881524512}
 // null when uuid unkown
 exp.get_details = function(uuid, callback) {
   // get uuid in lower case if not null
@@ -128,7 +130,8 @@ exp.get_details = function(uuid, callback) {
     var details = null;
     if (data) {
       details = {
-        hash: (data.h == "." ? null : data.h),
+        skin: (data.s === "." ? null : data.s),
+        cape: (data.c === "." ? null : data.c),
         time: Number(data.t)
       };
     }

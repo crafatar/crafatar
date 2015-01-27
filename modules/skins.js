@@ -62,10 +62,10 @@ exp.extract_helm = function(uuid, facefile, buffer, outname, callback) {
               }
             });
           });
-        }
-      });
-    }
-  });
+}
+});
+}
+});
 };
 
 // resizes the image file +inname+ to +size+ by +size+ pixels
@@ -96,11 +96,30 @@ exp.default_skin = function(uuid) {
 // helper method for opening a skin file from +skinpath+
 // callback contains error, image buffer
 exp.open_skin = function(uuid, skinpath, callback) {
-  fs.readFile(skinpath, function (err, buf) {
+  fs.readFile(skinpath, function(err, buf) {
     if (err) {
       logging.error(uuid + " error while opening skin file: " + err);
+      callback(err, null)
+    } else {
+      callback(null, buf);
     }
-    callback(err, buf);
+  });
+};
+
+exp.save_image = function(buffer, outpath, callback) {
+  lwip.open(buffer, "png", function(err, image) {
+    if (err) {
+      callback(err);
+    } else {
+      image.batch()
+      .writeFile(outpath, function(err) {
+        if (err) {
+          callback(err);
+        } else {
+          callback(null);
+        }
+      });
+    }
   });
 };
 

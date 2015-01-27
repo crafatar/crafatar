@@ -15,7 +15,7 @@ function should_clean_redis(callback) {
       callback(err, false);
     } else {
       try {
-        logging.debug(info);
+        //logging.debug(info.toString());
         logging.debug("used mem:" + info.used_memory);
         var used = parseInt(info.used_memory) / 1024;
         logging.log("RedisCleaner: " + used + "KB used");
@@ -71,7 +71,6 @@ exp.run = function() {
       var helmdir = __dirname + "/../" + config.helms_dir;
       var renderdir = __dirname + "/../" + config.renders_dir;
       var skindir = __dirname + "/../" + config.skins_dir;
-
       fs.readdir(facesdir, function (err, files) {
         for (var i = 0, l = Math.min(files.length, config.cleaning_amount); i < l; i++) {
           var filename = files[i];
