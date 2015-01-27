@@ -41,7 +41,6 @@ exp.extract_cape_url = function(profile) {
 // specified. +callback+ contains the body, response,
 // and error buffer. get_from helper method is available
 exp.get_from_options = function(url, options, callback) {
-  console.log("HERE: " + config.http_timeout)
   request.get({
     url: url,
     headers: {
