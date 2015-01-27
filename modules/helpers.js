@@ -94,13 +94,6 @@ function store_cape(uuid, profile, details, callback) {
   });
 }
 
-function remove_from_array(arr, item) {
-  var i;
-  while((i = arr.indexOf(item)) !== -1) {
-    arr.splice(i, 1);
-  }
-}
-
 // downloads the images for +uuid+ while checking the cache
 // status based on +details+. +whichhash+ specifies which
 // image is more important, and should be called back on
@@ -208,7 +201,7 @@ exp.get_avatar = function(uuid, helm, size, callback) {
       var facepath = __dirname + "/../" + config.faces_dir + hash + ".png";
       var helmpath = __dirname + "/../" + config.helms_dir + hash + ".png";
       var filepath = facepath;
-      fs.exists(helmpath, function (exists) {
+      fs.exists(helmpath, function(exists) {
         if (helm && exists) {
           filepath = helmpath;
         }

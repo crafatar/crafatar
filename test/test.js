@@ -14,7 +14,7 @@ var cleaner = require("../modules/cleaner")
 config.http_timeout *= 3;
 
 // no spam
-logging.log = function(){};
+logging.log = function() {};
 
 var uuids = fs.readFileSync("test/uuids.txt").toString().split(/\r?\n/);
 var names = fs.readFileSync("test/usernames.txt").toString().split(/\r?\n/);
@@ -24,7 +24,7 @@ var uuid = uuids[Math.round(Math.random() * (uuids.length - 1))];
 var name = names[Math.round(Math.random() * (names.length - 1))];
 
 function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 var ids = [
@@ -165,6 +165,12 @@ describe("Crafatar", function() {
       });
       done();
     });
+    it("should not find the file", function(done) {
+      skins.open_skin("TestUUID", 'non/existant/path', function(err, img) {
+        assert.notStrictEqual(err, null);
+        done();
+      });
+    });
   });
 
   // we have to make sure that we test both a 32x64 and 64x64 skin
@@ -186,6 +192,39 @@ describe("Crafatar", function() {
   describe("Networking: Cape", function() {
     it("should not fail (guaranteed cape)", function(done) {
       helpers.get_cape("Dinnerbone", function(err, hash, img) {
+        assert.strictEqual(err, null);
+        done();
+      });
+    });
+    it("should already exist", function(done) {
+      before(function() {
+        cache.get_redis().flushall();
+      });
+      helpers.get_cape("Dinnerbone", function(err, hash, img) {
+        assert.strictEqual(err, null);
+        done();
+      });
+    });
+    it("should not be found", function(done) {
+      helpers.get_cape("Jake0oo0", function(err, hash, img) {
+        assert.strictEqual(img, null);
+        done();
+      });
+    });
+  });
+
+  describe("Networking: Skin", function() {
+    it("should not fail", function(done) {
+      helpers.get_cape("Jake0oo0", function(err, hash, img) {
+        assert.strictEqual(err, null);
+        done();
+      });
+    });
+    it("should already exist", function(done) {
+      before(function() {
+        cache.get_redis().flushall();
+      });
+      helpers.get_cape("Jake0oo0", function(err, hash, img) {
         assert.strictEqual(err, null);
         done();
       });
@@ -213,7 +252,6 @@ describe("Crafatar", function() {
         });
         it("should be cached", function(done) {
           helpers.get_avatar(id, false, 160, function(err, status, image) {
-            console.log("STATUS: " + status)
             assert.strictEqual(status === 0 || status === 1, true);
             done();
           });
