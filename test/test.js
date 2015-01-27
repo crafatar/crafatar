@@ -275,7 +275,6 @@ describe("Crafatar", function() {
         if (id_type == "uuid") {
           it("uuid should be rate limited", function(done) {
             networking.get_profile(id, function(err, profile) {
-              console.log("THIS THING:: " + err)
               assert.strictEqual(profile.error, "TooManyRequestsException");
               done();
             });

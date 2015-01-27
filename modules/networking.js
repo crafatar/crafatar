@@ -53,8 +53,9 @@ exp.get_from_options = function(url, options, callback) {
     retryDelay: 2000,
     retryStrategy: request.RetryStrategies.NetworkError
   }, function(error, response, body) {
+    // 200 or 301 depending on content type
     if (!error && (response.statusCode === 200 || response.statusCode === 301)) {
-      // skin_url received successfully
+      // response received successfully
       logging.log(url + " url received");
       callback(body, response, null);
     } else if (error) {
@@ -119,7 +120,7 @@ exp.get_profile = function(uuid, callback) {
   if (!uuid) {
     callback(null, null);
   } else {
-    exp.get_from_options(session_url + uuid, {encoding: "utf8"} ,function(body, response, err) {
+    exp.get_from_options(session_url + uuid, {encoding: "utf8"}, function(body, response, err) {
       callback(err !== null ? err : null, (body !== null ? JSON.parse(body) : null));
     }); 
   }
