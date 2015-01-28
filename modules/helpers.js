@@ -99,11 +99,11 @@ function store_cape(uuid, profile, details, callback) {
 // image type should be called back on
 // +callback+ contains the error buffer and image hash
 var currently_running = [];
-function callback_for(uuid, type, err, cape_hash, skin_hash) {
+function callback_for(uuid, type, err, hash) {
   for (var i = 0; i < currently_running.length; i++) {
     if (currently_running[i].uuid === uuid && (currently_running[i].type === type || type === null)) {
       var will_call = currently_running[i];
-      will_call.callback(err, will_call.type === 'skin' ? skin_hash : cape_hash);
+      will_call.callback(err, hash);
       currently_running.splice(i, 1); // remove from array
       i--;
     }
@@ -126,14 +126,14 @@ function store_images(uuid, details, type, callback) {
     currently_running.push(new_hash);
     networking.get_profile((isUUID ? uuid : null), function(err, profile) {
       if (err || (isUUID && !profile)) {
-        callback_for(uuid, err, null, null);
+        callback_for(uuid, err, null);
       } else {
         store_skin(uuid, profile, details, function(err, skin_hash) {
           cache.save_hash(uuid, skin_hash, null);
-          callback_for(uuid, 'skin', err, null, skin_hash);
+          callback_for(uuid, 'skin', err, skin_hash);
           store_cape(uuid, profile, details, function(err, cape_hash) {
             cache.save_hash(uuid, skin_hash, cape_hash);
-            callback_for(uuid, 'cape', err, cape_hash, skin_hash);
+            callback_for(uuid, 'cape', err, cape_hash);
           });
         });
       }
