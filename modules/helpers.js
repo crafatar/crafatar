@@ -95,15 +95,15 @@ function store_cape(uuid, profile, details, callback) {
 }
 
 // downloads the images for +uuid+ while checking the cache
-// status based on +details+. +whichhash+ specifies which
-// image is more important, and should be called back on
+// status based on +details+. +type+ specifies which
+// image type should be called back on
 // +callback+ contains the error buffer and image hash
 var currently_running = [];
-function callback_for(uuid, which, err, cape_hash, skin_hash) {
+function callback_for(uuid, type, err, cape_hash, skin_hash) {
   for (var i = 0; i < currently_running.length; i++) {
-    if (currently_running[i] && currently_running[i].uuid === uuid && (currently_running[i].which === which || which === null)) {
+    if (currently_running[i] && currently_running[i].uuid === uuid && (currently_running[i].type === type || type === null)) {
       var will_call = currently_running[i];
-      will_call.callback(err, will_call.which === 'skin' ? skin_hash : cape_hash);
+      will_call.callback(err, will_call.type === 'skin' ? skin_hash : cape_hash);
       currently_running.splice(i, 1); // remove from array
       i--;
     }
@@ -119,9 +119,9 @@ function array_has_hash(arr, property, value) {
   return false;
 }
 
-function store_images(uuid, details, whichhash, callback) {
+function store_images(uuid, details, type, callback) {
   var isUUID = uuid.length > 16;
-  var new_hash = { 'uuid': uuid, 'which': whichhash, 'callback': callback };
+  var new_hash = { 'uuid': uuid, 'type': type, 'callback': callback };
   if (!array_has_hash(currently_running, 'uuid', uuid)) {
     currently_running.push(new_hash);
     networking.get_profile((isUUID ? uuid : null), function(err, profile) {
