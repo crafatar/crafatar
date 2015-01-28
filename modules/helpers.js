@@ -103,6 +103,7 @@ function callback_for(uuid, type, err, hash) {
   for (var i = 0; i < currently_running.length; i++) {
     var current = currently_running[i];
     if (current.uuid === uuid && current.type === type) {
+      logging.debug(uuid + " now completing queued " + type + " request");
       current.callback(err, hash);
       currently_running.splice(i, 1); // remove from array
       i--;
@@ -143,6 +144,7 @@ function store_images(uuid, details, type, callback) {
       }
     });
   } else {
+    logging.log(uuid + " ID already being processed, adding to queue");
     currently_running.push(new_hash);
   }
 }
