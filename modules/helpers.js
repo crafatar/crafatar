@@ -81,7 +81,7 @@ function store_cape(uuid, profile, details, callback) {
               } else {
                 skins.save_image(img, capepath, function(err) {
                   logging.log(uuid + " cape saved");
-                  callback(err, hash);              
+                  callback(err, hash);
                 });
               }
             });
@@ -104,8 +104,8 @@ function callback_for(uuid, which, err, cape_hash, skin_hash) {
     if (currently_running[i] && currently_running[i].uuid === uuid && (currently_running[i].which === which || which === null)) {
       var will_call = currently_running[i];
       will_call.callback(err, will_call.which === 'skin' ? skin_hash : cape_hash);
-      //remove_from_array(currently_running, i);
-      delete(currently_running[i]);
+      currently_running.splice(i, 1); // remove from array
+      i--;
     }
   }
 }
