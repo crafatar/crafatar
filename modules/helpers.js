@@ -126,7 +126,7 @@ function store_images(uuid, details, type, callback) {
     currently_running.push(new_hash);
     networking.get_profile((isUUID ? uuid : null), function(err, profile) {
       if (err || (isUUID && !profile)) {
-        callback_for(uuid, err, null);
+        callback_for(uuid, type, err, null);
       } else {
         store_skin(uuid, profile, details, function(err, skin_hash) {
           cache.save_hash(uuid, skin_hash, null);
