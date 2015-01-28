@@ -101,7 +101,7 @@ function store_cape(uuid, profile, details, callback) {
 var currently_running = [];
 function callback_for(uuid, type, err, cape_hash, skin_hash) {
   for (var i = 0; i < currently_running.length; i++) {
-    if (currently_running[i] && currently_running[i].uuid === uuid && (currently_running[i].type === type || type === null)) {
+    if (currently_running[i].uuid === uuid && (currently_running[i].type === type || type === null)) {
       var will_call = currently_running[i];
       will_call.callback(err, will_call.type === 'skin' ? skin_hash : cape_hash);
       currently_running.splice(i, 1); // remove from array
@@ -112,7 +112,7 @@ function callback_for(uuid, type, err, cape_hash, skin_hash) {
 
 function array_has_hash(arr, property, value) {
   for (var i = 0; i < arr.length; i++) {
-    if (arr[i] && arr[i][property] === value) {
+    if (arr[i][property] === value) {
       return true;
     }
   }
