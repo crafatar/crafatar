@@ -25,7 +25,7 @@ function store_skin(uuid, profile, details, callback) {
       } else {
         logging.log(uuid + " new skin hash: " + hash);
         var facepath = __dirname + "/../" + config.faces_dir + hash + ".png";
-        var helmpath = __dirname + "/../" + config.helms_dir + hash + ".png"
+        var helmpath = __dirname + "/../" + config.helms_dir + hash + ".png";
         fs.exists(facepath, function(exists) {
           if (exists) {
             logging.log(uuid + " skin already exists, not downloading");
