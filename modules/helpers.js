@@ -121,7 +121,11 @@ function array_has_hash(arr, property, value) {
 
 function store_images(uuid, details, type, callback) {
   var isUUID = uuid.length > 16;
-  var new_hash = { "uuid": uuid, "type": type, "callback": callback };
+  var new_hash = {
+    uuid: uuid,
+    type: type,
+    callback: callback
+  };
   if (!array_has_hash(currently_running, "uuid", uuid)) {
     currently_running.push(new_hash);
     networking.get_profile((isUUID ? uuid : null), function(err, profile) {
