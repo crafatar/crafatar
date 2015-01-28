@@ -120,7 +120,7 @@ function array_has_hash(arr, property, value) {
 }
 
 function store_images(uuid, details, type, callback) {
-  var isUUID = uuid.length > 16;
+  var is_uuid = uuid.length > 16;
   var new_hash = {
     uuid: uuid,
     type: type,
@@ -128,8 +128,8 @@ function store_images(uuid, details, type, callback) {
   };
   if (!array_has_hash(currently_running, "uuid", uuid)) {
     currently_running.push(new_hash);
-    networking.get_profile((isUUID ? uuid : null), function(err, profile) {
-      if (err || (isUUID && !profile)) {
+    networking.get_profile((is_uuid ? uuid : null), function(err, profile) {
+      if (err || (is_uuid && !profile)) {
         callback_for(uuid, type, err, null);
       } else {
         store_skin(uuid, profile, details, function(err, skin_hash) {
