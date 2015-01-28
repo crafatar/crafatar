@@ -101,9 +101,9 @@ function store_cape(uuid, profile, details, callback) {
 var currently_running = [];
 function callback_for(uuid, type, err, hash) {
   for (var i = 0; i < currently_running.length; i++) {
-    if (currently_running[i].uuid === uuid && currently_running[i].type === type) {
-      var will_call = currently_running[i];
-      will_call.callback(err, hash);
+    var current = currently_running[i];
+    if (current.uuid === uuid && current.type === type) {
+      current.callback(err, hash);
       currently_running.splice(i, 1); // remove from array
       i--;
     }
