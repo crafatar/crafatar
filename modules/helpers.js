@@ -110,7 +110,7 @@ function callback_for(uuid, type, err, hash) {
   }
 }
 
-function array_has_hash(arr, property, value) {
+function array_has_obj(arr, property, value) {
   for (var i = 0; i < arr.length; i++) {
     if (arr[i][property] === value) {
       return true;
@@ -126,7 +126,7 @@ function store_images(uuid, details, type, callback) {
     type: type,
     callback: callback
   };
-  if (!array_has_hash(currently_running, "uuid", uuid)) {
+  if (!array_has_obj(currently_running, "uuid", uuid)) {
     currently_running.push(new_hash);
     networking.get_profile((is_uuid ? uuid : null), function(err, profile) {
       if (err || (is_uuid && !profile)) {
