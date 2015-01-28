@@ -121,8 +121,8 @@ function array_has_hash(arr, property, value) {
 
 function store_images(uuid, details, type, callback) {
   var isUUID = uuid.length > 16;
-  var new_hash = { 'uuid': uuid, 'type': type, 'callback': callback };
-  if (!array_has_hash(currently_running, 'uuid', uuid)) {
+  var new_hash = { "uuid": uuid, "type": type, "callback": callback };
+  if (!array_has_hash(currently_running, "uuid", uuid)) {
     currently_running.push(new_hash);
     networking.get_profile((isUUID ? uuid : null), function(err, profile) {
       if (err || (isUUID && !profile)) {
@@ -130,10 +130,10 @@ function store_images(uuid, details, type, callback) {
       } else {
         store_skin(uuid, profile, details, function(err, skin_hash) {
           cache.save_hash(uuid, skin_hash, null);
-          callback_for(uuid, 'skin', err, skin_hash);
+          callback_for(uuid, "skin", err, skin_hash);
           store_cape(uuid, profile, details, function(err, cape_hash) {
             cache.save_hash(uuid, skin_hash, cape_hash);
-            callback_for(uuid, 'cape', err, cape_hash);
+            callback_for(uuid, "cape", err, cape_hash);
           });
         });
       }
@@ -226,7 +226,7 @@ exp.get_avatar = function(uuid, helm, size, callback) {
 // callback contains error, hash, image buffer
 exp.get_skin = function(uuid, callback) {
   logging.log(uuid + " skin request");
-  exp.get_image_hash(uuid, 'skin', function(err, status, hash) {
+  exp.get_image_hash(uuid, "skin", function(err, status, hash) {
     var skinpath = __dirname + "/../" + config.skins_dir + hash + ".png";
     fs.exists(skinpath, function (exists) {
       if (exists) {
