@@ -4,7 +4,10 @@ var exp = {};
 
 function log() {
   var time = new Date().toISOString();
-  var text = Array.prototype.slice.call(arguments).join(" ");
+  var text = '';
+  for (var i = 0, l = arguments.length; i < l; i++) {
+    text += ' ' + arguments[i];
+  }
   console.log(time + ": " + text);
 }
 
