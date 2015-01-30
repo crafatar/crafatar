@@ -21,7 +21,7 @@ function extract_url(profile, property) {
     });
   }
   return url;
-};
+}
 
 // exracts the skin url of a +profile+ object
 // returns null when no url found (user has no skin)

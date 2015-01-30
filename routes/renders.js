@@ -90,7 +90,7 @@ module.exports = function(req, res) {
   // default alex/steve images can be rendered, but
   // custom images will not be
   function handle_default(http_status, img_status, uuid) {
-    if (def && def != "steve" && def != "alex") {
+    if (def && def !== "steve" && def !== "alex") {
       logging.log(uuid + " status: 301");
       res.writeHead(301, {
         "Cache-Control": "max-age=" + config.browser_cache_time + ", public",

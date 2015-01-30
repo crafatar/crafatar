@@ -38,7 +38,7 @@ exp.extract_helm = function(uuid, facefile, buffer, outname, callback) {
         if (err) {
           callback(err);
         } else {
-          face_img.toBuffer("png", {compression: "none"}, function(err, face_buffer) {
+          face_img.toBuffer("png", { compression: "none" }, function(err, face_buffer) {
             skin_img.crop(40, 8, 47, 15, function(err, helm_img) {
               if (err) {
                 callback(err);
@@ -99,7 +99,7 @@ exp.open_skin = function(uuid, skinpath, callback) {
   fs.readFile(skinpath, function(err, buf) {
     if (err) {
       logging.error(uuid + " error while opening skin file: " + err);
-      callback(err, null)
+      callback(err, null);
     } else {
       callback(null, buf);
     }

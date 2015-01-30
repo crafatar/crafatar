@@ -1,4 +1,3 @@
-var networking = require("../modules/networking");
 var logging = require("../modules/logging");
 var helpers = require("../modules/helpers");
 var config = require("../modules/config");
@@ -52,7 +51,7 @@ module.exports = function(req, res) {
   }
 
   function handle_default(http_status, uuid) {
-    if (def && def != "steve" && def != "alex") {
+    if (def && def !== "steve" && def !== "alex") {
       logging.log(uuid + " status: 301");
       res.writeHead(301, {
         "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
