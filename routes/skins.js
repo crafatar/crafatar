@@ -7,27 +7,27 @@ var lwip = require("lwip");
 // GET skin request
 module.exports = function(req, res) {
   var start = new Date();
-  var uuid = (req.url.path_list[2] || "").split(".")[0];
+  var id = (req.url.path_list[2] || "").split(".")[0];
   var def = req.url.query.default;
   var etag = null;
 
-  if (!helpers.uuid_valid(uuid)) {
+  if (!helpers.id_valid(id)) {
     res.writeHead(422, {
       "Content-Type": "text/plain",
       "Response-Time": new Date() - start
     });
-    res.end("Invalid UUID");
+    res.end("Invalid ID");
     return;
   }
 
   // strip dashes
-  uuid = uuid.replace(/-/g, "");
+  id = id.replace(/-/g, "");
 
   try {
-    helpers.get_skin(uuid, function(err, hash, image) {
-      logging.log(uuid);
+    helpers.get_skin(id, function(err, hash, image) {
+      logging.log(id);
       if (err) {
-        logging.error(uuid + " " + err);
+        logging.error(id + " " + err);
       }
       etag = hash && hash.substr(0, 32) || "none";
       var matches = req.headers["if-none-match"] === '"' + etag + '"';
@@ -38,21 +38,21 @@ module.exports = function(req, res) {
         } else if (err) {
           http_status = 503;
         }
-        logging.debug(uuid + " etag: " + req.headers["if-none-match"]);
-        logging.debug(uuid + " matches: " + matches);
-        sendimage(http_status, image, uuid);
+        logging.debug(id + " etag: " + req.headers["if-none-match"]);
+        logging.debug(id + " matches: " + matches);
+        sendimage(http_status, image, id);
       } else {
-        handle_default(404, uuid);
+        handle_default(404, id);
       }
     });
   } catch(e) {
-    logging.error(uuid + " error: " + e);
-    handle_default(500, uuid);
+    logging.error(id + " error: " + e);
+    handle_default(500, id);
   }
 
-  function handle_default(http_status, uuid) {
+  function handle_default(http_status, id) {
     if (def && def !== "steve" && def !== "alex") {
-      logging.log(uuid + " status: 301");
+      logging.log(id + " status: 301");
       res.writeHead(301, {
         "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
         "Response-Time": new Date() - start,
@@ -62,17 +62,17 @@ module.exports = function(req, res) {
       });
       res.end();
     } else {
-      def = def || skins.default_skin(uuid);
+      def = def || skins.default_skin(id);
       lwip.open("public/images/" + def + "_skin.png", function(err, image) {
         image.toBuffer("png", function(err, buffer) {
-          sendimage(http_status, buffer, uuid);
+          sendimage(http_status, buffer, id);
         });
       });
     }
   }
 
-  function sendimage(http_status, image, uuid) {
-    logging.log(uuid + " status: " + http_status);
+  function sendimage(http_status, image, id) {
+    logging.log(id + " status: " + http_status);
     res.writeHead(http_status, {
       "Content-Type": "image/png",
       "Cache-Control": "max-age=" + config.browser_cache_time + ", public",

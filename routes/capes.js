@@ -13,10 +13,10 @@ var human_status = {
 // GET cape request
 module.exports = function(req, res) {
   var start = new Date();
-  var uuid = (req.url.pathname.split("/")[2] || "").split(".")[0];
+  var id = (req.url.pathname.split("/")[2] || "").split(".")[0];
   var etag = null;
 
-  if (!helpers.uuid_valid(uuid)) {
+  if (!helpers.id_valid(id)) {
     res.writeHead(422, {
       "Content-Type": "text/plain",
       "Response-Time": new Date() - start
@@ -26,13 +26,13 @@ module.exports = function(req, res) {
   }
 
   // strip dashes
-  uuid = uuid.replace(/-/g, "");
+  id = id.replace(/-/g, "");
 
   try {
-    helpers.get_cape(uuid, function(err, status, image, hash) {
-      logging.log(uuid + " - " + human_status[status]);
+    helpers.get_cape(id, function(err, status, image, hash) {
+      logging.log(id + " - " + human_status[status]);
       if (err) {
-        logging.error(uuid + " " + err);
+        logging.error(id + " " + err);
       }
       etag = hash && hash.substr(0, 32) || "none";
       var matches = req.headers["if-none-match"] === '"' + etag + '"';
@@ -56,7 +56,7 @@ module.exports = function(req, res) {
       }
     });
   } catch(e) {
-    logging.error(uuid + " error:");
+    logging.error(id + " error:");
     logging.error(e);
     res.writeHead(500, {
       "Content-Type": "text/plain",

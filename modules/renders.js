@@ -42,9 +42,9 @@ exp.draw_head = function(skin_canvas, model_ctx, scale) {
 // draws the body on to the +skin_canvas+
 // using the skin from the +model_ctx+ at the +scale+
 // parts are labeled as if drawn from the skin's POV
-exp.draw_body = function(uuid, skin_canvas, model_ctx, scale) {
+exp.draw_body = function(id, skin_canvas, model_ctx, scale) {
   if (skin_canvas.height == 32 * scale) {
-    logging.log(uuid + " old skin");
+    logging.log(id + " old skin");
     //Left Leg
     //Left Leg - Front
     model_ctx.setTransform(1,-0.5,0,1.2,0,0);
@@ -85,7 +85,7 @@ exp.draw_body = function(uuid, skin_canvas, model_ctx, scale) {
     model_ctx.scale(-1,1);
     model_ctx.drawImage(skin_canvas, 44*scale, 16*scale, 4*scale, 4*scale, -16*scale, 16*scale, 4*scale, 4*scale);
   } else {
-    logging.log(uuid + " new skin");
+    logging.log(id + " new skin");
     //Left Leg
     //Left Leg - Front
     model_ctx.setTransform(1,-0.5,0,1.2,0,0);
@@ -127,14 +127,14 @@ exp.draw_body = function(uuid, skin_canvas, model_ctx, scale) {
 };
 
 // sets up the necessary components to draw the skin model
-// uses the +img+ skin from the +uuid+ with options of drawing
+// uses the +img+ skin from the +id+ with options of drawing
 // the +helm+ and the +body+
 // callback contains error, image buffer
-exp.draw_model = function(uuid, img, scale, helm, body, callback) {
+exp.draw_model = function(id, img, scale, helm, body, callback) {
   var image = new Image();
 
   image.onerror = function(err) {
-    logging.error(uuid + " render error: " + err);
+    logging.error(id + " render error: " + err);
     callback(err, null);
   };
 
@@ -151,19 +151,19 @@ exp.draw_model = function(uuid, img, scale, helm, body, callback) {
     //Scale it
     scale_image(skin_ctx.getImageData(0,0,64,original_height), skin_ctx, 0, 0, scale);
     if (body) {
-      logging.log(uuid + " drawing body");
-      exp.draw_body(uuid, skin_canvas, model_ctx, scale);
+      logging.log(id + " drawing body");
+      exp.draw_body(id, skin_canvas, model_ctx, scale);
     }
-    logging.log(uuid + " drawing head");
+    logging.log(id + " drawing head");
     exp.draw_head(skin_canvas, model_ctx, scale);
     if (helm) {
-      logging.log(uuid + " drawing helmet");
+      logging.log(id + " drawing helmet");
       exp.draw_helmet(skin_canvas, model_ctx, scale);
     }
 
     model_canvas.toBuffer(function(err, buf){
       if (err) {
-        logging.log(uuid + " error creating buffer: " + err);
+        logging.log(id + " error creating buffer: " + err);
       }
       callback(err, buf);
     });
@@ -174,10 +174,10 @@ exp.draw_model = function(uuid, img, scale, helm, body, callback) {
 
 // helper method to open a render from +renderpath+
 // callback contains error, image buffer
-exp.open_render = function(uuid, renderpath, callback) {
+exp.open_render = function(id, renderpath, callback) {
   fs.readFile(renderpath, function (err, buf) {
     if (err) {
-      logging.error(uuid + " error while opening skin file: " + err);
+      logging.error(id + " error while opening skin file: " + err);
     }
     callback(err, buf);
   });
@@ -188,13 +188,13 @@ exp.open_render = function(uuid, renderpath, callback) {
 function scale_image(imageData, context, d_x, d_y, scale) {
   var width = imageData.width;
   var height = imageData.height;
-  context.clearRect(0,0,width,height); //Clear the spot where it originated from
-  for(y=0; y<height; y++) { //height original
-    for(x=0; x<width; x++) { //width original
+  context.clearRect(0, 0, width, height); //Clear the spot where it originated from
+  for (var y = 0; y < height; y++) { //height original
+    for (var x = 0; x < width ; x++) { //width original
       //Gets original colour, then makes a scaled square of the same colour
       var index = (x + y * width) * 4;
-      context.fillStyle = "rgba(" + imageData.data[index+0] + "," + imageData.data[index+1] + "," + imageData.data[index+2] + "," + imageData.data[index+3] + ")";
-      context.fillRect(d_x + x*scale, d_y + y*scale, scale, scale);
+      context.fillStyle = "rgba(" + imageData.data[index + 0] + "," + imageData.data[index + 1] + "," + imageData.data[index + 2] + "," + imageData.data[index + 3] + ")";
+      context.fillRect(d_x + x * scale, d_y + y * scale, scale, scale);
     }
   }
 }
