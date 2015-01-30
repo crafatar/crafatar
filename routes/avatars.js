@@ -15,7 +15,7 @@ var human_status = {
 // GET avatar request
 module.exports = function(req, res) {
   var start = new Date();
-  var uuid = (req.url.path_list[2] || "").split(".")[0];
+  var id = (req.url.path_list[2] || "").split(".")[0];
   var size = parseInt(req.url.query.size) || config.default_size;
   var def = req.url.query.default;
   var helm = req.url.query.hasOwnProperty("helm");
@@ -31,25 +31,25 @@ module.exports = function(req, res) {
     });
     res.end("Invalid Size");
     return;
-  } else if (!helpers.uuid_valid(uuid)) {
+  } else if (!helpers.id_valid(id)) {
     res.writeHead(422, {
       "Content-Type": "text/plain",
       "Response-Time": new Date() - start
     });
-    res.end("Invalid UUID");
+    res.end("Invalid ID");
     return;
   }
 
   // strip dashes
-  uuid = uuid.replace(/-/g, "");
+  id = id.replace(/-/g, "");
 
   try {
-    helpers.get_avatar(uuid, helm, size, function(err, status, image, hash) {
-      logging.log(uuid + " - " + human_status[status]);
+    helpers.get_avatar(id, helm, size, function(err, status, image, hash) {
+      logging.log(id + " - " + human_status[status]);
       if (err) {
-        logging.error(uuid + " " + err);
+        logging.error(id + " " + err);
         if (err.code === "ENOENT") {
-          cache.remove_hash(uuid);
+          cache.remove_hash(id);
         }
       }
       etag = image && hash && hash.substr(0, 32) || "none";
@@ -61,21 +61,21 @@ module.exports = function(req, res) {
         } else if (err) {
           http_status = 503;
         }
-        logging.debug(uuid + " etag: " + req.headers["if-none-match"]);
-        logging.debug(uuid + " matches: " + matches);
-        sendimage(http_status, status, image, uuid);
+        logging.debug(id + " etag: " + req.headers["if-none-match"]);
+        logging.debug(id + " matches: " + matches);
+        sendimage(http_status, status, image, id);
       } else {
-        handle_default(404, status, uuid);
+        handle_default(404, status, id);
       }
     });
   } catch(e) {
-    logging.error(uuid + " error: " + e);
-    handle_default(500, status, uuid);
+    logging.error(id + " error: " + e);
+    handle_default(500, status, id);
   }
 
-  function handle_default(http_status, img_status, uuid) {
+  function handle_default(http_status, img_status, id) {
     if (def && def !== "steve" && def !== "alex") {
-      logging.log(uuid + " status: 301");
+      logging.log(id + " status: 301");
       res.writeHead(301, {
         "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
         "Response-Time": new Date() - start,
@@ -85,15 +85,15 @@ module.exports = function(req, res) {
       });
       res.end();
     } else {
-      def = def || skins.default_skin(uuid);
+      def = def || skins.default_skin(id);
       skins.resize_img("public/images/" + def + ".png", size, function(err, image) {
-        sendimage(http_status, img_status, image, uuid);
+        sendimage(http_status, img_status, image, id);
       });
     }
   }
 
-  function sendimage(http_status, img_status, image, uuid) {
-    logging.log(uuid + " status: " + http_status);
+  function sendimage(http_status, img_status, image, id) {
+    logging.log(id + " status: " + http_status);
     res.writeHead(http_status, {
       "Content-Type": "image/png",
       "Cache-Control": "max-age=" + config.browser_cache_time + ", public",

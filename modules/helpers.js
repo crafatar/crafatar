@@ -7,7 +7,7 @@ var renders = require("./renders");
 var fs = require("fs");
 
 // 0098cb60-fa8e-427c-b299-793cbd302c9a
-var valid_uuid = /^([0-9a-f-A-F-]{32,36}|[a-zA-Z0-9_]{1,16})$/; // uuid|username
+var valid_id = /^([0-9a-f-A-F-]{32,36}|[a-zA-Z0-9_]{1,16})$/; // uuid|username
 var hash_pattern = /[0-9a-f]+$/;
 
 // gets the hash from the textures.minecraft.net +url+
@@ -15,20 +15,20 @@ function get_hash(url) {
   return hash_pattern.exec(url)[0].toLowerCase();
 }
 
-function store_skin(uuid, profile, details, callback) {
-  networking.get_skin_url(uuid, profile, function(url) {
+function store_skin(id, profile, details, callback) {
+  networking.get_skin_url(id, profile, function(url) {
     if (url) {
       var hash = get_hash(url);
       if (details && details.skin === hash) {
-        cache.update_timestamp(uuid, hash);
+        cache.update_timestamp(id, hash);
         callback(null, hash);
       } else {
-        logging.log(uuid + " new skin hash: " + hash);
+        logging.log(id + " new skin hash: " + hash);
         var facepath = __dirname + "/../" + config.faces_dir + hash + ".png";
         var helmpath = __dirname + "/../" + config.helms_dir + hash + ".png";
         fs.exists(facepath, function(exists) {
           if (exists) {
-            logging.log(uuid + " skin already exists, not downloading");
+            logging.log(id + " skin already exists, not downloading");
             callback(null, hash);
           } else {
             networking.get_from(url, function(img, response, err) {
@@ -40,9 +40,9 @@ function store_skin(uuid, profile, details, callback) {
                     logging.error(err);
                     callback(err, null);
                   } else {
-                    logging.log(uuid + " face extracted");
-                    skins.extract_helm(uuid, facepath, img, helmpath, function(err) {
-                      logging.log(uuid + " helm extracted");
+                    logging.log(id + " face extracted");
+                    skins.extract_helm(id, facepath, img, helmpath, function(err) {
+                      logging.log(id + " helm extracted");
                       logging.debug(helmpath);
                       callback(err, hash);
                     });
@@ -59,19 +59,19 @@ function store_skin(uuid, profile, details, callback) {
   });
 }
 
-function store_cape(uuid, profile, details, callback) {
-  networking.get_cape_url(uuid, profile, function(url) {
+function store_cape(id, profile, details, callback) {
+  networking.get_cape_url(id, profile, function(url) {
     if (url) {
       var hash = get_hash(url);
       if (details && details.cape === hash) {
-        cache.update_timestamp(uuid, hash);
+        cache.update_timestamp(id, hash);
         callback(null, hash);
       } else {
-        logging.log(uuid + " new cape hash: " + hash);
+        logging.log(id + " new cape hash: " + hash);
         var capepath = __dirname + "/../" + config.capes_dir + hash + ".png";
         fs.exists(capepath, function(exists) {
           if (exists) {
-            logging.log(uuid + " cape already exists, not downloading");
+            logging.log(id + " cape already exists, not downloading");
             callback(null, hash);
           } else {
             networking.get_from(url, function(img, response, err) {
@@ -80,7 +80,7 @@ function store_cape(uuid, profile, details, callback) {
                 callback(err, null);
               } else {
                 skins.save_image(img, capepath, function(err) {
-                  logging.log(uuid + " cape saved");
+                  logging.log(id + " cape saved");
                   callback(err, hash);
                 });
               }
@@ -94,16 +94,16 @@ function store_cape(uuid, profile, details, callback) {
   });
 }
 
-// downloads the images for +uuid+ while checking the cache
+// downloads the images for +id+ while checking the cache
 // status based on +details+. +type+ specifies which
 // image type should be called back on
 // +callback+ contains the error buffer and image hash
 var currently_running = [];
-function callback_for(uuid, type, err, hash) {
+function callback_for(id, type, err, hash) {
   for (var i = 0; i < currently_running.length; i++) {
     var current = currently_running[i];
-    if (current.uuid === uuid && current.type === type) {
-      logging.debug(uuid + " now completing queued " + type + " request");
+    if (current.id === id && current.type === type) {
+      logging.debug(id + " now completing queued " + type + " request");
       current.callback(err, hash);
       currently_running.splice(i, 1); // remove from array
       i--;
@@ -120,41 +120,41 @@ function array_has_obj(arr, property, value) {
   return false;
 }
 
-function store_images(uuid, details, type, callback) {
-  var is_uuid = uuid.length > 16;
+function store_images(id, details, type, callback) {
+  var is_uuid = id.length > 16;
   var new_hash = {
-    uuid: uuid,
+    id: id,
     type: type,
     callback: callback
   };
-  if (!array_has_obj(currently_running, "uuid", uuid)) {
+  if (!array_has_obj(currently_running, "id", id)) {
     currently_running.push(new_hash);
-    networking.get_profile((is_uuid ? uuid : null), function(err, profile) {
+    networking.get_profile((is_uuid ? id : null), function(err, profile) {
       if (err || (is_uuid && !profile)) {
-        callback_for(uuid, type, err, null);
+        callback_for(id, type, err, null);
       } else {
-        store_skin(uuid, profile, details, function(err, skin_hash) {
-          cache.save_hash(uuid, skin_hash, null);
-          callback_for(uuid, "skin", err, skin_hash);
-          store_cape(uuid, profile, details, function(err, cape_hash) {
-            cache.save_hash(uuid, skin_hash, cape_hash);
-            callback_for(uuid, "cape", err, cape_hash);
+        store_skin(id, profile, details, function(err, skin_hash) {
+          cache.save_hash(id, skin_hash, null);
+          callback_for(id, "skin", err, skin_hash);
+          store_cape(id, profile, details, function(err, cape_hash) {
+            cache.save_hash(id, skin_hash, cape_hash);
+            callback_for(id, "cape", err, cape_hash);
           });
         });
       }
     });
   } else {
-    logging.log(uuid + " ID already being processed, adding to queue");
+    logging.log(id + " ID already being processed, adding to queue");
     currently_running.push(new_hash);
   }
 }
 
 var exp = {};
 
-// returns true if the +uuid+ is a valid uuid or username
-// the uuid may be not exist, however
-exp.uuid_valid = function(uuid) {
-  return valid_uuid.test(uuid);
+// returns true if the +id+ is a valid uuid or username
+// the id may be not exist, however
+exp.id_valid = function(id) {
+  return valid_id.test(id);
 };
 
 // decides whether to get an image from disk or to download it
@@ -165,28 +165,28 @@ exp.uuid_valid = function(uuid) {
 //   1: "cached" - found on disk
 //   2: "downloaded" - profile downloaded, skin downloaded from mojang servers
 //   3: "checked" - profile re-downloaded (was too old), but it has either not changed or has no skin
-exp.get_image_hash = function(uuid, raw_type, callback) {
-  cache.get_details(uuid, function(err, details) {
+exp.get_image_hash = function(id, raw_type, callback) {
+  cache.get_details(id, function(err, details) {
     var type = (details !== null ? (raw_type === "skin" ? details.skin : details.cape) : null);
     if (err) {
       callback(err, -1, null);
     } else {
       if (details && details.time + config.local_cache_time * 1000 >= new Date().getTime()) {
-        logging.log(uuid + " uuid cached & recently updated");
+        logging.log(id + " id cached & recently updated");
         callback(null, (type ? 1 : 0), type);
       } else {
         if (details) {
-          logging.log(uuid + " uuid cached, but too old");
+          logging.log(id + " id cached, but too old");
         } else {
-          logging.log(uuid + " uuid not cached");
+          logging.log(id + " id not cached");
         }
-        store_images(uuid, details, raw_type, function(err, hash) {
+        store_images(id, details, raw_type, function(err, hash) {
           if (err) {
             callback(err, -1, details && type);
           } else {
             var status = details && (type === hash) ? 3 : 2;
-            logging.debug(uuid + " old hash: " + (details && type));
-            logging.log(uuid + " hash: " + hash);
+            logging.debug(id + " old hash: " + (details && type));
+            logging.log(id + " hash: " + hash);
             callback(null, status, hash);
           }
         });
@@ -196,13 +196,13 @@ exp.get_image_hash = function(uuid, raw_type, callback) {
 };
 
 
-// handles requests for +uuid+ avatars with +size+
+// handles requests for +id+ avatars with +size+
 // callback contains error, status, image buffer, hash
 // image is the user's face+helm when helm is true, or the face otherwise
 // for status, see get_image_hash
-exp.get_avatar = function(uuid, helm, size, callback) {
-  logging.log("request: " + uuid);
-  exp.get_image_hash(uuid, "skin", function(err, status, hash) {
+exp.get_avatar = function(id, helm, size, callback) {
+  logging.log("request: " + id);
+  exp.get_image_hash(id, "skin", function(err, status, hash) {
     if (hash) {
       var facepath = __dirname + "/../" + config.faces_dir + hash + ".png";
       var helmpath = __dirname + "/../" + config.helms_dir + hash + ".png";
@@ -222,26 +222,26 @@ exp.get_avatar = function(uuid, helm, size, callback) {
         });
       });
     } else {
-      // hash is null when uuid has no skin
+      // hash is null when the id has no skin
       callback(err, status, null, null);
     }
   });
 };
 
-// handles requests for +uuid+ skins
+// handles requests for +id+ skins
 // callback contains error, hash, image buffer
-exp.get_skin = function(uuid, callback) {
-  logging.log(uuid + " skin request");
-  exp.get_image_hash(uuid, "skin", function(err, status, hash) {
+exp.get_skin = function(id, callback) {
+  logging.log(id + " skin request");
+  exp.get_image_hash(id, "skin", function(err, status, hash) {
     var skinpath = __dirname + "/../" + config.skins_dir + hash + ".png";
     fs.exists(skinpath, function (exists) {
       if (exists) {
-        logging.log(uuid + " skin already exists, not downloading");
-        skins.open_skin(uuid, skinpath, function(err, img) {
+        logging.log(id + " skin already exists, not downloading");
+        skins.open_skin(id, skinpath, function(err, img) {
           callback(err, hash, img);
         });
       } else {
-        networking.save_texture(uuid, hash, skinpath, function(err, img) {
+        networking.save_texture(id, hash, skinpath, function(err, img) {
           callback(err, hash, img);
         });
       }
@@ -256,8 +256,8 @@ function get_type(helm, body) {
 
 // handles creations of skin renders
 // callback contanis error, hash, image buffer
-exp.get_render = function(uuid, scale, helm, body, callback) {
-  exp.get_skin(uuid, function(err, hash, img) {
+exp.get_render = function(id, scale, helm, body, callback) {
+  exp.get_skin(id, function(err, hash, img) {
     if (!hash) {
       callback(err, -1, hash, null);
       return;
@@ -265,7 +265,7 @@ exp.get_render = function(uuid, scale, helm, body, callback) {
     var renderpath = __dirname + "/../" + config.renders_dir + hash + "-" + scale + "-" + get_type(helm, body) + ".png";
     fs.exists(renderpath, function(exists) {
       if (exists) {
-        renders.open_render(uuid, renderpath, function(err, img) {
+        renders.open_render(id, renderpath, function(err, img) {
           callback(err, 1, hash, img);
         });
         return;
@@ -274,7 +274,7 @@ exp.get_render = function(uuid, scale, helm, body, callback) {
           callback(err, 0, hash, null);
           return;
         }
-        renders.draw_model(uuid, img, scale, helm, body, function(err, img) {
+        renders.draw_model(id, img, scale, helm, body, function(err, img) {
           if (err) {
             callback(err, -1, hash, null);
           } else if (!img) {
@@ -294,20 +294,20 @@ exp.get_render = function(uuid, scale, helm, body, callback) {
 };
 
 
-// handles requests for +uuid+ skins
+// handles requests for skin of the +id+
 // callback contains error, hash, image buffer
-exp.get_skin = function(uuid, callback) {
-  logging.log(uuid + " skin request");
-  exp.get_image_hash(uuid, "skin", function(err, status, hash) {
+exp.get_skin = function(id, callback) {
+  logging.log(id + " skin request");
+  exp.get_image_hash(id, "skin", function(err, status, hash) {
     var skinpath = __dirname + "/../" + config.skins_dir + hash + ".png";
     fs.exists(skinpath, function(exists) {
       if (exists) {
         logging.log("skin already exists, not downloading");
-        skins.open_skin(uuid, skinpath, function(err, img) {
+        skins.open_skin(id, skinpath, function(err, img) {
           callback(err, hash, img);
         });
       } else {
-        networking.save_texture(uuid, hash, skinpath, function(err, response, img) {
+        networking.save_texture(id, hash, skinpath, function(err, response, img) {
           callback(err, hash, img);
         });
       }
@@ -315,11 +315,11 @@ exp.get_skin = function(uuid, callback) {
   });
 };
 
-// handles requests for +uuid+ capes
+// handles requests for +id+ capes
 // callback contains error, hash, image buffer
-exp.get_cape = function(uuid, callback) {
-  logging.log(uuid + " cape request");
-  exp.get_image_hash(uuid, "cape", function(err, status, hash) {
+exp.get_cape = function(id, callback) {
+  logging.log(id + " cape request");
+  exp.get_image_hash(id, "cape", function(err, status, hash) {
     if (!hash) {
       callback(err, null, null);
       return;
@@ -328,11 +328,11 @@ exp.get_cape = function(uuid, callback) {
     fs.exists(capepath, function(exists) {
       if (exists) {
         logging.log("cape already exists, not downloading");
-        skins.open_skin(uuid, capepath, function(err, img) {
+        skins.open_skin(id, capepath, function(err, img) {
           callback(err, hash, img);
         });
       } else {
-        networking.save_texture(uuid, hash, capepath, function(err, response, img) {
+        networking.save_texture(id, hash, capepath, function(err, response, img) {
           if (response && response.statusCode === 404) {
             callback(err, hash, null);
           } else {

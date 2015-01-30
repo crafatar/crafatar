@@ -124,28 +124,28 @@ exp.get_profile = function(uuid, callback) {
   }
 };
 
-// +uuid+ is likely a username and if so
-// +uuid+ is used to get the url, otherwise
+// +id+ is likely a username and if so
+// +id+ is used to get the url, otherwise
 // +profile+ will be used to get the url
-exp.get_skin_url = function(uuid, profile, callback) {
-  getUrl(uuid, profile, 1, function(url) {
+exp.get_skin_url = function(id, profile, callback) {
+  getUrl(id, profile, 1, function(url) {
     callback(url);
   });
 };
 
-// +uuid+ is likely a username and if so
-// +uuid+ is used to get the url, otherwise
+// +id+ is likely a username and if so
+// +id+ is used to get the url, otherwise
 // +profile+ will be used to get the url
-exp.get_cape_url = function(uuid, profile, callback) {
-  getUrl(uuid, profile, 2, function(url) {
+exp.get_cape_url = function(id, profile, callback) {
+  getUrl(id, profile, 2, function(url) {
     callback(url);
   });
 };
 
-function getUrl(uuid, profile, type, callback) {
-  if (uuid.length <= 16) {
+function getUrl(id, profile, type, callback) {
+  if (id.length <= 16) {
     //username
-    exp.get_username_url(uuid, type, function(err, url) {
+    exp.get_username_url(id, type, function(err, url) {
       callback(url || null);
     });
   } else {
@@ -157,23 +157,23 @@ function getUrl(uuid, profile, type, callback) {
 
 // downloads skin file from +url+
 // callback contains error, image
-exp.get_skin = function(url, uuid, callback) {
+exp.get_skin = function(url, id, callback) {
   exp.get_from(url, function(body, response, err) {
     callback(body, err);
   });
 };
 
-exp.save_texture = function(uuid, hash, outpath, callback) {
+exp.save_texture = function(id, hash, outpath, callback) {
   if (hash) {
     var textureurl = "http://textures.minecraft.net/texture/" + hash;
     exp.get_from(textureurl, function(img, response, err) {
       if (err) {
-        logging.error(uuid + "error while downloading texture");
+        logging.error(id + "error while downloading texture");
         callback(err, response, null);
       } else {
         fs.writeFile(outpath, img, "binary", function(err) {
           if (err) {
-            logging.log(uuid + " error: " + err);
+            logging.log(id + " error: " + err);
           }
           callback(err, response, img);
         });
