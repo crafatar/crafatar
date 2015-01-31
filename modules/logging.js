@@ -2,20 +2,36 @@ var config = require("./config");
 
 var exp = {};
 
-function log() {
-  var time = new Date().toISOString();
-  var text = '';
-  for (var i = 0, l = arguments.length; i < l; i++) {
-    text += ' ' + arguments[i];
+function split_args(args) {
+  var text = "";
+  for (var i = 0, l = args.length; i < l; i++) {
+    if (i > 0) {
+      text += " " + args[i];
+    } else {
+      text += args[i];
+    }
   }
-  console.log(time + ": " + text);
+  return text;
 }
 
-exp.log = log;
-exp.warn = log;
-exp.error = log;
+function log(level, args) {
+  var time = new Date().toISOString();
+  console.log(time + ": " + level + ": " + split_args(args));
+}
+
+exp.log = function() {
+  log(" INFO", arguments);
+};
+exp.warn = function() {
+  log(" WARN", arguments);
+};
+exp.error = function() {
+  log("ERROR", arguments);
+};
 if (config.debug_enabled) {
-  exp.debug = log;
+  exp.debug = function() {
+    log("DEBUG", arguments);
+  };
 } else {
   exp.debug = function(){};
 }
