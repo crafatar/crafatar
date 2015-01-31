@@ -58,7 +58,7 @@ exp.get_from_options = function(rid, url, options, callback) {
       callback(body, response, null);
     } else if (error) {
       callback(body || null, response, error);
-    } else if (response.statusCode === 404) {
+    } else if (response.statusCode === 404 || response.statusCode === 204) {
       // page does not exist
       logging.log(rid + url + " url does not exist");
       callback(null, response, null);
@@ -68,7 +68,7 @@ exp.get_from_options = function(rid, url, options, callback) {
       callback(body || null, response, error);
     } else {
       logging.error(rid + url + " Unknown error:");
-      logging.error(rid + response);
+      logging.error(rid + JSON.stringify(response));
       callback(body || null, response, error);
     }
   });
