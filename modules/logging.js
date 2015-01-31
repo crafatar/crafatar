@@ -1,3 +1,4 @@
+var cluster = require("cluster");
 var config = require("./config");
 
 var exp = {};
@@ -16,7 +17,7 @@ function split_args(args) {
 
 function log(level, args) {
   var time = new Date().toISOString();
-  console.log(time + ": " + level + ": " + split_args(args));
+  console.log(time + " " + (cluster.worker && cluster.worker.id || "M") + " " + level + ": " + split_args(args));
 }
 
 exp.log = function() {
