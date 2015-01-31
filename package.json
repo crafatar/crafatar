@@ -22,11 +22,12 @@
   ],
   "scripts": {
     "postinstall": "cp 'modules/config.example.js' 'modules/config.js'",
-    "start": "node bin/www.js",
+    "start": "forever start -l logs/log.log -o logs/out.log -e logs/error.log -p ./ -a --minUptime 8000 --spinSleepTime 1500 bin/www.js",
     "test": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "dependencies": {
     "canvas": "1.1.6",
+    "forever": "^0.13.0",
     "jade": "~1.8.2",
     "lwip": "0.0.6",
     "mime": "1.2.11",
