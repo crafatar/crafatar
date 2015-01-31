@@ -45,43 +45,43 @@ describe("Crafatar", function() {
 
   describe("UUID/username", function() {
     it("non-hex uuid is invalid", function(done) {
-      assert.strictEqual(helpers.id_valid("g098cb60fa8e427cb299793cbd302c9a"), false);
+      assert.strictEqual(helpers.uuid_valid("g098cb60fa8e427cb299793cbd302c9a"), false);
       done();
     });
     it("empty id is invalid", function(done) {
-      assert.strictEqual(helpers.id_valid(""), false);
+      assert.strictEqual(helpers.uuid_valid(""), false);
       done();
     });
     it("non-alphanumeric username is invalid", function(done) {
-      assert.strictEqual(helpers.id_valid("usernäme"), false);
+      assert.strictEqual(helpers.uuid_valid("usernäme"), false);
       done();
     });
     it("dashed username is invalid", function(done) {
-      assert.strictEqual(helpers.id_valid("user-name"), false);
+      assert.strictEqual(helpers.uuid_valid("user-name"), false);
       done();
     });
     it(">16 length username is invalid", function(done) {
-      assert.strictEqual(helpers.id_valid("ThisNameIsTooLong"), false);
+      assert.strictEqual(helpers.uuid_valid("ThisNameIsTooLong"), false);
       done();
     });
     it("lowercase uuid is valid", function(done) {
-      assert.strictEqual(helpers.id_valid("0098cb60fa8e427cb299793cbd302c9a"), true);
+      assert.strictEqual(helpers.uuid_valid("0098cb60fa8e427cb299793cbd302c9a"), true);
       done();
     });
     it("uppercase uuid is valid", function(done) {
-      assert.strictEqual(helpers.id_valid("1DCEF164FF0A47F2B9A691385C774EE7"), true);
+      assert.strictEqual(helpers.uuid_valid("1DCEF164FF0A47F2B9A691385C774EE7"), true);
       done();
     });
     it("dashed uuid is valid", function(done) {
-      assert.strictEqual(helpers.id_valid("0098cb60-fa8e-427c-b299-793cbd302c9a"), true);
+      assert.strictEqual(helpers.uuid_valid("0098cb60-fa8e-427c-b299-793cbd302c9a"), true);
       done();
     });
     it("16 chars, underscored, capital, numbered username is valid", function(done) {
-      assert.strictEqual(helpers.id_valid("__niceUs3rname__"), true);
+      assert.strictEqual(helpers.uuid_valid("__niceUs3rname__"), true);
       done();
     });
     it("1 char username is valid", function(done) {
-      assert.strictEqual(helpers.id_valid("a"), true);
+      assert.strictEqual(helpers.uuid_valid("a"), true);
       done();
     });
     it("should not exist (uuid)", function(done) {

@@ -33,7 +33,7 @@ module.exports = function(req, res) {
   }
 
   var body = raw_type === "body";
-  var id = (req.url.path_list[3] || "").split(".")[0];
+  var uuid = (req.url.path_list[3] || "").split(".")[0];
   var def = req.url.query.default;
   var scale = parseInt(req.url.query.scale) || config.default_scale;
   var helm = req.url.query.hasOwnProperty("helm");
@@ -46,23 +46,23 @@ module.exports = function(req, res) {
     });
     res.end("422 Invalid Scale");
     return;
-  } else if (!helpers.id_valid(id)) {
+  } else if (!helpers.uuid_valid(uuid)) {
     res.writeHead(422, {
       "Content-Type": "text/plain",
       "Response-Time": new Date() - start
     });
-    res.end("422 Invalid ID");
+    res.end("422 Invalid UUID");
     return;
   }
 
   // strip dashes
-  id = id.replace(/-/g, "");
+  uuid = uuid.replace(/-/g, "");
 
   try {
-    helpers.get_render(id, scale, helm, body, function(err, status, hash, image) {
-      logging.log(id + " - " + human_status[status]);
+    helpers.get_render(uuid, scale, helm, body, function(err, status, hash, image) {
+      logging.log(uuid + " - " + human_status[status]);
       if (err) {
-        logging.error(id + " " + err);
+        logging.error(uuid + " " + err);
       }
       etag = hash && hash.substr(0, 32) || "none";
       var matches = req.headers["if-none-match"] === '"' + etag + '"';
@@ -73,25 +73,25 @@ module.exports = function(req, res) {
         } else if (err) {
           http_status = 503;
         }
-        logging.debug(id + " etag: " + req.headers["if-none-match"]);
-        logging.debug(id + " matches: " + matches);
+        logging.debug(uuid + " etag: " + req.headers["if-none-match"]);
+        logging.debug(uuid + " matches: " + matches);
         sendimage(http_status, status, image, uuid);
       } else {
-        logging.log(id + " image not found, using default.");
+        logging.log(uuid + " image not found, using default.");
         handle_default(404, status, uuid);
       }
     });
   } catch(e) {
-    logging.error(id + " error: " + e);
+    logging.error(uuid + " error: " + e);
     handle_default(500, status, uuid);
   }
 
 
   // default alex/steve images can be rendered, but
   // custom images will not be
-  function handle_default(http_status, img_status, id) {
+  function handle_default(http_status, img_status, uuid) {
     if (def && def !== "steve" && def !== "alex") {
-      logging.log(id + " status: 301");
+      logging.log(uuid + " status: 301");
       res.writeHead(301, {
         "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
         "Response-Time": new Date() - start,
@@ -101,25 +101,25 @@ module.exports = function(req, res) {
       });
       res.end();
     } else {
-      def = def || skins.default_skin(id);
+      def = def || skins.default_skin(uuid);
       fs.readFile("public/images/" + def + "_skin.png", function (err, buf) {
         if (err) {
           // errored while loading the default image, continuing with null image
-          logging.error(id + "error loading default render image: " + err);
+          logging.error(uuid + "error loading default render image: " + err);
         }
         // we render the default skins, but not custom images
-        renders.draw_model(id, buf, scale, helm, body, function(err, def_img) {
+        renders.draw_model(uuid, buf, scale, helm, body, function(err, def_img) {
           if (err) {
-            logging.log(id + "error while rendering default image: " + err);
+            logging.log(uuid + "error while rendering default image: " + err);
           }
-          sendimage(http_status, img_status, def_img, id);
+          sendimage(http_status, img_status, def_img, uuid);
         });
       });
     }
   }
 
-  function sendimage(http_status, img_status, image, id) {
-    logging.log(id + " status: " + http_status);
+  function sendimage(http_status, img_status, image, uuid) {
+    logging.log(uuid + " status: " + http_status);
     res.writeHead(http_status, {
       "Content-Type": "image/png",
       "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
