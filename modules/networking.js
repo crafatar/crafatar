@@ -155,7 +155,7 @@ function getUrl(rid, uuid, profile, type, callback) {
   }
 }
 
-exp.save_texture = function(rid, uuid, hash, outpath, callback) {
+exp.save_texture = function(rid, hash, outpath, callback) {
   if (hash) {
     var textureurl = "http://textures.minecraft.net/texture/" + hash;
     exp.get_from(rid, textureurl, function(img, response, err) {

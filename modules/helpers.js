@@ -241,7 +241,7 @@ exp.get_skin = function(rid, uuid, callback) {
           callback(err, hash, img);
         });
       } else {
-        networking.save_texture(rid, uuid, hash, skinpath, function(err, response, img) {
+        networking.save_texture(rid, hash, skinpath, function(err, response, img) {
           callback(err, hash, img);
         });
       }
@@ -310,7 +310,7 @@ exp.get_cape = function(rid, uuid, callback) {
           callback(err, hash, img);
         });
       } else {
-        networking.save_texture(rid, uuid, hash, capepath, function(err, response, img) {
+        networking.save_texture(rid, hash, capepath, function(err, response, img) {
           if (response && response.statusCode === 404) {
             callback(err, hash, null);
           } else {
