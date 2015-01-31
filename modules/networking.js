@@ -40,7 +40,7 @@ exp.extract_cape_url = function(profile) {
 // encoding and timeouts, defaults are already
 // specified. +callback+ contains the body, response,
 // and error buffer. get_from helper method is available
-exp.get_from_options = function(url, options, callback) {
+exp.get_from_options = function(rid, url, options, callback) {
   request.get({
     url: url,
     headers: {
@@ -54,29 +54,29 @@ exp.get_from_options = function(url, options, callback) {
     // 200 or 301 depending on content type
     if (!error && (response.statusCode === 200 || response.statusCode === 301)) {
       // response received successfully
-      logging.log(url + " url received");
+      logging.log(rid + url + " url received");
       callback(body, response, null);
     } else if (error) {
       callback(body || null, response, error);
     } else if (response.statusCode === 404) {
       // page does not exist
-      logging.log(url + " url does not exist");
+      logging.log(rid + url + " url does not exist");
       callback(null, response, null);
     } else if (response.statusCode === 429) {
       // Too Many Requests exception - code 429
-      logging.warn(body || "Too many requests");
+      logging.warn(rid + body || "Too many requests");
       callback(body || null, response, error);
     } else {
-      logging.error(url + " Unknown error:");
-      //logging.error(response);
+      logging.error(rid + url + " Unknown error:");
+      logging.error(rid + response);
       callback(body || null, response, error);
     }
   });
 };
 
 // helper method for get_from_options, no options required
-exp.get_from = function(url, callback) {
-  exp.get_from_options(url, {}, function(body, response, err) {
+exp.get_from = function(rid, url, callback) {
+  exp.get_from_options(rid, url, {}, function(body, response, err) {
     callback(body, response, err);
   });
 };
@@ -90,8 +90,8 @@ var mojang_url_types = {
 // make a request to skins.miencraft.net
 // the skin url is taken from the HTTP redirect
 // type reference is above
-exp.get_username_url = function(name, type, callback) {
-  exp.get_from(mojang_url_types[type] + name + ".png", function(body, response, err) {
+exp.get_username_url = function(rid, name, type, callback) {
+  exp.get_from(rid, mojang_url_types[type] + name + ".png", function(body, response, err) {
     if (!err) {
       callback(err, response ? (response.statusCode === 404 ? null : response.headers.location) : null);
     } else {
@@ -114,21 +114,21 @@ exp.get_uuid_url = function(profile, type, callback) {
 
 // make a request to sessionserver
 // profile is returned as json
-exp.get_profile = function(uuid, callback) {
+exp.get_profile = function(rid, uuid, callback) {
   if (!uuid) {
     callback(null, null);
   } else {
-    exp.get_from_options(session_url + uuid, { encoding: "utf8" }, function(body, response, err) {
+    exp.get_from_options(rid, session_url + uuid, { encoding: "utf8" }, function(body, response, err) {
       callback(err || null, (body !== null ? JSON.parse(body) : null));
-    }); 
+    });
   }
 };
 
 // +uuid+ is likely a username and if so
 // +uuid+ is used to get the url, otherwise
 // +profile+ will be used to get the url
-exp.get_skin_url = function(uuid, profile, callback) {
-  getUrl(uuid, profile, 1, function(url) {
+exp.get_skin_url = function(rid, uuid, profile, callback) {
+  getUrl(rid, uuid, profile, 1, function(url) {
     callback(url);
   });
 };
@@ -136,16 +136,16 @@ exp.get_skin_url = function(uuid, profile, callback) {
 // +uuid+ is likely a username and if so
 // +uuid+ is used to get the url, otherwise
 // +profile+ will be used to get the url
-exp.get_cape_url = function(uuid, profile, callback) {
-  getUrl(uuid, profile, 2, function(url) {
+exp.get_cape_url = function(rid, uuid, profile, callback) {
+  getUrl(rid, uuid, profile, 2, function(url) {
     callback(url);
   });
 };
 
-function getUrl(uuid, profile, type, callback) {
+function getUrl(rid, uuid, profile, type, callback) {
   if (uuid.length <= 16) {
     //username
-    exp.get_username_url(uuid, type, function(err, url) {
+    exp.get_username_url(rid, uuid, type, function(err, url) {
       callback(url || null);
     });
   } else {
@@ -155,25 +155,17 @@ function getUrl(uuid, profile, type, callback) {
   }
 }
 
-// downloads skin file from +url+
-// callback contains error, image
-exp.get_skin = function(url, uuid, callback) {
-  exp.get_from(url, function(body, response, err) {
-    callback(body, err);
-  });
-};
-
-exp.save_texture = function(uuid, hash, outpath, callback) {
+exp.save_texture = function(rid, uuid, hash, outpath, callback) {
   if (hash) {
     var textureurl = "http://textures.minecraft.net/texture/" + hash;
-    exp.get_from(textureurl, function(img, response, err) {
+    exp.get_from(rid, textureurl, function(img, response, err) {
       if (err) {
-        logging.error(uuid + "error while downloading texture");
+        logging.error(rid + "error while downloading texture");
         callback(err, response, null);
       } else {
         fs.writeFile(outpath, img, "binary", function(err) {
           if (err) {
-            logging.log(uuid + " error: " + err);
+            logging.log(rid + "error: " + err.stack);
           }
           callback(err, response, img);
         });
@@ -182,12 +174,6 @@ exp.save_texture = function(uuid, hash, outpath, callback) {
   } else {
     callback(null, null, null);
   }
-};
-
-exp.get_cape = function(url, callback) {
-  exp.get_from(url, function(body, response, err) {
-    callback(err, body);
-  });
 };
 
 module.exports = exp;

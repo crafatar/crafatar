@@ -21,6 +21,7 @@ var human_status = {
 module.exports = function(req, res) {
   var start = new Date();
   var raw_type = (req.url.path_list[2] || "");
+  var rid = req.id;
 
   // validate type
   if (raw_type !== "body" && raw_type !== "head") {
@@ -57,12 +58,17 @@ module.exports = function(req, res) {
 
   // strip dashes
   uuid = uuid.replace(/-/g, "");
+  logging.log(rid + "uuid: " + uuid);
 
   try {
-    helpers.get_render(uuid, scale, helm, body, function(err, status, hash, image) {
-      logging.log(uuid + " - " + human_status[status]);
+    helpers.get_render(rid, uuid, scale, helm, body, function(err, status, hash, image) {
+      logging.log(rid + "storage type: " + human_status[status]);
       if (err) {
-        logging.error(uuid + " " + err);
+        logging.error(rid + err);
+        if (err.code == "ENOENT") {
+          // no such file
+          cache.remove_hash(rid, uuid);
+        }
       }
       etag = hash && hash.substr(0, 32) || "none";
       var matches = req.headers["if-none-match"] === '"' + etag + '"';
@@ -73,29 +79,30 @@ module.exports = function(req, res) {
         } else if (err) {
           http_status = 503;
         }
-        logging.debug(uuid + " etag: " + req.headers["if-none-match"]);
-        logging.debug(uuid + " matches: " + matches);
-        sendimage(http_status, status, image, uuid);
+        logging.debug(rid + "etag: " + req.headers["if-none-match"]);
+        logging.debug(rid + "matches: " + matches);
+        sendimage(rid, http_status, status, image);
       } else {
-        logging.log(uuid + " image not found, using default.");
-        handle_default(404, status, uuid);
+        logging.log(rid + "image not found, using default.");
+        handle_default(rid, 404, status, uuid);
       }
     });
   } catch(e) {
-    logging.error(uuid + " error: " + e);
-    handle_default(500, status, uuid);
+    logging.error(rid + "error: " + e.stack);
+    handle_default(rid, 500, -1, uuid);
   }
 
 
   // default alex/steve images can be rendered, but
   // custom images will not be
-  function handle_default(http_status, img_status, uuid) {
+  function handle_default(rid, http_status, img_status, uuid) {
     if (def && def !== "steve" && def !== "alex") {
-      logging.log(uuid + " status: 301");
+      logging.log(rid + "status: 301");
       res.writeHead(301, {
         "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
         "Response-Time": new Date() - start,
         "X-Storage-Type": human_status[img_status],
+        "X-Request-ID": rid,
         "Access-Control-Allow-Origin": "*",
         "Location": def
       });
@@ -105,26 +112,27 @@ module.exports = function(req, res) {
       fs.readFile("public/images/" + def + "_skin.png", function (err, buf) {
         if (err) {
           // errored while loading the default image, continuing with null image
-          logging.error(uuid + "error loading default render image: " + err);
+          logging.error(rid + "error loading default render image: " + err);
         }
         // we render the default skins, but not custom images
-        renders.draw_model(uuid, buf, scale, helm, body, function(err, def_img) {
+        renders.draw_model(rid, buf, scale, helm, body, function(err, def_img) {
           if (err) {
-            logging.log(uuid + "error while rendering default image: " + err);
+            logging.log(rid + "error while rendering default image: " + err);
           }
-          sendimage(http_status, img_status, def_img, uuid);
+          sendimage(rid, http_status, img_status, def_img);
         });
       });
     }
   }
 
-  function sendimage(http_status, img_status, image, uuid) {
-    logging.log(uuid + " status: " + http_status);
+  function sendimage(rid, http_status, img_status, image) {
+    logging.log(rid + "status: " + http_status);
     res.writeHead(http_status, {
       "Content-Type": "image/png",
       "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
       "Response-Time": new Date() - start,
       "X-Storage-Type": human_status[img_status],
+      "X-Request-ID": rid,
       "Access-Control-Allow-Origin": "*",
       "Etag": '"' + etag + '"'
     });

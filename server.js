@@ -44,8 +44,11 @@ function requestHandler(req, res) {
   }
   request.url.path_list = path_list;
 
+  // generate 12 character random string
+  request.id = Math.random().toString(36).substring(2,14) + " ";
+
   var local_path = request.url.path_list[1];
-  logging.log(request.method + " " + request.url.href);
+  logging.log(request.id + request.method + " " + request.url.href);
   if (request.method === "GET" || request.method === "HEAD") {
     try {
       switch (local_path) {
@@ -69,7 +72,7 @@ function requestHandler(req, res) {
       }
     } catch(e) {
       var error = JSON.stringify(req.headers) + "\n" + e.stack;
-      logging.error("Error: " + error);
+      logging.error(request.id + "Error: " + error);
       res.writeHead(500, {
         "Content-Type": "text/plain"
       });

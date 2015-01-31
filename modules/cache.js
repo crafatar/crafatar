@@ -37,7 +37,7 @@ function connect_redis() {
 
 // sets the date of the face file belonging to +hash+ to now
 // the helms file is ignored because we only need 1 file to read/write from
-function update_file_date(hash, uuid) {
+function update_file_date(rid, hash) {
   if (hash) {
     var path = config.faces_dir + hash + ".png";
     fs.exists(path, function(exists) {
@@ -45,11 +45,11 @@ function update_file_date(hash, uuid) {
         var date = new Date();
         fs.utimes(path, date, date, function(err){
           if (err) {
-            logging.error(uuid + " Error: " + err);
+            logging.error(rid + "Error: " + err.stack);
           }
         });
       } else {
-        logging.error(uuid + " tried to update " + path + " date, but it does not exist");
+        logging.error(rid + "tried to update " + path + " date, but it does not exist");
       }
     });
   }
@@ -93,19 +93,19 @@ exp.info = function(callback) {
 };
 
 // sets the timestamp for +uuid+ and its face file's date to now
-exp.update_timestamp = function(uuid, hash) {
-  logging.log(uuid + " cache: updating timestamp");
+exp.update_timestamp = function(rid, uuid, hash) {
+  logging.log(rid + "cache: updating timestamp");
   var time = new Date().getTime();
   // store uuid in lower case if not null
   uuid = uuid && uuid.toLowerCase();
   redis.hmset(uuid, "t", time);
-  update_file_date(hash, uuid);
+  update_file_date(rid, hash);
 };
 
-// create the key +uuid+, store +hash+ and time
-exp.save_hash = function(uuid, skin, cape) {
-  logging.log(uuid + " cache: saving hash");
-  logging.log("skin:" + skin + " cape:" + cape);
+// create the key +uuid+, store +skin+ hash, +cape+ hash and time
+exp.save_hash = function(rid, uuid, skin, cape) {
+  logging.log(rid + "cache: saving hash");
+  logging.log(rid + "skin:" + skin + " cape:" + cape);
   var time = new Date().getTime();
   // store shorter null byte instead of "null"
   skin = skin || ".";
@@ -115,8 +115,8 @@ exp.save_hash = function(uuid, skin, cape) {
   redis.hmset(uuid, "s", skin, "c", cape, "t", time);
 };
 
-exp.remove_hash = function(uuid) {
-  logging.log(uuid + " cache: deleting hash");
+exp.remove_hash = function(rid, uuid) {
+  logging.log(rid + "cache: deleting hash");
   redis.del(uuid.toLowerCase(), "h", "t");
 };
 
