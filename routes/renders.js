@@ -34,7 +34,7 @@ module.exports = function(req, res) {
   }
 
   var body = raw_type === "body";
-  var uuid = (req.url.path_list[3] || "").split(".")[0];
+  var userId = (req.url.path_list[3] || "").split(".")[0];
   var def = req.url.query.default;
   var scale = parseInt(req.url.query.scale) || config.default_scale;
   var helm = req.url.query.hasOwnProperty("helm");
@@ -47,27 +47,27 @@ module.exports = function(req, res) {
     });
     res.end("422 Invalid Scale");
     return;
-  } else if (!helpers.uuid_valid(uuid)) {
+  } else if (!helpers.id_valid(userId)) {
     res.writeHead(422, {
       "Content-Type": "text/plain",
       "Response-Time": new Date() - start
     });
-    res.end("422 Invalid UUID");
+    res.end("422 Invalid ID");
     return;
   }
 
   // strip dashes
-  uuid = uuid.replace(/-/g, "");
-  logging.log(rid + "uuid: " + uuid);
+  userId = userId.replace(/-/g, "");
+  logging.log(rid + "userId: " + userId);
 
   try {
-    helpers.get_render(rid, uuid, scale, helm, body, function(err, status, hash, image) {
+    helpers.get_render(rid, userId, scale, helm, body, function(err, status, hash, image) {
       logging.log(rid + "storage type: " + human_status[status]);
       if (err) {
         logging.error(rid + err);
         if (err.code == "ENOENT") {
           // no such file
-          cache.remove_hash(rid, uuid);
+          cache.remove_hash(rid, userId);
         }
       }
       etag = hash && hash.substr(0, 32) || "none";
@@ -84,18 +84,18 @@ module.exports = function(req, res) {
         sendimage(rid, http_status, status, image);
       } else {
         logging.log(rid + "image not found, using default.");
-        handle_default(rid, 404, status, uuid);
+        handle_default(rid, 404, status, userId);
       }
     });
   } catch(e) {
     logging.error(rid + "error: " + e.stack);
-    handle_default(rid, 500, -1, uuid);
+    handle_default(rid, 500, -1, userId);
   }
 
 
   // default alex/steve images can be rendered, but
   // custom images will not be
-  function handle_default(rid, http_status, img_status, uuid) {
+  function handle_default(rid, http_status, img_status, userId) {
     if (def && def !== "steve" && def !== "alex") {
       logging.log(rid + "status: 301");
       res.writeHead(301, {
@@ -108,7 +108,7 @@ module.exports = function(req, res) {
       });
       res.end();
     } else {
-      def = def || skins.default_skin(uuid);
+      def = def || skins.default_skin(userId);
       fs.readFile("public/images/" + def + "_skin.png", function (err, buf) {
         if (err) {
           // errored while loading the default image, continuing with null image

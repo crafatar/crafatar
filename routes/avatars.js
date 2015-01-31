@@ -15,7 +15,7 @@ var human_status = {
 // GET avatar request
 module.exports = function(req, res) {
   var start = new Date();
-  var uuid = (req.url.path_list[2] || "").split(".")[0];
+  var userId = (req.url.path_list[2] || "").split(".")[0];
   var size = parseInt(req.url.query.size) || config.default_size;
   var def = req.url.query.default;
   var helm = req.url.query.hasOwnProperty("helm");
@@ -32,27 +32,27 @@ module.exports = function(req, res) {
     });
     res.end("Invalid Size");
     return;
-  } else if (!helpers.uuid_valid(uuid)) {
+  } else if (!helpers.id_valid(userId)) {
     res.writeHead(422, {
       "Content-Type": "text/plain",
       "Response-Time": new Date() - start
     });
-    res.end("Invalid UUID");
+    res.end("Invalid ID");
     return;
   }
 
   // strip dashes
-  uuid = uuid.replace(/-/g, "");
-  logging.log(rid + "uuid: " + uuid);
+  userId = userId.replace(/-/g, "");
+  logging.log(rid + "userid: " + userId);
 
   try {
-    helpers.get_avatar(rid, uuid, helm, size, function(err, status, image, hash) {
+    helpers.get_avatar(rid, userId, helm, size, function(err, status, image, hash) {
       logging.log(rid + "storage type: " + human_status[status]);
       if (err) {
         logging.error(rid + err);
         if (err.code === "ENOENT") {
           // no such file
-          cache.remove_hash(rid, uuid);
+          cache.remove_hash(rid, userId);
         }
       }
       etag = image && hash && hash.substr(0, 32) || "none";
@@ -68,15 +68,15 @@ module.exports = function(req, res) {
         logging.debug(rid + "matches: " + matches);
         sendimage(rid, http_status, status, image);
       } else {
-        handle_default(rid, 404, status, uuid);
+        handle_default(rid, 404, status, userId);
       }
     });
   } catch(e) {
     logging.error(rid + "error: " + e.stack);
-    handle_default(rid, 500, -1, uuid);
+    handle_default(rid, 500, -1, userId);
   }
 
-  function handle_default(rid, http_status, img_status, uuid) {
+  function handle_default(rid, http_status, img_status, userId) {
     if (def && def !== "steve" && def !== "alex") {
       logging.log(rid + "status: 301");
       res.writeHead(301, {
@@ -89,7 +89,7 @@ module.exports = function(req, res) {
       });
       res.end();
     } else {
-      def = def || skins.default_skin(uuid);
+      def = def || skins.default_skin(userId);
       skins.resize_img("public/images/" + def + ".png", size, function(err, image) {
         sendimage(rid, http_status, img_status, image);
       });

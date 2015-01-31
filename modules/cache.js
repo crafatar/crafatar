@@ -92,41 +92,41 @@ exp.info = function(callback) {
   });
 };
 
-// sets the timestamp for +uuid+ and its face file's date to now
-exp.update_timestamp = function(rid, uuid, hash) {
+// sets the timestamp for +userId+ and its face file's date to now
+exp.update_timestamp = function(rid, userId, hash) {
   logging.log(rid + "cache: updating timestamp");
   var time = new Date().getTime();
-  // store uuid in lower case if not null
-  uuid = uuid && uuid.toLowerCase();
-  redis.hmset(uuid, "t", time);
+  // store userId in lower case if not null
+  userId = userId && userId.toLowerCase();
+  redis.hmset(userId, "t", time);
   update_file_date(rid, hash);
 };
 
-// create the key +uuid+, store +skin+ hash, +cape+ hash and time
-exp.save_hash = function(rid, uuid, skin, cape) {
+// create the key +userId+, store +skin+ hash, +cape+ hash and time
+exp.save_hash = function(rid, userId, skin, cape) {
   logging.log(rid + "cache: saving hash");
   logging.log(rid + "skin:" + skin + " cape:" + cape);
   var time = new Date().getTime();
   // store shorter null byte instead of "null"
   skin = skin || ".";
   cape = cape || ".";
-  // store uuid in lower case if not null
-  uuid = uuid && uuid.toLowerCase();
-  redis.hmset(uuid, "s", skin, "c", cape, "t", time);
+  // store userId in lower case if not null
+  userId = userId && userId.toLowerCase();
+  redis.hmset(userId, "s", skin, "c", cape, "t", time);
 };
 
-exp.remove_hash = function(rid, uuid) {
+exp.remove_hash = function(rid, userId) {
   logging.log(rid + "cache: deleting hash");
-  redis.del(uuid.toLowerCase(), "h", "t");
+  redis.del(userId.toLowerCase(), "h", "t");
 };
 
-// get a details object for +uuid+
+// get a details object for +userId+
 // {skin: "0123456789abcdef", cape: "gs1gds1g5d1g5ds1", time: 1414881524512}
-// null when uuid unkown
-exp.get_details = function(uuid, callback) {
-  // get uuid in lower case if not null
-  uuid = uuid && uuid.toLowerCase();
-  redis.hgetall(uuid, function(err, data) {
+// null when userId unkown
+exp.get_details = function(userId, callback) {
+  // get userId in lower case if not null
+  userId = userId && userId.toLowerCase();
+  redis.hgetall(userId, function(err, data) {
     var details = null;
     if (data) {
       details = {

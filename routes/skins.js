@@ -7,26 +7,26 @@ var lwip = require("lwip");
 // GET skin request
 module.exports = function(req, res) {
   var start = new Date();
-  var uuid = (req.url.path_list[2] || "").split(".")[0];
+  var userId = (req.url.path_list[2] || "").split(".")[0];
   var def = req.url.query.default;
   var etag = null;
   var rid = req.id;
 
-  if (!helpers.uuid_valid(uuid)) {
+  if (!helpers.id_valid(userId)) {
     res.writeHead(422, {
       "Content-Type": "text/plain",
       "Response-Time": new Date() - start
     });
-    res.end("Invalid UUID");
+    res.end("Invalid ID");
     return;
   }
 
   // strip dashes
-  uuid = uuid.replace(/-/g, "");
-  logging.log(rid + "uuid: " + uuid);
+  userId = userId.replace(/-/g, "");
+  logging.log(rid + "userid: " + userId);
 
   try {
-    helpers.get_skin(rid, uuid, function(err, hash, image) {
+    helpers.get_skin(rid, userId, function(err, hash, image) {
       if (err) {
         logging.error(rid + err);
       }
@@ -43,15 +43,15 @@ module.exports = function(req, res) {
         logging.debug(rid + "matches: " + matches);
         sendimage(rid, http_status, image);
       } else {
-        handle_default(rid, 404, uuid);
+        handle_default(rid, 404, userId);
       }
     });
   } catch(e) {
     logging.error(rid + "error: " + e.stack);
-    handle_default(rid, 500, uuid);
+    handle_default(rid, 500, userId);
   }
 
-  function handle_default(rid, http_status, uuid) {
+  function handle_default(rid, http_status, userId) {
     if (def && def !== "steve" && def !== "alex") {
       logging.log(rid + "status: 301");
       res.writeHead(301, {
@@ -64,7 +64,7 @@ module.exports = function(req, res) {
       });
       res.end();
     } else {
-      def = def || skins.default_skin(uuid);
+      def = def || skins.default_skin(userId);
       lwip.open("public/images/" + def + "_skin.png", function(err, image) {
         image.toBuffer("png", function(err, buffer) {
           sendimage(rid, http_status, buffer);
