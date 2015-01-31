@@ -94,24 +94,32 @@ function store_cape(rid, uuid, profile, details, callback) {
   });
 }
 
-// downloads the images for +uuid+ while checking the cache
-// status based on +details+. +type+ specifies which
-// image type should be called back on
-// +callback+ contains the error buffer and image hash
+// used by store_images to queue simultaneous requests for identical uuid
+// the first request has to be completed until all others are continued
 var currently_running = [];
+// calls back all queued requests that match uuid and type
 function callback_for(uuid, type, err, hash) {
+  var req_count = 0;
   for (var i = 0; i < currently_running.length; i++) {
     var current = currently_running[i];
     if (current.uuid === uuid && current.type === type) {
-      logging.debug(current.rid + "now completing queued " + type + " request");
-      current.callback(err, hash);
+      req_count++;
+      if (req_count !== 1) {
+        // otherwise this would show up on single/first requests, too
+        logging.debug(current.rid + "queued " + type + " request continued");
+      }
       currently_running.splice(i, 1); // remove from array
+      current.callback(err, hash);
       i--;
     }
   }
+  if (req_count > 1) {
+    logging.debug(req_count + " simultaneous requests for " + uuid);
+  }
 }
 
-function array_has_obj(arr, property, value) {
+// returns true if any object in +arr+ has +value+ as +property+
+function deep_property_check(arr, property, value) {
   for (var i = 0; i < arr.length; i++) {
     if (arr[i][property] === value) {
       return true;
@@ -120,6 +128,10 @@ function array_has_obj(arr, property, value) {
   return false;
 }
 
+// downloads the images for +uuid+ while checking the cache
+// status based on +details+. +type+ specifies which
+// image type should be called back on
+// +callback+ contains the error buffer and image hash
 function store_images(rid, uuid, details, type, callback) {
   var is_uuid = uuid.length > 16;
   var new_hash = {
@@ -128,7 +140,7 @@ function store_images(rid, uuid, details, type, callback) {
     type: type,
     callback: callback
   };
-  if (!array_has_obj(currently_running, "uuid", uuid)) {
+  if (!deep_property_check(currently_running, "uuid", uuid)) {
     currently_running.push(new_hash);
     networking.get_profile(rid, (is_uuid ? uuid : null), function(err, profile) {
       if (err || (is_uuid && !profile)) {
