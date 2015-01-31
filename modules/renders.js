@@ -42,9 +42,9 @@ exp.draw_head = function(skin_canvas, model_ctx, scale) {
 // draws the body on to the +skin_canvas+
 // using the skin from the +model_ctx+ at the +scale+
 // parts are labeled as if drawn from the skin's POV
-exp.draw_body = function(uuid, skin_canvas, model_ctx, scale) {
+exp.draw_body = function(rid, skin_canvas, model_ctx, scale) {
   if (skin_canvas.height == 32 * scale) {
-    logging.log(uuid + " old skin");
+    logging.debug(rid + "uses old skin format");
     //Left Leg
     //Left Leg - Front
     model_ctx.setTransform(1,-0.5,0,1.2,0,0);
@@ -85,7 +85,7 @@ exp.draw_body = function(uuid, skin_canvas, model_ctx, scale) {
     model_ctx.scale(-1,1);
     model_ctx.drawImage(skin_canvas, 44*scale, 16*scale, 4*scale, 4*scale, -16*scale, 16*scale, 4*scale, 4*scale);
   } else {
-    logging.log(uuid + " new skin");
+    logging.debug(rid + "uses new skin format");
     //Left Leg
     //Left Leg - Front
     model_ctx.setTransform(1,-0.5,0,1.2,0,0);
@@ -127,14 +127,14 @@ exp.draw_body = function(uuid, skin_canvas, model_ctx, scale) {
 };
 
 // sets up the necessary components to draw the skin model
-// uses the +img+ skin from the +uuid+ with options of drawing
+// uses the +img+ skin with options of drawing
 // the +helm+ and the +body+
 // callback contains error, image buffer
-exp.draw_model = function(uuid, img, scale, helm, body, callback) {
+exp.draw_model = function(rid, img, scale, helm, body, callback) {
   var image = new Image();
 
   image.onerror = function(err) {
-    logging.error(uuid + " render error: " + err);
+    logging.error(rid + "render error: " + err.stack);
     callback(err, null);
   };
 
@@ -151,19 +151,19 @@ exp.draw_model = function(uuid, img, scale, helm, body, callback) {
     //Scale it
     scale_image(skin_ctx.getImageData(0,0,64,original_height), skin_ctx, 0, 0, scale);
     if (body) {
-      logging.log(uuid + " drawing body");
-      exp.draw_body(uuid, skin_canvas, model_ctx, scale);
+      logging.log(rid + "drawing body");
+      exp.draw_body(rid, skin_canvas, model_ctx, scale);
     }
-    logging.log(uuid + " drawing head");
+    logging.log(rid + "drawing head");
     exp.draw_head(skin_canvas, model_ctx, scale);
     if (helm) {
-      logging.log(uuid + " drawing helmet");
+      logging.log(rid + "drawing helmet");
       exp.draw_helmet(skin_canvas, model_ctx, scale);
     }
 
     model_canvas.toBuffer(function(err, buf){
       if (err) {
-        logging.log(uuid + " error creating buffer: " + err);
+        logging.log(rid + "error creating buffer: " + err);
       }
       callback(err, buf);
     });
@@ -174,10 +174,10 @@ exp.draw_model = function(uuid, img, scale, helm, body, callback) {
 
 // helper method to open a render from +renderpath+
 // callback contains error, image buffer
-exp.open_render = function(uuid, renderpath, callback) {
+exp.open_render = function(rid, renderpath, callback) {
   fs.readFile(renderpath, function (err, buf) {
     if (err) {
-      logging.error(uuid + " error while opening skin file: " + err);
+      logging.error(rid + "error while opening skin file: " + err);
     }
     callback(err, buf);
   });

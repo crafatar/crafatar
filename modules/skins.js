@@ -29,7 +29,7 @@ exp.extract_face = function(buffer, outname, callback) {
 // +facefile+ is the filename of an image produced by extract_face
 // result is saved to a file called +outname+
 // +callback+ contains error
-exp.extract_helm = function(uuid, facefile, buffer, outname, callback) {
+exp.extract_helm = function(rid, facefile, buffer, outname, callback) {
   lwip.open(buffer, "png", function(err, skin_img) {
     if (err) {
       callback(err);
@@ -53,7 +53,7 @@ exp.extract_helm = function(uuid, facefile, buffer, outname, callback) {
                           callback(err);
                         });
                       } else {
-                        logging.log(uuid + " helm image is the same as face image, not storing!");
+                        logging.log(rid + "helm image is the same as face image, not storing!");
                         callback(null);
                       }
                     });
@@ -62,10 +62,10 @@ exp.extract_helm = function(uuid, facefile, buffer, outname, callback) {
               }
             });
           });
-}
-});
-}
-});
+        }
+      });
+    }
+  });
 };
 
 // resizes the image file +inname+ to +size+ by +size+ pixels
@@ -98,7 +98,7 @@ exp.default_skin = function(uuid) {
 exp.open_skin = function(uuid, skinpath, callback) {
   fs.readFile(skinpath, function(err, buf) {
     if (err) {
-      logging.error(uuid + " error while opening skin file: " + err);
+      logging.error(rid + "error while opening skin file: " + err);
       callback(err, null)
     } else {
       callback(null, buf);

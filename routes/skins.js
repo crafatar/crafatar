@@ -11,6 +11,7 @@ module.exports = function(req, res) {
   var uuid = (req.url.path_list[2] || "").split(".")[0];
   var def = req.url.query.default;
   var etag = null;
+  var rid = req.id;
 
   if (!helpers.uuid_valid(uuid)) {
     res.writeHead(422, {
@@ -23,12 +24,12 @@ module.exports = function(req, res) {
 
   // strip dashes
   uuid = uuid.replace(/-/g, "");
+  logging.log(rid + "uuid: " + uuid);
 
   try {
-    helpers.get_skin(uuid, function(err, hash, image) {
-      logging.log(uuid);
+    helpers.get_skin(rid, uuid, function(err, hash, image) {
       if (err) {
-        logging.error(uuid + " " + err);
+        logging.error(rid + err);
       }
       etag = hash && hash.substr(0, 32) || "none";
       var matches = req.headers["if-none-match"] === '"' + etag + '"';
@@ -39,25 +40,26 @@ module.exports = function(req, res) {
         } else if (err) {
           http_status = 503;
         }
-        logging.debug(uuid + " etag: " + req.headers["if-none-match"]);
-        logging.debug(uuid + " matches: " + matches);
-        sendimage(http_status, image, uuid);
+        logging.debug(rid + "etag: " + req.headers["if-none-match"]);
+        logging.debug(rid + "matches: " + matches);
+        sendimage(rid, http_status, image);
       } else {
-        handle_default(404, uuid);
+        handle_default(rid, 404, uuid);
       }
     });
   } catch(e) {
-    logging.error(uuid + " error: " + e);
-    handle_default(500, uuid);
+    logging.error(rid + "error: " + e.stack);
+    handle_default(rid, 500, uuid);
   }
 
-  function handle_default(http_status, uuid) {
+  function handle_default(rid, http_status, uuid) {
     if (def && def != "steve" && def != "alex") {
-      logging.log(uuid + " status: 301");
+      logging.log(rid + "status: 301");
       res.writeHead(301, {
         "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
         "Response-Time": new Date() - start,
         "X-Storage-Type": "downloaded",
+        "X-Request-ID": rid,
         "Access-Control-Allow-Origin": "*",
         "Location": def
       });
@@ -66,19 +68,20 @@ module.exports = function(req, res) {
       def = def || skins.default_skin(uuid);
       lwip.open("public/images/" + def + "_skin.png", function(err, image) {
         image.toBuffer("png", function(err, buffer) {
-          sendimage(http_status, buffer, uuid);
+          sendimage(rid, http_status, buffer);
         });
       });
     }
   }
 
-  function sendimage(http_status, image, uuid) {
-    logging.log(uuid + " status: " + http_status);
+  function sendimage(rid, http_status, image) {
+    logging.log(rid + "status: " + http_status);
     res.writeHead(http_status, {
       "Content-Type": "image/png",
       "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
       "Response-Time": new Date() - start,
       "X-Storage-Type": "downloaded",
+      "X-Request-ID": rid,
       "Access-Control-Allow-Origin": "*",
       "Etag": '"' + etag + '"'
     });
