@@ -237,7 +237,7 @@ exp.get_skin = function(rid, uuid, callback) {
     fs.exists(skinpath, function(exists) {
       if (exists) {
         logging.log(rid + "skin already exists, not downloading");
-        skins.open_skin(uuid, skinpath, function(err, img) {
+        skins.open_skin(rid, skinpath, function(err, img) {
           callback(err, hash, img);
         });
       } else {
@@ -306,7 +306,7 @@ exp.get_cape = function(rid, uuid, callback) {
     fs.exists(capepath, function(exists) {
       if (exists) {
         logging.log(rid + "cape already exists, not downloading");
-        skins.open_skin(uuid, capepath, function(err, img) {
+        skins.open_skin(rid, capepath, function(err, img) {
           callback(err, hash, img);
         });
       } else {

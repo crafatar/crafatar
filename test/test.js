@@ -8,7 +8,7 @@ var config = require("../modules/config");
 var skins = require("../modules/skins");
 var cache = require("../modules/cache");
 var renders = require("../modules/renders");
-var cleaner = require("../modules/cleaner")
+var cleaner = require("../modules/cleaner");
 
 // we don't want tests to fail because of slow internet
 config.http_timeout *= 3;
@@ -22,6 +22,8 @@ var names = fs.readFileSync("test/usernames.txt").toString().split(/\r?\n/);
 // Get a random UUID + name in order to prevent rate limiting
 var uuid = uuids[Math.round(Math.random() * (uuids.length - 1))];
 var name = names[Math.round(Math.random() * (names.length - 1))];
+
+var rid = "TestReqID: ";
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -86,13 +88,13 @@ describe("Crafatar", function() {
     });
     it("should not exist (uuid)", function(done) {
       var number = getRandomInt(0, 9).toString();
-      networking.get_profile("testreq", Array(33).join(number), function(err, profile) {
+      networking.get_profile(rid, Array(33).join(number), function(err, profile) {
         assert.strictEqual(profile, null);
         done();
       });
     });
     it("should not exist (username)", function(done) {
-      networking.get_username_url("Steve", 1, function(err, profile) {
+      networking.get_username_url(rid, "Steve", 1, function(err, profile) {
         assert.strictEqual(err, null);
         done();
       });
@@ -106,13 +108,13 @@ describe("Crafatar", function() {
     var steven_uuid = "b8ffc3d37dbf48278f69475f6690aabd";
 
     it("uuid's account should exist, but skin should not", function(done) {
-      networking.get_profile("testreq", alex_uuid, function(err, profile) {
+      networking.get_profile(rid, alex_uuid, function(err, profile) {
         assert.notStrictEqual(profile, null);
         networking.get_uuid_url(profile, 1, function(url) {
           assert.strictEqual(url, null);
           done();
         });
-      })
+      });
     });
     it("odd UUID should default to Alex", function(done) {
       assert.strictEqual(skins.default_skin(alex_uuid), "alex");
@@ -127,7 +129,7 @@ describe("Crafatar", function() {
     it("should time out on uuid info download", function(done) {
       var original_timeout = config.http_timeout;
       config.http_timeout = 1;
-      networking.get_profile("testreq", "069a79f444e94726a5befca90e38aaf5", function(err, profile) {
+      networking.get_profile(rid, "069a79f444e94726a5befca90e38aaf5", function(err, profile) {
         assert.strictEqual(err.code, "ETIMEDOUT");
         config.http_timeout = original_timeout;
         done();
@@ -136,7 +138,7 @@ describe("Crafatar", function() {
     it("should time out on username info download", function(done) {
       var original_timeout = config.http_timeout;
       config.http_timeout = 1;
-      networking.get_username_url("redstone_sheep", 1, function(err, url) {
+      networking.get_username_url(rid, "redstone_sheep", 1, function(err, url) {
         assert.strictEqual(err.code, "ETIMEDOUT");
         config.http_timeout = original_timeout;
         done();
@@ -145,7 +147,7 @@ describe("Crafatar", function() {
     it("should time out on skin download", function(done) {
       var original_timeout = config.http_timeout;
       config.http_timeout = 1;
-      networking.get_from("http://textures.minecraft.net/texture/477be35554684c28bdeee4cf11c591d3c88afb77e0b98da893fd7bc318c65184", function(body, res, error) {
+      networking.get_from(rid, "http://textures.minecraft.net/texture/477be35554684c28bdeee4cf11c591d3c88afb77e0b98da893fd7bc318c65184", function(body, res, error) {
         assert.strictEqual(error.code, "ETIMEDOUT");
         config.http_timeout = original_timeout;
         done();
@@ -153,7 +155,7 @@ describe("Crafatar", function() {
     });
     it("should not find the skin", function(done) {
       assert.doesNotThrow(function() {
-        networking.get_from("http://textures.minecraft.net/texture/this-does-not-exist", function(img, response, err) {
+        networking.get_from(rid, "http://textures.minecraft.net/texture/this-does-not-exist", function(img, response, err) {
           assert.strictEqual(err, null); // no error here, but it shouldn't throw exceptions
           done();
         });
@@ -161,12 +163,12 @@ describe("Crafatar", function() {
     });
     it("should ignore file updates on invalid files", function(done) {
       assert.doesNotThrow(function() {
-        cache.update_timestamp("testreq", "0123456789abcdef0123456789abcdef", "invalid-file.png");
+        cache.update_timestamp(rid, "0123456789abcdef0123456789abcdef", "invalid-file.png");
       });
       done();
     });
     it("should not find the file", function(done) {
-      skins.open_skin("TestUUID", 'non/existant/path', function(err, img) {
+      skins.open_skin(rid, 'non/existant/path', function(err, img) {
         assert.notStrictEqual(err, null);
         done();
       });
@@ -176,13 +178,13 @@ describe("Crafatar", function() {
   // we have to make sure that we test both a 32x64 and 64x64 skin
   describe("Networking: Render", function() {
     it("should not fail (username, 32x64 skin)", function(done) {
-      helpers.get_render("testreq", "md_5", 6, true, true, function(err, hash, img) {
+      helpers.get_render(rid, "md_5", 6, true, true, function(err, hash, img) {
         assert.strictEqual(err, null);
         done();
       });
     });
     it("should not fail (username, 64x64 skin)", function(done) {
-      helpers.get_render("testreq", "Jake0oo0", 6, true, true, function(err, hash, img) {
+      helpers.get_render(rid, "Jake0oo0", 6, true, true, function(err, hash, img) {
         assert.strictEqual(err, null);
         done();
       });
@@ -191,7 +193,7 @@ describe("Crafatar", function() {
 
   describe("Networking: Cape", function() {
     it("should not fail (guaranteed cape)", function(done) {
-      helpers.get_cape("testreq", "Dinnerbone", function(err, hash, img) {
+      helpers.get_cape(rid, "Dinnerbone", function(err, hash, img) {
         assert.strictEqual(err, null);
         done();
       });
@@ -200,13 +202,13 @@ describe("Crafatar", function() {
       before(function() {
         cache.get_redis().flushall();
       });
-      helpers.get_cape("testreq", "Dinnerbone", function(err, hash, img) {
+      helpers.get_cape(rid, "Dinnerbone", function(err, hash, img) {
         assert.strictEqual(err, null);
         done();
       });
     });
     it("should not be found", function(done) {
-      helpers.get_cape("testreq", "Jake0oo0", function(err, hash, img) {
+      helpers.get_cape(rid, "Jake0oo0", function(err, hash, img) {
         assert.strictEqual(img, null);
         done();
       });
@@ -215,7 +217,7 @@ describe("Crafatar", function() {
 
   describe("Networking: Skin", function() {
     it("should not fail", function(done) {
-      helpers.get_cape("testreq", "Jake0oo0", function(err, hash, img) {
+      helpers.get_cape(rid, "Jake0oo0", function(err, hash, img) {
         assert.strictEqual(err, null);
         done();
       });
@@ -224,7 +226,7 @@ describe("Crafatar", function() {
       before(function() {
         cache.get_redis().flushall();
       });
-      helpers.get_cape("testreq", "Jake0oo0", function(err, hash, img) {
+      helpers.get_cape(rid, "Jake0oo0", function(err, hash, img) {
         assert.strictEqual(err, null);
         done();
       });
@@ -245,13 +247,13 @@ describe("Crafatar", function() {
         });
 
         it("should be downloaded", function(done) {
-          helpers.get_avatar("testreq", id, false, 160, function(err, status, image) {
+          helpers.get_avatar(rid, id, false, 160, function(err, status, image) {
             assert.strictEqual(status, 2);
             done();
           });
         });
         it("should be cached", function(done) {
-          helpers.get_avatar("testreq", id, false, 160, function(err, status, image) {
+          helpers.get_avatar(rid, id, false, 160, function(err, status, image) {
             assert.strictEqual(status === 0 || status === 1, true);
             done();
           });
@@ -262,7 +264,7 @@ describe("Crafatar", function() {
           it("should be checked", function(done) {
             var original_cache_time = config.local_cache_time;
             config.local_cache_time = 0;
-            helpers.get_avatar("testreq", id, false, 160, function(err, status, image) {
+            helpers.get_avatar(rid, id, false, 160, function(err, status, image) {
               assert.strictEqual(status, 3);
               config.local_cache_time = original_cache_time;
               done();
@@ -273,7 +275,7 @@ describe("Crafatar", function() {
 
       describe("Networking: Skin", function() {
         it("should not fail (uuid)", function(done) {
-          helpers.get_skin("testreq", id, function(err, hash, img) {
+          helpers.get_skin(rid, id, function(err, hash, img) {
             assert.strictEqual(err, null);
             done();
           });
@@ -282,13 +284,13 @@ describe("Crafatar", function() {
 
       describe("Networking: Render", function() {
         it("should not fail (full body)", function(done) {
-          helpers.get_render("testreq", id, 6, true, true, function(err, hash, img) {
+          helpers.get_render(rid, id, 6, true, true, function(err, hash, img) {
             assert.strictEqual(err, null);
             done();
           });
         });
         it("should not fail (only head)", function(done) {
-          helpers.get_render("testreq", id, 6, true, false, function(err, hash, img) {
+          helpers.get_render(rid, id, 6, true, false, function(err, hash, img) {
             assert.strictEqual(err, null);
             done();
           });
@@ -297,7 +299,7 @@ describe("Crafatar", function() {
 
       describe("Networking: Cape", function() {
         it("should not fail (possible cape)", function(done) {
-          helpers.get_cape("testreq", id, function(err, hash, img) {
+          helpers.get_cape(rid, id, function(err, hash, img) {
             assert.strictEqual(err, null);
             done();
           });
@@ -312,14 +314,14 @@ describe("Crafatar", function() {
 
         if (id_type == "uuid") {
           it("uuid should be rate limited", function(done) {
-            networking.get_profile("testreq", id, function(err, profile) {
+            networking.get_profile(rid, id, function(err, profile) {
               assert.strictEqual(profile.error, "TooManyRequestsException");
               done();
             });
           });
         } else {
           it("username should NOT be rate limited (username)", function(done) {
-            helpers.get_avatar("testreq", id, false, 160, function(err, status, image) {
+            helpers.get_avatar(rid, id, false, 160, function(err, status, image) {
               assert.strictEqual(err, null);
               done();
             });

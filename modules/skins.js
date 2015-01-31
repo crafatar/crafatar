@@ -95,7 +95,7 @@ exp.default_skin = function(uuid) {
 
 // helper method for opening a skin file from +skinpath+
 // callback contains error, image buffer
-exp.open_skin = function(uuid, skinpath, callback) {
+exp.open_skin = function(rid, skinpath, callback) {
   fs.readFile(skinpath, function(err, buf) {
     if (err) {
       logging.error(rid + "error while opening skin file: " + err);
