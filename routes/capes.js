@@ -13,11 +13,11 @@ var human_status = {
 // GET cape request
 module.exports = function(req, res) {
   var start = new Date();
-  var uuid = (req.url.pathname.split("/")[2] || "").split(".")[0];
+  var userId = (req.url.pathname.split("/")[2] || "").split(".")[0];
   var etag = null;
   var rid = req.id;
 
-  if (!helpers.uuid_valid(uuid)) {
+  if (!helpers.id_valid(userId)) {
     res.writeHead(422, {
       "Content-Type": "text/plain",
       "Response-Time": new Date() - start
@@ -27,17 +27,17 @@ module.exports = function(req, res) {
   }
 
   // strip dashes
-  uuid = uuid.replace(/-/g, "");
-  logging.log(rid + "uuid: " + uuid);
+  userId = userId.replace(/-/g, "");
+  logging.log(rid + "userid: " + userId);
 
   try {
-    helpers.get_cape(rid, uuid, function(err, status, image, hash) {
+    helpers.get_cape(rid, userId, function(err, status, image, hash) {
       logging.log(rid + "storage type: " + human_status[status]);
       if (err) {
         logging.error(rid + err);
         if (err.code == "ENOENT") {
           // no such file
-          cache.remove_hash(rid, uuid);
+          cache.remove_hash(rid, userId);
         }
       }
       etag = hash && hash.substr(0, 32) || "none";

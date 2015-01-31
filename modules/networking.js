@@ -119,28 +119,28 @@ exp.get_profile = function(rid, uuid, callback) {
   }
 };
 
-// +uuid+ is likely a username and if so
-// +uuid+ is used to get the url, otherwise
+// +userId+ is likely a username and if so
+// +userId+ is used to get the url, otherwise
 // +profile+ will be used to get the url
-exp.get_skin_url = function(rid, uuid, profile, callback) {
-  get_url(rid, uuid, profile, 0, function(url) {
+exp.get_skin_url = function(rid, userId, profile, callback) {
+  get_url(rid, userId, profile, 0, function(url) {
     callback(url);
   });
 };
 
-// +uuid+ is likely a username and if so
-// +uuid+ is used to get the url, otherwise
+// +userId+ is likely a username and if so
+// +userId+ is used to get the url, otherwise
 // +profile+ will be used to get the url
-exp.get_cape_url = function(rid, uuid, profile, callback) {
-  get_url(rid, uuid, profile, 1, function(url) {
+exp.get_cape_url = function(rid, userId, profile, callback) {
+  get_url(rid, userId, profile, 1, function(url) {
     callback(url);
   });
 };
 
-function get_url(rid, uuid, profile, type, callback) {
-  if (uuid.length <= 16) {
+function get_url(rid, userId, profile, type, callback) {
+  if (userId.length <= 16) {
     //username
-    exp.get_username_url(rid, uuid, type, function(err, url) {
+    exp.get_username_url(rid, userId, type, function(err, url) {
       callback(url || null);
     });
   } else {
