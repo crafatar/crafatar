@@ -94,7 +94,7 @@ describe("Crafatar", function() {
       });
     });
     it("should not exist (username)", function(done) {
-      networking.get_username_url(rid, "Steve", 1, function(err, profile) {
+      networking.get_username_url(rid, "Steve", 0, function(err, profile) {
         assert.strictEqual(err, null);
         done();
       });
@@ -138,7 +138,7 @@ describe("Crafatar", function() {
     it("should time out on username info download", function(done) {
       var original_timeout = config.http_timeout;
       config.http_timeout = 1;
-      networking.get_username_url(rid, "redstone_sheep", 1, function(err, url) {
+      networking.get_username_url(rid, "redstone_sheep", 0, function(err, url) {
         assert.strictEqual(err.code, "ETIMEDOUT");
         config.http_timeout = original_timeout;
         done();

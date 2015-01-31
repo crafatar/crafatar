@@ -6,6 +6,7 @@ var fs = require("fs");
 var session_url = "https://sessionserver.mojang.com/session/minecraft/profile/";
 var skins_url = "https://skins.minecraft.net/MinecraftSkins/";
 var capes_url = "https://skins.minecraft.net/MinecraftCloaks/";
+var mojang_urls = [skins_url, capes_url];
 
 var exp = {};
 
@@ -81,17 +82,11 @@ exp.get_from = function(rid, url, callback) {
   });
 };
 
-// specifies which numbers identify what url
-var mojang_url_types = {
-  1: skins_url,
-  2: capes_url
-};
-
 // make a request to skins.miencraft.net
 // the skin url is taken from the HTTP redirect
 // type reference is above
 exp.get_username_url = function(rid, name, type, callback) {
-  exp.get_from(rid, mojang_url_types[type] + name + ".png", function(body, response, err) {
+  exp.get_from(rid, mojang_urls[type] + name + ".png", function(body, response, err) {
     if (!err) {
       callback(err, response ? (response.statusCode === 404 ? null : response.headers.location) : null);
     } else {
@@ -128,7 +123,7 @@ exp.get_profile = function(rid, uuid, callback) {
 // +uuid+ is used to get the url, otherwise
 // +profile+ will be used to get the url
 exp.get_skin_url = function(rid, uuid, profile, callback) {
-  getUrl(rid, uuid, profile, 1, function(url) {
+  get_url(rid, uuid, profile, 0, function(url) {
     callback(url);
   });
 };
@@ -137,12 +132,12 @@ exp.get_skin_url = function(rid, uuid, profile, callback) {
 // +uuid+ is used to get the url, otherwise
 // +profile+ will be used to get the url
 exp.get_cape_url = function(rid, uuid, profile, callback) {
-  getUrl(rid, uuid, profile, 2, function(url) {
+  get_url(rid, uuid, profile, 1, function(url) {
     callback(url);
   });
 };
 
-function getUrl(rid, uuid, profile, type, callback) {
+function get_url(rid, uuid, profile, type, callback) {
   if (uuid.length <= 16) {
     //username
     exp.get_username_url(rid, uuid, type, function(err, url) {
