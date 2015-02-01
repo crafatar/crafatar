@@ -1,7 +1,7 @@
 {
     "name": "Crafatar",
     "description": "A Minecraft Avatar API written in NodeJS",
-    "repository": "https://github.com/Jake0oo0/crafatar",
+    "repository": "https://github.com/crafatar/crafatar",
     "keywords": [
         "node",
         "minecraft",
