@@ -178,29 +178,31 @@ exp.id_valid = function(userId) {
 //   1: "cached" - found on disk
 //   2: "downloaded" - profile downloaded, skin downloaded from mojang servers
 //   3: "checked" - profile re-downloaded (was too old), but it has either not changed or has no skin
-exp.get_image_hash = function(rid, userId, raw_type, callback) {
+exp.get_image_hash = function(rid, userId, type, callback) {
   cache.get_details(userId, function(err, details) {
-    var type = (details !== null ? (raw_type === "skin" ? details.skin : details.cape) : null);
+    var hash = details !== null ? (type === "skin" ? details.skin : details.cape) : null;
     if (err) {
       callback(err, -1, null);
     } else {
       if (details && details.time + config.local_cache_time * 1000 >= new Date().getTime()) {
+        // use cached image
         logging.log(rid + "userId cached & recently updated");
-        callback(null, (type ? 1 : 0), type);
+        callback(null, (hash ? 1 : 0), hash);
       } else {
+        // download image
         if (details) {
           logging.log(rid + "userId cached, but too old");
         } else {
           logging.log(rid + "userId not cached");
         }
-        store_images(rid, userId, details, raw_type, function(err, hash) {
+        store_images(rid, userId, details, type, function(err, new_hash) {
           if (err) {
-            callback(err, -1, details && type);
+            callback(err, -1, details && hash);
           } else {
-            var status = details && (type === hash) ? 3 : 2;
-            logging.debug(rid + "old hash: " + (details && type));
-            logging.log(rid + "hash: " + hash);
-            callback(null, status, hash);
+            var status = details && (hash === new_hash) ? 3 : 2;
+            logging.debug(rid + "old hash: " + (details && hash));
+            logging.log(rid + "new hash: " + new_hash);
+            callback(null, status, new_hash);
           }
         });
       }
