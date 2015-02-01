@@ -65,7 +65,7 @@ exp.get_from_options = function(rid, url, options, callback) {
       callback(null, response, null);
     } else if (response.statusCode === 429) {
       // Too Many Requests exception - code 429
-      logging.warn(rid + body || "Too many requests");
+      logging.warn(rid + url + " Too many requests");
       callback(body || null, response, error);
     } else {
       logging.error(rid + url + " Unknown error:");
