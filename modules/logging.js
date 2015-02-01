@@ -29,7 +29,7 @@ exp.warn = function() {
 exp.error = function() {
   log("ERROR", arguments);
 };
-if (config.debug_enabled) {
+if (config.debug_enabled || process.env.DEBUG === "true") {
   exp.debug = function() {
     log("DEBUG", arguments);
   };
