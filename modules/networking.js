@@ -86,6 +86,7 @@ exp.get_from = function(rid, url, callback) {
 // the skin url is taken from the HTTP redirect
 // type reference is above
 exp.get_username_url = function(rid, name, type, callback) {
+  console.log(mojang_urls[type])
   exp.get_from(rid, mojang_urls[type] + name + ".png", function(body, response, err) {
     if (!err) {
       callback(err, response ? (response.statusCode === 404 ? null : response.headers.location) : null);
@@ -99,9 +100,9 @@ exp.get_username_url = function(rid, name, type, callback) {
 // +type+ specifies which to retrieve
 exp.get_uuid_url = function(profile, type, callback) {
   var url = null;
-  if (type === 1) {
+  if (type === 0) {
     url = exp.extract_skin_url(profile);
-  } else if (type === 2) {
+  } else if (type === 1) {
     url = exp.extract_cape_url(profile);
   }
   callback(url || null);
