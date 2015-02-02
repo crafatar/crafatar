@@ -35,11 +35,11 @@ function connect_redis() {
   });
 }
 
-// sets the date of the face file belonging to +hash+ to now
+// sets the date of the face file belonging to +skin_hash+ to now
 // the helms file is ignored because we only need 1 file to read/write from
-function update_file_date(rid, hash) {
-  if (hash) {
-    var path = config.faces_dir + hash + ".png";
+function update_file_date(rid, skin_hash) {
+  if (skin_hash) {
+    var path = config.faces_dir + skin_hash + ".png";
     fs.exists(path, function(exists) {
       if (exists) {
         var date = new Date();
@@ -102,17 +102,17 @@ exp.update_timestamp = function(rid, userId, hash) {
   update_file_date(rid, hash);
 };
 
-// create the key +userId+, store +skin+ hash, +cape+ hash and time
-exp.save_hash = function(rid, userId, skin, cape) {
+// create the key +userId+, store +skin_hash+ hash, +cape_hash+ hash and time
+exp.save_hash = function(rid, userId, skin_hash, cape_hash) {
   logging.log(rid + "cache: saving hash");
-  logging.log(rid + "skin:" + skin + " cape:" + cape);
+  logging.log(rid + "skin:" + skin_hash + " cape:" + cape_hash);
   var time = new Date().getTime();
   // store shorter null byte instead of "null"
-  skin = skin || ".";
-  cape = cape || ".";
+  skin_hash = skin_hash || ".";
+  cape_hash = cape_hash || ".";
   // store userId in lower case if not null
   userId = userId && userId.toLowerCase();
-  redis.hmset(userId, "s", skin, "c", cape, "t", time);
+  redis.hmset(userId, "s", skin_hash, "c", cape_hash, "t", time);
 };
 
 exp.remove_hash = function(rid, userId) {

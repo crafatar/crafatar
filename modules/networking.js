@@ -6,6 +6,7 @@ var fs = require("fs");
 var session_url = "https://sessionserver.mojang.com/session/minecraft/profile/";
 var skins_url = "https://skins.minecraft.net/MinecraftSkins/";
 var capes_url = "https://skins.minecraft.net/MinecraftCloaks/";
+var textures_url = "http://textures.minecraft.net/texture/";
 var mojang_urls = [skins_url, capes_url];
 
 var exp = {};
@@ -50,7 +51,6 @@ exp.get_from_options = function(rid, url, options, callback) {
     timeout: (options.timeout || config.http_timeout),
     encoding: (options.encoding || null),
     followRedirect: (options.folow_redirect || false),
-    maxAttempts: (options.max_attempts || 2)
   }, function(error, response, body) {
     // 200 or 301 depending on content type
     if (!error && (response.statusCode === 200 || response.statusCode === 301)) {
@@ -86,7 +86,6 @@ exp.get_from = function(rid, url, callback) {
 // the skin url is taken from the HTTP redirect
 // type reference is above
 exp.get_username_url = function(rid, name, type, callback) {
-  console.log(mojang_urls[type])
   exp.get_from(rid, mojang_urls[type] + name + ".png", function(body, response, err) {
     if (!err) {
       callback(err, response ? (response.statusCode === 404 ? null : response.headers.location) : null);
@@ -151,9 +150,9 @@ function get_url(rid, userId, profile, type, callback) {
   }
 }
 
-exp.save_texture = function(rid, hash, outpath, callback) {
-  if (hash) {
-    var textureurl = "http://textures.minecraft.net/texture/" + hash;
+exp.save_texture = function(rid, tex_hash, outpath, callback) {
+  if (tex_hash) {
+    var textureurl = textures_url + tex_hash;
     exp.get_from(rid, textureurl, function(img, response, err) {
       if (err) {
         logging.error(rid + "error while downloading texture");
