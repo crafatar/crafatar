@@ -15,19 +15,24 @@ function split_args(args) {
   return text;
 }
 
-function log(level, args) {
+function log(level, args, logger) {
+  logger = logger || console.log;
   var time = new Date().toISOString();
-  console.log(time + " " + (cluster.worker && cluster.worker.id || "M") + " " + level + ": " + split_args(args));
+  var clid = (cluster.worker && cluster.worker.id || "M");
+  var lines = split_args(args).split("\n");
+  for (var i = 0, l = lines.length; i < l; i++) {
+    logger(time + " " + clid + " " + level + ": " + lines[i]);
+  }
 }
 
 exp.log = function() {
   log(" INFO", arguments);
 };
 exp.warn = function() {
-  log(" WARN", arguments);
+  log(" WARN", arguments, console.warn);
 };
 exp.error = function() {
-  log("ERROR", arguments);
+  log("ERROR", arguments, console.error);
 };
 if (config.debug_enabled || process.env.DEBUG === "true") {
   exp.debug = function() {
