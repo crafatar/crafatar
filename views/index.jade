@@ -35,11 +35,11 @@ block content
           a(href="#avatars")
             h3 Avatars
           | Replace
-          mark.green  id
+          mark.green  userid
           |  with a Mojang <b>UUID</b> or <b>username</b> to get the related head. All images are PNGs.
           .code
             | #{domain}/avatars/
-            mark.green id
+            mark.green userid
 
           section
             a(id="avatar-parameters" class="anchor")
@@ -65,7 +65,7 @@ block content
                     | The standard value is calculated based on the UUID (even = alex, odd = steve).<br>
                     | Usernames always default to steve.
                   td
-                    | The image to be served when the id has no skin (404).<br>
+                    | The image to be served when the userid has no skin (404).<br>
                     | Valid options are
                     a(href="/avatars/0?default=steve")  steve
                     | ,
@@ -114,16 +114,16 @@ block content
             | Crafatar also provides support for 3D renders of Minecraft skins.<br>
             | Please note that <b>this feature is currently beta</b>!<br>
             | Replace
-            mark.green  id
+            mark.green  userid
             |  with a Mojang <b>UUID</b> or <b>username</b> to get a render of the skin.
             | The <b>head</b> render type returns a render of the skin's head.
             span.code
               | #{domain}/renders/head/
-              mark.green id
+              mark.green userid
             | The <b>body</b> render returns a render of the entire skin.
             span.code
               | #{domain}/renders/body/
-              mark.green id
+              mark.green userid
 
           section
             a(id="render-parameters" class="anchor")
@@ -171,13 +171,13 @@ block content
           p
             | You can also get the full skin file of a player.<br>
             | Replace
-            mark.green  id
+            mark.green  userid
             |  with a Mojang <b>UUID</b> or <b>username</b> to get the related skin.<br>
             | The user's skin is returned, or the default image is served.<br>
             | You can use the default parameter here as well.
             span.code
               | #{domain}/skins/
-              mark.green id
+              mark.green userid
 
           section
             a(id="skin-parameters" class="anchor")
@@ -198,7 +198,7 @@ block content
                     | The standard value is calculated based on the UUID (even = alex, odd = steve).<br>
                     | Usernames always default to steve.
                   td
-                    | The image to be served when the id has no skin (404).<br>
+                    | The image to be served when the userid has no skin (404).<br>
                     | Valid options are
                     a(href="/skins/0?default=steve")  steve
                     | ,
@@ -227,12 +227,12 @@ block content
           p
             | A cape endpoint is also available to get the active cape of a user.<br>
             | Replace
-            mark.green  id
+            mark.green  userid
             |  with a Mojang <b>UUID</b> or <b>username</b> to get the related cape.<br>
             | The user's cape is returned, otherwise a 404 is thrown.<br>
             .code
               | #{domain}/skins/
-              mark.green id
+              mark.green userid
 
           section
             a(id="cape-examples", class="anchor")
