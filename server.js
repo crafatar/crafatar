@@ -87,7 +87,9 @@ function requestHandler(req, res) {
 }
 
 var boot = module.exports = function () {
-  http.createServer(requestHandler).listen(process.env.PORT || 3000);
+  var port = process.env.PORT || 3000;
+  var bind_ip = process.env.BIND || '127.0.0.1';
+  http.createServer(requestHandler).listen(port, bind_ip);
 };
 
 if (require.main === module) {
