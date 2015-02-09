@@ -20,8 +20,9 @@ function store_skin(rid, userId, profile, details, callback) {
     if (url) {
       var skin_hash = get_hash(url);
       if (details && details.skin === skin_hash) {
-        cache.update_timestamp(rid, userId, skin_hash);
-        callback(null, skin_hash);
+        cache.update_timestamp(rid, userId, skin_hash, function(err) {
+          callback(err, skin_hash);
+        });
       } else {
         logging.log(rid + "new skin hash: " + skin_hash);
         var facepath = __dirname + "/../" + config.faces_dir + skin_hash + ".png";
@@ -64,8 +65,9 @@ function store_cape(rid, userId, profile, details, callback) {
     if (url) {
       var cape_hash = get_hash(url);
       if (details && details.cape === cape_hash) {
-        cache.update_timestamp(rid, userId, cape_hash);
-        callback(null, cape_hash);
+        cache.update_timestamp(rid, userId, cape_hash, function(err) {
+          callback(err, cape_hash);
+        });
       } else {
         logging.log(rid + "new cape hash: " + cape_hash);
         var capepath = __dirname + "/../" + config.capes_dir + cape_hash + ".png";
@@ -131,7 +133,7 @@ function deep_property_check(arr, property, value) {
 // downloads the images for +userId+ while checking the cache
 // status based on +details+. +type+ specifies which
 // image type should be called back on
-// +callback+ contains the error buffer and image hash
+// +callback+ contains error, image hash
 function store_images(rid, userId, details, type, callback) {
   var is_uuid = userId.length > 16;
   var new_hash = {
@@ -147,11 +149,13 @@ function store_images(rid, userId, details, type, callback) {
         callback_for(userId, type, err, null);
       } else {
         store_skin(rid, userId, profile, details, function(err, skin_hash) {
-          cache.save_hash(rid, userId, skin_hash, null);
-          callback_for(userId, "skin", err, skin_hash);
-          store_cape(rid, userId, profile, details, function(err, cape_hash) {
-            cache.save_hash(rid, userId, skin_hash, cape_hash);
-            callback_for(userId, "cape", err, cape_hash);
+          cache.save_hash(rid, userId, skin_hash, null, function(cache_err) {
+            callback_for(userId, "skin", (err || cache_err), skin_hash);
+            store_cape(rid, userId, profile, details, function(err, cape_hash) {
+              cache.save_hash(rid, userId, skin_hash, cape_hash, function(cache_err) {
+                callback_for(userId, "cape", (err || cache_err), cape_hash);
+              });
+            });
           });
         });
       }

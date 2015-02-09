@@ -93,17 +93,21 @@ exp.info = function(callback) {
 };
 
 // sets the timestamp for +userId+ and its face file's date to now
-exp.update_timestamp = function(rid, userId, hash) {
+// +callback+ contains error
+exp.update_timestamp = function(rid, userId, hash, callback) {
   logging.log(rid + "cache: updating timestamp");
   var time = new Date().getTime();
   // store userId in lower case if not null
   userId = userId && userId.toLowerCase();
-  redis.hmset(userId, "t", time);
+  redis.hmset(userId, "t", time, function(err) {
+    callback(err);
+  });
   update_file_date(rid, hash);
 };
 
 // create the key +userId+, store +skin_hash+ hash, +cape_hash+ hash and time
-exp.save_hash = function(rid, userId, skin_hash, cape_hash) {
+// +callback+ contans error
+exp.save_hash = function(rid, userId, skin_hash, cape_hash, callback) {
   logging.log(rid + "cache: saving hash");
   logging.log(rid + "skin:" + skin_hash + " cape:" + cape_hash);
   var time = new Date().getTime();
@@ -112,9 +116,12 @@ exp.save_hash = function(rid, userId, skin_hash, cape_hash) {
   cape_hash = cape_hash || ".";
   // store userId in lower case if not null
   userId = userId && userId.toLowerCase();
-  redis.hmset(userId, "s", skin_hash, "c", cape_hash, "t", time);
+  redis.hmset(userId, "s", skin_hash, "c", cape_hash, "t", time, function(err){
+    callback(err);
+  });
 };
 
+// removes the hash for +userId+ from the cache
 exp.remove_hash = function(rid, userId) {
   logging.log(rid + "cache: deleting hash");
   redis.del(userId.toLowerCase(), "h", "t");
