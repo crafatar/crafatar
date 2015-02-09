@@ -17,11 +17,11 @@ function split_args(args) {
 
 function log(level, args, logger) {
   logger = logger || console.log;
-  var time = new Date().toISOString();
+  var time = config.log_time ? new Date().toISOString() + " " : "";
   var clid = (cluster.worker && cluster.worker.id || "M");
   var lines = split_args(args).split("\n");
   for (var i = 0, l = lines.length; i < l; i++) {
-    logger(time + " " + clid + " " + level + ": " + lines[i]);
+    logger(time + clid + " " + level + ": " + lines[i]);
   }
 }
 

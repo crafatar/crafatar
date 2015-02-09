@@ -19,6 +19,7 @@ var config = {
   renders_dir: "images/renders/", // Directory where rendered skins are kept. should have trailing "/"
   capes_dir: "images/capes/",     // directory where capes are kept. should have trailing "/"
   clusters: 1,                    // We recommend not using multiple clusters YET, see issue #80
+  log_time: true,                 // set to false if you use an external logger that provides timestamps
 };
 
 module.exports = config;
