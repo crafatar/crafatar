@@ -89,7 +89,7 @@ function requestHandler(req, res) {
 var boot = module.exports = function () {
   var port = process.env.PORT || 3000;
   var bind_ip = process.env.BIND || "127.0.0.1";
-  console.log("Server running on http://" + bind_ip + ":" + port + "/");
+  logging.log("Server running on http://" + bind_ip + ":" + port + "/");
   http.createServer(requestHandler).listen(port, bind_ip);
 };
 
