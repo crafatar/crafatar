@@ -4,9 +4,9 @@ var config = require("../modules/config");
 var cluster = require("cluster");
 
 if (cluster.isMaster) {
-  var cores = require("os").cpus().length;
+  var cores = config.clusters || require("os").cpus().length;
   logging.log("Starting " + cores + " workers");
-  for (var i = cores; i > 0; i--) {
+  for (var i = 0; i < cores; i++) {
     cluster.fork();
   }
 
