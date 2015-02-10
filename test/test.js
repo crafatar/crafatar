@@ -168,7 +168,7 @@ describe("Errors", function() {
     done();
   });
   it("should not find the file", function(done) {
-    skins.open_skin(rid, 'non/existant/path', function(err, img) {
+    skins.open_skin(rid, "non/existant/path", function(err, img) {
       assert.notStrictEqual(err, null);
       done();
     });
@@ -184,7 +184,7 @@ describe("Server", function() {
 
     // Test the home page
     it("should return a 200", function(done) {
-      request.get('http://localhost:3000', function(error, res, body) {
+      request.get("http://localhost:3000", function(error, res, body) {
         assert.equal(200, res.statusCode);
         done();
       });
@@ -192,7 +192,7 @@ describe("Server", function() {
 
     // invalid method, we only allow GET and HEAD requests
     it("should return a 405", function(done) {
-      request.post('http://localhost:3000/avatars/Jake0oo0', function(error, res, body) {
+      request.post("http://localhost:3000", function(error, res, body) {
         assert.equal(405, res.statusCode);
         done();
       });
@@ -200,55 +200,58 @@ describe("Server", function() {
 
     it("should return a 422 (invalid size)", function(done) {
       var size = config.max_size + 1;
-      request.get('http://localhost:3000/avatars/Jake0oo0?size=' + size, function(error, res, body) {
+      request.get("http://localhost:3000/avatars/Jake0oo0?size=" + size, function(error, res, body) {
         assert.equal(422, res.statusCode);
         done();
       });
     });
 
+    it("should return a 422 (invalid scale)", function(done) {
+      var scale = config.max_scale + 1;
+      request.get("http://localhost:3000/renders/head/Jake0oo0?scale=" + scale, function(error, res, body) {
+        assert.equal(422, res.statusCode);
+        done();
+      });
+    });
+
+    // no default images for capes, should 404
+    it("should return a 404 (no cape)", function(done) {
+      request.get("http://localhost:3000/capes/Jake0oo0", function(error, res, body) {
+        assert.equal(404, res.statusCode);
+        done();
+      });
+    });
+
+    // testing all paths for invalid id formats
     var locations = ["avatars", "capes", "skins", "renders/head"]
     for (var l in locations) {
       var location = locations[l];
-      it("should return a 422 (invalid uuid " + location + ")", function(done) {
-        request.get('http://localhost:3000/' + location + '/thisisaninvaliduuid', function(error, res, body) {
+      it("should return a 422 (invalid id " + location + ")", function(done) {
+        request.get("http://localhost:3000/" + location + "/thisisaninvaliduuid", function(error, res, body) {
           assert.equal(422, res.statusCode);
           done();
         });
       });
     }
 
-    it("should return a 422 (invalid scale)", function(done) {
-      var scale = config.max_scale + 1;
-      request.get('http://localhost:3000/renders/head/Jake0oo0?scale=' + scale, function(error, res, body) {
-        assert.equal(422, res.statusCode);
-        done();
-      });
-    });
-
+    // testing all paths for default images
     locations = ["avatars", "capes", "skins"]
     for (var l in locations) {
       var location = locations[l];
       it("should return a 404 (default steve image " + location + ")", function(done) {
-        request.get('http://localhost:3000/' + location + '/invalidjsvns?default=steve', function(error, res, body) {
+        request.get("http://localhost:3000/" + location + "/invalidjsvns?default=steve", function(error, res, body) {
           assert.equal(404, res.statusCode);
           done();
         });
       });
 
       it("should return a 200 (default external image " + location + ")", function(done) {
-        request.get('http://localhost:3000/' + location + '/invalidjsvns?default=https%3A%2F%2Fi.imgur.com%2FocJVWAc.png', function(error, res, body) {
+        request.get("http://localhost:3000/" + location + "/invalidjsvns?default=https%3A%2F%2Fi.imgur.com%2FocJVWAc.png", function(error, res, body) {
           assert.equal(200, res.statusCode);
           done();
         });
       });
     }
-
-    it("should return a 404 (no cape)", function(done) {
-      request.get('http://localhost:3000/capes/Jake0oo0', function(error, res, body) {
-        assert.equal(404, res.statusCode);
-        done();
-      });
-    });
 
     after(function(done) {
       server.close(function() {
