@@ -13,3 +13,6 @@ notifications:
     skip_join: true
 services:
   - redis-server
+cache:
+  directories:
+    - node_modules
