@@ -32,7 +32,12 @@ Please [visit the website](https://crafatar.com) for details.
   -v /var/lib/crafatar/images:/app/images
   -v /var/log/crafatar:/app/logs
   ```
-0. Deploy with `PORT=5000`
+0. Deploy with ENV config:
+
+  ```bash
+  PORT=5000
+  BIND=0.0.0.0
+  ```
 
 #### Local
 * [Install](https://github.com/Automattic/node-canvas/wiki) Cairo.
