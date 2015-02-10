@@ -183,15 +183,22 @@ describe("Server", function() {
   });
 
     // Test the home page
-    it("should return a 200", function(done) {
+    it("should return a 200 (home page)", function(done) {
       request.get("http://localhost:3000", function(error, res, body) {
         assert.equal(200, res.statusCode);
         done();
       });
     });
 
+    it("should return a 200 (asset request)", function(done) {
+      request.get("http://localhost:3000/stylesheets/style.css", function(error, res, body) {
+        assert.equal(200, res.statusCode);
+        done();
+      });
+    });
+
     // invalid method, we only allow GET and HEAD requests
-    it("should return a 405", function(done) {
+    it("should return a 405 (invalid method)", function(done) {
       request.post("http://localhost:3000", function(error, res, body) {
         assert.equal(405, res.statusCode);
         done();
