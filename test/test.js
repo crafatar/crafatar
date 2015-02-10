@@ -225,19 +225,23 @@ describe("Server", function() {
       });
     });
 
-    it("should return a 404 (default steve image)", function(done) {
-      request.get('http://localhost:3000/avatars/invalidjsvns?default=steve', function(error, res, body) {
-        assert.equal(404, res.statusCode);
-        done();
+    locations = ["avatars", "capes", "skins"]
+    for (var l in locations) {
+      var location = locations[l];
+      it("should return a 404 (default steve image " + location + ")", function(done) {
+        request.get('http://localhost:3000/' + location + '/invalidjsvns?default=steve', function(error, res, body) {
+          assert.equal(404, res.statusCode);
+          done();
+        });
       });
-    });
 
-    it("should return a 200 (default external image)", function(done) {
-      request.get('http://localhost:3000/avatars/invalidjsvns?default=https%3A%2F%2Fi.imgur.com%2FocJVWAc.png', function(error, res, body) {
-        assert.equal(200, res.statusCode);
-        done();
+      it("should return a 200 (default external image " + location + ")", function(done) {
+        request.get('http://localhost:3000/' + location + '/invalidjsvns?default=https%3A%2F%2Fi.imgur.com%2FocJVWAc.png', function(error, res, body) {
+          assert.equal(200, res.statusCode);
+          done();
+        });
       });
-    });
+    }
 
     it("should return a 404 (no cape)", function(done) {
       request.get('http://localhost:3000/capes/Jake0oo0', function(error, res, body) {
