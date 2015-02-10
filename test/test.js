@@ -8,7 +8,8 @@ var config = require("../modules/config");
 var skins = require("../modules/skins");
 var cache = require("../modules/cache");
 var renders = require("../modules/renders");
-var cleaner = require("../modules/cleaner");
+var server = require("../server");
+var request = require("request");
 
 // we don't want tests to fail because of slow internet
 config.http_timeout *= 3;
@@ -33,7 +34,7 @@ var ids = [
   uuid.toLowerCase(),
   name.toLowerCase(),
   uuid.toUpperCase(),
-  name.toUpperCase()
+  name.toUpperCase(),
 ];
 
 describe("Crafatar", function() {
@@ -42,7 +43,6 @@ describe("Crafatar", function() {
 
   before(function() {
     cache.get_redis().flushall();
-    cleaner.run();
   });
 
   describe("UUID/username", function() {
@@ -330,4 +330,63 @@ describe("Crafatar", function() {
       });
     })(id, id_type);
   }
+  describe("Server", function() {
+    before(function(done) {
+      server.boot(function() {
+        done();
+      });
+    });
+
+    // Test the home page
+    it("should return a 200", function(done) {
+      request.get('http://localhost:3000', function(error, res, body) {
+        assert.equal(200, res.statusCode);
+        done();
+      });
+    });
+
+    // invalid method, we only allow GET and HEAD requests
+    it("should return a 405", function(done) {
+      request.post('http://localhost:3000/avatars/Jake0oo0', function(error, res, body) {
+        assert.equal(405, res.statusCode);
+        done();
+      });
+    });
+
+    it("should return a 422 (invalid scale)", function(done) {
+      var scale = config.max_scale + 1;
+      request.get('http://localhost:3000/avatars/Jake0oo0?scale=' + scale, function(error, res, body) {
+        assert.equal(422, res.statusCode);
+        done();
+      });
+    });
+
+    it("should return a 422 (invalid uuid)", function(done) {
+      request.get('http://localhost:3000/avatars/thisisaninvaliduuid', function(error, res, body) {
+        assert.equal(422, res.statusCode);
+        done();
+      });
+    });
+
+    it("should return a 422 (invalid size)", function(done) {
+      var size = config.max_size + 1;
+      request.get('http://localhost:3000/renders/Jake0oo0?size=' + size, function(error, res, body) {
+        assert.equal(422, res.statusCode);
+        done();
+      });
+    });
+
+    it("should return a 301 (default image)", function(done) {
+      request.get('http://localhost:3000/renders/invalidjsvns?def=steve', function(error, res, body) {
+        assert.equal(301, res.statusCode);
+        done();
+      });
+    });
+
+    after(function(done) {
+      server.close(function() {
+        done();
+      })
+    });
+  });
 });
