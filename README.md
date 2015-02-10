@@ -24,7 +24,15 @@ Please [visit the website](https://crafatar.com) for details.
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 #### Dokku
-Deploy with [dokku-redis](https://github.com/ohardy/dokku-redis#redis-plugin-for-dokku) installed.
+0. Install the [dokku-redis](https://github.com/ohardy/dokku-redis#redis-plugin-for-dokku) plugin
+0. `dokku redis:start`
+0. You also might want to use [docker-options](https://github.com/dyson/dokku-docker-options) for persistent storage:
+
+  ```docker
+  -v /var/lib/crafatar/images:/app/images
+  -v /var/log/crafatar:/app/logs
+  ```
+0. Deploy with `PORT=5000`
 
 #### Local
 * [Install](https://github.com/Automattic/node-canvas/wiki) Cairo.
