@@ -9,6 +9,7 @@ var skins = require("../modules/skins");
 var cache = require("../modules/cache");
 var renders = require("../modules/renders");
 var server = require("../server");
+var cleaner = require("../modules/cleaner");
 var request = require("request");
 
 // we don't want tests to fail because of slow internet
@@ -43,6 +44,7 @@ describe("Crafatar", function() {
 
   before(function() {
     cache.get_redis().flushall();
+    cleaner.run();
   });
 
   describe("UUID/username", function() {
@@ -100,7 +102,6 @@ describe("Crafatar", function() {
       });
     });
   });
-
 describe("Avatar", function() {
     // profile "Alex" - hoping it'll never have a skin
     var alex_uuid = "ec561538f3fd461daff5086b22154bce";
