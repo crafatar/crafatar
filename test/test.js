@@ -248,7 +248,7 @@ describe("Server", function() {
         });
       });
 
-      it("should return a 200 (valid input)", function(done) {
+      it("should return a 200 (valid input " + location + ")", function(done) {
         request.get("http://localhost:3000/" + location + "/Jake0oo0", function(error, res, body) {
           assert.equal(200, res.statusCode);
           done();
