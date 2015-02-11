@@ -246,6 +246,13 @@ describe("Server", function() {
           done();
         });
       });
+
+      it("should return a 200 (valid input)", function(done) {
+        request.get("http://localhost:3000/" + location + "/Jake0oo0", function(error, res, body) {
+          assert.equal(200, res.statusCode);
+          done();
+        });
+      });
     }
 
     // testing all paths for default images
