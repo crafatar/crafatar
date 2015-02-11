@@ -229,6 +229,13 @@ describe("Server", function() {
       });
     });
 
+    it("should return a 422 (invalid render type)", function(done) {
+      request.get("http://localhost:3000/renders/side/Jake0oo0", function(error, res, body) {
+        assert.equal(422, res.statusCode);
+        done();
+      });
+    });
+
     // testing all paths for invalid id formats
     var locations = ["avatars", "capes", "skins", "renders/head"]
     for (var l in locations) {
