@@ -259,7 +259,7 @@ describe("Server", function() {
     }
 
     //testing all paths for default images
-    locations = ["avatars", "skins"]
+    locations = ["avatars", "skins", "renders/head"]
     for (var l in locations) {
       var location = locations[l];
       (function(location) {
