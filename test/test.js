@@ -236,19 +236,31 @@ describe("Server", function() {
       });
     });
 
+    // testing all paths for valid inputs
+    var locations = ["avatars", "skins", "renders/head"]
+    for (var l in locations) {
+      var location = locations[l];
+      (function(location) {
+        it("should return a 200 (valid input " + location + ")", function(done) {
+          request.get("http://localhost:3000/" + location + "/Jake0oo0", function(error, res, body) {
+            assert.equal(200, res.statusCode);
+            done();
+          });
+        })
+        it("should return a 422 (invalid id " + location + ")", function(done) {
+          request.get("http://localhost:3000/" + location + "/thisisaninvaliduuid", function(error, res, body) {
+            assert.equal(422, res.statusCode);
+            done();
+          });
+        });
+      })(location);
+    }
+
     // testing all paths for invalid id formats
     var locations = ["avatars", "capes", "skins", "renders/head"]
     for (var l in locations) {
       var location = locations[l];
       (function(location) {
-        if (location !== "capes") {
-          it("should return a 200 (valid input " + location + ")", function(done) {
-            request.get("http://localhost:3000/" + location + "/Jake0oo0", function(error, res, body) {
-              assert.equal(200, res.statusCode);
-              done();
-            });
-          })
-        }
         it("should return a 422 (invalid id " + location + ")", function(done) {
           request.get("http://localhost:3000/" + location + "/thisisaninvaliduuid", function(error, res, body) {
             assert.equal(422, res.statusCode);
