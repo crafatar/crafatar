@@ -7,6 +7,7 @@ var http = require("http");
 var mime = require("mime");
 var url = require("url");
 var fs = require("fs");
+var server = null;
 
 var routes = {
   index: require("./routes/index"),
@@ -53,22 +54,22 @@ function requestHandler(req, res) {
     try {
       switch (local_path) {
         case "":
-          routes.index(request, res);
-          break;
+        routes.index(request, res);
+        break;
         case "avatars":
-          routes.avatars(request, res);
-          break;
+        routes.avatars(request, res);
+        break;
         case "skins":
-          routes.skins(request, res);
-          break;
+        routes.skins(request, res);
+        break;
         case "renders":
-          routes.renders(request, res);
-          break;
+        routes.renders(request, res);
+        break;
         case "capes":
-          routes.capes(request, res);
-          break;
+        routes.capes(request, res);
+        break;
         default:
-          asset_request(request, res);
+        asset_request(request, res);
       }
     } catch(e) {
       var error = JSON.stringify(req.headers) + "\n" + e.stack;
@@ -86,15 +87,27 @@ function requestHandler(req, res) {
   }
 }
 
-var boot = module.exports = function () {
+var exp = {};
+
+exp.boot = function(callback) {
   var port = process.env.PORT || 3000;
   var bind_ip = process.env.BIND || "127.0.0.1";
   logging.log("Server running on http://" + bind_ip + ":" + port + "/");
-  http.createServer(requestHandler).listen(port, bind_ip);
+  server = http.createServer(requestHandler).listen(port, bind_ip, function() {
+    callback();
+  });
 };
 
+exp.close = function(callback) {
+  server.close(function() {
+    callback();
+  });
+}
+
+module.exports = exp;
+
 if (require.main === module) {
-  boot();
+  exp.boot(function(){});
 
   // cleaning worker
   setInterval(clean.run, config.cleaning_interval * 1000);

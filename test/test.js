@@ -1,6 +1,5 @@
 var assert = require("assert");
 var fs = require("fs");
-
 var networking = require("../modules/networking");
 var helpers = require("../modules/helpers");
 var logging = require("../modules/logging");
@@ -8,7 +7,9 @@ var config = require("../modules/config");
 var skins = require("../modules/skins");
 var cache = require("../modules/cache");
 var renders = require("../modules/renders");
+var server = require("../server");
 var cleaner = require("../modules/cleaner");
+var request = require("request");
 
 // we don't want tests to fail because of slow internet
 config.http_timeout *= 3;
@@ -32,8 +33,8 @@ function getRandomInt(min, max) {
 var ids = [
   uuid.toLowerCase(),
   name.toLowerCase(),
+  name.toUpperCase(),
   uuid.toUpperCase(),
-  name.toUpperCase()
 ];
 
 describe("Crafatar", function() {
@@ -42,6 +43,10 @@ describe("Crafatar", function() {
 
   before(function() {
     cache.get_redis().flushall();
+    // largest possible integers, cause I don't know
+    // how big hard drives are these days
+    config.cleaning_disk_limit = Math.pow(2, 32) - 1;;
+    config.cleaning_redis_limit = Math.pow(2, 32) - 1;;
     cleaner.run();
   });
 
@@ -100,7 +105,6 @@ describe("Crafatar", function() {
       });
     });
   });
-
   describe("Avatar", function() {
     // profile "Alex" - hoping it'll never have a skin
     var alex_uuid = "ec561538f3fd461daff5086b22154bce";
@@ -169,10 +173,132 @@ describe("Crafatar", function() {
       });
     });
     it("should not find the file", function(done) {
-      skins.open_skin(rid, 'non/existant/path', function(err, img) {
+      skins.open_skin(rid, "non/existant/path", function(err, img) {
         assert.notStrictEqual(err, null);
         done();
       });
+    });
+  });
+
+  describe("Server", function() {
+    before(function(done) {
+      server.boot(function() {
+        done();
+      });
+    });
+
+    // Test the home page
+    it("should return a 200 (home page)", function(done) {
+      request.get("http://localhost:3000", function(error, res, body) {
+        assert.equal(200, res.statusCode);
+        done();
+      });
+    });
+
+    it("should return a 200 (asset request)", function(done) {
+      request.get("http://localhost:3000/stylesheets/style.css", function(error, res, body) {
+        assert.equal(200, res.statusCode);
+        done();
+      });
+    });
+
+    // invalid method, we only allow GET and HEAD requests
+    it("should return a 405 (invalid method)", function(done) {
+      request.post("http://localhost:3000", function(error, res, body) {
+        assert.equal(405, res.statusCode);
+        done();
+      });
+    });
+
+    it("should return a 422 (invalid size)", function(done) {
+      var size = config.max_size + 1;
+      request.get("http://localhost:3000/avatars/Jake0oo0?size=" + size, function(error, res, body) {
+        assert.equal(422, res.statusCode);
+        done();
+      });
+    });
+
+    it("should return a 422 (invalid scale)", function(done) {
+      var scale = config.max_scale + 1;
+      request.get("http://localhost:3000/renders/head/Jake0oo0?scale=" + scale, function(error, res, body) {
+        assert.equal(422, res.statusCode);
+        done();
+      });
+    });
+
+    // no default images for capes, should 404
+    it("should return a 404 (no cape)", function(done) {
+      request.get("http://localhost:3000/capes/Jake0oo0", function(error, res, body) {
+        assert.equal(404, res.statusCode);
+        done();
+      });
+    });
+
+    it("should return a 422 (invalid render type)", function(done) {
+      request.get("http://localhost:3000/renders/side/Jake0oo0", function(error, res, body) {
+        assert.equal(422, res.statusCode);
+        done();
+      });
+    });
+
+    // testing all paths for valid inputs
+    var locations = ["avatars", "skins", "renders/head"]
+    for (var l in locations) {
+      var location = locations[l];
+      (function(location) {
+        it("should return a 200 (valid input " + location + ")", function(done) {
+          request.get("http://localhost:3000/" + location + "/Jake0oo0", function(error, res, body) {
+            assert.equal(200, res.statusCode);
+            done();
+          });
+        })
+        it("should return a 422 (invalid id " + location + ")", function(done) {
+          request.get("http://localhost:3000/" + location + "/thisisaninvaliduuid", function(error, res, body) {
+            assert.equal(422, res.statusCode);
+            done();
+          });
+        });
+      })(location);
+    }
+
+    // testing all paths for invalid id formats
+    var locations = ["avatars", "capes", "skins", "renders/head"]
+    for (var l in locations) {
+      var location = locations[l];
+      (function(location) {
+        it("should return a 422 (invalid id " + location + ")", function(done) {
+          request.get("http://localhost:3000/" + location + "/thisisaninvaliduuid", function(error, res, body) {
+            assert.equal(422, res.statusCode);
+            done();
+          });
+        });
+      })(location);
+    }
+
+    //testing all paths for default images
+    locations = ["avatars", "skins", "renders/head"]
+    for (var l in locations) {
+      var location = locations[l];
+      (function(location) {
+        it("should return a 404 (default steve image " + location + ")", function(done) {
+          request.get("http://localhost:3000/" + location + "/invalidjsvns?default=steve", function(error, res, body) {
+            assert.equal(404, res.statusCode);
+            done();
+          });
+        });
+        it("should return a 200 (default external image " + location + ")", function(done) {
+          request.get("http://localhost:3000/" + location + "/invalidjsvns?default=https%3A%2F%2Fi.imgur.com%2FocJVWAc.png", function(error, res, body) {
+            assert.equal(200, res.statusCode);
+            done();
+          });
+        });
+      })(location);
+    }
+
+    after(function(done) {
+      server.close(function() {
+        done();
+      })
     });
   });
 

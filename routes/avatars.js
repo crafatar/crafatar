@@ -45,6 +45,7 @@ module.exports = function(req, res) {
   userId = userId.replace(/-/g, "");
   logging.log(rid + "userid: " + userId);
 
+
   try {
     helpers.get_avatar(rid, userId, helm, size, function(err, status, image, hash) {
       logging.log(rid + "storage type: " + human_status[status]);
