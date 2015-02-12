@@ -43,6 +43,10 @@ describe("Crafatar", function() {
 
   before(function() {
     cache.get_redis().flushall();
+    // largest possible integers, cause I don't know
+    // how big hard drives are these days
+    config.cleaning_disk_limit = Math.pow(2,32) - 1;;
+    config.cleaning_redis_limit = Math.pow(2,32) - 1;;
     cleaner.run();
   });
 
@@ -173,6 +177,10 @@ describe("Errors", function() {
       done();
     });
   });
+});
+
+describe("Cleaner", function() {
+
 });
 
 describe("Server", function() {
