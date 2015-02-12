@@ -31,10 +31,10 @@ function getRandomInt(min, max) {
 }
 
 var ids = [
-  uuid.toLowerCase(),
-  name.toLowerCase(),
-  name.toUpperCase(),
-  uuid.toUpperCase(),
+uuid.toLowerCase(),
+name.toLowerCase(),
+name.toUpperCase(),
+uuid.toUpperCase(),
 ];
 
 describe("Crafatar", function() {
@@ -101,7 +101,7 @@ describe("Crafatar", function() {
       });
     });
   });
-  describe("Avatar", function() {
+describe("Avatar", function() {
     // profile "Alex" - hoping it'll never have a skin
     var alex_uuid = "ec561538f3fd461daff5086b22154bce";
     // profile "Steven" (Steve doesn't exist) - hoping it'll never have a skin
@@ -125,62 +125,62 @@ describe("Crafatar", function() {
       done();
     });
   });
-  describe("Errors", function() {
-    it("should time out on uuid info download", function(done) {
-      var original_timeout = config.http_timeout;
-      config.http_timeout = 1;
-      networking.get_profile(rid, "069a79f444e94726a5befca90e38aaf5", function(err, profile) {
-        assert.strictEqual(err.code, "ETIMEDOUT");
-        config.http_timeout = original_timeout;
-        done();
-      });
+describe("Errors", function() {
+  it("should time out on uuid info download", function(done) {
+    var original_timeout = config.http_timeout;
+    config.http_timeout = 1;
+    networking.get_profile(rid, "069a79f444e94726a5befca90e38aaf5", function(err, profile) {
+      assert.strictEqual(err.code, "ETIMEDOUT");
+      config.http_timeout = original_timeout;
+      done();
     });
-    it("should time out on username info download", function(done) {
-      var original_timeout = config.http_timeout;
-      config.http_timeout = 1;
-      networking.get_username_url(rid, "jomo", 0, function(err, url) {
-        assert.strictEqual(err.code, "ETIMEDOUT");
-        config.http_timeout = original_timeout;
-        done();
-      });
+  });
+  it("should time out on username info download", function(done) {
+    var original_timeout = config.http_timeout;
+    config.http_timeout = 1;
+    networking.get_username_url(rid, "jomo", 0, function(err, url) {
+      assert.strictEqual(err.code, "ETIMEDOUT");
+      config.http_timeout = original_timeout;
+      done();
     });
-    it("should time out on skin download", function(done) {
-      var original_timeout = config.http_timeout;
-      config.http_timeout = 1;
-      networking.get_from(rid, "http://textures.minecraft.net/texture/477be35554684c28bdeee4cf11c591d3c88afb77e0b98da893fd7bc318c65184", function(body, res, error) {
-        assert.strictEqual(error.code, "ETIMEDOUT");
-        config.http_timeout = original_timeout;
-        done();
-      });
+  });
+  it("should time out on skin download", function(done) {
+    var original_timeout = config.http_timeout;
+    config.http_timeout = 1;
+    networking.get_from(rid, "http://textures.minecraft.net/texture/477be35554684c28bdeee4cf11c591d3c88afb77e0b98da893fd7bc318c65184", function(body, res, error) {
+      assert.strictEqual(error.code, "ETIMEDOUT");
+      config.http_timeout = original_timeout;
+      done();
     });
-    it("should not find the skin", function(done) {
-      assert.doesNotThrow(function() {
-        networking.get_from(rid, "http://textures.minecraft.net/texture/this-does-not-exist", function(img, response, err) {
+  });
+  it("should not find the skin", function(done) {
+    assert.doesNotThrow(function() {
+      networking.get_from(rid, "http://textures.minecraft.net/texture/this-does-not-exist", function(img, response, err) {
           assert.strictEqual(err, null); // no error here, but it shouldn't throw exceptions
           done();
         });
-      });
-    });
-    it("should ignore file updates on invalid files", function(done) {
-      assert.doesNotThrow(function() {
-        cache.update_timestamp(rid, "0123456789abcdef0123456789abcdef", "invalid-file.png");
-      });
-      done();
-    });
-    it("should not find the file", function(done) {
-      skins.open_skin(rid, "non/existant/path", function(err, img) {
-        assert.notStrictEqual(err, null);
-        done();
-      });
     });
   });
-
-  describe("Server", function() {
-    before(function(done) {
-      server.boot(function() {
-        done();
-      });
+  it("should ignore file updates on invalid files", function(done) {
+    assert.doesNotThrow(function() {
+      cache.update_timestamp(rid, "0123456789abcdef0123456789abcdef", "invalid-file.png");
     });
+    done();
+  });
+  it("should not find the file", function(done) {
+    skins.open_skin(rid, "non/existant/path", function(err, img) {
+      assert.notStrictEqual(err, null);
+      done();
+    });
+  });
+});
+
+describe("Server", function() {
+  before(function(done) {
+    server.boot(function() {
+      done();
+    });
+  });
 
     // Test the home page
     it("should return a 200 (home page)", function(done) {
@@ -240,38 +240,42 @@ describe("Crafatar", function() {
     var locations = ["avatars", "capes", "skins", "renders/head"]
     for (var l in locations) {
       var location = locations[l];
-      it("should return a 200 (valid input " + location + ")", function(done) {
-        request.get("http://localhost:3000/" + location + "/Jake0oo0", function(error, res, body) {
-          assert.equal(200, res.statusCode);
-          done();
+      (function(location) {
+        if (location !== "capes") {
+          it("should return a 200 (valid input " + location + ")", function(done) {
+            request.get("http://localhost:3000/" + location + "/Jake0oo0", function(error, res, body) {
+              assert.equal(200, res.statusCode);
+              done();
+            });
+          })
+        }
+        it("should return a 422 (invalid id " + location + ")", function(done) {
+          request.get("http://localhost:3000/" + location + "/thisisaninvaliduuid", function(error, res, body) {
+            assert.equal(422, res.statusCode);
+            done();
+          });
         });
-      });
-      it("should return a 422 (invalid id " + location + ")", function(done) {
-        request.get("http://localhost:3000/" + location + "/thisisaninvaliduuid", function(error, res, body) {
-          assert.equal(422, res.statusCode);
-          done();
-        });
-      });
-
+      })(location);
     }
 
-    // testing all paths for default images
-    locations = ["avatars", "capes", "skins"]
+    //testing all paths for default images
+    locations = ["avatars", "skins"]
     for (var l in locations) {
       var location = locations[l];
-      it("should return a 404 (default steve image " + location + ")", function(done) {
-        request.get("http://localhost:3000/" + location + "/invalidjsvns?default=steve", function(error, res, body) {
-          assert.equal(404, res.statusCode);
-          done();
+      (function(location) {
+        it("should return a 404 (default steve image " + location + ")", function(done) {
+          request.get("http://localhost:3000/" + location + "/invalidjsvns?default=steve", function(error, res, body) {
+            assert.equal(404, res.statusCode);
+            done();
+          });
         });
-      });
-
-      it("should return a 200 (default external image " + location + ")", function(done) {
-        request.get("http://localhost:3000/" + location + "/invalidjsvns?default=https%3A%2F%2Fi.imgur.com%2FocJVWAc.png", function(error, res, body) {
-          assert.equal(200, res.statusCode);
-          done();
+        it("should return a 200 (default external image " + location + ")", function(done) {
+          request.get("http://localhost:3000/" + location + "/invalidjsvns?default=https%3A%2F%2Fi.imgur.com%2FocJVWAc.png", function(error, res, body) {
+            assert.equal(200, res.statusCode);
+            done();
+          });
         });
-      });
+      })(location);
     }
 
     after(function(done) {
@@ -379,61 +383,61 @@ describe("Crafatar", function() {
         }
       });
 
-      describe("Networking: Skin", function() {
-        it("should not fail (uuid)", function(done) {
-          helpers.get_skin(rid, id, function(err, hash, img) {
-            assert.strictEqual(err, null);
-            done();
-          });
-        });
+describe("Networking: Skin", function() {
+  it("should not fail (uuid)", function(done) {
+    helpers.get_skin(rid, id, function(err, hash, img) {
+      assert.strictEqual(err, null);
+      done();
+    });
+  });
+});
+
+describe("Networking: Render", function() {
+  it("should not fail (full body)", function(done) {
+    helpers.get_render(rid, id, 6, true, true, function(err, hash, img) {
+      assert.strictEqual(err, null);
+      done();
+    });
+  });
+  it("should not fail (only head)", function(done) {
+    helpers.get_render(rid, id, 6, true, false, function(err, hash, img) {
+      assert.strictEqual(err, null);
+      done();
+    });
+  });
+});
+
+describe("Networking: Cape", function() {
+  it("should not fail (possible cape)", function(done) {
+    helpers.get_cape(rid, id, function(err, hash, img) {
+      assert.strictEqual(err, null);
+      done();
+    });
+  });
+});
+
+
+describe("Errors", function() {
+  before(function() {
+    cache.get_redis().flushall();
+  });
+
+  if (id_type == "uuid") {
+    it("uuid should be rate limited", function(done) {
+      networking.get_profile(rid, id, function(err, profile) {
+        assert.strictEqual(profile.error, "TooManyRequestsException");
+        done();
       });
-
-      describe("Networking: Render", function() {
-        it("should not fail (full body)", function(done) {
-          helpers.get_render(rid, id, 6, true, true, function(err, hash, img) {
-            assert.strictEqual(err, null);
-            done();
-          });
-        });
-        it("should not fail (only head)", function(done) {
-          helpers.get_render(rid, id, 6, true, false, function(err, hash, img) {
-            assert.strictEqual(err, null);
-            done();
-          });
-        });
+    });
+  } else {
+    it("username should NOT be rate limited (username)", function(done) {
+      helpers.get_avatar(rid, id, false, 160, function(err, status, image) {
+        assert.strictEqual(err, null);
+        done();
       });
-
-      describe("Networking: Cape", function() {
-        it("should not fail (possible cape)", function(done) {
-          helpers.get_cape(rid, id, function(err, hash, img) {
-            assert.strictEqual(err, null);
-            done();
-          });
-        });
-      });
-
-
-      describe("Errors", function() {
-        before(function() {
-          cache.get_redis().flushall();
-        });
-
-        if (id_type == "uuid") {
-          it("uuid should be rate limited", function(done) {
-            networking.get_profile(rid, id, function(err, profile) {
-              assert.strictEqual(profile.error, "TooManyRequestsException");
-              done();
-            });
-          });
-        } else {
-          it("username should NOT be rate limited (username)", function(done) {
-            helpers.get_avatar(rid, id, false, 160, function(err, status, image) {
-              assert.strictEqual(err, null);
-              done();
-            });
-          });
-        }
-      });
-    })(id, id_type);
+    });
   }
+});
+})(id, id_type);
+}
 });

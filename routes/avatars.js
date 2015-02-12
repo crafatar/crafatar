@@ -45,12 +45,9 @@ module.exports = function(req, res) {
   userId = userId.replace(/-/g, "");
   logging.log(rid + "userid: " + userId);
 
-  console.log("THIS WAS CALLED")
 
   try {
-    console.log("TRIED")
     helpers.get_avatar(rid, userId, helm, size, function(err, status, image, hash) {
-      console.log("I DID RUN COVERALLS!!")
       logging.log(rid + "storage type: " + human_status[status]);
       if (err) {
         logging.error(rid + err);
@@ -76,7 +73,6 @@ module.exports = function(req, res) {
       }
     });
   } catch(e) {
-    console.log("FAILED")
     logging.error(rid + "error: " + e.stack);
     handle_default(rid, 500, -1, userId);
   }
