@@ -45,8 +45,8 @@ describe("Crafatar", function() {
     cache.get_redis().flushall();
     // largest possible integers, cause I don't know
     // how big hard drives are these days
-    config.cleaning_disk_limit = Math.pow(2, 32) - 1;;
-    config.cleaning_redis_limit = Math.pow(2, 32) - 1;;
+    config.cleaning_disk_limit = Math.pow(2, 32) - 1;
+    config.cleaning_redis_limit = Math.pow(2, 32) - 1;
     cleaner.run();
   });
 
@@ -242,7 +242,7 @@ describe("Crafatar", function() {
     });
 
     // testing all paths for valid inputs
-    var locations = ["avatars", "skins", "renders/head"]
+    var locations = ["avatars", "skins", "renders/head"];
     for (var l in locations) {
       var location = locations[l];
       (function(location) {
@@ -251,7 +251,7 @@ describe("Crafatar", function() {
             assert.equal(200, res.statusCode);
             done();
           });
-        })
+        });
         it("should return a 422 (invalid id " + location + ")", function(done) {
           request.get("http://localhost:3000/" + location + "/thisisaninvaliduuid", function(error, res, body) {
             assert.equal(422, res.statusCode);
@@ -262,8 +262,8 @@ describe("Crafatar", function() {
     }
 
     // testing all paths for invalid id formats
-    var locations = ["avatars", "capes", "skins", "renders/head"]
-    for (var l in locations) {
+    locations = ["avatars", "capes", "skins", "renders/head"];
+    for (l in locations) {
       var location = locations[l];
       (function(location) {
         it("should return a 422 (invalid id " + location + ")", function(done) {
@@ -276,8 +276,8 @@ describe("Crafatar", function() {
     }
 
     //testing all paths for default images
-    locations = ["avatars", "skins", "renders/head"]
-    for (var l in locations) {
+    locations = ["avatars", "skins", "renders/head"];
+    for (l in locations) {
       var location = locations[l];
       (function(location) {
         it("should return a 404 (default steve image " + location + ")", function(done) {
@@ -298,7 +298,7 @@ describe("Crafatar", function() {
     after(function(done) {
       server.close(function() {
         done();
-      })
+      });
     });
   });
 
