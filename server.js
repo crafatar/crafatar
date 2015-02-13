@@ -109,8 +109,6 @@ exp.close = function(callback) {
 module.exports = exp;
 
 if (require.main === module) {
-  exp.boot();
-
-  // cleaning worker
-  setInterval(clean.run, config.cleaning_interval * 1000);
+  logging.error("Please use 'npm start' or 'bin/www.js'");
+  process.exit(1);
 }
