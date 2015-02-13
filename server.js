@@ -94,7 +94,9 @@ exp.boot = function(callback) {
   var bind_ip = process.env.BIND || "127.0.0.1";
   logging.log("Server running on http://" + bind_ip + ":" + port + "/");
   server = http.createServer(requestHandler).listen(port, bind_ip, function() {
-    callback();
+    if (callback) {
+      callback();
+    }
   });
 };
 
@@ -102,12 +104,12 @@ exp.close = function(callback) {
   server.close(function() {
     callback();
   });
-}
+};
 
 module.exports = exp;
 
 if (require.main === module) {
-  exp.boot(function(){});
+  exp.boot();
 
   // cleaning worker
   setInterval(clean.run, config.cleaning_interval * 1000);

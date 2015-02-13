@@ -111,7 +111,7 @@ h4 {
 }
 
 .code .example {
-  cursor: pointer;
+  cursor: text;
 }
 
 .code .example:hover {

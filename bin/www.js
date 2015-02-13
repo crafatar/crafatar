@@ -17,5 +17,5 @@ if (cluster.isMaster) {
 
   setInterval(cleaner.run, config.cleaning_interval * 1000);
 } else {
-  require("../server.js")();
+  require("../server.js").boot();
 }
