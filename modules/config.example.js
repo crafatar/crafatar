@@ -2,9 +2,9 @@ var config = {
   min_size: 1,                    // for avatars
   max_size: 512,                  // for avatars; too big values might lead to slow response time or DoS
   default_size: 160,              // for avatars; size to be used when no size given
-  min_scale: 1,                   // for renders
-  max_scale: 10,                  // for renders; too big values might lead to slow response time or DoS
-  default_scale: 6,               // for renders; scale to be used when no scale given
+  min_scale: 1,                   // for 3D renders
+  max_scale: 10,                  // for 3D renders; too big values might lead to slow response time or DoS
+  default_scale: 6,               // for 3D renders; scale to be used when no scale given
   local_cache_time: 1200,         // seconds until we will check if the image changed. should be > 60 to prevent mojang 429 response
   browser_cache_time: 3600,       // seconds until browser will request image again
   cleaning_interval: 1800,        // seconds interval: deleting images if disk size at limit

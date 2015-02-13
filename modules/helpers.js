@@ -272,7 +272,7 @@ function get_type(helm, body) {
   return helm ? text + "helm" : text;
 }
 
-// handles creations of skin renders
+// handles creations of 3D renders
 // callback contains error, skin hash, image buffer
 exp.get_render = function(rid, userId, scale, helm, body, callback) {
   exp.get_skin(rid, userId, function(err, skin_hash, img) {
