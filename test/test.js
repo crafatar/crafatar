@@ -172,7 +172,7 @@ describe("Crafatar", function() {
       });
     });
     it("should not find the file", function(done) {
-      skins.open_skin(rid, "non/existant/path", function(err, img) {
+      skins.open_skin(rid, "non/existent/path", function(err, img) {
         assert.notStrictEqual(err, null);
         done();
       });
