@@ -146,7 +146,15 @@ function store_images(rid, userId, details, type, callback) {
     currently_running.push(new_hash);
     networking.get_profile(rid, (is_uuid ? userId : null), function(err, profile) {
       if (err || (is_uuid && !profile)) {
-        callback_for(userId, type, err, null);
+        if (!err && !profile) {
+          cache.save_hash(rid, userId, null, null, function(cache_err) {
+            // we have no profile, so we have neither skin nor cape
+            callback_for(userId, "skin", cache_err, null);
+            callback_for(userId, "cape", cache_err, null);
+          });
+        } else {
+          callback_for(userId, type, err, null);
+        }
       } else {
         store_skin(rid, userId, profile, details, function(err, skin_hash) {
           cache.save_hash(rid, userId, skin_hash, null, function(cache_err) {
