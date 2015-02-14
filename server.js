@@ -91,7 +91,7 @@ var exp = {};
 
 exp.boot = function(callback) {
   var port = process.env.PORT || 3000;
-  var bind_ip = process.env.BIND || "127.0.0.1";
+  var bind_ip = process.env.BIND || "0.0.0.0";
   logging.log("Server running on http://" + bind_ip + ":" + port + "/");
   server = http.createServer(requestHandler).listen(port, bind_ip, function() {
     if (callback) {
