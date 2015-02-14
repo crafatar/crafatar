@@ -2,7 +2,6 @@
 var logging = require("./modules/logging");
 var querystring = require("querystring");
 var config = require("./modules/config");
-var clean = require("./modules/cleaner");
 var http = require("http");
 var mime = require("mime");
 var url = require("url");
