@@ -320,7 +320,7 @@ exp.get_cape = function(rid, userId, callback) {
       callback(err, null, null);
       return;
     }
-    var capepath = __dirname + "/../" + config.capes_path + cape_hash + ".png";
+    var capepath = __dirname + "/../" + config.capes_dir + cape_hash + ".png";
     fs.exists(capepath, function(exists) {
       if (exists) {
         logging.log(rid + "cape already exists, not downloading");
