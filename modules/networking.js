@@ -55,13 +55,13 @@ exp.get_from_options = function(rid, url, options, callback) {
     // 200 or 301 depending on content type
     if (!error && (response.statusCode === 200 || response.statusCode === 301)) {
       // response received successfully
-      logging.log(rid + url + " url received");
+      logging.log(rid + url + " response received");
       callback(body, response, null);
     } else if (error) {
       callback(body || null, response, error);
     } else if (response.statusCode === 404 || response.statusCode === 204) {
       // page does not exist
-      logging.log(rid + url + " url does not exist");
+      logging.log(rid + url + " url or content does not exist");
       callback(null, response, null);
     } else if (response.statusCode === 429) {
       // Too Many Requests exception - code 429
