@@ -2,7 +2,6 @@
 // https://github.com/confuser/serverless-mc-skin-viewer
 // Permission to use & distribute https://github.com/confuser/serverless-mc-skin-viewer/blob/master/LICENSE
 
-var helpers = require("./helpers");
 var logging = require("./logging");
 var fs = require("fs");
 var Canvas = require("canvas");
@@ -43,7 +42,7 @@ exp.draw_head = function(skin_canvas, model_ctx, scale) {
 // using the skin from the +model_ctx+ at the +scale+
 // parts are labeled as if drawn from the skin's POV
 exp.draw_body = function(rid, skin_canvas, model_ctx, scale) {
-  if (skin_canvas.height == 32 * scale) {
+  if (skin_canvas.height === 32 * scale) {
     logging.debug(rid + "uses old skin format");
     //Left Leg
     //Left Leg - Front
@@ -189,8 +188,8 @@ function scale_image(imageData, context, d_x, d_y, scale) {
   var width = imageData.width;
   var height = imageData.height;
   context.clearRect(0,0,width,height); //Clear the spot where it originated from
-  for(y=0; y<height; y++) { //height original
-    for(x=0; x<width; x++) { //width original
+  for(var y = 0; y < height; y++) { // height original
+    for(var x = 0; x < width; x++) { // width original
       //Gets original colour, then makes a scaled square of the same colour
       var index = (x + y * width) * 4;
       context.fillStyle = "rgba(" + imageData.data[index+0] + "," + imageData.data[index+1] + "," + imageData.data[index+2] + "," + imageData.data[index+3] + ")";

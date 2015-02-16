@@ -1,6 +1,7 @@
 var logging = require("../modules/logging");
 var helpers = require("../modules/helpers");
 var config = require("../modules/config");
+var cache = require("../modules/cache");
 var skins = require("../modules/skins");
 var renders = require("../modules/renders");
 var fs = require("fs");
@@ -65,7 +66,7 @@ module.exports = function(req, res) {
       logging.log(rid + "storage type: " + human_status[status]);
       if (err) {
         logging.error(rid + err);
-        if (err.code == "ENOENT") {
+        if (err.code === "ENOENT") {
           // no such file
           cache.remove_hash(rid, userId);
         }

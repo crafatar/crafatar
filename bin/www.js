@@ -10,8 +10,8 @@ if (cluster.isMaster) {
     cluster.fork();
   }
 
-  cluster.on("exit", function (worker, code, signal) {
-    logging.error("Worker died. Rebooting a new one.");
+  cluster.on("exit", function (worker) {
+    logging.error("Worker #" + worker.id + " died. Rebooting a new one.");
     setTimeout(cluster.fork, 100);
   });
 

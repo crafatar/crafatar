@@ -17,6 +17,7 @@
 0. If you add new functions, **add documentation** (comment above)
   * Wrap function arguments in `+` signs (e.g. `the +type+ is used for…`)
 0. If you add new functions, **add tests** (test/test.js)
+0. If you fixed an issue, **add a test** that would catch this issue
 0. Run **tests** (`npm test`)
 0. Make sure as much of your code as possible is **covered by tests**
 0. Double check that your pull request is **awesome** :)
