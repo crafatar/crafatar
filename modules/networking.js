@@ -48,9 +48,9 @@ exp.get_from_options = function(rid, url, options, callback) {
     headers: {
       "User-Agent": "https://crafatar.com"
     },
-    timeout: (options.timeout || config.http_timeout),
+    timeout: config.http_timeout,
+    followRedirect: false,
     encoding: (options.encoding || null),
-    followRedirect: (options.folow_redirect || false),
   }, function(error, response, body) {
     // 200 or 301 depending on content type
     if (!error && (response.statusCode === 200 || response.statusCode === 301)) {
