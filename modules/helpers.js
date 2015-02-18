@@ -32,20 +32,20 @@ function store_skin(rid, userId, profile, details, callback) {
             logging.log(rid + "skin already exists, not downloading");
             callback(null, skin_hash);
           } else {
-            networking.get_from(rid, url, function(img, response, err) {
-              if (err || !img) {
-                callback(err, null);
+            networking.get_from(rid, url, function(img, response, err1) {
+              if (err1 || !img) {
+                callback(err1, null);
               } else {
-                skins.extract_face(img, facepath, function(err) {
-                  if (err) {
-                    logging.error(rid + err.stack);
-                    callback(err, null);
+                skins.extract_face(img, facepath, function(err2) {
+                  if (err2) {
+                    logging.error(rid + err2.stack);
+                    callback(err2, null);
                   } else {
                     logging.log(rid + "face extracted");
-                    skins.extract_helm(rid, facepath, img, helmpath, function(err) {
+                    skins.extract_helm(rid, facepath, img, helmpath, function(err3) {
                       logging.log(rid + "helm extracted");
                       logging.debug(rid + helmpath);
-                      callback(err, skin_hash);
+                      callback(err3, skin_hash);
                     });
                   }
                 });

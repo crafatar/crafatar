@@ -69,7 +69,8 @@ exp.get_from_options = function(rid, url, options, callback) {
       callback(null, response, null);
     } else if (code === 429) {
       // Too Many Requests exception - code 429
-      callback(body || null, response, error);
+      // cause error so the image will not be cached
+      callback(body || null, response, (error || "TooManyRequests"));
     } else {
       logging.error(rid + " Unknown reply:");
       logging.error(rid + JSON.stringify(response));
