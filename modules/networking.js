@@ -1,3 +1,4 @@
+var http_code = require("http").STATUS_CODES;
 var logging = require("./logging");
 var request = require("request");
 var config = require("./config");
@@ -52,23 +53,25 @@ exp.get_from_options = function(rid, url, options, callback) {
     followRedirect: false,
     encoding: (options.encoding || null),
   }, function(error, response, body) {
+    // log url + code + description
+    var code = response.statusCode;
+    logfunc = code && code < 405 ? logging.log : logging.warn;
+    logfunc(rid + url + " " + code + " " + http_code[code]);
+
     // 200 or 301 depending on content type
-    if (!error && (response.statusCode === 200 || response.statusCode === 301)) {
+    if (!error && (code === 200 || code === 301)) {
       // response received successfully
-      logging.log(rid + url + " response received");
       callback(body, response, null);
     } else if (error) {
       callback(body || null, response, error);
-    } else if (response.statusCode === 404 || response.statusCode === 204) {
+    } else if (code === 404 || code === 204) {
       // page does not exist
-      logging.log(rid + url + " url or content does not exist");
       callback(null, response, null);
-    } else if (response.statusCode === 429) {
+    } else if (code === 429) {
       // Too Many Requests exception - code 429
-      logging.warn(rid + url + " Too many requests");
       callback(body || null, response, error);
     } else {
-      logging.error(rid + url + " Unknown error:");
+      logging.error(rid + " Unknown reply:");
       logging.error(rid + JSON.stringify(response));
       callback(body || null, response, error);
     }
