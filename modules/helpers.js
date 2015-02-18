@@ -159,6 +159,7 @@ function store_images(rid, userId, details, type, callback) {
           callback_for(userId, type, err, null);
         }
       } else {
+        // no error and we have a profile or it's not a uuid
         store_skin(rid, userId, profile, details, function(err, skin_hash) {
           cache.save_hash(rid, userId, skin_hash, null, function(cache_err) {
             callback_for(userId, "skin", (err || cache_err), skin_hash);
