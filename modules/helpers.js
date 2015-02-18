@@ -192,14 +192,14 @@ exp.id_valid = function(userId) {
 //   3: "checked" - profile re-downloaded (was too old), but it has either not changed or has no skin
 exp.get_image_hash = function(rid, userId, type, callback) {
   cache.get_details(userId, function(err, details) {
-    var hash = details !== null ? (type === "skin" ? details.skin : details.cape) : null;
+    var cached_hash = details !== null ? (type === "skin" ? details.skin : details.cape) : null;
     if (err) {
       callback(err, -1, null);
     } else {
       if (details && details.time + config.local_cache_time * 1000 >= new Date().getTime()) {
         // use cached image
         logging.log(rid + "userId cached & recently updated");
-        callback(null, (hash ? 1 : 0), hash);
+        callback(null, (cached_hash ? 1 : 0), cached_hash);
       } else {
         // download image
         if (details) {
@@ -209,12 +209,12 @@ exp.get_image_hash = function(rid, userId, type, callback) {
         }
         store_images(rid, userId, details, type, function(err, new_hash) {
           if (err) {
-            // we might have a hash although an error occured
+            // we might have a cached hash although an error occured
             // (e.g. Mojang servers not reachable, using outdated hash)
-            callback(err, -1, details && hash);
+            callback(err, -1, details && cached_hash);
           } else {
-            var status = details && (hash === new_hash) ? 3 : 2;
-            logging.debug(rid + "old hash: " + (details && hash));
+            var status = details && (cached_hash === new_hash) ? 3 : 2;
+            logging.debug(rid + "cached hash: " + (details && cached_hash));
             logging.log(rid + "new hash: " + new_hash);
             callback(null, status, new_hash);
           }
