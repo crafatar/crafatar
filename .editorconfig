@@ -1,19 +1,17 @@
 # We use EditorConfig to standardize settings between contributors
 # See http://editorconfig.org for more info and plugin downloads
 
-# This is the only config file
 root = true
 
-# Unix-style newlines with with new lines at the end
 [*]
 end_of_line = lf
-insert_final_newline = true
+insert_final_newline = false
+trim_trailing_whitespace = true
 
-# Use utf-8 for character encoding
-[*.{js, json, yml}]
-charset = utf-8
-
-# 2 space indents
 [*.{js, json, yml}]
 indent_style = space
 indent_size = 2
+charset = utf-8
+
+[*.md]
+trim_trailing_whitespace = false
