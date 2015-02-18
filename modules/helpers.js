@@ -209,6 +209,8 @@ exp.get_image_hash = function(rid, userId, type, callback) {
         }
         store_images(rid, userId, details, type, function(err, new_hash) {
           if (err) {
+            // we might have a hash although an error occured
+            // (e.g. Mojang servers not reachable, using outdated hash)
             callback(err, -1, details && hash);
           } else {
             var status = details && (hash === new_hash) ? 3 : 2;
@@ -241,8 +243,6 @@ exp.get_avatar = function(rid, userId, helm, size, callback) {
           if (img_err) {
             callback(img_err, -1, null, skin_hash);
           } else {
-            // we might have a hash although an error occured
-            // (e.g. Mojang servers not reachable, using outdated hash)
             callback(err, (err ? -1 : status), result, skin_hash);
           }
         });
