@@ -38,9 +38,9 @@ exp.extract_cape_url = function(profile) {
 };
 
 // makes a GET request to the +url+
-// +options+ hash includes various options for
-// encoding and timeouts, defaults are already
-// specified. +callback+ contains the body, response,
+// +options+ hash includes these options:
+//   encoding (string), default is to return a buffer
+// +callback+ contains the body, response,
 // and error buffer. get_from helper method is available
 exp.get_from_options = function(rid, url, options, callback) {
   request.get({
