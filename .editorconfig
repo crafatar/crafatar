@@ -15,3 +15,7 @@ charset = utf-8
 
 [*.md]
 trim_trailing_whitespace = false
+
+[.gitignore]
+# echo "filename" >> .gitignorre
+insert_final_newline = true
