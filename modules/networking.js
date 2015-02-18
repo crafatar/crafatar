@@ -110,8 +110,8 @@ exp.get_uuid_url = function(profile, type, callback) {
   callback(url || null);
 };
 
-// make a request to sessionserver
-// profile is returned as json
+// make a request to sessionserver for +uuid+
+// +callback+ contains error, profile
 exp.get_profile = function(rid, uuid, callback) {
   if (!uuid) {
     callback(null, null);
@@ -122,18 +122,16 @@ exp.get_profile = function(rid, uuid, callback) {
   }
 };
 
-// +userId+ is likely a username and if so
-// +userId+ is used to get the url, otherwise
-// +profile+ will be used to get the url
+// get the skin URL for +userId+
+// +profile+ is used if +userId+ is a uuid
 exp.get_skin_url = function(rid, userId, profile, callback) {
   get_url(rid, userId, profile, 0, function(url) {
     callback(url);
   });
 };
 
-// +userId+ is likely a username and if so
-// +userId+ is used to get the url, otherwise
-// +profile+ will be used to get the url
+// get the cape URL for +userId+
+// +profile+ is used if +userId+ is a uuid
 exp.get_cape_url = function(rid, userId, profile, callback) {
   get_url(rid, userId, profile, 1, function(url) {
     callback(url);
