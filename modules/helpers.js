@@ -239,11 +239,11 @@ exp.get_avatar = function(rid, userId, helm, size, callback) {
         if (helm && exists) {
           filepath = helmpath;
         }
-        skins.resize_img(filepath, size, function(img_err, result) {
+        skins.resize_img(filepath, size, function(img_err, image) {
           if (img_err) {
             callback(img_err, -1, null, skin_hash);
           } else {
-            callback(err, (err ? -1 : status), result, skin_hash);
+            callback(err, (err ? -1 : status), image, skin_hash);
           }
         });
       });
