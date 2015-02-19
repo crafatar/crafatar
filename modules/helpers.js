@@ -16,11 +16,11 @@ function get_hash(url) {
 }
 
 function store_skin(rid, userId, profile, details, callback) {
-  networking.get_skin_url(rid, userId, profile, function(url) {
-    if (url) {
+  networking.get_skin_url(rid, userId, profile, function(err, url) {
+    if (!err && url) {
       var skin_hash = get_hash(url);
       if (details && details.skin === skin_hash) {
-        cache.update_timestamp(rid, userId, skin_hash, function(err) {
+        cache.update_timestamp(rid, userId, skin_hash, false, function(err) {
           callback(err, skin_hash);
         });
       } else {
@@ -55,17 +55,17 @@ function store_skin(rid, userId, profile, details, callback) {
         });
       }
     } else {
-      callback(null, null);
+      callback(err, null);
     }
   });
 }
 
 function store_cape(rid, userId, profile, details, callback) {
-  networking.get_cape_url(rid, userId, profile, function(url) {
-    if (url) {
+  networking.get_cape_url(rid, userId, profile, function(err, url) {
+    if (!err && url) {
       var cape_hash = get_hash(url);
       if (details && details.cape === cape_hash) {
-        cache.update_timestamp(rid, userId, cape_hash, function(err) {
+        cache.update_timestamp(rid, userId, cape_hash, false, function(err) {
           callback(err, cape_hash);
         });
       } else {
@@ -91,7 +91,7 @@ function store_cape(rid, userId, profile, details, callback) {
         });
       }
     } else {
-      callback(null, null);
+      callback(err, null);
     }
   });
 }
@@ -155,20 +155,30 @@ function store_images(rid, userId, details, type, callback) {
             callback_for(userId, "cape", cache_err, null);
           });
         } else {
-          // an error occured, not caching
+          // an error occured, not caching. we can try in 60 seconds
           callback_for(userId, type, err, null);
         }
       } else {
-        // no error and we have a profile or it's not a uuid
+        // no error and we have a profile (if it's a uuid)
         store_skin(rid, userId, profile, details, function(err, skin_hash) {
-          cache.save_hash(rid, userId, skin_hash, null, function(cache_err) {
-            callback_for(userId, "skin", (err || cache_err), skin_hash);
-            store_cape(rid, userId, profile, details, function(err, cape_hash) {
-              cache.save_hash(rid, userId, skin_hash, cape_hash, function(cache_err) {
-                callback_for(userId, "cape", (err || cache_err), cape_hash);
-              });
+          if (err && !skin_hash) {
+            // an error occured, not caching. we can try in 60 seconds
+            callback_for(userId, "skin", err, null);
+          } else {
+            cache.save_hash(rid, userId, skin_hash, null, function(cache_err) {
+              callback_for(userId, "skin", (err || cache_err), skin_hash);
             });
-          });
+          }
+        });
+        store_cape(rid, userId, profile, details, function(err, cape_hash) {
+          if (err && !cape_hash) {
+            // an error occured, not caching. we can try in 60 seconds
+            callback_for(userId, "cape", (err || cache_err), cape_hash);
+          } else {
+            cache.save_hash(rid, userId, undefined, cape_hash, function(cache_err) {
+              callback_for(userId, "cape", (err || cache_err), cape_hash);
+            });
+          }
         });
       }
     });
@@ -215,7 +225,9 @@ exp.get_image_hash = function(rid, userId, type, callback) {
           if (err) {
             // we might have a cached hash although an error occured
             // (e.g. Mojang servers not reachable, using outdated hash)
-            callback(err, -1, details && cached_hash);
+            cache.update_timestamp(rid, userId, cached_hash, true, function(err2) {
+              callback(err2 || err, -1, details && cached_hash);
+            });
           } else {
             var status = details && (cached_hash === new_hash) ? 3 : 2;
             logging.debug(rid + "cached hash: " + (details && cached_hash));

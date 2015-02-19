@@ -15,7 +15,7 @@ var request = require("request");
 config.http_timeout *= 3;
 
 // no spam
-logging.log = function() {};
+//logging.log = function() {};
 
 var uuids = fs.readFileSync("test/uuids.txt").toString().split(/\r?\n/);
 var names = fs.readFileSync("test/usernames.txt").toString().split(/\r?\n/);
@@ -166,7 +166,7 @@ describe("Crafatar", function() {
     });
     it("should ignore file updates on invalid files", function(done) {
       assert.doesNotThrow(function() {
-        cache.update_timestamp(rid, "0123456789abcdef0123456789abcdef", "invalid-file.png", function(err) {
+        cache.update_timestamp(rid, "0123456789abcdef0123456789abcdef", "invalid-file.png", false, function(err) {
           done();
         });
       });
