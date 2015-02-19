@@ -15,7 +15,7 @@ var request = require("request");
 config.http_timeout *= 3;
 
 // no spam
-//logging.log = function() {};
+logging.log = function() {};
 
 var uuids = fs.readFileSync("test/uuids.txt").toString().split(/\r?\n/);
 var names = fs.readFileSync("test/usernames.txt").toString().split(/\r?\n/);
