@@ -118,7 +118,7 @@ module.exports = function(req, res) {
         // we render the default skins, but not custom images
         renders.draw_model(rid, buf, scale, helm, body, function(err, def_img) {
           if (err) {
-            logging.log(rid + "error while rendering default image: " + err);
+            logging.error(rid + "error while rendering default image: " + err);
           }
           sendimage(rid, http_status, img_status, def_img);
         });

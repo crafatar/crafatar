@@ -113,8 +113,7 @@ exp.update_timestamp = function(rid, userId, hash, temp, callback) {
 // this feature can be used to write both cape and skin at separate times
 // +callback+ contans error
 exp.save_hash = function(rid, userId, skin_hash, cape_hash, callback) {
-  logging.log(rid + "cache: saving hash");
-  logging.log(rid + "skin:" + skin_hash + " cape:" + cape_hash);
+  logging.log(rid + "cache: saving skin:" + skin_hash + " cape:" + cape_hash);
   var time = new Date().getTime();
   // store shorter null byte instead of "null"
   skin_hash = (skin_hash === null ? "." : skin_hash);

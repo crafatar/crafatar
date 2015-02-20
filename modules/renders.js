@@ -150,19 +150,16 @@ exp.draw_model = function(rid, img, scale, helm, body, callback) {
     //Scale it
     scale_image(skin_ctx.getImageData(0,0,64,original_height), skin_ctx, 0, 0, scale);
     if (body) {
-      logging.log(rid + "drawing body");
       exp.draw_body(rid, skin_canvas, model_ctx, scale);
     }
-    logging.log(rid + "drawing head");
     exp.draw_head(skin_canvas, model_ctx, scale);
     if (helm) {
-      logging.log(rid + "drawing helmet");
       exp.draw_helmet(skin_canvas, model_ctx, scale);
     }
 
     model_canvas.toBuffer(function(err, buf){
       if (err) {
-        logging.log(rid + "error creating buffer: " + err);
+        logging.error(rid + "error creating buffer: " + err);
       }
       callback(err, buf);
     });

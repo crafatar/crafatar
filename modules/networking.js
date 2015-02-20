@@ -165,7 +165,7 @@ exp.save_texture = function(rid, tex_hash, outpath, callback) {
       } else {
         fs.writeFile(outpath, img, "binary", function(err) {
           if (err) {
-            logging.log(rid + "error: " + err.stack);
+            logging.error(rid + "error: " + err.stack);
           }
           callback(err, response, img);
         });

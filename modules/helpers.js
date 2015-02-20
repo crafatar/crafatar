@@ -41,9 +41,9 @@ function store_skin(rid, userId, profile, details, callback) {
                     logging.error(rid + err2.stack);
                     callback(err2, null);
                   } else {
-                    logging.log(rid + "face extracted");
+                    logging.debug(rid + "face extracted");
                     skins.extract_helm(rid, facepath, img, helmpath, function(err3) {
-                      logging.log(rid + "helm extracted");
+                      logging.debug(rid + "helm extracted");
                       logging.debug(rid + helmpath);
                       callback(err3, skin_hash);
                     });
@@ -82,7 +82,7 @@ function store_cape(rid, userId, profile, details, callback) {
                 callback(err, null);
               } else {
                 skins.save_image(img, capepath, function(err) {
-                  logging.log(rid + "cape saved");
+                  logging.debug(rid + "cape saved");
                   callback(err, cape_hash);
                 });
               }
@@ -273,7 +273,6 @@ exp.get_avatar = function(rid, userId, helm, size, callback) {
 // handles requests for +userId+ skins
 // callback contains error, skin hash, image buffer
 exp.get_skin = function(rid, userId, callback) {
-  logging.log(rid + "skin request");
   exp.get_image_hash(rid, userId, "skin", function(err, status, skin_hash) {
     var skinpath = __dirname + "/../" + config.skins_dir + skin_hash + ".png";
     fs.exists(skinpath, function(exists) {
@@ -324,7 +323,7 @@ exp.get_render = function(rid, userId, scale, helm, body, callback) {
           } else {
             fs.writeFile(renderpath, img, "binary", function(err) {
               if (err) {
-                logging.log(rid + err.stack);
+                logging.error(rid + err.stack);
               }
               callback(null, 2, skin_hash, img);
             });
@@ -338,7 +337,6 @@ exp.get_render = function(rid, userId, scale, helm, body, callback) {
 // handles requests for +userId+ capes
 // callback contains error, cape hash, image buffer
 exp.get_cape = function(rid, userId, callback) {
-  logging.log(rid + "cape request");
   exp.get_image_hash(rid, userId, "cape", function(err, status, cape_hash) {
     if (!cape_hash) {
       callback(err, null, null);
