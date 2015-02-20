@@ -54,9 +54,11 @@ exp.get_from_options = function(rid, url, options, callback) {
     encoding: (options.encoding || null),
   }, function(error, response, body) {
     // log url + code + description
-    var code = response.statusCode;
-    logfunc = code && code < 405 ? logging.log : logging.warn;
-    logfunc(rid + url + " " + code + " " + http_code[code]);
+    var code = response && response.statusCode;
+    if (!error) {
+     var logfunc = code && code < 405 ? logging.log : logging.warn;
+     logfunc(rid + url + " " + code + " " + http_code[code]);
+   }
 
     // 200 or 301 depending on content type
     if (!error && (code === 200 || code === 301)) {
