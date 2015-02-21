@@ -15,7 +15,7 @@ var request = require("request");
 config.http_timeout *= 3;
 
 // no spam
-if (!process.env.VERBOSE_TEST !== "true") {
+if (process.env.VERBOSE_TEST !== "true") {
   logging.log = function() {};
 }
 
