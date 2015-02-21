@@ -116,8 +116,8 @@ exp.save_hash = function(rid, userId, skin_hash, cape_hash, callback) {
   logging.log(rid + "cache: saving skin:" + skin_hash + " cape:" + cape_hash);
   var time = new Date().getTime();
   // store shorter null byte instead of "null"
-  skin_hash = (skin_hash === null ? "." : skin_hash);
-  cape_hash = (cape_hash === null ? "." : cape_hash);
+  skin_hash = (skin_hash === null ? "" : skin_hash);
+  cape_hash = (cape_hash === null ? "" : cape_hash);
   // store userId in lower case if not null
   userId = userId && userId.toLowerCase();
   if (skin_hash === undefined) {
@@ -152,8 +152,8 @@ exp.get_details = function(userId, callback) {
     var details = null;
     if (data) {
       details = {
-        skin: (!data.s || data.s === ".") ? null : data.s,
-        cape: (!data.c || data.c === ".") ? null : data.c,
+        skin: (!data.s || data.s === "") ? null : data.s,
+        cape: (!data.c || data.c === "") ? null : data.c,
         time: Number(data.t)
       };
     }
