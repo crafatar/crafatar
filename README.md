@@ -45,3 +45,19 @@ Please [visit the website](https://crafatar.com) for details.
 * Start `redis-server`
 * `npm start`
 * Access [http://localhost:3000](http://localhost:3000)
+
+
+## Tests
+```shell
+npm test
+```
+
+If you want to debug failing tests, you can set the env
+```shell
+VERBOSE_TEST=true
+```
+
+To debug caching, it can be helpful to monitor redis commands while tests are running:
+```shell
+redis-cli monitor
+```
