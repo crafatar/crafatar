@@ -196,7 +196,7 @@ exp.id_valid = function(userId) {
   return valid_user_id.test(userId);
 };
 
-// decides whether to get an image from disk or to download it
+// decides whether to get a +type+ image for +userId+ from disk or to download it
 // callback contains error, status, hash
 // the status gives information about how the image was received
 //  -1: "error"
@@ -206,11 +206,11 @@ exp.id_valid = function(userId) {
 //   3: "checked" - profile re-downloaded (was too old), but it has either not changed or has no skin
 exp.get_image_hash = function(rid, userId, type, callback) {
   cache.get_details(userId, function(err, details) {
-    var cached_hash = details !== null ? (type === "skin" ? details.skin : details.cape) : null;
+    var cached_hash = (details !== null) ? (type === "skin" ? details.skin : details.cape) : null;
     if (err) {
       callback(err, -1, null);
     } else {
-      if (details && details.time + config.local_cache_time * 1000 >= new Date().getTime()) {
+      if (details && details[type] !== undefined && details.time + config.local_cache_time * 1000 >= new Date().getTime()) {
         // use cached image
         logging.log(rid + "userId cached & recently updated");
         callback(null, (cached_hash ? 1 : 0), cached_hash);
