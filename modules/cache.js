@@ -143,7 +143,7 @@ exp.remove_hash = function(rid, userId) {
 
 // get a details object for +userId+
 // {skin: "0123456789abcdef", cape: "gs1gds1g5d1g5ds1", time: 1414881524512}
-// +callbacl+ contains error, details
+// +callback+ contains error, details
 // details is null when userId not cached
 exp.get_details = function(userId, callback) {
   // get userId in lower case if not null
@@ -152,8 +152,8 @@ exp.get_details = function(userId, callback) {
     var details = null;
     if (data) {
       details = {
-        skin: (!data.s || data.s === "") ? null : data.s,
-        cape: (!data.c || data.c === "") ? null : data.c,
+        skin: data.s === "" ? null : data.s,
+        cape: data.c === "" ? null : data.c,
         time: Number(data.t)
       };
     }
