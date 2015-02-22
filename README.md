@@ -40,6 +40,7 @@ Please [visit the website](https://crafatar.com) for details.
   ```
 
 #### Local
+* Use io.js
 * [Install](https://github.com/Automattic/node-canvas/wiki) Cairo.
 * `npm install`
 * Start `redis-server`
