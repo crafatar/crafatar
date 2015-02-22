@@ -16,6 +16,7 @@ Please [visit the website](https://crafatar.com) for details.
 ## Contact
 
 * You can follow us on [![t](https://favicons.githubusercontent.com/twitter.com)@crafatar](https://twitter.com/crafatar)
+* Open an [issue](https://github.com/crafatar/crafatar/issues/) on GitHub
 * You can [join us](https://webchat.esper.net/?channels=crafatar) in #crafatar on irc.esper.net.
 
 ## Installation
