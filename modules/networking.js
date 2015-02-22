@@ -56,15 +56,16 @@ exp.get_from_options = function(rid, url, options, callback) {
     // log url + code + description
     var code = response && response.statusCode;
     if (!error) {
-     var logfunc = code && code < 405 ? logging.log : logging.warn;
-     logfunc(rid + url + " " + code + " " + http_code[code]);
-   }
+      var logfunc = code && code < 405 ? logging.log : logging.warn;
+      logfunc(rid + url + " " + code + " " + http_code[code]);
+    }
 
     // 200 or 301 depending on content type
     if (!error && (code === 200 || code === 301)) {
       // response received successfully
       callback(body, response, null);
     } else if (error) {
+      logging.error(error);
       callback(body || null, response, error);
     } else if (code === 404 || code === 204) {
       // page does not exist
@@ -128,16 +129,16 @@ exp.get_profile = function(rid, uuid, callback) {
 // get the skin URL for +userId+
 // +profile+ is used if +userId+ is a uuid
 exp.get_skin_url = function(rid, userId, profile, callback) {
-  get_url(rid, userId, profile, 0, function(url) {
-    callback(url);
+  get_url(rid, userId, profile, 0, function(err, url) {
+    callback(err, url);
   });
 };
 
 // get the cape URL for +userId+
 // +profile+ is used if +userId+ is a uuid
 exp.get_cape_url = function(rid, userId, profile, callback) {
-  get_url(rid, userId, profile, 1, function(url) {
-    callback(url);
+  get_url(rid, userId, profile, 1, function(err, url) {
+    callback(err, url);
   });
 };
 
@@ -145,11 +146,11 @@ function get_url(rid, userId, profile, type, callback) {
   if (userId.length <= 16) {
     //username
     exp.get_username_url(rid, userId, type, function(err, url) {
-      callback(url || null);
+      callback(err, url || null);
     });
   } else {
     exp.get_uuid_url(profile, type, function(url) {
-      callback(url || null);
+      callback(null, url || null);
     });
   }
 }
@@ -164,7 +165,7 @@ exp.save_texture = function(rid, tex_hash, outpath, callback) {
       } else {
         fs.writeFile(outpath, img, "binary", function(err) {
           if (err) {
-            logging.log(rid + "error: " + err.stack);
+            logging.error(rid + "error: " + err.stack);
           }
           callback(err, response, img);
         });

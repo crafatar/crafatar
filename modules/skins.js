@@ -53,7 +53,7 @@ exp.extract_helm = function(rid, facefile, buffer, outname, callback) {
                           callback(err);
                         });
                       } else {
-                        logging.log(rid + "helm image is the same as face image, not storing!");
+                        logging.log(rid + "helm img == face img, not storing!");
                         callback(null);
                       }
                     });

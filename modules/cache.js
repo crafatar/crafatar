@@ -92,11 +92,14 @@ exp.info = function(callback) {
   });
 };
 
-// sets the timestamp for +userId+ and its face file's date to now
+// sets the timestamp for +userId+ and its face file's (+hash+) date to the current time
+// if +temp+ is true, the timestamp is set so that the record will be outdated after 60 seconds
+// these 60 seconds match the duration of Mojang's rate limit ban
 // +callback+ contains error
-exp.update_timestamp = function(rid, userId, hash, callback) {
+exp.update_timestamp = function(rid, userId, hash, temp, callback) {
   logging.log(rid + "cache: updating timestamp");
-  var time = new Date().getTime();
+  sub = temp ? (config.local_cache_time - 60) : 0;
+  var time = new Date().getTime() - sub;
   // store userId in lower case if not null
   userId = userId && userId.toLowerCase();
   redis.hmset(userId, "t", time, function(err) {
@@ -105,20 +108,31 @@ exp.update_timestamp = function(rid, userId, hash, callback) {
   update_file_date(rid, hash);
 };
 
-// create the key +userId+, store +skin_hash+ hash, +cape_hash+ hash and time
+// create the key +userId+, store +skin_hash+, +cape_hash+ and time
+// if either +skin_hash+ or +cape_hash+ are undefined, they will not be stored
+// this feature can be used to write both cape and skin at separate times
 // +callback+ contans error
 exp.save_hash = function(rid, userId, skin_hash, cape_hash, callback) {
-  logging.log(rid + "cache: saving hash");
-  logging.log(rid + "skin:" + skin_hash + " cape:" + cape_hash);
+  logging.log(rid + "cache: saving skin:" + skin_hash + " cape:" + cape_hash);
   var time = new Date().getTime();
   // store shorter null byte instead of "null"
-  skin_hash = skin_hash || ".";
-  cape_hash = cape_hash || ".";
+  skin_hash = (skin_hash === null ? "" : skin_hash);
+  cape_hash = (cape_hash === null ? "" : cape_hash);
   // store userId in lower case if not null
   userId = userId && userId.toLowerCase();
-  redis.hmset(userId, "s", skin_hash, "c", cape_hash, "t", time, function(err){
-    callback(err);
-  });
+  if (skin_hash === undefined) {
+    redis.hmset(userId, "c", cape_hash, "t", time, function(err){
+      callback(err);
+    });
+  } else if (cape_hash === undefined) {
+    redis.hmset(userId, "s", skin_hash, "t", time, function(err){
+      callback(err);
+    });
+  } else {
+    redis.hmset(userId, "s", skin_hash, "c", cape_hash, "t", time, function(err){
+      callback(err);
+    });
+  }
 };
 
 // removes the hash for +userId+ from the cache
@@ -129,7 +143,8 @@ exp.remove_hash = function(rid, userId) {
 
 // get a details object for +userId+
 // {skin: "0123456789abcdef", cape: "gs1gds1g5d1g5ds1", time: 1414881524512}
-// null when userId unkown
+// +callback+ contains error, details
+// details is null when userId not cached
 exp.get_details = function(userId, callback) {
   // get userId in lower case if not null
   userId = userId && userId.toLowerCase();
@@ -137,8 +152,8 @@ exp.get_details = function(userId, callback) {
     var details = null;
     if (data) {
       details = {
-        skin: (data.s === "." ? null : data.s),
-        cape: (data.c === "." ? null : data.c),
+        skin: data.s === "" ? null : data.s,
+        cape: data.c === "" ? null : data.c,
         time: Number(data.t)
       };
     }

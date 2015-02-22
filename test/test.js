@@ -15,7 +15,9 @@ var request = require("request");
 config.http_timeout *= 3;
 
 // no spam
-logging.log = function() {};
+if (process.env.VERBOSE_TEST !== "true") {
+  logging.log = function() {};
+}
 
 var uuids = fs.readFileSync("test/uuids.txt").toString().split(/\r?\n/);
 var names = fs.readFileSync("test/usernames.txt").toString().split(/\r?\n/);
@@ -166,7 +168,7 @@ describe("Crafatar", function() {
     });
     it("should ignore file updates on invalid files", function(done) {
       assert.doesNotThrow(function() {
-        cache.update_timestamp(rid, "0123456789abcdef0123456789abcdef", "invalid-file.png", function(err) {
+        cache.update_timestamp(rid, "0123456789abcdef0123456789abcdef", "invalid-file.png", false, function(err) {
           done();
         });
       });
@@ -211,7 +213,7 @@ describe("Crafatar", function() {
 
     it("should return a 422 (invalid size)", function(done) {
       var size = config.max_size + 1;
-      request.get("http://localhost:3000/avatars/Jake0oo0?size=" + size, function(error, res, body) {
+      request.get("http://localhost:3000/avatars/Jake_0?size=" + size, function(error, res, body) {
         assert.equal(422, res.statusCode);
         done();
       });
@@ -219,7 +221,7 @@ describe("Crafatar", function() {
 
     it("should return a 422 (invalid scale)", function(done) {
       var scale = config.max_scale + 1;
-      request.get("http://localhost:3000/renders/head/Jake0oo0?scale=" + scale, function(error, res, body) {
+      request.get("http://localhost:3000/renders/head/Jake_0?scale=" + scale, function(error, res, body) {
         assert.equal(422, res.statusCode);
         done();
       });
@@ -227,14 +229,14 @@ describe("Crafatar", function() {
 
     // no default images for capes, should 404
     it("should return a 404 (no cape)", function(done) {
-      request.get("http://localhost:3000/capes/Jake0oo0", function(error, res, body) {
+      request.get("http://localhost:3000/capes/Jake_0", function(error, res, body) {
         assert.equal(404, res.statusCode);
         done();
       });
     });
 
     it("should return a 422 (invalid render type)", function(done) {
-      request.get("http://localhost:3000/renders/side/Jake0oo0", function(error, res, body) {
+      request.get("http://localhost:3000/renders/side/Jake_0", function(error, res, body) {
         assert.equal(422, res.statusCode);
         done();
       });
@@ -246,7 +248,7 @@ describe("Crafatar", function() {
       var location = locations[l];
       (function(location) {
         it("should return a 200 (valid input " + location + ")", function(done) {
-          request.get("http://localhost:3000/" + location + "/Jake0oo0", function(error, res, body) {
+          request.get("http://localhost:3000/" + location + "/Jake_0", function(error, res, body) {
             assert.equal(200, res.statusCode);
             done();
           });
@@ -310,7 +312,7 @@ describe("Crafatar", function() {
       });
     });
     it("should not fail (username, 64x64 skin)", function(done) {
-      helpers.get_render(rid, "Jake0oo0", 6, true, true, function(err, hash, img) {
+      helpers.get_render(rid, "Jake_0", 6, true, true, function(err, hash, img) {
         assert.strictEqual(err, null);
         done();
       });
@@ -334,7 +336,7 @@ describe("Crafatar", function() {
       });
     });
     it("should not be found", function(done) {
-      helpers.get_cape(rid, "Jake0oo0", function(err, hash, img) {
+      helpers.get_cape(rid, "Jake_0", function(err, hash, img) {
         assert.strictEqual(img, null);
         done();
       });
@@ -343,7 +345,7 @@ describe("Crafatar", function() {
 
   describe("Networking: Skin", function() {
     it("should not fail", function(done) {
-      helpers.get_cape(rid, "Jake0oo0", function(err, hash, img) {
+      helpers.get_cape(rid, "Jake_0", function(err, hash, img) {
         assert.strictEqual(err, null);
         done();
       });
@@ -352,7 +354,7 @@ describe("Crafatar", function() {
       before(function() {
         cache.get_redis().flushall();
       });
-      helpers.get_cape(rid, "Jake0oo0", function(err, hash, img) {
+      helpers.get_cape(rid, "Jake_0", function(err, hash, img) {
         assert.strictEqual(err, null);
         done();
       });
