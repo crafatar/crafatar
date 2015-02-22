@@ -1,6 +1,6 @@
 {
   "name": "crafatar",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "author": "Jake0oo0",
   "description": "A Minecraft avatar service with support for avatars, 1.8 skins, and even 3D renders!",
