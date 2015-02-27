@@ -87,7 +87,7 @@ exp.resize_img = function(inname, size, callback) {
 // returns "alex" or "steve" calculated by the +uuid+
 exp.default_skin = function(uuid) {
   if (uuid.length <= 16) {
-    // we can't get the
+    // we can't get the skin type by username
     return "steve";
   } else {
     // great thanks to Minecrell for research into Minecraft and Java's UUID hashing!
