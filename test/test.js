@@ -26,6 +26,30 @@ var names = fs.readFileSync("test/usernames.txt").toString().split(/\r?\n/);
 var uuid = uuids[Math.round(Math.random() * (uuids.length - 1))];
 var name = names[Math.round(Math.random() * (names.length - 1))];
 
+
+// Let's hope these will never be assigned
+var steve_ids = [
+  "fffffff0"+"fffffff0"+"fffffff0"+"fffffff0",
+  "fffffff0"+"fffffff0"+"fffffff1"+"fffffff1",
+  "fffffff0"+"fffffff1"+"fffffff0"+"fffffff1",
+  "fffffff0"+"fffffff1"+"fffffff1"+"fffffff0",
+  "fffffff1"+"fffffff0"+"fffffff0"+"fffffff1",
+  "fffffff1"+"fffffff0"+"fffffff1"+"fffffff0",
+  "fffffff1"+"fffffff1"+"fffffff0"+"fffffff0",
+  "fffffff1"+"fffffff1"+"fffffff1"+"fffffff1",
+];
+// Let's hope these will never be assigned
+var alex_ids = [
+  "fffffff0"+"fffffff0"+"fffffff0"+"fffffff1",
+  "fffffff0"+"fffffff0"+"fffffff1"+"fffffff0",
+  "fffffff0"+"fffffff1"+"fffffff0"+"fffffff0",
+  "fffffff0"+"fffffff1"+"fffffff1"+"fffffff1",
+  "fffffff1"+"fffffff0"+"fffffff0"+"fffffff0",
+  "fffffff1"+"fffffff0"+"fffffff1"+"fffffff1",
+  "fffffff1"+"fffffff1"+"fffffff0"+"fffffff1",
+  "fffffff1"+"fffffff1"+"fffffff1"+"fffffff0",
+];
+
 var rid = "TestReqID: ";
 
 function getRandomInt(min, max) {
@@ -107,13 +131,9 @@ describe("Crafatar", function() {
     });
   });
   describe("Avatar", function() {
-    // profile "Alex" - hoping it'll never have a skin
-    var alex_uuid = "ec561538f3fd461daff5086b22154bce";
-    // profile "Steven" (Steve doesn't exist) - hoping it'll never have a skin
-    var steven_uuid = "b8ffc3d37dbf48278f69475f6690aabd";
-
     it("uuid's account should exist, but skin should not", function(done) {
-      networking.get_profile(rid, alex_uuid, function(err, profile) {
+      // profile "Alex" - hoping it'll never have a skin
+      networking.get_profile(rid, "ec561538f3fd461daff5086b22154bce", function(err, profile) {
         assert.notStrictEqual(profile, null);
         networking.get_uuid_url(profile, 1, function(url) {
           assert.strictEqual(url, null);
@@ -121,14 +141,24 @@ describe("Crafatar", function() {
         });
       });
     });
-    it("odd UUID should default to Alex", function(done) {
-      assert.strictEqual(skins.default_skin(alex_uuid), "alex");
-      done();
-    });
-    it("even UUID should default to Steve", function(done) {
-      assert.strictEqual(skins.default_skin(steven_uuid), "steve");
-      done();
-    });
+    for (var a in alex_ids) {
+      var alex_id = alex_ids[a];
+      (function(alex_id) {
+        it("UUID " + alex_id + " should default to Alex", function(done) {
+          assert.strictEqual(skins.default_skin(alex_id), "alex");
+          done();
+        });
+      })(alex_id);
+    }
+    for (var s in steve_ids) {
+      var steve_id = steve_ids[s];
+      (function(steve_id) {
+        it("UUID " + steve_id + " should default to Steve", function(done) {
+          assert.strictEqual(skins.default_skin(steve_id), "steve");
+          done();
+        });
+      })(steve_id);
+    }
   });
   describe("Errors", function() {
     it("should time out on uuid info download", function(done) {

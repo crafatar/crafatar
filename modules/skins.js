@@ -84,12 +84,23 @@ exp.resize_img = function(inname, size, callback) {
   });
 };
 
-// returns "alex" or "steve" calculated by the +userId+
-exp.default_skin = function(userId) {
-  if (Number("0x" + userId[31]) % 2 === 0) {
-    return "alex";
-  } else {
+// returns "alex" or "steve" calculated by the +uuid+
+exp.default_skin = function(uuid) {
+  if (uuid.length <= 16) {
+    // we can't get the
     return "steve";
+  } else {
+    // great thanks to Minecrell for research into Minecraft and Java's UUID hashing!
+    // https://git.io/xJpV
+    // MC uses `uuid.hashCode() & 1` for alex
+    // that can be compacted to counting the LSBs of every 4th byte in the UUID
+    // an odd sum means alex, an even sum means steve
+    // XOR-ing all the LSBs gives us 1 for alex and 0 for steve
+    var lsbs_even = parseInt(uuid[07], 16) ^
+                    parseInt(uuid[15], 16) ^
+                    parseInt(uuid[23], 16) ^
+                    parseInt(uuid[31], 16);
+      return lsbs_even ? "alex" : "steve";
   }
 };
 
