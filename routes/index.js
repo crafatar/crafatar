@@ -1,4 +1,4 @@
-var config = require("../modules/config");
+var config = require("../lib/config");
 var jade = require("jade");
 
 // compile jade

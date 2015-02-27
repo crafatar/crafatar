@@ -1,7 +1,7 @@
-var logging = require("../modules/logging");
-var helpers = require("../modules/helpers");
-var config = require("../modules/config");
-var skins = require("../modules/skins");
+var logging = require("../lib/logging");
+var helpers = require("../lib/helpers");
+var config = require("../lib/config");
+var skins = require("../lib/skins");
 var lwip = require("lwip");
 
 // GET skin request

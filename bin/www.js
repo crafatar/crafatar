@@ -1,6 +1,6 @@
-var logging = require ("../modules/logging");
-var cleaner = require("../modules/cleaner");
-var config = require("../modules/config");
+var logging = require ("../lib/logging");
+var cleaner = require("../lib/cleaner");
+var config = require("../lib/config");
 var cluster = require("cluster");
 
 if (cluster.isMaster) {

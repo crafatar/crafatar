@@ -1,7 +1,7 @@
-var logging = require("../modules/logging");
-var helpers = require("../modules/helpers");
-var config = require("../modules/config");
-var cache = require("../modules/cache");
+var logging = require("../lib/logging");
+var helpers = require("../lib/helpers");
+var config = require("../lib/config");
+var cache = require("../lib/cache");
 
 var human_status = {
   0: "none",

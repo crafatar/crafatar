@@ -1,9 +1,9 @@
-var logging = require("../modules/logging");
-var helpers = require("../modules/helpers");
-var config = require("../modules/config");
-var cache = require("../modules/cache");
-var skins = require("../modules/skins");
-var renders = require("../modules/renders");
+var logging = require("../lib/logging");
+var helpers = require("../lib/helpers");
+var config = require("../lib/config");
+var cache = require("../lib/cache");
+var skins = require("../lib/skins");
+var renders = require("../lib/renders");
 var fs = require("fs");
 
 var human_status = {

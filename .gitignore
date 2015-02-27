@@ -4,6 +4,6 @@ node_modules/
 .DS_Store
 *.rdb
 coverage/
-modules/config.js
+lib/config.js
 undefined*.png
 *.sublime-*
