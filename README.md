@@ -1,5 +1,5 @@
 # Crafatar [![travis](https://img.shields.io/travis/crafatar/crafatar.svg?style=flat)](https://travis-ci.org/crafatar/crafatar/) [![Coverage Status](https://img.shields.io/coveralls/crafatar/crafatar.svg?style=flat)](https://coveralls.io/r/crafatar/crafatar) [![Code Climate](https://codeclimate.com/github/crafatar/crafatar/badges/gpa.svg)](https://codeclimate.com/github/crafatar/crafatar)
-[![dependency status](https://img.shields.io/david/crafatar/crafatar.svg?style=flat)](https://david-dm.org/crafatar/crafatar) [![devDependency status](https://img.shields.io/david/dev/crafatar/crafatar.svg?style=flat)](https://david-dm.org/crafatar/crafatar#info=devDependencies)
+[![dependency status](https://img.shields.io/david/crafatar/crafatar.svg?style=flat)](https://david-dm.org/crafatar/crafatar) [![devDependency status](https://img.shields.io/david/dev/crafatar/crafatar.svg?style=flat)](https://david-dm.org/crafatar/crafatar#info=devDependencies)[![docs status](http://inch-ci.org/github/crafatar/crafatar.svg?branch=master&style=shields)](http://inch-ci.org/github/crafatar/crafatar)
 
 https://crafatar.com
 
