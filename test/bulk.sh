@@ -1,17 +1,35 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+async="true"
+interval="0.1"
+if [ "$1" = "-s" ]; then
+  async=""
+  shift
+elif [ "$1" = "-i" ]; then
+  interval="$2"
+  shift 2
+fi
 host="$1"
-if [ -z "$host" ]; then
-  echo "Usage: $0 <host>"
+shift
+if [ -z "$host" ] || [ ! -z "$@" ]; then
+  echo "Usage: $0 [-s | -i <interval>] <host uri>"
   exit 1
 fi
-dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-rm -f "$dir/../skins/"*.png || exit 1
-for uuid in `cat "$dir/uuids.txt"`; do
-  uuid=`echo "$uuid" | tr -d "\r"`
-  size=$(( ((RANDOM<<15)|RANDOM) % 514 - 1 )) # random number from -1 to 513
-  helm=""
-  if [ "$(( ((RANDOM<<15)|RANDOM) % 2 ))" -eq "1" ]; then
-    helm="&helm"
-  fi
-  curl -sSL -o /dev/null -w "%{url_effective} %{http_code} %{time_total}s\\n" "http://$host/avatars/$uuid?size=$size$helm"
-done
+
+# insert newline after uuids
+id_file="$(echo | cat 'uuids.txt' - 'usernames.txt')"
+mapfile ids <<< $id_file
+
+bulk() {
+  trap return INT
+  for id in $ids; do
+    if [ -z "$async" ]; then
+      curl -sSL -o /dev/null -w "%{url_effective} %{http_code} %{time_total}s\\n" -- "$host/avatars/$id?helm"
+    else
+      curl -sSL -o /dev/null -w "%{url_effective} %{http_code} %{time_total}s\\n" -- "$host/avatars/$id?helm" &
+      sleep "$interval"
+    fi
+  done
+}
+
+time bulk
