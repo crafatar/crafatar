@@ -129,9 +129,9 @@ h4 {
   left: 0;
   right: 0;
   position: absolute;
-  bottom: -240px;
+  bottom: -260px;
   padding-left: 10px;
-  padding-top: 200px;
+  height: 220px;
   background-position: 10px center;
   background-repeat: no-repeat;
   font-size: 14px;
@@ -143,6 +143,7 @@ h4 {
 .code .preview-placeholder {
   display: block;
   font-weight: bold;
+  line-height: 200px;
 }
 
 .code .preview-placeholder:hover {
