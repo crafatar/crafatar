@@ -59,13 +59,13 @@ module.exports = function(req, res) {
 
   // strip dashes
   userId = userId.replace(/-/g, "");
-  logging.log(rid + "userId: " + userId);
+  logging.log(rid, "userId:", userId);
 
   try {
     helpers.get_render(rid, userId, scale, helm, body, function(err, status, hash, image) {
-      logging.log(rid + "storage type: " + human_status[status]);
+      logging.log(rid, "storage type:", human_status[status]);
       if (err) {
-        logging.error(rid + err);
+        logging.error(rid, err);
         if (err.code === "ENOENT") {
           // no such file
           cache.remove_hash(rid, userId);
@@ -80,16 +80,16 @@ module.exports = function(req, res) {
         } else if (err) {
           http_status = 503;
         }
-        logging.debug(rid + "etag: " + req.headers["if-none-match"]);
-        logging.debug(rid + "matches: " + matches);
+        logging.debug(rid, "etag:", req.headers["if-none-match"]);
+        logging.debug(rid, "matches:", matches);
         sendimage(rid, http_status, status, image);
       } else {
-        logging.log(rid + "image not found, using default.");
+        logging.log(rid, "image not found, using default.");
         handle_default(rid, 404, status, userId);
       }
     });
   } catch(e) {
-    logging.error(rid + "error: " + e.stack);
+    logging.error(rid, "error:", e.stack);
     handle_default(rid, 500, -1, userId);
   }
 
@@ -98,7 +98,7 @@ module.exports = function(req, res) {
   // custom images will not be
   function handle_default(rid, http_status, img_status, userId) {
     if (def && def !== "steve" && def !== "alex") {
-      logging.log(rid + "status: 301");
+      logging.log(rid, "status: 301");
       res.writeHead(301, {
         "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
         "Response-Time": new Date() - start,
@@ -113,12 +113,12 @@ module.exports = function(req, res) {
       fs.readFile("public/images/" + def + "_skin.png", function (err, buf) {
         if (err) {
           // errored while loading the default image, continuing with null image
-          logging.error(rid + "error loading default render image: " + err);
+          logging.error(rid, "error loading default render image:", err);
         }
         // we render the default skins, but not custom images
         renders.draw_model(rid, buf, scale, helm, body, function(err, def_img) {
           if (err) {
-            logging.error(rid + "error while rendering default image: " + err);
+            logging.error(rid, "error while rendering default image:", err);
           }
           sendimage(rid, http_status, img_status, def_img);
         });
@@ -127,7 +127,7 @@ module.exports = function(req, res) {
   }
 
   function sendimage(rid, http_status, img_status, image) {
-    logging.log(rid + "status: " + http_status);
+    logging.log(rid, "status:", http_status);
     res.writeHead(http_status, {
       "Content-Type": "image/png",
       "Cache-Control": "max-age=" + config.browser_cache_time + ", public",

@@ -23,12 +23,12 @@ module.exports = function(req, res) {
 
   // strip dashes
   userId = userId.replace(/-/g, "");
-  logging.log(rid + "userid: " + userId);
+  logging.log(rid, "userid:", userId);
 
   try {
     helpers.get_skin(rid, userId, function(err, hash, image) {
       if (err) {
-        logging.error(rid + err);
+        logging.error(rid, err);
       }
       etag = hash && hash.substr(0, 32) || "none";
       var matches = req.headers["if-none-match"] === '"' + etag + '"';
@@ -39,21 +39,21 @@ module.exports = function(req, res) {
         } else if (err) {
           http_status = 503;
         }
-        logging.debug(rid + "etag: " + req.headers["if-none-match"]);
-        logging.debug(rid + "matches: " + matches);
+        logging.debug(rid, "etag:", req.headers["if-none-match"]);
+        logging.debug(rid, "matches:", matches);
         sendimage(rid, http_status, image);
       } else {
         handle_default(rid, 404, userId);
       }
     });
   } catch(e) {
-    logging.error(rid + "error: " + e.stack);
+    logging.error(rid, "error:", e.stack);
     handle_default(rid, 500, userId);
   }
 
   function handle_default(rid, http_status, userId) {
     if (def && def !== "steve" && def !== "alex") {
-      logging.log(rid + "status: 301");
+      logging.log(rid, "status: 301");
       res.writeHead(301, {
         "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
         "Response-Time": new Date() - start,
@@ -74,7 +74,7 @@ module.exports = function(req, res) {
   }
 
   function sendimage(rid, http_status, image) {
-    logging.log(rid + "status: " + http_status);
+    logging.log(rid, "status:", http_status);
     res.writeHead(http_status, {
       "Content-Type": "image/png",
       "Cache-Control": "max-age=" + config.browser_cache_time + ", public",

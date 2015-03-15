@@ -29,13 +29,13 @@ module.exports = function(req, res) {
 
   // strip dashes
   userId = userId.replace(/-/g, "");
-  logging.log(rid + "userid: " + userId);
+  logging.log(rid, "userid:", userId);
 
   try {
     helpers.get_cape(rid, userId, function(err, status, image, hash) {
-      logging.log(rid + "storage type: " + human_status[status]);
+      logging.log(rid, "storage type:", human_status[status]);
       if (err) {
-        logging.error(rid + err);
+        logging.error(rid, err);
         if (err.code === "ENOENT") {
           // no such file
           cache.remove_hash(rid, userId);
@@ -50,9 +50,9 @@ module.exports = function(req, res) {
         } else if (err) {
           http_status = 503;
         }
-        logging.debug(rid + "etag: " + req.headers["if-none-match"]);
-        logging.debug(rid + "matches: " + matches);
-        logging.log(rid + "status: " + http_status);
+        logging.debug(rid, "etag:", req.headers["if-none-match"]);
+        logging.debug(rid, "matches:", matches);
+        logging.log(rid, "status:", http_status);
         sendimage(rid, http_status, status, image);
       } else {
         res.writeHead(404, {
@@ -63,7 +63,7 @@ module.exports = function(req, res) {
       }
     });
   } catch(e) {
-    logging.error(rid + "error:" + e.stack);
+    logging.error(rid, "error:" + e.stack);
     res.writeHead(500, {
       "Content-Type": "text/plain",
       "Response-Time": new Date() - start
