@@ -43,7 +43,7 @@ module.exports = function(req, res) {
         logging.debug(rid, "matches:", matches);
         sendimage(rid, http_status, image);
       } else {
-        handle_default(rid, 404, userId);
+        handle_default(rid, 200, userId);
       }
     });
   } catch(e) {
