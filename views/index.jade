@@ -65,7 +65,7 @@ block content
                     | The standard value is calculated based on the UUID (even = alex, odd = steve).<br>
                     | Usernames always default to steve.
                   td
-                    | The image to be served when the userid has no skin (404).<br>
+                    | The image to be served when the userid has no skin.<br>
                     | Valid options are
                     a(href="/avatars/0?default=steve")  steve
                     | ,
@@ -198,7 +198,7 @@ block content
                     | The standard value is calculated based on the UUID (even = alex, odd = steve).<br>
                     | Usernames always default to steve.
                   td
-                    | The image to be served when the userid has no skin (404).<br>
+                    | The image to be served when the userid has no skin.<br>
                     | Valid options are
                     a(href="/skins/0?default=steve")  steve
                     | ,
@@ -229,7 +229,7 @@ block content
             | Replace
             mark.green  userid
             |  with a Mojang <b>UUID</b> or <b>username</b> to get the related cape.<br>
-            | The user's cape is returned, otherwise a 404 is thrown.<br>
+            | The user's cape is returned, otherwise a 404 is returned.<br>
             .code
               | #{domain}/capes/
               mark.green userid

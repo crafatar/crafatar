@@ -85,7 +85,7 @@ module.exports = function(req, res) {
         sendimage(rid, http_status, status, image);
       } else {
         logging.log(rid, "image not found, using default.");
-        handle_default(rid, 404, status, userId);
+        handle_default(rid, 200, status, userId);
       }
     });
   } catch(e) {

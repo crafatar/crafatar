@@ -311,9 +311,9 @@ describe("Crafatar", function() {
     for (l in locations) {
       var location = locations[l];
       (function(location) {
-        it("should return a 404 (default steve image " + location + ")", function(done) {
+        it("should return a 200 (default steve image " + location + ")", function(done) {
           request.get("http://localhost:3000/" + location + "/invalidjsvns?default=steve", function(error, res, body) {
-            assert.equal(404, res.statusCode);
+            assert.equal(200, res.statusCode);
             done();
           });
         });
