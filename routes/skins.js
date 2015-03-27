@@ -12,6 +12,44 @@ module.exports = function(req, res) {
   var etag = null;
   var rid = req.id;
 
+  function sendimage(rid, http_status, image) {
+    logging.log(rid, "status:", http_status);
+    res.writeHead(http_status, {
+      "Content-Type": "image/png",
+      "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
+      "Response-Time": new Date() - start,
+      "X-Storage-Type": "downloaded",
+      "X-Request-ID": rid,
+      "Access-Control-Allow-Origin": "*",
+      "Etag": '"' + etag + '"'
+    });
+    res.end(http_status === 304 ? null : image);
+  }
+
+  function handle_default(rid, http_status, userId) {
+    if (def && def !== "steve" && def !== "alex") {
+      logging.log(rid, "status: 301");
+      res.writeHead(301, {
+        "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
+        "Response-Time": new Date() - start,
+        "X-Storage-Type": "downloaded",
+        "X-Request-ID": rid,
+        "Access-Control-Allow-Origin": "*",
+        "Location": def
+      });
+      res.end();
+    } else {
+      def = def || skins.default_skin(userId);
+      lwip.open("public/images/" + def + "_skin.png", function(err, image) {
+        // FIXME: err is not handled
+        image.toBuffer("png", function(buf_err, buffer) {
+          // FIXME: buf_err is not handled
+          sendimage(rid, http_status, buffer);
+        });
+      });
+    }
+  }
+
   if (!helpers.id_valid(userId)) {
     res.writeHead(422, {
       "Content-Type": "text/plain",
@@ -49,41 +87,5 @@ module.exports = function(req, res) {
   } catch(e) {
     logging.error(rid, "error:", e.stack);
     handle_default(rid, 500, userId);
-  }
-
-  function handle_default(rid, http_status, userId) {
-    if (def && def !== "steve" && def !== "alex") {
-      logging.log(rid, "status: 301");
-      res.writeHead(301, {
-        "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
-        "Response-Time": new Date() - start,
-        "X-Storage-Type": "downloaded",
-        "X-Request-ID": rid,
-        "Access-Control-Allow-Origin": "*",
-        "Location": def
-      });
-      res.end();
-    } else {
-      def = def || skins.default_skin(userId);
-      lwip.open("public/images/" + def + "_skin.png", function(err, image) {
-        image.toBuffer("png", function(err, buffer) {
-          sendimage(rid, http_status, buffer);
-        });
-      });
-    }
-  }
-
-  function sendimage(rid, http_status, image) {
-    logging.log(rid, "status:", http_status);
-    res.writeHead(http_status, {
-      "Content-Type": "image/png",
-      "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
-      "Response-Time": new Date() - start,
-      "X-Storage-Type": "downloaded",
-      "X-Request-ID": rid,
-      "Access-Control-Allow-Origin": "*",
-      "Etag": '"' + etag + '"'
-    });
-    res.end(http_status === 304 ? null : image);
   }
 };

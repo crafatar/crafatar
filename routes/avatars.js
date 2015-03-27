@@ -22,6 +22,20 @@ module.exports = function(req, res) {
   var etag = null;
   var rid = req.id;
 
+  function sendimage(rid, http_status, img_status, image) {
+    logging.log(rid, "status:", http_status);
+    res.writeHead(http_status, {
+      "Content-Type": "image/png",
+      "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
+      "Response-Time": new Date() - start,
+      "X-Storage-Type": human_status[img_status],
+      "X-Request-ID": rid,
+      "Access-Control-Allow-Origin": "*",
+      "Etag": '"' + etag + '"'
+    });
+    res.end(http_status === 304 ? null : image);
+  }
+
   // Prevent app from crashing/freezing
   if (size < config.min_size || size > config.max_size) {
     // "Unprocessable Entity", valid request, but semantically erroneous:
@@ -95,19 +109,5 @@ module.exports = function(req, res) {
         sendimage(rid, http_status, img_status, image);
       });
     }
-  }
-
-  function sendimage(rid, http_status, img_status, image) {
-    logging.log(rid, "status:", http_status);
-    res.writeHead(http_status, {
-      "Content-Type": "image/png",
-      "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
-      "Response-Time": new Date() - start,
-      "X-Storage-Type": human_status[img_status],
-      "X-Request-ID": rid,
-      "Access-Control-Allow-Origin": "*",
-      "Etag": '"' + etag + '"'
-    });
-    res.end(http_status === 304 ? null : image);
   }
 };

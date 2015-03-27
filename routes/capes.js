@@ -18,6 +18,19 @@ module.exports = function(req, res) {
   var etag = null;
   var rid = req.id;
 
+  function sendimage(rid, http_status, img_status, image) {
+    res.writeHead(http_status, {
+      "Content-Type": "image/png",
+      "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
+      "Response-Time": new Date() - start,
+      "X-Storage-Type": human_status[img_status],
+      "X-Request-ID": rid,
+      "Access-Control-Allow-Origin": "*",
+      "Etag": '"' + etag + '"'
+    });
+    res.end(http_status === 304 ? null : image);
+  }
+
   if (!helpers.id_valid(userId)) {
     res.writeHead(422, {
       "Content-Type": "text/plain",
@@ -69,18 +82,5 @@ module.exports = function(req, res) {
       "Response-Time": new Date() - start
     });
     res.end("500 server error");
-  }
-
-  function sendimage(rid, http_status, img_status, image) {
-    res.writeHead(http_status, {
-      "Content-Type": "image/png",
-      "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
-      "Response-Time": new Date() - start,
-      "X-Storage-Type": human_status[img_status],
-      "X-Request-ID": rid,
-      "Access-Control-Allow-Origin": "*",
-      "Etag": '"' + etag + '"'
-    });
-    res.end(http_status === 304 ? null : image);
   }
 };

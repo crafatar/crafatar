@@ -1,8 +1,9 @@
 var config = require("../lib/config");
+var path = require("path");
 var jade = require("jade");
 
 // compile jade
-var index = jade.compileFile(__dirname + "/../views/index.jade");
+var index = jade.compileFile(path.join(__dirname, "../views/index.jade"));
 
 module.exports = function(req, res) {
   var html = index({

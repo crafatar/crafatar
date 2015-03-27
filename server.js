@@ -21,11 +21,11 @@ function asset_request(req, res) {
   var filename = path.join(__dirname, "public", req.url.path_list.join("/"));
   fs.exists(filename, function(exists) {
     if (exists) {
-      res.writeHead(200, { "Content-type" : mime.lookup(filename) });
+      res.writeHead(200, { "Content-type": mime.lookup(filename) });
       fs.createReadStream(filename).pipe(res);
     } else {
       res.writeHead(404, {
-        "Content-type" : "text/plain"
+        "Content-type": "text/plain"
       });
       res.end("Not Found");
     }
@@ -46,7 +46,7 @@ function requestHandler(req, res) {
   request.url.path_list = path_list;
 
   // generate 12 character random string
-  request.id = Math.random().toString(36).substring(2,14);
+  request.id = Math.random().toString(36).substring(2, 14);
 
   var local_path = request.url.path_list[1];
   logging.log(request.id + request.method, request.url.href);

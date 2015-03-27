@@ -41,6 +41,52 @@ module.exports = function(req, res) {
   var helm = req.url.query.hasOwnProperty("helm");
   var etag = null;
 
+  function sendimage(rid, http_status, img_status, image) {
+    logging.log(rid, "status:", http_status);
+    res.writeHead(http_status, {
+      "Content-Type": "image/png",
+      "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
+      "Response-Time": new Date() - start,
+      "X-Storage-Type": human_status[img_status],
+      "X-Request-ID": rid,
+      "Access-Control-Allow-Origin": "*",
+      "Etag": '"' + etag + '"'
+    });
+    res.end(http_status === 304 ? null : image);
+  }
+
+  // default alex/steve images can be rendered, but
+  // custom images will not be
+  function handle_default(rid, http_status, img_status, userId) {
+    if (def && def !== "steve" && def !== "alex") {
+      logging.log(rid, "status: 301");
+      res.writeHead(301, {
+        "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
+        "Response-Time": new Date() - start,
+        "X-Storage-Type": human_status[img_status],
+        "X-Request-ID": rid,
+        "Access-Control-Allow-Origin": "*",
+        "Location": def
+      });
+      res.end();
+    } else {
+      def = def || skins.default_skin(userId);
+      fs.readFile("public/images/" + def + "_skin.png", function (err, buf) {
+        if (err) {
+          // errored while loading the default image, continuing with null image
+          logging.error(rid, "error loading default render image:", err);
+        }
+        // we render the default skins, but not custom images
+        renders.draw_model(rid, buf, scale, helm, body, function(render_err, def_img) {
+          if (render_err) {
+            logging.error(rid, "error while rendering default image:", render_err);
+          }
+          sendimage(rid, http_status, img_status, def_img);
+        });
+      });
+    }
+  }
+
   if (scale < config.min_scale || scale > config.max_scale) {
     res.writeHead(422, {
       "Content-Type": "text/plain",
@@ -91,52 +137,5 @@ module.exports = function(req, res) {
   } catch(e) {
     logging.error(rid, "error:", e.stack);
     handle_default(rid, 500, -1, userId);
-  }
-
-
-  // default alex/steve images can be rendered, but
-  // custom images will not be
-  function handle_default(rid, http_status, img_status, userId) {
-    if (def && def !== "steve" && def !== "alex") {
-      logging.log(rid, "status: 301");
-      res.writeHead(301, {
-        "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
-        "Response-Time": new Date() - start,
-        "X-Storage-Type": human_status[img_status],
-        "X-Request-ID": rid,
-        "Access-Control-Allow-Origin": "*",
-        "Location": def
-      });
-      res.end();
-    } else {
-      def = def || skins.default_skin(userId);
-      fs.readFile("public/images/" + def + "_skin.png", function (err, buf) {
-        if (err) {
-          // errored while loading the default image, continuing with null image
-          logging.error(rid, "error loading default render image:", err);
-        }
-        // we render the default skins, but not custom images
-        renders.draw_model(rid, buf, scale, helm, body, function(err, def_img) {
-          if (err) {
-            logging.error(rid, "error while rendering default image:", err);
-          }
-          sendimage(rid, http_status, img_status, def_img);
-        });
-      });
-    }
-  }
-
-  function sendimage(rid, http_status, img_status, image) {
-    logging.log(rid, "status:", http_status);
-    res.writeHead(http_status, {
-      "Content-Type": "image/png",
-      "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
-      "Response-Time": new Date() - start,
-      "X-Storage-Type": human_status[img_status],
-      "X-Request-ID": rid,
-      "Access-Control-Allow-Origin": "*",
-      "Etag": '"' + etag + '"'
-    });
-    res.end(http_status === 304 ? null : image);
   }
 };

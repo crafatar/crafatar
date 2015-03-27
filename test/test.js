@@ -6,7 +6,6 @@ var logging = require("../lib/logging");
 var config = require("../lib/config");
 var skins = require("../lib/skins");
 var cache = require("../lib/cache");
-var renders = require("../lib/renders");
 var server = require("../server");
 var cleaner = require("../lib/cleaner");
 var request = require("request");
@@ -29,25 +28,25 @@ var name = names[Math.round(Math.random() * (names.length - 1))];
 
 // Let's hope these will never be assigned
 var steve_ids = [
-  "fffffff0"+"fffffff0"+"fffffff0"+"fffffff0",
-  "fffffff0"+"fffffff0"+"fffffff1"+"fffffff1",
-  "fffffff0"+"fffffff1"+"fffffff0"+"fffffff1",
-  "fffffff0"+"fffffff1"+"fffffff1"+"fffffff0",
-  "fffffff1"+"fffffff0"+"fffffff0"+"fffffff1",
-  "fffffff1"+"fffffff0"+"fffffff1"+"fffffff0",
-  "fffffff1"+"fffffff1"+"fffffff0"+"fffffff0",
-  "fffffff1"+"fffffff1"+"fffffff1"+"fffffff1",
+  "fffffff0" + "fffffff0" + "fffffff0" + "fffffff0",
+  "fffffff0" + "fffffff0" + "fffffff1" + "fffffff1",
+  "fffffff0" + "fffffff1" + "fffffff0" + "fffffff1",
+  "fffffff0" + "fffffff1" + "fffffff1" + "fffffff0",
+  "fffffff1" + "fffffff0" + "fffffff0" + "fffffff1",
+  "fffffff1" + "fffffff0" + "fffffff1" + "fffffff0",
+  "fffffff1" + "fffffff1" + "fffffff0" + "fffffff0",
+  "fffffff1" + "fffffff1" + "fffffff1" + "fffffff1",
 ];
 // Let's hope these will never be assigned
 var alex_ids = [
-  "fffffff0"+"fffffff0"+"fffffff0"+"fffffff1",
-  "fffffff0"+"fffffff0"+"fffffff1"+"fffffff0",
-  "fffffff0"+"fffffff1"+"fffffff0"+"fffffff0",
-  "fffffff0"+"fffffff1"+"fffffff1"+"fffffff1",
-  "fffffff1"+"fffffff0"+"fffffff0"+"fffffff0",
-  "fffffff1"+"fffffff0"+"fffffff1"+"fffffff1",
-  "fffffff1"+"fffffff1"+"fffffff0"+"fffffff1",
-  "fffffff1"+"fffffff1"+"fffffff1"+"fffffff0",
+  "fffffff0" + "fffffff0" + "fffffff0" + "fffffff1",
+  "fffffff0" + "fffffff0" + "fffffff1" + "fffffff0",
+  "fffffff0" + "fffffff1" + "fffffff0" + "fffffff0",
+  "fffffff0" + "fffffff1" + "fffffff1" + "fffffff1",
+  "fffffff1" + "fffffff0" + "fffffff0" + "fffffff0",
+  "fffffff1" + "fffffff0" + "fffffff1" + "fffffff1",
+  "fffffff1" + "fffffff1" + "fffffff0" + "fffffff1",
+  "fffffff1" + "fffffff1" + "fffffff1" + "fffffff0",
 ];
 
 var rid = "TestReqID: ";
