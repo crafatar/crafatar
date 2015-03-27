@@ -23,7 +23,8 @@
   "scripts": {
     "postinstall": "cp 'lib/config.example.js' 'lib/config.js'",
     "start": "forever -l logs/log.log -o logs/out.log -e logs/error.log -p ./ -a --minUptime 8000 --spinSleepTime 1500 lib/www.js",
-    "test": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "test": "mocha",
+    "test-travis": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "engines": {
     "iojs": "1.6.x"

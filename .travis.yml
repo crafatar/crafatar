@@ -1,10 +1,10 @@
 language: node_js
 node_js:
   - "iojs-v1.6.0"
-before_script:
-  - cp "lib/config.example.js" "lib/config.js"
 before_install:
   - sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
+script:
+  - npm run-script test-travis
 notifications:
   irc:
     channels:
