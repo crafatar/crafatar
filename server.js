@@ -4,6 +4,7 @@ var querystring = require("querystring");
 var config = require("./lib/config");
 var http = require("http");
 var mime = require("mime");
+var path = require("path");
 var url = require("url");
 var fs = require("fs");
 var server = null;
@@ -17,7 +18,7 @@ var routes = {
 };
 
 function asset_request(req, res) {
-  var filename = __dirname + "/public/" + req.url.path_list.join("/");
+  var filename = path.join(__dirname, "public", req.url.path_list.join("/"));
   fs.exists(filename, function(exists) {
     if (exists) {
       res.writeHead(200, { "Content-type" : mime.lookup(filename) });
