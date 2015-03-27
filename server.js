@@ -108,6 +108,6 @@ exp.close = function(callback) {
 module.exports = exp;
 
 if (require.main === module) {
-  logging.error("Please use 'npm start' or 'bin/www.js'");
+  logging.error("Please use 'npm start' or 'lib/www.js'");
   process.exit(1);
 }
