@@ -58,18 +58,23 @@ module.exports = function(req, res) {
       var matches = req.headers["if-none-match"] === '"' + etag + '"';
       if (image) {
         var http_status = 200;
-        if (matches) {
-          http_status = 304;
-        } else if (err) {
+        if (err) {
           http_status = 503;
         }
         logging.debug(rid, "etag:", req.headers["if-none-match"]);
         logging.debug(rid, "matches:", matches);
         logging.log(rid, "status:", http_status);
-        sendimage(rid, http_status, status, image);
+        sendimage(rid, matches ? 304 : http_status, status, image);
+      } else if (matches) {
+        res.writeHead(304, {
+          "Etag": '"' + etag + '"',
+          "Response-Time": new Date() - start
+        });
+        res.end();
       } else {
         res.writeHead(404, {
           "Content-Type": "text/plain",
+          "Etag": '"' + etag + '"',
           "Response-Time": new Date() - start
         });
         res.end("404 not found");

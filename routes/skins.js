@@ -72,14 +72,12 @@ module.exports = function(req, res) {
       var matches = req.headers["if-none-match"] === '"' + etag + '"';
       if (image) {
         var http_status = 200;
-        if (matches) {
-          http_status = 304;
-        } else if (err) {
+        if (err) {
           http_status = 503;
         }
         logging.debug(rid, "etag:", req.headers["if-none-match"]);
         logging.debug(rid, "matches:", matches);
-        sendimage(rid, http_status, image);
+        sendimage(rid, matches ? 304 : http_status, image);
       } else {
         handle_default(rid, 200, userId);
       }

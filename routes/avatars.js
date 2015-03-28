@@ -36,6 +36,26 @@ module.exports = function(req, res) {
     res.end(http_status === 304 ? null : image);
   }
 
+  function handle_default(rid, http_status, img_status, userId) {
+    if (def && def !== "steve" && def !== "alex") {
+      logging.log(rid, "status: 301");
+      res.writeHead(301, {
+        "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
+        "Response-Time": new Date() - start,
+        "X-Storage-Type": human_status[img_status],
+        "X-Request-ID": rid,
+        "Access-Control-Allow-Origin": "*",
+        "Location": def
+      });
+      res.end();
+    } else {
+      def = def || skins.default_skin(userId);
+      skins.resize_img("public/images/" + def + ".png", size, function(err, image) {
+        sendimage(rid, http_status, img_status, image);
+      });
+    }
+  }
+
   // Prevent app from crashing/freezing
   if (size < config.min_size || size > config.max_size) {
     // "Unprocessable Entity", valid request, but semantically erroneous:
@@ -74,40 +94,18 @@ module.exports = function(req, res) {
       var matches = req.headers["if-none-match"] === '"' + etag + '"';
       if (image) {
         var http_status = 200;
-        if (matches) {
-          http_status = 304;
-        } else if (err) {
+        if (err) {
           http_status = 503;
         }
         logging.debug(rid, "etag:", req.headers["if-none-match"]);
         logging.debug(rid, "matches:", matches);
-        sendimage(rid, http_status, status, image);
+        sendimage(rid, matches ? 304 : http_status, status, image);
       } else {
-        handle_default(rid, 200, status, userId);
+        handle_default(rid, matches ? 304 : 200, status, userId);
       }
     });
   } catch(e) {
     logging.error(rid, "error:", e.stack);
     handle_default(rid, 500, -1, userId);
-  }
-
-  function handle_default(rid, http_status, img_status, userId) {
-    if (def && def !== "steve" && def !== "alex") {
-      logging.log(rid, "status: 301");
-      res.writeHead(301, {
-        "Cache-Control": "max-age=" + config.browser_cache_time + ", public",
-        "Response-Time": new Date() - start,
-        "X-Storage-Type": human_status[img_status],
-        "X-Request-ID": rid,
-        "Access-Control-Allow-Origin": "*",
-        "Location": def
-      });
-      res.end();
-    } else {
-      def = def || skins.default_skin(userId);
-      skins.resize_img("public/images/" + def + ".png", size, function(err, image) {
-        sendimage(rid, http_status, img_status, image);
-      });
-    }
   }
 };
