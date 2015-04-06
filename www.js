@@ -1,6 +1,6 @@
-var logging = require("../lib/logging");
-var cleaner = require("../lib/cleaner");
-var config = require("../lib/config");
+var logging = require("./lib/logging");
+var cleaner = require("./lib/cleaner");
+var config = require("./lib/config");
 var cluster = require("cluster");
 
 if (cluster.isMaster) {
@@ -17,5 +17,5 @@ if (cluster.isMaster) {
 
   setInterval(cleaner.run, config.cleaning_interval * 1000);
 } else {
-  require("../server.js").boot();
+  require("./lib/server.js").boot();
 }

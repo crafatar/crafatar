@@ -6,7 +6,7 @@ var logging = require("../lib/logging");
 var config = require("../lib/config");
 var skins = require("../lib/skins");
 var cache = require("../lib/cache");
-var server = require("../server");
+var server = require("../lib/server");
 var cleaner = require("../lib/cleaner");
 var request = require("request");
 
