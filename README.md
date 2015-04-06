@@ -2,7 +2,7 @@
 [![dependency status](https://img.shields.io/david/crafatar/crafatar.svg?style=flat-square)](https://david-dm.org/crafatar/crafatar) [![devDependency status](https://img.shields.io/david/dev/crafatar/crafatar.svg?style=flat-square)](https://david-dm.org/crafatar/crafatar#info=devDependencies) [![docs status](http://inch-ci.org/github/crafatar/crafatar.svg?branch=master&style=flat-square)](http://inch-ci.org/github/crafatar/crafatar)
 
 
-<img src="public/logo.png" align="right">
+<img alt="logo" src="lib/public/logo.png" align="right">
 [Crafatar](https://crafatar.com) serves Minecraft avatars based on the skin for use in external applications.
 Inspired by [Gravatar](https://gravatar.com) (hence the name) and [Minotar](https://minotar.net).
 
