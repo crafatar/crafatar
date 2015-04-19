@@ -287,8 +287,11 @@ block content
                   | This happens either when the user removed their skin or when it didn't change.
                 li <b>downloaded</b>: 2 external requests. Skin changed or unknown, downloaded.
                 li
-                  | <b>error</b>: This can happen, for example, when Mojang's servers are down.<br>
+                  | <b>server error</b>: This can happen, for example, when Mojang's servers are down.<br>
                   | If possible, an outdated image is served instead.
+                li
+                  | <b>user error</b>: You have done something wrong, such as requesting a malformed userid.<br>
+                  | Check the response body for details.
             section
               a(id="meta-x-request-id" class="anchor")
               a(href="#meta-x-request-id")
