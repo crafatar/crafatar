@@ -37,7 +37,8 @@
     "mime": "1.3.4",
     "node-df": "0.1.1",
     "redis": "0.12.1",
-    "request": "^2.51.0"
+    "request": "^2.51.0",
+    "crc": "3.2.1"
   },
   "devDependencies": {
     "coveralls": "^2.11.2",
