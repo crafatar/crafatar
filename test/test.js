@@ -432,7 +432,7 @@ describe("Crafatar", function() {
 
       describe("Networking: Skin", function() {
         it("should not fail (uuid)", function(done) {
-          helpers.get_skin(rid, id, function(err, hash, img) {
+          helpers.get_skin(rid, id, function(err, hash, status, img) {
             assert.strictEqual(err, null);
             done();
           });
