@@ -286,10 +286,10 @@ block content
                 li
                   | <b>checked</b>: 1 external request. Skin cached, checked for updates, no skin downloaded.<br>
                   | This happens either when the user removed their skin or when it didn't change.
-                li <b>downloaded</b>: 2 external requests. Skin changed or unknown, downloaded.
+                li <b>downloaded</b>: 2 external requests. First request or skin changed, skin downloaded.
                 li
                   | <b>server error</b>: This can happen, for example, when Mojang's servers are down.<br>
-                  | If possible, an outdated image is served instead.
+                  | If possible, a cached image is served instead.
                 li
                   | <b>user error</b>: You have done something wrong, such as requesting a malformed userid.<br>
                   | Check the response body for details.
