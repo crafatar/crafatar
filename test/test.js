@@ -350,7 +350,7 @@ describe("Crafatar", function() {
 
   describe("Networking: Cape", function() {
     it("should not fail (guaranteed cape)", function(done) {
-      helpers.get_cape(rid, "Dinnerbone", function(err, hash, img) {
+      helpers.get_cape(rid, "Dinnerbone", function(err, hash, status, img) {
         assert.strictEqual(err, null);
         done();
       });
@@ -359,13 +359,13 @@ describe("Crafatar", function() {
       before(function() {
         cache.get_redis().flushall();
       });
-      helpers.get_cape(rid, "Dinnerbone", function(err, hash, img) {
+      helpers.get_cape(rid, "Dinnerbone", function(err, hash, status, img) {
         assert.strictEqual(err, null);
         done();
       });
     });
     it("should not be found", function(done) {
-      helpers.get_cape(rid, "Jake_0", function(err, hash, img) {
+      helpers.get_cape(rid, "Jake_0", function(err, hash, status, img) {
         assert.strictEqual(img, null);
         done();
       });
@@ -374,7 +374,7 @@ describe("Crafatar", function() {
 
   describe("Networking: Skin", function() {
     it("should not fail", function(done) {
-      helpers.get_cape(rid, "Jake_0", function(err, hash, img) {
+      helpers.get_cape(rid, "Jake_0", function(err, hash, status, img) {
         assert.strictEqual(err, null);
         done();
       });
@@ -383,7 +383,7 @@ describe("Crafatar", function() {
       before(function() {
         cache.get_redis().flushall();
       });
-      helpers.get_cape(rid, "Jake_0", function(err, hash, img) {
+      helpers.get_cape(rid, "Jake_0", function(err, hash, status, img) {
         assert.strictEqual(err, null);
         done();
       });
@@ -456,7 +456,7 @@ describe("Crafatar", function() {
 
       describe("Networking: Cape", function() {
         it("should not fail (possible cape)", function(done) {
-          helpers.get_cape(rid, id, function(err, hash, img) {
+          helpers.get_cape(rid, id, function(err, hash, status, img) {
             assert.strictEqual(err, null);
             done();
           });
