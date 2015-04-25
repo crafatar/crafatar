@@ -140,6 +140,10 @@ describe("Crafatar", function() {
         });
       });
     });
+    it("Username should default to Steve", function(done) {
+      assert.strictEqual(skins.default_skin("TestUser"), "steve");
+      done();
+    });
     for (var a in alex_ids) {
       var alex_id = alex_ids[a];
       (function(alex_id) {
