@@ -1,21 +1,22 @@
-var assert = require("assert");
-var fs = require("fs");
 var networking = require("../lib/networking");
 var helpers = require("../lib/helpers");
 var logging = require("../lib/logging");
-var config = require("../lib/config");
-var skins = require("../lib/skins");
-var cache = require("../lib/cache");
-var server = require("../lib/server");
 var cleaner = require("../lib/cleaner");
 var request = require("request");
+var config = require("../lib/config");
+var server = require("../lib/server");
+var assert = require("assert");
+var skins = require("../lib/skins");
+var cache = require("../lib/cache");
+var crc = require("crc").crc32;
+var fs = require("fs");
 
 // we don't want tests to fail because of slow internet
 config.http_timeout *= 3;
 
 // no spam
 if (process.env.VERBOSE_TEST !== "true") {
-  logging.log = function() {};
+  logging.log = logging.debug = logging.warn = logging.error = function() {};
 }
 
 var uuids = fs.readFileSync("test/uuids.txt").toString().split(/\r?\n/);
@@ -215,118 +216,269 @@ describe("Crafatar", function() {
   });
 
   describe("Server", function() {
+
+    // throws Exception when default headers are not in res.headers
+    function assert_headers(res) {
+      assert(res.headers["content-type"]);
+      assert(res.headers["response-time"]);
+      assert(res.headers["x-request-id"]);
+      assert.equal(res.headers["access-control-allow-origin"], "*");
+      assert.equal(res.headers["cache-control"], "max-age=" + config.browser_cache_time + ", public");
+    }
+
+    // throws Exception when +url+ is requested with +etag+
+    // and it does not return 304 without a body
+    function assert_cache(url, etag, callback) {
+      request.get(url, {
+        headers: {
+          "If-None-Match": etag
+        }
+      }, function(error, res, body) {
+        assert.ifError(error);
+        assert.ifError(body);
+        assert.equal(res.statusCode, 304);
+        assert(res.headers["etag"]);
+        assert_headers(res);
+        callback();
+      });
+    }
+
     before(function(done) {
       server.boot(function() {
         done();
       });
     });
 
-    // Test the home page
-    it("should return a 200 (home page)", function(done) {
-      request.get("http://localhost:3000", function(error, res, body) {
-        assert.equal(200, res.statusCode);
-        done();
-      });
-    });
-
-    it("should return a 200 (asset request)", function(done) {
-      request.get("http://localhost:3000/stylesheets/style.css", function(error, res, body) {
-        assert.equal(200, res.statusCode);
-        done();
-      });
-    });
-
-    // invalid method, we only allow GET and HEAD requests
-    it("should return a 405 (invalid method)", function(done) {
+    it("should return 405 Method Not Allowed for POST", function(done) {
       request.post("http://localhost:3000", function(error, res, body) {
-        assert.equal(405, res.statusCode);
+        assert.ifError(error);
+        assert.strictEqual(res.statusCode, 405);
         done();
       });
     });
 
-    it("should return a 422 (invalid size)", function(done) {
-      var size = config.max_size + 1;
-      request.get("http://localhost:3000/avatars/Jake_0?size=" + size, function(error, res, body) {
-        assert.equal(422, res.statusCode);
-        done();
+    it("should return correct HTTP response for home page", function(done) {
+      var url = "http://localhost:3000";
+      request.get(url, function(error, res, body) {
+        assert.ifError(error);
+        assert.strictEqual(res.statusCode, 200);
+        assert_headers(res);
+        assert(res.headers["etag"]);
+        assert.strictEqual(res.headers["content-type"], "text/html; charset=utf-8");
+        assert.strictEqual(res.headers["etag"], "\"" + crc(body) + "\"");
+        assert(body);
+
+        assert_cache(url, res.headers["etag"], function() {
+          done();
+        });
       });
     });
 
-    it("should return a 422 (invalid scale)", function(done) {
-      var scale = config.max_scale + 1;
-      request.get("http://localhost:3000/renders/head/Jake_0?scale=" + scale, function(error, res, body) {
-        assert.equal(422, res.statusCode);
-        done();
+    it("should return correct HTTP response for assets", function(done) {
+      var url = "http://localhost:3000/stylesheets/style.css";
+      request.get(url, function(error, res, body) {
+        assert.ifError(error);
+        assert.strictEqual(res.statusCode, 200);
+        assert_headers(res);
+        assert(res.headers["etag"]);
+        assert.strictEqual(res.headers["content-type"], "text/css");
+        assert.strictEqual(res.headers["etag"], "\"" + crc(body) + "\"");
+        assert(body);
+
+        assert_cache(url, res.headers["etag"], function() {
+          done();
+        });
       });
     });
 
-    // no default images for capes, should 404
-    it("should return a 404 (no cape)", function(done) {
-      request.get("http://localhost:3000/capes/Jake_0", function(error, res, body) {
-        assert.equal(404, res.statusCode);
-        done();
-      });
-    });
+    var locations = {
+      "avatar with existing username": {
+        url: "http://localhost:3000/avatars/jeb_?size=16",
+        etag: '"a846b82963"',
+        crc32: 3898010414
+      },
+      "avatar with not existing username": {
+        url: "http://localhost:3000/avatars/0?size=16",
+        etag: '"steve"',
+        crc32: 2172290550
+      },
+      "helm avatar with existing username": {
+        url: "http://localhost:3000/avatars/jeb_?size=16&helm",
+        etag: '"a846b82963"',
+        crc32: 2775605405
+      },
+      "helm avatar with not existing username": {
+        url: "http://localhost:3000/avatars/0?size=16&helm",
+        etag: '"steve"',
+        crc32: 2172290550
+      },
+      "avatar with existing uuid": {
+        url: "http://localhost:3000/avatars/853c80ef3c3749fdaa49938b674adae6?size=16",
+        etag: '"a846b82963"',
+        crc32: 3898010414
+      },
+      "avatar with not existing uuid": {
+        url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16",
+        etag: '"steve"',
+        crc32: 2172290550
+      },
+      "helm avatar with existing uuid": {
+        url: "http://localhost:3000/avatars/853c80ef3c3749fdaa49938b674adae6?size=16&helm",
+        etag: '"a846b82963"',
+        crc32: 2775605405
+      },
+      "helm avatar with not existing uuid": {
+        url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&helm",
+        etag: '"steve"',
+        crc32: 2172290550
+      },
+      "cape with existing username": {
+        url: "http://localhost:3000/capes/jeb_",
+        etag: '"3f688e0e69"',
+        crc32: 3151059445
+      },
+      "cape with not existing username": {
+        url: "http://localhost:3000/capes/0",
+        etag: undefined,
+        crc32: 0
+      },
+      "cape with existing uuid": {
+        url: "http://localhost:3000/capes/853c80ef3c3749fdaa49938b674adae6",
+        etag: '"3f688e0e69"',
+        crc32: 3151059445
+      },
+      "cape with not existing uuid": {
+        url: "http://localhost:3000/capes/00000000000000000000000000000000",
+        etag: undefined,
+        crc32: 0
+      },
+      "skin with existing username": {
+        url: "http://localhost:3000/skins/jeb_",
+        etag: '"a846b82963"',
+        crc32: 2804046136
+      },
+      "skin with not existing username": {
+        url: "http://localhost:3000/skins/0",
+        etag: '"steve"',
+        crc32: 3033070999
+      },
+      "skin with existing uuid": {
+        url: "http://localhost:3000/skins/853c80ef3c3749fdaa49938b674adae6",
+        etag: '"a846b82963"',
+        crc32: 2804046136
+      },
+      "skin with not existing uuid": {
+        url: "http://localhost:3000/skins/00000000000000000000000000000000",
+        etag: '"steve"',
+        crc32: 3033070999
+      },
+      "head render with existing username": {
+        url: "http://localhost:3000/renders/head/jeb_?scale=2",
+        etag: '"a846b82963"',
+        crc32: 4068337011
+      },
+      "head render with not existing username": {
+        url: "http://localhost:3000/renders/head/0?scale=2",
+        etag: '"steve"',
+        crc32: 3356822684
+      },
+      "helm head render with existing username": {
+        url: "http://localhost:3000/renders/head/jeb_?scale=2&helm",
+        etag: '"a846b82963"',
+        crc32: 4150827424
+      },
+      "helm head render with not existing username": {
+        url: "http://localhost:3000/renders/head/0?scale=2&helm",
+        etag: '"steve"',
+        crc32: 349655416
+      },
+      "head render with existing uuid": {
+        url: "http://localhost:3000/renders/head/853c80ef3c3749fdaa49938b674adae6?scale=2",
+        etag: '"a846b82963"',
+        crc32: 4068337011
+      },
+      "head render with not existing uuid": {
+        url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2",
+        etag: '"steve"',
+        crc32: 3356822684
+      },
+      "helm head render with existing uuid": {
+        url: "http://localhost:3000/renders/head/853c80ef3c3749fdaa49938b674adae6?scale=2&helm",
+        etag: '"a846b82963"',
+        crc32: 4150827424
+      },
+      "helm head render with not existing uuid": {
+        url: "http://localhost:3000/avatars/00000000000000000000000000000000?scale=2&helm",
+        etag: '"steve"',
+        crc32: 1255390784
+      },
+      "body render with existing username": {
+        url: "http://localhost:3000/renders/body/jeb_?scale=2",
+        etag: '"a846b82963"',
+        crc32: 2118588728
+      },
+      "body render with not existing username": {
+        url: "http://localhost:3000/renders/body/0?scale=2",
+        etag: '"steve"',
+        crc32: 216470159
+      },
+      "helm body render with existing username": {
+        url: "http://localhost:3000/renders/body/jeb_?scale=2&helm",
+        etag: '"a846b82963"',
+        crc32: 2280652919
+      },
+      "helm body render with not existing username": {
+        url: "http://localhost:3000/renders/body/0?scale=2&helm",
+        etag: '"steve"',
+        crc32: 1991273336
+      },
+      "body render with existing uuid": {
+        url: "http://localhost:3000/renders/body/853c80ef3c3749fdaa49938b674adae6?scale=2",
+        etag: '"a846b82963"',
+        crc32: 2118588728
+      },
+      "body render with not existing uuid": {
+        url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2",
+        etag: '"steve"',
+        crc32: 216470159
+      },
+      "helm body render with existing uuid": {
+        url: "http://localhost:3000/renders/body/853c80ef3c3749fdaa49938b674adae6?scale=2&helm",
+        etag: '"a846b82963"',
+        crc32: 2280652919
+      },
+      "helm body render with not existing uuid": {
+        url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&helm",
+        etag: '"steve"',
+        crc32: 1991273336
+      },
+    };
 
-    it("should return a 422 (invalid render type)", function(done) {
-      request.get("http://localhost:3000/renders/side/Jake_0", function(error, res, body) {
-        assert.equal(422, res.statusCode);
-        done();
-      });
-    });
-
-    // testing all paths for valid inputs
-    var locations = ["avatars", "skins", "renders/head"];
-    for (var l in locations) {
-      var location = locations[l];
+    for (var description in locations) {
+      var location = locations[description];
       (function(location) {
-        it("should return a 200 (valid input " + location + ")", function(done) {
-          request.get("http://localhost:3000/" + location + "/Jake_0", function(error, res, body) {
-            assert.equal(200, res.statusCode);
-            done();
+        it("should return correct HTTP response for " + description, function(done) {
+          request.get(location.url, function(error, res, body) {
+            assert.ifError(error);
+            assert_headers(res);
+            assert(res.headers["x-storage-type"]);
+            assert.strictEqual(res.headers["etag"], location.etag);
+            assert.strictEqual(crc(body), location.crc32);
+            if (location.url.substr(21, 7) === "/capes/" && !body) {
+              assert.strictEqual(res.statusCode, 404);
+              assert.strictEqual(res.headers["content-type"], "text/plain");
+              done();
+            } else {
+              assert(res.headers["etag"]);
+              assert.strictEqual(res.headers["content-type"], "image/png");
+              assert.strictEqual(res.statusCode, 200);
+              assert_cache(location.url, res.headers["etag"], function() {
+                done();
+              });
+            }
           });
         });
-        it("should return a 422 (invalid id " + location + ")", function(done) {
-          request.get("http://localhost:3000/" + location + "/thisisaninvaliduuid", function(error, res, body) {
-            assert.equal(422, res.statusCode);
-            done();
-          });
-        });
-      })(location);
-    }
-
-    // testing all paths for invalid id formats
-    locations = ["avatars", "capes", "skins", "renders/head"];
-    for (l in locations) {
-      var location = locations[l];
-      (function(location) {
-        it("should return a 422 (invalid id " + location + ")", function(done) {
-          request.get("http://localhost:3000/" + location + "/thisisaninvaliduuid", function(error, res, body) {
-            assert.equal(422, res.statusCode);
-            done();
-          });
-        });
-      })(location);
-    }
-
-    //testing all paths for default images
-    locations = ["avatars", "skins", "renders/head"];
-    for (l in locations) {
-      var location = locations[l];
-      (function(location) {
-        it("should return a 200 (default steve image " + location + ")", function(done) {
-          request.get("http://localhost:3000/" + location + "/invalidjsvns?default=steve", function(error, res, body) {
-            assert.equal(200, res.statusCode);
-            done();
-          });
-        });
-        it("should return a 200 (default external image " + location + ")", function(done) {
-          request.get("http://localhost:3000/" + location + "/invalidjsvns?default=https%3A%2F%2Fi.imgur.com%2FocJVWAc.png", function(error, res, body) {
-            assert.equal(200, res.statusCode);
-            done();
-          });
-        });
-      })(location);
+      }(location));
     }
 
     after(function(done) {
