@@ -464,7 +464,7 @@ describe("Crafatar", function() {
             assert(res.headers["x-storage-type"]);
             assert.strictEqual(res.headers["etag"], location.etag);
             assert.strictEqual(crc(body), location.crc32);
-            if (location.url.substr(21, 7) === "/capes/" && !body) {
+            if (location.etag === undefined) {
               assert.strictEqual(res.statusCode, 404);
               assert.strictEqual(res.headers["content-type"], "text/plain");
               done();
