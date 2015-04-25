@@ -381,10 +381,6 @@ describe("Crafatar", function() {
         url: "http://localhost:3000/capes/0",
         crc32: 0
       },
-      "cape with not existing username defaulting to alex": {
-        url: "http://localhost:3000/capes/0?default=alex",
-        crc32: 0
-      },
       "cape with not existing username defaulting to url": {
         url: "http://localhost:3000/capes/0?default=http://example.com",
         crc32: 0,
@@ -397,10 +393,6 @@ describe("Crafatar", function() {
       },
       "cape with not existing uuid": {
         url: "http://localhost:3000/capes/00000000000000000000000000000000",
-        crc32: 0
-      },
-      "cape with not existing uuid defaulting to alex": {
-        url: "http://localhost:3000/capes/00000000000000000000000000000000?default=alex",
         crc32: 0
       },
       "cape with not existing uuid defaulting to url": {
