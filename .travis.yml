@@ -1,8 +1,12 @@
 language: node_js
 node_js:
-  - "iojs-v1.8.0"
+  - "iojs-v1.8"
 before_install:
-  - sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
+  - cat /etc/apt/sources.list
+  - sudo add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ vivid main restricted"
+  - cat /etc/apt/sources.list
+  - sudo apt-get update
+  - sudo apt-get install -y --force-yes libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
 script:
   - npm run-script test-travis
 notifications:
