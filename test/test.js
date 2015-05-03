@@ -606,7 +606,7 @@ describe("Crafatar", function() {
       var location = locations[description];
       (function(location) {
         it("should return correct HTTP response for " + description, function(done) {
-          request.get(location.url, {followRedirect: false}, function(error, res, body) {
+          request.get(location.url, {followRedirect: false, encoding: null}, function(error, res, body) {
             assert.ifError(error);
             assert_headers(res);
             assert(res.headers["x-storage-type"]);
