@@ -506,17 +506,17 @@ describe("Crafatar", function() {
         crc32: [3456497067, 3490318764]
       },
       "helm head render with not existing uuid": {
-        url: "http://localhost:3000/avatars/00000000000000000000000000000000?scale=2&helm",
+        url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&helm",
         etag: '"steve"',
-        crc32: 1327292273
+        crc32: [1858563554, 2647471936]
       },
       "helm head render with not existing uuid defaulting to alex": {
-        url: "http://localhost:3000/avatars/00000000000000000000000000000000?scale=2&helm&default=alex",
+        url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&helm&default=alex",
         etag: '"alex"',
-        crc32: 2233777481
+        crc32: [2963161105, 1769904825]
       },
       "helm head render with not existing uuid defaulting to url": {
-        url: "http://localhost:3000/avatars/00000000000000000000000000000000?scale=2&helm&default=http://example.com",
+        url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&helm&default=http://example.com",
         crc32: 0,
         redirect: "http://example.com"
       },
