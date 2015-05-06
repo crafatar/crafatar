@@ -300,12 +300,12 @@ describe("Crafatar", function() {
       "avatar with not existing username": {
         url: "http://localhost:3000/avatars/0?size=16",
         etag: '"steve"',
-        crc32: 1243826040
+        crc32: 2416827277
       },
       "avatar with not existing username defaulting to alex": {
         url: "http://localhost:3000/avatars/0?size=16&default=alex",
         etag: '"alex"',
-        crc32: 809395677
+        crc32: 862751081
       },
       "avatar with not existing username defaulting to url": {
         url: "http://localhost:3000/avatars/0?size=16&default=http://example.com",
@@ -320,12 +320,12 @@ describe("Crafatar", function() {
       "helm avatar with not existing username": {
         url: "http://localhost:3000/avatars/0?size=16&helm",
         etag: '"steve"',
-        crc32: 1243826040
+        crc32: 2416827277
       },
       "helm avatar with not existing username defaulting to alex": {
         url: "http://localhost:3000/avatars/0?size=16&helm&default=alex",
         etag: '"alex"',
-        crc32: 809395677
+        crc32: 862751081
       },
       "helm avatar with not existing username defaulting to url": {
         url: "http://localhost:3000/avatars/0?size=16&helm&default=http://example.com",
@@ -340,12 +340,12 @@ describe("Crafatar", function() {
       "avatar with not existing uuid": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16",
         etag: '"steve"',
-        crc32: 1243826040
+        crc32: 2416827277
       },
       "avatar with not existing uuid defaulting to alex": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&default=alex",
         etag: '"alex"',
-        crc32: 809395677
+        crc32: 862751081
       },
       "avatar with not existing uuid defaulting to url": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&default=http://example.com",
@@ -360,12 +360,12 @@ describe("Crafatar", function() {
       "helm avatar with not existing uuid": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&helm",
         etag: '"steve"',
-        crc32: 1243826040
+        crc32: 2416827277
       },
       "helm avatar with not existing uuid defaulting to alex": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&helm&default=alex",
         etag: '"alex"',
-        crc32: 809395677
+        crc32: 862751081
       },
       "helm avatar with not existing uuid defaulting to url": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&helm&default=http://example.com",
@@ -375,7 +375,7 @@ describe("Crafatar", function() {
       "cape with existing username": {
         url: "http://localhost:3000/capes/jeb_",
         etag: '"3f688e0e69"',
-        crc32: 1901140141
+        crc32: 989800403
       },
       "cape with not existing username": {
         url: "http://localhost:3000/capes/0",
@@ -389,7 +389,7 @@ describe("Crafatar", function() {
       "cape with existing uuid": {
         url: "http://localhost:3000/capes/853c80ef3c3749fdaa49938b674adae6",
         etag: '"3f688e0e69"',
-        crc32: 1901140141
+        crc32: 989800403
       },
       "cape with not existing uuid": {
         url: "http://localhost:3000/capes/00000000000000000000000000000000",
@@ -508,12 +508,12 @@ describe("Crafatar", function() {
       "helm head render with not existing uuid": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?scale=2&helm",
         etag: '"steve"',
-        crc32: 24686928
+        crc32: 1327292273
       },
       "helm head render with not existing uuid defaulting to alex": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?scale=2&helm&default=alex",
         etag: '"alex"',
-        crc32: 2086405365
+        crc32: 2233777481
       },
       "helm head render with not existing uuid defaulting to url": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?scale=2&helm&default=http://example.com",
