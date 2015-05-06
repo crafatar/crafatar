@@ -27,17 +27,18 @@
     "test-travis": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "engines": {
-    "iojs": "1.6.x"
+    "iojs": "2.0.x"
   },
   "dependencies": {
     "canvas": "crafatar/node-canvas",
     "forever": "0.14.1",
     "jade": "~1.9.1",
-    "lwip": "0.0.6",
+    "lwip": "crafatar/lwip",
     "mime": "1.3.4",
     "node-df": "0.1.1",
     "redis": "0.12.1",
-    "request": "^2.51.0"
+    "request": "^2.51.0",
+    "crc": "3.2.1"
   },
   "devDependencies": {
     "coveralls": "^2.11.2",
