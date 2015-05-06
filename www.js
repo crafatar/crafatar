@@ -3,6 +3,10 @@ var cleaner = require("./lib/cleaner");
 var config = require("./lib/config");
 var cluster = require("cluster");
 
+process.on("uncaughtException", function (err) {
+  logging.error("uncaughtException", err.stack || err.toString());
+});
+
 if (cluster.isMaster) {
   var cores = config.clusters || require("os").cpus().length;
   logging.log("Starting", cores + " workers");
