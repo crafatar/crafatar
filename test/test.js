@@ -664,7 +664,7 @@ describe("Crafatar", function() {
       });
     });
 
-    // testing all paths for invalid userid
+    // testing all paths for Invalid UserID
     var locations = ["avatars", "skins", "capes", "renders/body", "renders/head"];
     for (var l in locations) {
       var location = locations[l];
