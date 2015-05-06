@@ -291,7 +291,7 @@ describe("Crafatar", function() {
       });
     });
 
-    var locations = {
+    var server_tests = {
       "avatar with existing username": {
         url: "http://localhost:3000/avatars/jeb_?size=16",
         etag: '"a846b82963"',
@@ -602,8 +602,8 @@ describe("Crafatar", function() {
       },
     };
 
-    for (var description in locations) {
-      var location = locations[description];
+    for (var description in server_tests) {
+      var location = server_tests[description];
       (function(location) {
         it("should return correct HTTP response for " + description, function(done) {
           request.get(location.url, {followRedirect: false, encoding: null}, function(error, res, body) {
@@ -639,6 +639,43 @@ describe("Crafatar", function() {
           });
         });
       }(location));
+    }
+
+    it("should return a 422 (invalid size)", function(done) {
+      var size = config.max_size + 1;
+      request.get("http://localhost:3000/avatars/Jake_0?size=" + size, function(error, res, body) {
+        assert.strictEqual(res.statusCode, 422);
+        done();
+      });
+    });
+
+    it("should return a 422 (invalid scale)", function(done) {
+      var scale = config.max_scale + 1;
+      request.get("http://localhost:3000/renders/head/Jake_0?scale=" + scale, function(error, res, body) {
+        assert.strictEqual(res.statusCode, 422);
+        done();
+      });
+    });
+
+    it("should return a 422 (invalid render type)", function(done) {
+      request.get("http://localhost:3000/renders/invalid/Jake_0", function(error, res, body) {
+        assert.strictEqual(res.statusCode, 422);
+        done();
+      });
+    });
+
+    // testing all paths for invalid userid
+    var locations = ["avatars", "skins", "capes", "renders/body", "renders/head"];
+    for (var l in locations) {
+      var location = locations[l];
+      (function(location) {
+        it("should return a 422 (invalid id " + location + ")", function(done) {
+          request.get("http://localhost:3000/" + location + "/thisisaninvaliduuid", function(error, res, body) {
+            assert.strictEqual(res.statusCode, 422);
+            done();
+          });
+        });
+      })(location);
     }
 
     after(function(done) {
