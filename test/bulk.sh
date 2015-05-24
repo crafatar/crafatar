@@ -18,7 +18,9 @@ fi
 
 # insert newline after uuids
 id_file="$(echo | cat 'uuids.txt' - 'usernames.txt')"
-mapfile ids <<< $id_file
+# `brew install coreutils` on OS X
+id_file="$(shuf <<< "$id_file" || gshuf <<< "$id_file")"
+mapfile ids <<< "$id_file"
 
 bulk() {
   trap return INT
