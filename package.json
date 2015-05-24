@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "canvas": "crafatar/node-canvas",
+    "crc": "3.2.1",
     "forever": "0.14.1",
     "jade": "~1.9.1",
     "lwip": "crafatar/lwip",
@@ -38,7 +39,7 @@
     "node-df": "0.1.1",
     "redis": "0.12.1",
     "request": "^2.51.0",
-    "crc": "3.2.1"
+    "toobusy-js": "^0.4.1"
   },
   "devDependencies": {
     "coveralls": "^2.11.2",
