@@ -17,14 +17,13 @@ if [ -z "$host" ] || [ ! -z "$@" ]; then
 fi
 
 # insert newline after uuids
-id_file="$(echo | cat 'uuids.txt' - 'usernames.txt')"
+ids="$(echo | cat 'uuids.txt' - 'usernames.txt')"
 # `brew install coreutils` on OS X
-id_file="$(shuf <<< "$id_file" || gshuf <<< "$id_file")"
-mapfile ids <<< "$id_file"
+ids="$(shuf <<< "$ids" 2>/dev/null || gshuf <<< "$ids")"
 
 bulk() {
   trap return INT
-  for id in $ids; do
+  echo "$ids" | while read id; do
     if [ -z "$async" ]; then
       curl -sSL -o /dev/null -w "%{url_effective} %{http_code} %{time_total}s\\n" -- "$host/avatars/$id?helm"
     else
