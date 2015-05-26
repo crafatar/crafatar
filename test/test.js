@@ -311,8 +311,7 @@ describe("Crafatar", function() {
       var finished = 0;
       function partDone() {
         finished++;
-        if (finished === requests) {
-          // all requests have finished
+        if (requests === finished) {
           done();
         }
       }
