@@ -299,10 +299,38 @@ describe("Crafatar", function() {
         assert_headers(res);
         assert(res.headers["etag"]);
         assert.strictEqual(res.headers["content-type"], "image/png");
-        assert.strictEqual(res.headers["etag"], '"bb2ea7307d"');
         assert(body);
         done();
       });
+    });
+
+    it("should not fail on simultaneous requests", function(done) {
+      var url = "http://localhost:3000/avatars/696a82ce41f44b51aa31b8709b8686f0";
+      // 10 requests at once
+      var requests = 10;
+      var finished = 0;
+      function partDone() {
+        finished++;
+        if (finished === requests) {
+          // all requests have finished
+          done();
+        }
+      }
+      function req() {
+        request.get(url, function(error, res, body) {
+          assert.ifError(error);
+          assert.strictEqual(res.statusCode, 200);
+          assert_headers(res);
+          assert(res.headers["etag"]);
+          assert.strictEqual(res.headers["content-type"], "image/png");
+          assert(body);
+          partDone();
+        });
+      }
+      // make simultanous requests
+      for (var j = 0; j < requests; j++) {
+        req(j);
+      }
     });
 
     var server_tests = {
