@@ -291,6 +291,20 @@ describe("Crafatar", function() {
       });
     });
 
+    it("should return correct HTTP response for URL encoded URLs", function(done) {
+      var url = "http://localhost:3000/%61%76%61%74%61%72%73/%6a%6f%6d%6f"; // avatars/jomo
+      request.get(url, function(error, res, body) {
+        assert.ifError(error);
+        assert.strictEqual(res.statusCode, 200);
+        assert_headers(res);
+        assert(res.headers["etag"]);
+        assert.strictEqual(res.headers["content-type"], "image/png");
+        assert.strictEqual(res.headers["etag"], '"bb2ea7307d"');
+        assert(body);
+        done();
+      });
+    });
+
     var server_tests = {
       "avatar with existing username": {
         url: "http://localhost:3000/avatars/jeb_?size=16",
