@@ -8,6 +8,12 @@ Inspired by [Gravatar](https://gravatar.com) (hence the name) and [Minotar](http
 
 Image manipulation is done by [lwip](https://github.com/EyalAr/lwip). 3D renders are created with [node-canvas](https://github.com/Automattic/node-canvas), based on math by [confuser](https://github.com/confuser/serverless-mc-skin-viewer).
 
+# Contributions welcome!
+
+There are usually a few [open issues](https://github.com/crafatar/crafatar/issues).  
+We welcome any opinions or advice in discussions as well as pull requests.  
+Issues tagged with [![help wanted](https://i.imgur.com/kkozGKY.png "help wanted")](https://github.com/crafatar/crafatar/labels/help%20wanted) show where we could especially need your help!
+
 # Examples
 
 | | | | |
