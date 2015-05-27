@@ -1,3 +1,5 @@
+/* globals describe, it, before, after */
+/* eslint no-loop-func:0 guard-for-in:0 */
 var networking = require("../lib/networking");
 var helpers = require("../lib/helpers");
 var logging = require("../lib/logging");
@@ -119,13 +121,14 @@ describe("Crafatar", function() {
     it("should not exist (uuid)", function(done) {
       var number = getRandomInt(0, 9).toString();
       networking.get_profile(rid, Array(33).join(number), function(err, profile) {
+        assert.ifError(err);
         assert.strictEqual(profile, null);
         done();
       });
     });
     it("should not exist (username)", function(done) {
       networking.get_username_url(rid, "Steve", 0, function(err, profile) {
-        assert.strictEqual(err, null);
+        assert.ifError(err);
         done();
       });
     });
@@ -134,6 +137,7 @@ describe("Crafatar", function() {
     it("uuid's account should exist, but skin should not", function(done) {
       // profile "Alex" - hoping it'll never have a skin
       networking.get_profile(rid, "ec561538f3fd461daff5086b22154bce", function(err, profile) {
+        assert.ifError(err);
         assert.notStrictEqual(profile, null);
         networking.get_uuid_url(profile, 1, function(url) {
           assert.strictEqual(url, null);
@@ -146,22 +150,22 @@ describe("Crafatar", function() {
       done();
     });
     for (var a in alex_ids) {
-      var alex_id = alex_ids[a];
+      var alexid = alex_ids[a];
       (function(alex_id) {
         it("UUID " + alex_id + " should default to Alex", function(done) {
           assert.strictEqual(skins.default_skin(alex_id), "alex");
           done();
         });
-      })(alex_id);
+      }(alexid));
     }
     for (var s in steve_ids) {
-      var steve_id = steve_ids[s];
+      var steveid = steve_ids[s];
       (function(steve_id) {
         it("UUID " + steve_id + " should default to Steve", function(done) {
           assert.strictEqual(skins.default_skin(steve_id), "steve");
           done();
         });
-      })(steve_id);
+      }(steveid));
     }
   });
   describe("Errors", function() {
@@ -203,20 +207,20 @@ describe("Crafatar", function() {
     it("should ignore file updates on invalid files", function(done) {
       assert.doesNotThrow(function() {
         cache.update_timestamp(rid, "0123456789abcdef0123456789abcdef", "invalid-file.png", false, function(err) {
+          assert.ifError(err);
           done();
         });
       });
     });
     it("should not find the file", function(done) {
       skins.open_skin(rid, "non/existent/path", function(err, img) {
-        assert.notStrictEqual(err, null);
+        assert(err);
         done();
       });
     });
   });
 
   describe("Server", function() {
-
     // throws Exception when default headers are not in res.headers
     function assert_headers(res) {
       assert(res.headers["content-type"]);
@@ -237,7 +241,7 @@ describe("Crafatar", function() {
         assert.ifError(error);
         assert.ifError(body);
         assert.equal(res.statusCode, 304);
-        assert(res.headers["etag"]);
+        assert(res.headers.etag);
         assert_headers(res);
         callback();
       });
@@ -263,12 +267,12 @@ describe("Crafatar", function() {
         assert.ifError(error);
         assert.strictEqual(res.statusCode, 200);
         assert_headers(res);
-        assert(res.headers["etag"]);
+        assert(res.headers.etag);
         assert.strictEqual(res.headers["content-type"], "text/html; charset=utf-8");
-        assert.strictEqual(res.headers["etag"], "\"" + crc(body) + "\"");
+        assert.strictEqual(res.headers.etag, '"' + crc(body) + '"');
         assert(body);
 
-        assert_cache(url, res.headers["etag"], function() {
+        assert_cache(url, res.headers.etag, function() {
           done();
         });
       });
@@ -280,12 +284,12 @@ describe("Crafatar", function() {
         assert.ifError(error);
         assert.strictEqual(res.statusCode, 200);
         assert_headers(res);
-        assert(res.headers["etag"]);
+        assert(res.headers.etag);
         assert.strictEqual(res.headers["content-type"], "text/css");
-        assert.strictEqual(res.headers["etag"], "\"" + crc(body) + "\"");
+        assert.strictEqual(res.headers.etag, '"' + crc(body) + '"');
         assert(body);
 
-        assert_cache(url, res.headers["etag"], function() {
+        assert_cache(url, res.headers.etag, function() {
           done();
         });
       });
@@ -297,7 +301,7 @@ describe("Crafatar", function() {
         assert.ifError(error);
         assert.strictEqual(res.statusCode, 200);
         assert_headers(res);
-        assert(res.headers["etag"]);
+        assert(res.headers.etag);
         assert.strictEqual(res.headers["content-type"], "image/png");
         assert(body);
         done();
@@ -320,7 +324,7 @@ describe("Crafatar", function() {
           assert.ifError(error);
           assert.strictEqual(res.statusCode, 200);
           assert_headers(res);
-          assert(res.headers["etag"]);
+          assert(res.headers.etag);
           assert.strictEqual(res.headers["content-type"], "image/png");
           assert(body);
           partDone();
@@ -644,14 +648,14 @@ describe("Crafatar", function() {
     };
 
     for (var description in server_tests) {
-      var location = server_tests[description];
+      var loc = server_tests[description];
       (function(location) {
         it("should return correct HTTP response for " + description, function(done) {
           request.get(location.url, {followRedirect: false, encoding: null}, function(error, res, body) {
             assert.ifError(error);
             assert_headers(res);
             assert(res.headers["x-storage-type"]);
-            assert.strictEqual(res.headers["etag"], location.etag);
+            assert.strictEqual(res.headers.etag, location.etag);
             var matches = false;
             if (location.crc32 instanceof Array) {
               for (var i = 0; i < location.crc32.length; i++) {
@@ -663,28 +667,33 @@ describe("Crafatar", function() {
             } else {
               matches = (location.crc32 === crc(body));
             }
-            assert.ok(matches);
-            assert.strictEqual(res.headers["location"], location.redirect);
+            try {
+              assert.ok(matches);
+            } catch(e) {
+              throw new Error(crc(body) + " != " + location.crc32);
+            }
+            assert.strictEqual(res.headers.location, location.redirect);
             if (location.etag === undefined) {
               assert.strictEqual(res.statusCode, location.redirect ? 307 : 404);
               assert.strictEqual(res.headers["content-type"], "text/plain");
               done();
             } else {
-              assert(res.headers["etag"]);
+              assert(res.headers.etag);
               assert.strictEqual(res.headers["content-type"], "image/png");
               assert.strictEqual(res.statusCode, 200);
-              assert_cache(location.url, res.headers["etag"], function() {
+              assert_cache(location.url, res.headers.etag, function() {
                 done();
               });
             }
           });
         });
-      }(location));
+      }(loc));
     }
 
     it("should return a 422 (invalid size)", function(done) {
       var size = config.max_size + 1;
       request.get("http://localhost:3000/avatars/Jake_0?size=" + size, function(error, res, body) {
+        assert.ifError(error);
         assert.strictEqual(res.statusCode, 422);
         done();
       });
@@ -693,6 +702,7 @@ describe("Crafatar", function() {
     it("should return a 422 (invalid scale)", function(done) {
       var scale = config.max_scale + 1;
       request.get("http://localhost:3000/renders/head/Jake_0?scale=" + scale, function(error, res, body) {
+        assert.ifError(error);
         assert.strictEqual(res.statusCode, 422);
         done();
       });
@@ -700,6 +710,7 @@ describe("Crafatar", function() {
 
     it("should return a 422 (invalid render type)", function(done) {
       request.get("http://localhost:3000/renders/invalid/Jake_0", function(error, res, body) {
+        assert.ifError(error);
         assert.strictEqual(res.statusCode, 422);
         done();
       });
@@ -708,15 +719,16 @@ describe("Crafatar", function() {
     // testing all paths for Invalid UserID
     var locations = ["avatars", "skins", "capes", "renders/body", "renders/head"];
     for (var l in locations) {
-      var location = locations[l];
+      loc = locations[l];
       (function(location) {
         it("should return a 422 (invalid id " + location + ")", function(done) {
           request.get("http://localhost:3000/" + location + "/thisisaninvaliduuid", function(error, res, body) {
+            assert.ifError(error);
             assert.strictEqual(res.statusCode, 422);
             done();
           });
         });
-      })(location);
+      }(loc));
     }
 
     after(function(done) {
@@ -760,6 +772,7 @@ describe("Crafatar", function() {
     });
     it("should not be found", function(done) {
       helpers.get_cape(rid, "Jake_0", function(err, hash, status, img) {
+        assert.ifError(err);
         assert.strictEqual(img, null);
         done();
       });
@@ -787,8 +800,8 @@ describe("Crafatar", function() {
 
   // DRY with uuid and username tests
   for (var i in ids) {
-    var id = ids[i];
-    var id_type = id.length > 16 ? "uuid" : "name";
+    var iid = ids[i];
+    var iid_type = iid.length > 16 ? "uuid" : "name";
     // needs an anonymous function because id and id_type aren't constant
     (function(id, id_type) {
       describe("Networking: Avatar", function() {
@@ -799,12 +812,14 @@ describe("Crafatar", function() {
 
         it("should be downloaded", function(done) {
           helpers.get_avatar(rid, id, false, 160, function(err, status, image) {
+            assert.ifError(err);
             assert.strictEqual(status, 2);
             done();
           });
         });
         it("should be cached", function(done) {
           helpers.get_avatar(rid, id, false, 160, function(err, status, image) {
+            assert.ifError(err);
             assert.strictEqual(status === 0 || status === 1, true);
             done();
           });
@@ -816,6 +831,7 @@ describe("Crafatar", function() {
             var original_cache_time = config.local_cache_time;
             config.local_cache_time = 0;
             helpers.get_avatar(rid, id, false, 160, function(err, status, image) {
+              assert.ifError(err);
               assert.strictEqual(status, 3);
               config.local_cache_time = original_cache_time;
               done();
@@ -836,13 +852,13 @@ describe("Crafatar", function() {
       describe("Networking: Render", function() {
         it("should not fail (full body)", function(done) {
           helpers.get_render(rid, id, 6, true, true, function(err, hash, img) {
-            assert.strictEqual(err, null);
+            assert.ifError(err);
             done();
           });
         });
         it("should not fail (only head)", function(done) {
           helpers.get_render(rid, id, 6, true, false, function(err, hash, img) {
-            assert.strictEqual(err, null);
+            assert.ifError(err);
             done();
           });
         });
@@ -851,7 +867,7 @@ describe("Crafatar", function() {
       describe("Networking: Cape", function() {
         it("should not fail (possible cape)", function(done) {
           helpers.get_cape(rid, id, function(err, hash, status, img) {
-            assert.strictEqual(err, null);
+            assert.ifError(err);
             done();
           });
         });
@@ -863,9 +879,10 @@ describe("Crafatar", function() {
           cache.get_redis().flushall();
         });
 
-        if (id_type == "uuid") {
+        if (id_type === "uuid") {
           it("uuid should be rate limited", function(done) {
             networking.get_profile(rid, id, function(err, profile) {
+              assert.ifError(err);
               assert.strictEqual(profile.error, "TooManyRequestsException");
               done();
             });
@@ -879,6 +896,6 @@ describe("Crafatar", function() {
           });
         }
       });
-    })(id, id_type);
+    }(iid, iid_type));
   }
 });
