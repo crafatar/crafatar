@@ -10,6 +10,7 @@ notifications:
     channels:
       - irc.esper.net#crafatar
     skip_join: true
+env: TRAVIS=true
 services:
   - redis-server
 cache:
