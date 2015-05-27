@@ -448,7 +448,7 @@ describe("Crafatar", function() {
       "skin with existing username": {
         url: "http://localhost:3000/skins/jeb_",
         etag: '"a846b82963"',
-        crc32: 110922424
+        crc32: 26500336
       },
       "skin with not existing username": {
         url: "http://localhost:3000/skins/0",
@@ -468,7 +468,7 @@ describe("Crafatar", function() {
       "skin with existing uuid": {
         url: "http://localhost:3000/skins/853c80ef3c3749fdaa49938b674adae6",
         etag: '"a846b82963"',
-        crc32: 110922424
+        crc32: 26500336
       },
       "skin with not existing uuid": {
         url: "http://localhost:3000/skins/00000000000000000000000000000000",
