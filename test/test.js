@@ -345,12 +345,12 @@ describe("Crafatar", function() {
       "avatar with not existing username": {
         url: "http://localhost:3000/avatars/0?size=16",
         etag: '"steve"',
-        crc32: 2416827277
+        crc32: [2416827277, 1243826040]
       },
       "avatar with not existing username defaulting to alex": {
         url: "http://localhost:3000/avatars/0?size=16&default=alex",
         etag: '"alex"',
-        crc32: 862751081
+        crc32: [862751081, 809395677]
       },
       "avatar with not existing username defaulting to url": {
         url: "http://localhost:3000/avatars/0?size=16&default=http://example.com",
@@ -365,12 +365,12 @@ describe("Crafatar", function() {
       "helm avatar with not existing username": {
         url: "http://localhost:3000/avatars/0?size=16&helm",
         etag: '"steve"',
-        crc32: 2416827277
+        crc32: [2416827277, 1243826040]
       },
       "helm avatar with not existing username defaulting to alex": {
         url: "http://localhost:3000/avatars/0?size=16&helm&default=alex",
         etag: '"alex"',
-        crc32: 862751081
+        crc32: [862751081, 809395677]
       },
       "helm avatar with not existing username defaulting to url": {
         url: "http://localhost:3000/avatars/0?size=16&helm&default=http://example.com",
@@ -385,12 +385,12 @@ describe("Crafatar", function() {
       "avatar with not existing uuid": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16",
         etag: '"steve"',
-        crc32: 2416827277
+        crc32: [2416827277, 1243826040]
       },
       "avatar with not existing uuid defaulting to alex": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&default=alex",
         etag: '"alex"',
-        crc32: 862751081
+        crc32: [862751081, 809395677]
       },
       "avatar with not existing uuid defaulting to url": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&default=http://example.com",
@@ -405,12 +405,12 @@ describe("Crafatar", function() {
       "helm avatar with not existing uuid": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&helm",
         etag: '"steve"',
-        crc32: 2416827277
+        crc32: [2416827277, 1243826040]
       },
       "helm avatar with not existing uuid defaulting to alex": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&helm&default=alex",
         etag: '"alex"',
-        crc32: 862751081
+        crc32: [862751081, 809395677]
       },
       "helm avatar with not existing uuid defaulting to url": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&helm&default=http://example.com",
