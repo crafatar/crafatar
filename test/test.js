@@ -881,17 +881,21 @@ describe("Crafatar", function() {
 
         if (id_type === "uuid") {
           it("uuid should be rate limited", function(done) {
-            networking.get_profile(rid, id, function(err, profile) {
-              assert.ifError(err);
-              assert.strictEqual(profile.error, "TooManyRequests");
-              done();
+            networking.get_profile(rid, id, function() {
+              networking.get_profile(rid, id, function(err, profile) {
+                assert.strictEqual(err, "TooManyRequests");
+                assert.strictEqual(profile.error, "TooManyRequestsException");
+                done();
+              });
             });
           });
         } else {
           it("username should NOT be rate limited (username)", function(done) {
-            helpers.get_avatar(rid, id, false, 160, function(err, status, image) {
-              assert.strictEqual(err, null);
-              done();
+            helpers.get_avatar(rid, id, false, 160, function() {
+              helpers.get_avatar(rid, id, false, 160, function(err, status, image) {
+                assert.strictEqual(err, null);
+                done();
+              });
             });
           });
         }
