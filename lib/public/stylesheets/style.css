@@ -245,7 +245,7 @@ img.preload {
 .avatar.jeb:hover {background-image: url("/avatars/853c80ef3c3749fdaa49938b674adae6?size=64&helm")}
 
 .avatar.notch {background-image: url("/avatars/069a79f444e94726a5befca90e38aaf5?size=64")}
-/* Notch fucked up his helm */
+.avatar.notch:hover {background-image: url("/avatars/069a79f444e94726a5befca90e38aaf5?size=64&helm")}
 
 .avatar.dinnerbone {background-image: url("/avatars/61699b2ed3274a019f1e0ea8c3f06bc6?size=64")}
 .avatar.dinnerbone:hover {background-image: url("/avatars/61699b2ed3274a019f1e0ea8c3f06bc6?size=64&helm")}
