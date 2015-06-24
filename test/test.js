@@ -640,6 +640,11 @@ describe("Crafatar", function() {
         etag: '"alex"',
         crc32: [737759773, 66512449]
       },
+      "helm body render with non-existent uuid defaulting to userId": {
+        url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&helm&default=alex",
+        etag: '"alex"',
+        crc32: [737759773, 66512449]
+      },
       "helm body render with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&helm&default=http://example.com",
         crc32: 0,
