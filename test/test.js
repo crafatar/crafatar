@@ -342,17 +342,17 @@ describe("Crafatar", function() {
         etag: '"a846b82963"',
         crc32: 1623808067
       },
-      "avatar with not existing username": {
+      "avatar with non-existent username": {
         url: "http://localhost:3000/avatars/0?size=16",
         etag: '"steve"',
         crc32: [2416827277, 1243826040]
       },
-      "avatar with not existing username defaulting to alex": {
+      "avatar with non-existent username defaulting to alex": {
         url: "http://localhost:3000/avatars/0?size=16&default=alex",
         etag: '"alex"',
         crc32: [862751081, 809395677]
       },
-      "avatar with not existing username defaulting to url": {
+      "avatar with non-existent username defaulting to url": {
         url: "http://localhost:3000/avatars/0?size=16&default=http://example.com",
         crc32: 0,
         redirect: "http://example.com"
@@ -362,17 +362,17 @@ describe("Crafatar", function() {
         etag: '"a846b82963"',
         crc32: 646871998
       },
-      "helm avatar with not existing username": {
+      "helm avatar with non-existent username": {
         url: "http://localhost:3000/avatars/0?size=16&helm",
         etag: '"steve"',
         crc32: [2416827277, 1243826040]
       },
-      "helm avatar with not existing username defaulting to alex": {
+      "helm avatar with non-existent username defaulting to alex": {
         url: "http://localhost:3000/avatars/0?size=16&helm&default=alex",
         etag: '"alex"',
         crc32: [862751081, 809395677]
       },
-      "helm avatar with not existing username defaulting to url": {
+      "helm avatar with non-existent username defaulting to url": {
         url: "http://localhost:3000/avatars/0?size=16&helm&default=http://example.com",
         crc32: 0,
         redirect: "http://example.com"
@@ -382,17 +382,17 @@ describe("Crafatar", function() {
         etag: '"a846b82963"',
         crc32: 1623808067
       },
-      "avatar with not existing uuid": {
+      "avatar with non-existent uuid": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16",
         etag: '"steve"',
         crc32: [2416827277, 1243826040]
       },
-      "avatar with not existing uuid defaulting to alex": {
+      "avatar with non-existent uuid defaulting to alex": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&default=alex",
         etag: '"alex"',
         crc32: [862751081, 809395677]
       },
-      "avatar with not existing uuid defaulting to url": {
+      "avatar with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&default=http://example.com",
         crc32: 0,
         redirect: "http://example.com"
@@ -402,17 +402,17 @@ describe("Crafatar", function() {
         etag: '"a846b82963"',
         crc32: 646871998
       },
-      "helm avatar with not existing uuid": {
+      "helm avatar with non-existent uuid": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&helm",
         etag: '"steve"',
         crc32: [2416827277, 1243826040]
       },
-      "helm avatar with not existing uuid defaulting to alex": {
+      "helm avatar with non-existent uuid defaulting to alex": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&helm&default=alex",
         etag: '"alex"',
         crc32: [862751081, 809395677]
       },
-      "helm avatar with not existing uuid defaulting to url": {
+      "helm avatar with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&helm&default=http://example.com",
         crc32: 0,
         redirect: "http://example.com"
@@ -422,11 +422,11 @@ describe("Crafatar", function() {
         etag: '"3f688e0e69"',
         crc32: [989800403, 1901140141]
       },
-      "cape with not existing username": {
+      "cape with non-existent username": {
         url: "http://localhost:3000/capes/0",
         crc32: 0
       },
-      "cape with not existing username defaulting to url": {
+      "cape with non-existent username defaulting to url": {
         url: "http://localhost:3000/capes/0?default=http://example.com",
         crc32: 0,
         redirect: "http://example.com"
@@ -436,11 +436,11 @@ describe("Crafatar", function() {
         etag: '"3f688e0e69"',
         crc32: [989800403, 1901140141]
       },
-      "cape with not existing uuid": {
+      "cape with non-existent uuid": {
         url: "http://localhost:3000/capes/00000000000000000000000000000000",
         crc32: 0
       },
-      "cape with not existing uuid defaulting to url": {
+      "cape with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/capes/00000000000000000000000000000000?default=http://example.com",
         crc32: 0,
         redirect: "http://example.com"
@@ -450,17 +450,17 @@ describe("Crafatar", function() {
         etag: '"a846b82963"',
         crc32: 26500336
       },
-      "skin with not existing username": {
+      "skin with non-existent username": {
         url: "http://localhost:3000/skins/0",
         etag: '"steve"',
         crc32: 981937087
       },
-      "skin with not existing username defaulting to alex": {
+      "skin with non-existent username defaulting to alex": {
         url: "http://localhost:3000/skins/0?default=alex",
         etag: '"alex"',
         crc32: 2298915739
       },
-      "skin with not existing username defaulting to url": {
+      "skin with non-existent username defaulting to url": {
         url: "http://localhost:3000/skins/0?default=http://example.com",
         crc32: 0,
         redirect: "http://example.com"
@@ -470,17 +470,17 @@ describe("Crafatar", function() {
         etag: '"a846b82963"',
         crc32: 26500336
       },
-      "skin with not existing uuid": {
+      "skin with non-existent uuid": {
         url: "http://localhost:3000/skins/00000000000000000000000000000000",
         etag: '"steve"',
         crc32: 981937087
       },
-      "skin with not existing uuid defaulting to alex": {
+      "skin with non-existent uuid defaulting to alex": {
         url: "http://localhost:3000/skins/00000000000000000000000000000000?default=alex",
         etag: '"alex"',
         crc32: 2298915739
       },
-      "skin with not existing uuid defaulting to url": {
+      "skin with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/skins/00000000000000000000000000000000?default=http://example.com",
         crc32: 0,
         redirect: "http://example.com"
@@ -490,17 +490,17 @@ describe("Crafatar", function() {
         etag: '"a846b82963"',
         crc32: [353633671, 370672768]
       },
-      "head render with not existing username": {
+      "head render with non-existent username": {
         url: "http://localhost:3000/renders/head/0?scale=2",
         etag: '"steve"',
         crc32: [883439147, 433083528]
       },
-      "head render with not existing username defaulting to alex": {
+      "head render with non-existent username defaulting to alex": {
         url: "http://localhost:3000/renders/head/0?scale=2&default=alex",
         etag: '"alex"',
         crc32: [1240086237, 1108800327]
       },
-      "head render with not existing username defaulting to url": {
+      "head render with non-existent username defaulting to url": {
         url: "http://localhost:3000/renders/head/0?scale=2&default=http://example.com",
         crc32: 0,
         redirect: "http://example.com"
@@ -510,17 +510,17 @@ describe("Crafatar", function() {
         etag: '"a846b82963"',
         crc32: [3456497067, 3490318764]
       },
-      "helm head render with not existing username": {
+      "helm head render with non-existent username": {
         url: "http://localhost:3000/renders/head/0?scale=2&helm",
         etag: '"steve"',
         crc32: [1858563554, 2647471936]
       },
-      "helm head render with not existing username defaulting to alex": {
+      "helm head render with non-existent username defaulting to alex": {
         url: "http://localhost:3000/renders/head/0?scale=2&helm&default=alex",
         etag: '"alex"',
         crc32: [2963161105, 1769904825]
       },
-      "helm head render with not existing username defaulting to url": {
+      "helm head render with non-existent username defaulting to url": {
         url: "http://localhost:3000/renders/head/0?scale=2&helm&default=http://example.com",
         crc32: 0,
         redirect: "http://example.com"
@@ -530,17 +530,17 @@ describe("Crafatar", function() {
         etag: '"a846b82963"',
         crc32: [353633671, 370672768]
       },
-      "head render with not existing uuid": {
+      "head render with non-existent uuid": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2",
         etag: '"steve"',
         crc32: [883439147, 433083528]
       },
-      "head render with not existing uuid defaulting to alex": {
+      "head render with non-existent uuid defaulting to alex": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&default=alex",
         etag: '"alex"',
         crc32: [1240086237, 1108800327]
       },
-      "head render with not existing uuid defaulting to url": {
+      "head render with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&default=http://example.com",
         crc32: 0,
         redirect: "http://example.com"
@@ -550,17 +550,17 @@ describe("Crafatar", function() {
         etag: '"a846b82963"',
         crc32: [3456497067, 3490318764]
       },
-      "helm head render with not existing uuid": {
+      "helm head render with non-existent uuid": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&helm",
         etag: '"steve"',
         crc32: [1858563554, 2647471936]
       },
-      "helm head render with not existing uuid defaulting to alex": {
+      "helm head render with non-existent uuid defaulting to alex": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&helm&default=alex",
         etag: '"alex"',
         crc32: [2963161105, 1769904825]
       },
-      "helm head render with not existing uuid defaulting to url": {
+      "helm head render with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&helm&default=http://example.com",
         crc32: 0,
         redirect: "http://example.com"
@@ -570,17 +570,17 @@ describe("Crafatar", function() {
         etag: '"a846b82963"',
         crc32: [1291941229, 2628108474]
       },
-      "body render with not existing username": {
+      "body render with non-existent username": {
         url: "http://localhost:3000/renders/body/0?scale=2",
         etag: '"steve"',
         crc32: [2652947188, 2115706574]
       },
-      "body render with not existing username defaulting to alex": {
+      "body render with non-existent username defaulting to alex": {
         url: "http://localhost:3000/renders/body/0?scale=2&default=alex",
         etag: '"alex"',
         crc32: [407932087, 2516216042]
       },
-      "body render with not existing username defaulting to url": {
+      "body render with non-existent username defaulting to url": {
         url: "http://localhost:3000/renders/body/0?scale=2&default=http://example.com",
         crc32: 0,
         redirect: "http://example.com"
@@ -590,17 +590,17 @@ describe("Crafatar", function() {
         etag: '"a846b82963"',
         crc32: [3556188297, 4269754007]
       },
-      "helm body render with not existing username": {
+      "helm body render with non-existent username": {
         url: "http://localhost:3000/renders/body/0?scale=2&helm",
         etag: '"steve"',
         crc32: [272191039, 542896675]
       },
-      "helm body render with not existing username defaulting to alex": {
+      "helm body render with non-existent username defaulting to alex": {
         url: "http://localhost:3000/renders/body/0?scale=2&helm&default=alex",
         etag: '"alex"',
         crc32: [737759773, 66512449]
       },
-      "helm body render with not existing username defaulting to url": {
+      "helm body render with non-existent username defaulting to url": {
         url: "http://localhost:3000/renders/body/0?scale=2&helm&default=http://example.com",
         crc32: 0,
         redirect: "http://example.com"
@@ -610,17 +610,17 @@ describe("Crafatar", function() {
         etag: '"a846b82963"',
         crc32: [1291941229, 2628108474]
       },
-      "body render with not existing uuid": {
+      "body render with non-existent uuid": {
         url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2",
         etag: '"steve"',
         crc32: [2652947188, 2115706574]
       },
-      "body render with not existing uuid defaulting to alex": {
+      "body render with non-existent uuid defaulting to alex": {
         url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&default=alex",
         etag: '"alex"',
         crc32: [407932087, 2516216042]
       },
-      "body render with not existing uuid defaulting to url": {
+      "body render with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&default=http://example.com",
         crc32: 0,
         redirect: "http://example.com"
@@ -630,17 +630,17 @@ describe("Crafatar", function() {
         etag: '"a846b82963"',
         crc32: [3556188297, 4269754007]
       },
-      "helm body render with not existing uuid": {
+      "helm body render with non-existent uuid": {
         url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&helm",
         etag: '"steve"',
         crc32: [272191039, 542896675]
       },
-      "helm body render with not existing uuid defaulting to alex": {
+      "helm body render with non-existent uuid defaulting to alex": {
         url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&helm&default=alex",
         etag: '"alex"',
         crc32: [737759773, 66512449]
       },
-      "helm body render with not existing uuid defaulting to url": {
+      "helm body render with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&helm&default=http://example.com",
         crc32: 0,
         redirect: "http://example.com"
