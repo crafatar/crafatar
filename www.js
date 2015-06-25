@@ -1,6 +1,6 @@
 var logging = require("./lib/logging");
 var cleaner = require("./lib/cleaner");
-var config = require("./lib/config");
+var config = require("./config");
 var cluster = require("cluster");
 
 process.on("uncaughtException", function (err) {
@@ -8,8 +8,8 @@ process.on("uncaughtException", function (err) {
 });
 
 if (cluster.isMaster) {
-  var cores = config.clusters || require("os").cpus().length;
-  logging.log("Starting", cores + " workers");
+  var cores = config.server.clusters || require("os").cpus().length;
+  logging.log("Starting", cores + " worker" + (cores > 1 ? "s" : ""));
   for (var i = 0; i < cores; i++) {
     cluster.fork();
   }
@@ -19,7 +19,7 @@ if (cluster.isMaster) {
     setTimeout(cluster.fork, 100);
   });
 
-  setInterval(cleaner.run, config.cleaning_interval * 1000);
+  setInterval(cleaner.run, config.cleaner.interval * 1000);
 } else {
   require("./lib/server.js").boot();
 }

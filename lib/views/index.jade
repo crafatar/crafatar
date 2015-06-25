@@ -56,8 +56,8 @@ block content
                 tr
                   td size
                   td integer
-                  td #{config.default_size}
-                  td The size of the image in pixels, #{config.min_size} - #{config.max_size}.
+                  td #{config.avatars.default_size}
+                  td The size of the image in pixels, #{config.avatars.min_size} - #{config.avatars.max_size}.
                 tr
                   td default
                   td string
@@ -140,8 +140,8 @@ block content
                 tr
                   td scale
                   td integer
-                  td #{config.default_scale}. The actual size differs between the type of render.
-                  td The scale factor of the image #{config.min_scale} - #{config.max_scale}.
+                  td #{config.renders.default_scale}. The actual size differs between the type of render.
+                  td The scale factor of the image #{config.renders.min_scale} - #{config.renders.max_scale}.
                 tr
                   td helm
                   td null
@@ -324,8 +324,8 @@ block content
             a(href="#meta-about-caching")
               h3 About Caching
             p
-              | Crafatar caches skins for #{config.local_cache_time/60} minutes before checking for skin changes.<br>
-              | Images are cached in your browser for #{config.browser_cache_time/60} minutes until a new request to Crafatar is made.<br>
+              | Crafatar caches skins for #{config.caching.local_cache_time/60} minutes before checking for skin changes.<br>
+              | Images are cached in your browser for #{config.caching.browser_cache_time/60} minutes until a new request to Crafatar is made.<br>
               | When you changed your skin you can try clearing your browser cache to see the change faster.
 
 

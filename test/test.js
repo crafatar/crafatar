@@ -5,7 +5,7 @@ var helpers = require("../lib/helpers");
 var logging = require("../lib/logging");
 var cleaner = require("../lib/cleaner");
 var request = require("request");
-var config = require("../lib/config");
+var config = require("../config");
 var server = require("../lib/server");
 var assert = require("assert");
 var skins = require("../lib/skins");
@@ -14,7 +14,7 @@ var crc = require("crc").crc32;
 var fs = require("fs");
 
 // we don't want tests to fail because of slow internet
-config.http_timeout *= 3;
+config.server.http_timeout *= 3;
 
 // no spam
 if (process.env.VERBOSE_TEST !== "true") {
@@ -67,13 +67,13 @@ var ids = [
 
 describe("Crafatar", function() {
   // we might have to make 2 HTTP requests
-  this.timeout(config.http_timeout * 2 + 50);
+  this.timeout(config.server.http_timeout * 2 + 50);
 
   before(function() {
     cache.get_redis().flushall();
     // cause I don't know how big hard drives are these days
-    config.cleaning_disk_limit = Infinity;
-    config.cleaning_redis_limit = Infinity;
+    config.cleaner.disk_limit = Infinity;
+    config.cleaner.redis_limit = Infinity;
     cleaner.run();
   });
 
@@ -170,29 +170,29 @@ describe("Crafatar", function() {
   });
   describe("Errors", function() {
     it("should time out on uuid info download", function(done) {
-      var original_timeout = config.http_timeout;
-      config.http_timeout = 1;
+      var original_timeout = config.server.http_timeout;
+      config.server.http_timeout = 1;
       networking.get_profile(rid, "069a79f444e94726a5befca90e38aaf5", function(err, profile) {
         assert.strictEqual(err.code, "ETIMEDOUT");
-        config.http_timeout = original_timeout;
+        config.server.http_timeout = original_timeout;
         done();
       });
     });
     it("should time out on username info download", function(done) {
-      var original_timeout = config.http_timeout;
-      config.http_timeout = 1;
+      var original_timeout = config.server.http_timeout;
+      config.server.http_timeout = 1;
       networking.get_username_url(rid, "jomo", 0, function(err, url) {
         assert.strictEqual(err.code, "ETIMEDOUT");
-        config.http_timeout = original_timeout;
+        config.server.http_timeout = original_timeout;
         done();
       });
     });
     it("should time out on skin download", function(done) {
       var original_timeout = config.http_timeout;
-      config.http_timeout = 1;
+      config.server.http_timeout = 1;
       networking.get_from(rid, "http://textures.minecraft.net/texture/477be35554684c28bdeee4cf11c591d3c88afb77e0b98da893fd7bc318c65184", function(body, res, error) {
         assert.strictEqual(error.code, "ETIMEDOUT");
-        config.http_timeout = original_timeout;
+        config.server.http_timeout = original_timeout;
         done();
       });
     });
@@ -227,7 +227,7 @@ describe("Crafatar", function() {
       assert("" + res.headers["response-time"]);
       assert(res.headers["x-request-id"]);
       assert.equal(res.headers["access-control-allow-origin"], "*");
-      assert.equal(res.headers["cache-control"], "max-age=" + config.browser_cache_time + ", public");
+      assert.equal(res.headers["cache-control"], "max-age=" + config.caching.browser_cache_time + ", public");
     }
 
     // throws Exception when +url+ is requested with +etag+
@@ -352,6 +352,11 @@ describe("Crafatar", function() {
         etag: '"alex"',
         crc32: [862751081, 809395677]
       },
+      "avatar with non-existent username defaulting to userId": {
+        url: "http://localhost:3000/avatars/0?size=16&default=jeb_",
+        crc32: 0,
+        redirect: "/avatars/jeb_?size=16"
+      },
       "avatar with non-existent username defaulting to url": {
         url: "http://localhost:3000/avatars/0?size=16&default=http://example.com",
         crc32: 0,
@@ -371,6 +376,11 @@ describe("Crafatar", function() {
         url: "http://localhost:3000/avatars/0?size=16&helm&default=alex",
         etag: '"alex"',
         crc32: [862751081, 809395677]
+      },
+      "helm avatar with non-existent username defaulting to userId": {
+        url: "http://localhost:3000/avatars/0?size=16&helm&default=jeb_",
+        crc32: 0,
+        redirect: "/avatars/jeb_?size=16&helm="
       },
       "helm avatar with non-existent username defaulting to url": {
         url: "http://localhost:3000/avatars/0?size=16&helm&default=http://example.com",
@@ -392,6 +402,11 @@ describe("Crafatar", function() {
         etag: '"alex"',
         crc32: [862751081, 809395677]
       },
+      "avatar with non-existent uuid defaulting to userId": {
+        url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&default=jeb_",
+        crc32: 0,
+        redirect: "/avatars/jeb_?size=16"
+      },
       "avatar with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&default=http://example.com",
         crc32: 0,
@@ -411,6 +426,11 @@ describe("Crafatar", function() {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&helm&default=alex",
         etag: '"alex"',
         crc32: [862751081, 809395677]
+      },
+      "helm avatar with non-existent uuid defaulting to userId": {
+        url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&default=jeb_",
+        crc32: 0,
+        redirect: "/avatars/jeb_?size=16"
       },
       "helm avatar with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&helm&default=http://example.com",
@@ -460,6 +480,11 @@ describe("Crafatar", function() {
         etag: '"alex"',
         crc32: 2298915739
       },
+      "skin with non-existent username defaulting to userId": {
+        url: "http://localhost:3000/skins/0?size=16&default=jeb_",
+        crc32: 0,
+        redirect: "/skins/jeb_?size=16"
+      },
       "skin with non-existent username defaulting to url": {
         url: "http://localhost:3000/skins/0?default=http://example.com",
         crc32: 0,
@@ -480,11 +505,18 @@ describe("Crafatar", function() {
         etag: '"alex"',
         crc32: 2298915739
       },
+      "skin with non-existent uuid defaulting to userId": {
+        url: "http://localhost:3000/skins/00000000000000000000000000000000?size=16&default=jeb_",
+        crc32: 0,
+        redirect: "/skins/jeb_?size=16"
+      },
       "skin with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/skins/00000000000000000000000000000000?default=http://example.com",
         crc32: 0,
         redirect: "http://example.com"
       },
+
+
       "head render with existing username": {
         url: "http://localhost:3000/renders/head/jeb_?scale=2",
         etag: '"a846b82963"',
@@ -499,6 +531,11 @@ describe("Crafatar", function() {
         url: "http://localhost:3000/renders/head/0?scale=2&default=alex",
         etag: '"alex"',
         crc32: [1240086237, 1108800327]
+      },
+      "head render with non-existent useranme defaulting to userId": {
+        url: "http://localhost:3000/avatars/0?scale=2&default=jeb_",
+        crc32: 0,
+        redirect: "/renders/head/jeb_?scale=2"
       },
       "head render with non-existent username defaulting to url": {
         url: "http://localhost:3000/renders/head/0?scale=2&default=http://example.com",
@@ -520,6 +557,11 @@ describe("Crafatar", function() {
         etag: '"alex"',
         crc32: [2963161105, 1769904825]
       },
+      "helm head render with non-existent username defaulting to userId": {
+        url: "http://localhost:3000/renders/head/0?scale=2&helm&default=jeb_",
+        crc32: 0,
+        redirect: "/renders/head/jeb_?scale=2&helm="
+      },
       "helm head render with non-existent username defaulting to url": {
         url: "http://localhost:3000/renders/head/0?scale=2&helm&default=http://example.com",
         crc32: 0,
@@ -539,6 +581,11 @@ describe("Crafatar", function() {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&default=alex",
         etag: '"alex"',
         crc32: [1240086237, 1108800327]
+      },
+      "head render with non-existent uuid defaulting to userId": {
+        url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&default=jeb_",
+        crc32: 0,
+        redirect: "/renders/head/jeb_?scale=2"
       },
       "head render with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&default=http://example.com",
@@ -560,6 +607,11 @@ describe("Crafatar", function() {
         etag: '"alex"',
         crc32: [2963161105, 1769904825]
       },
+      "helm head with non-existent uuid defaulting to userId": {
+        url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&helm&default=jeb_",
+        crc32: 0,
+        redirect: "/renders/head/jeb_?scale=2&helm="
+      },
       "helm head render with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&helm&default=http://example.com",
         crc32: 0,
@@ -579,6 +631,11 @@ describe("Crafatar", function() {
         url: "http://localhost:3000/renders/body/0?scale=2&default=alex",
         etag: '"alex"',
         crc32: [407932087, 2516216042]
+      },
+      "body render with non-existent username defaulting to userId": {
+        url: "http://localhost:3000/renders/body/0?scale=2&default=jeb_",
+        crc32: 0,
+        redirect: "/renders/body/jeb_?scale=2"
       },
       "body render with non-existent username defaulting to url": {
         url: "http://localhost:3000/renders/body/0?scale=2&default=http://example.com",
@@ -600,6 +657,11 @@ describe("Crafatar", function() {
         etag: '"alex"',
         crc32: [737759773, 66512449]
       },
+      "helm body render with non-existent username defaulting to userId": {
+        url: "http://localhost:3000/renders/body/0?scale=2&helm&default=jeb_",
+        crc32: 0,
+        redirect: "/renders/body/jeb_?scale=2&helm="
+      },
       "helm body render with non-existent username defaulting to url": {
         url: "http://localhost:3000/renders/body/0?scale=2&helm&default=http://example.com",
         crc32: 0,
@@ -620,6 +682,11 @@ describe("Crafatar", function() {
         etag: '"alex"',
         crc32: [407932087, 2516216042]
       },
+      "body render with non-existent uuid defaulting to userId": {
+        url: "http://localhost:3000/renders/body/0?scale=2&default=jeb_",
+        crc32: 0,
+        redirect: "/renders/body/jeb_?scale=2"
+      },
       "body render with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&default=http://example.com",
         crc32: 0,
@@ -636,11 +703,6 @@ describe("Crafatar", function() {
         crc32: [272191039, 542896675]
       },
       "helm body render with non-existent uuid defaulting to alex": {
-        url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&helm&default=alex",
-        etag: '"alex"',
-        crc32: [737759773, 66512449]
-      },
-      "helm body render with non-existent uuid defaulting to userId": {
         url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&helm&default=alex",
         etag: '"alex"',
         crc32: [737759773, 66512449]
@@ -696,7 +758,7 @@ describe("Crafatar", function() {
     }
 
     it("should return a 422 (invalid size)", function(done) {
-      var size = config.max_size + 1;
+      var size = config.avatars.max_size + 1;
       request.get("http://localhost:3000/avatars/Jake_0?size=" + size, function(error, res, body) {
         assert.ifError(error);
         assert.strictEqual(res.statusCode, 422);
@@ -705,7 +767,7 @@ describe("Crafatar", function() {
     });
 
     it("should return a 422 (invalid scale)", function(done) {
-      var scale = config.max_scale + 1;
+      var scale = config.renders.max_scale + 1;
       request.get("http://localhost:3000/renders/head/Jake_0?scale=" + scale, function(error, res, body) {
         assert.ifError(error);
         assert.strictEqual(res.statusCode, 422);
@@ -833,12 +895,12 @@ describe("Crafatar", function() {
           console.log("can't run 'checked' test due to Mojang's rate limits :(");
         } else {
           it("should be checked", function(done) {
-            var original_cache_time = config.local_cache_time;
-            config.local_cache_time = 0;
+            var original_cache_time = config.caching.local_cache_time;
+            config.caching.local_cache_time = 0;
             helpers.get_avatar(rid, id, false, 160, function(err, status, image) {
               assert.ifError(err);
               assert.strictEqual(status, 3);
-              config.local_cache_time = original_cache_time;
+              config.caching.local_cache_time = original_cache_time;
               done();
             });
           });
