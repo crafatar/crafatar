@@ -5,5 +5,4 @@ node_modules/
 *.rdb
 coverage/
 config.js
-undefined*.png
 *.sublime-*
