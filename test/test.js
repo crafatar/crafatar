@@ -532,7 +532,7 @@ describe("Crafatar", function() {
         etag: '"alex"',
         crc32: [1240086237, 1108800327]
       },
-      "head render with non-existent useranme defaulting to userId": {
+      "head render with non-existent username defaulting to userId": {
         url: "http://localhost:3000/avatars/0?scale=2&default=jeb_",
         crc32: 0,
         redirect: "/avatars/jeb_?scale=2"
