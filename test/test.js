@@ -535,7 +535,7 @@ describe("Crafatar", function() {
       "head render with non-existent useranme defaulting to userId": {
         url: "http://localhost:3000/avatars/0?scale=2&default=jeb_",
         crc32: 0,
-        redirect: "/renders/head/jeb_?scale=2"
+        redirect: "/avatars/jeb_?scale=2"
       },
       "head render with non-existent username defaulting to url": {
         url: "http://localhost:3000/renders/head/0?scale=2&default=http://example.com",
