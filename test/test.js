@@ -363,7 +363,7 @@ describe("Crafatar", function() {
         redirect: "/avatars/853c80ef3c3749fdaa49938b674adae6?size=16"
       },
       "avatar with non-existent username defaulting to url": {
-        url: "http://localhost:3000/avatars/0?size=16&default=http://example.com",
+        url: "http://localhost:3000/avatars/0?size=16&default=http%3A%2F%2Fexample.com",
         crc32: 0,
         redirect: "http://example.com"
       },
@@ -393,7 +393,7 @@ describe("Crafatar", function() {
         redirect: "/avatars/853c80ef3c3749fdaa49938b674adae6?size=16&helm="
       },
       "helm avatar with non-existent username defaulting to url": {
-        url: "http://localhost:3000/avatars/0?size=16&helm&default=http://example.com",
+        url: "http://localhost:3000/avatars/0?size=16&helm&default=http%3A%2F%2Fexample.com",
         crc32: 0,
         redirect: "http://example.com"
       },
@@ -423,7 +423,7 @@ describe("Crafatar", function() {
         redirect: "/avatars/853c80ef3c3749fdaa49938b674adae6?size=16"
       },
       "avatar with non-existent uuid defaulting to url": {
-        url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&default=http://example.com",
+        url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&default=http%3A%2F%2Fexample.com",
         crc32: 0,
         redirect: "http://example.com"
       },
@@ -453,7 +453,7 @@ describe("Crafatar", function() {
         redirect: "/avatars/853c80ef3c3749fdaa49938b674adae6?size=16"
       },
       "helm avatar with non-existent uuid defaulting to url": {
-        url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&helm&default=http://example.com",
+        url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&helm&default=http%3A%2F%2Fexample.com",
         crc32: 0,
         redirect: "http://example.com"
       },
@@ -467,7 +467,7 @@ describe("Crafatar", function() {
         crc32: 0
       },
       "cape with non-existent username defaulting to url": {
-        url: "http://localhost:3000/capes/0?default=http://example.com",
+        url: "http://localhost:3000/capes/0?default=http%3A%2F%2Fexample.com",
         crc32: 0,
         redirect: "http://example.com"
       },
@@ -481,7 +481,7 @@ describe("Crafatar", function() {
         crc32: 0
       },
       "cape with non-existent uuid defaulting to url": {
-        url: "http://localhost:3000/capes/00000000000000000000000000000000?default=http://example.com",
+        url: "http://localhost:3000/capes/00000000000000000000000000000000?default=http%3A%2F%2Fexample.com",
         crc32: 0,
         redirect: "http://example.com"
       },
@@ -511,7 +511,7 @@ describe("Crafatar", function() {
         redirect: "/skins/853c80ef3c3749fdaa49938b674adae6?size=16"
       },
       "skin with non-existent username defaulting to url": {
-        url: "http://localhost:3000/skins/0?default=http://example.com",
+        url: "http://localhost:3000/skins/0?default=http%3A%2F%2Fexample.com",
         crc32: 0,
         redirect: "http://example.com"
       },
@@ -541,12 +541,10 @@ describe("Crafatar", function() {
         redirect: "/skins/853c80ef3c3749fdaa49938b674adae6?size=16"
       },
       "skin with non-existent uuid defaulting to url": {
-        url: "http://localhost:3000/skins/00000000000000000000000000000000?default=http://example.com",
+        url: "http://localhost:3000/skins/00000000000000000000000000000000?default=http%3A%2F%2Fexample.com",
         crc32: 0,
         redirect: "http://example.com"
       },
-
-
       "head render with existing username": {
         url: "http://localhost:3000/renders/head/jeb_?scale=2",
         etag: '"a846b82963"',
@@ -573,7 +571,7 @@ describe("Crafatar", function() {
         redirect: "/avatars/853c80ef3c3749fdaa49938b674adae6?scale=2"
       },
       "head render with non-existent username defaulting to url": {
-        url: "http://localhost:3000/renders/head/0?scale=2&default=http://example.com",
+        url: "http://localhost:3000/renders/head/0?scale=2&default=http%3A%2F%2Fexample.com",
         crc32: 0,
         redirect: "http://example.com"
       },
@@ -603,7 +601,7 @@ describe("Crafatar", function() {
         redirect: "/renders/head/853c80ef3c3749fdaa49938b674adae6?scale=2&helm="
       },
       "helm head render with non-existent username defaulting to url": {
-        url: "http://localhost:3000/renders/head/0?scale=2&helm&default=http://example.com",
+        url: "http://localhost:3000/renders/head/0?scale=2&helm&default=http%3A%2F%2Fexample.com",
         crc32: 0,
         redirect: "http://example.com"
       },
@@ -633,7 +631,7 @@ describe("Crafatar", function() {
         redirect: "/renders/head/853c80ef3c3749fdaa49938b674adae6?scale=2"
       },
       "head render with non-existent uuid defaulting to url": {
-        url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&default=http://example.com",
+        url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&default=http%3A%2F%2Fexample.com",
         crc32: 0,
         redirect: "http://example.com"
       },
@@ -663,7 +661,7 @@ describe("Crafatar", function() {
         redirect: "/renders/head/853c80ef3c3749fdaa49938b674adae6?scale=2&helm="
       },
       "helm head render with non-existent uuid defaulting to url": {
-        url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&helm&default=http://example.com",
+        url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&helm&default=http%3A%2F%2Fexample.com",
         crc32: 0,
         redirect: "http://example.com"
       },
@@ -693,7 +691,7 @@ describe("Crafatar", function() {
         redirect: "/renders/body/853c80ef3c3749fdaa49938b674adae6?scale=2"
       },
       "body render with non-existent username defaulting to url": {
-        url: "http://localhost:3000/renders/body/0?scale=2&default=http://example.com",
+        url: "http://localhost:3000/renders/body/0?scale=2&default=http%3A%2F%2Fexample.com",
         crc32: 0,
         redirect: "http://example.com"
       },
@@ -723,7 +721,7 @@ describe("Crafatar", function() {
         redirect: "/renders/body/853c80ef3c3749fdaa49938b674adae6?scale=2&helm="
       },
       "helm body render with non-existent username defaulting to url": {
-        url: "http://localhost:3000/renders/body/0?scale=2&helm&default=http://example.com",
+        url: "http://localhost:3000/renders/body/0?scale=2&helm&default=http%3A%2F%2Fexample.com",
         crc32: 0,
         redirect: "http://example.com"
       },
@@ -753,7 +751,7 @@ describe("Crafatar", function() {
         redirect: "/renders/body/853c80ef3c3749fdaa49938b674adae6?scale=2"
       },
       "body render with non-existent uuid defaulting to url": {
-        url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&default=http://example.com",
+        url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&default=http%3A%2F%2Fexample.com",
         crc32: 0,
         redirect: "http://example.com"
       },
@@ -773,7 +771,7 @@ describe("Crafatar", function() {
         crc32: [737759773, 66512449]
       },
       "helm body render with non-existent uuid defaulting to url": {
-        url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&helm&default=http://example.com",
+        url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&helm&default=http%3A%2F%2Fexample.com",
         crc32: 0,
         redirect: "http://example.com"
       },
