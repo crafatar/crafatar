@@ -227,7 +227,7 @@ describe("Crafatar", function() {
       assert("" + res.headers["response-time"]);
       assert(res.headers["x-request-id"]);
       assert.equal(res.headers["access-control-allow-origin"], "*");
-      assert.equal(res.headers["cache-control"], "max-age=" + config.caching.browser_cache_time + ", public");
+      assert.equal(res.headers["cache-control"], "max-age=" + config.caching.browser + ", public");
     }
 
     // throws Exception when +url+ is requested with +etag+
@@ -895,12 +895,12 @@ describe("Crafatar", function() {
           console.log("can't run 'checked' test due to Mojang's rate limits :(");
         } else {
           it("should be checked", function(done) {
-            var original_cache_time = config.caching.local_cache_time;
-            config.caching.local_cache_time = 0;
+            var original_cache_time = config.caching.local;
+            config.caching.local = 0;
             helpers.get_avatar(rid, id, false, 160, function(err, status, image) {
               assert.ifError(err);
               assert.strictEqual(status, 3);
-              config.caching.local_cache_time = original_cache_time;
+              config.caching.local = original_cache_time;
               done();
             });
           });

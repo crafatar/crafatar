@@ -16,15 +16,15 @@ var config = {
     amount: 50000                   // amount of skins for which all iamge types are deleted
   },
   directories: {
-    faces_dir: "images/faces/",     // directory where faces are kept. should have trailing "/"
-    helms_dir: "images/helms/",     // directory where helms are kept. should have trailing "/"
-    skins_dir: "images/skins/",     // directory where skins are kept. should have trailing "/"
-    renders_dir: "images/renders/", // directory where rendered skins are kept. should have trailing "/"
-    capes_dir: "images/capes/"      // directory where capes are kept. should have trailing "/"
+    faces: "images/faces/",         // directory where faces are kept. should have trailing "/"
+    helms: "images/helms/",         // directory where helms are kept. should have trailing "/"
+    skins: "images/skins/",         // directory where skins are kept. should have trailing "/"
+    renders: "images/renders/",     // directory where rendered skins are kept. should have trailing "/"
+    capes: "images/capes/"          // directory where capes are kept. should have trailing "/"
   },
   caching: {
-    local_cache_time: 1200,         // seconds until we will check if user's skin changed. should be > 60 to comply with Mojang's rate limit
-    browser_cache_time: 3600        // seconds until browser will request image again
+    local: 1200,                    // seconds until we will check if user's skin changed. should be > 60 to comply with Mojang's rate limit
+    browser: 3600                   // seconds until browser will request image again
   },
   server: {
     http_timeout: 1000,             // ms until connection to Mojang is dropped
