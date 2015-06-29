@@ -31,14 +31,14 @@
   },
   "dependencies": {
     "canvas": "crafatar/node-canvas",
-    "crc": "~3.2.1",
+    "crc": "~3.3.0",
     "forever": "~0.14.1",
-    "jade": "~1.10.0",
+    "jade": "~1.11.0",
     "lwip": "~0.0.7",
     "mime": "~1.3.4",
     "node-df": "~0.1.1",
     "redis": "~0.12.1",
-    "request": "~2.55.0",
+    "request": "~2.58.0",
     "toobusy-js": "~0.4.1"
   },
   "devDependencies": {
