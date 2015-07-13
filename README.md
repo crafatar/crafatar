@@ -46,8 +46,8 @@ dokku config:set crafatar BIND=0.0.0.0 PORT=5000
 ```
 For persistent images and logs:
 ```shell
-dokku docker-options:add crafatar run "-v /var/lib/crafatar/images:/app/images"
-dokku docker-options:add crafatar run "-v /var/log/crafatar:/app/logs"
+dokku docker-options:add crafatar deploy "-v /var/lib/crafatar/images:/app/images"
+dokku docker-options:add crafatar deploy "-v /var/log/crafatar:/app/logs"
 ```
 If you want to listen on extra domains:
 ```shell
