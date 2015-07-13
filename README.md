@@ -29,32 +29,38 @@ Please [visit the website](https://crafatar.com) for details.
 
 ## Contact
 
-* You can follow us on [![twitter ](https://favicons.githubusercontent.com/twitter.com)@crafatar](https://twitter.com/crafatar)
+* You can [follow](https://twitter.com/crafatar) us on twitter
 * Open an [issue](https://github.com/crafatar/crafatar/issues/) on GitHub
-* You can [join us](https://webchat.esper.net/?channels=crafatar) in #crafatar on irc.esper.net.
+* You can [join IRC](https://webchat.esper.net/?channels=crafatar) in #crafatar on irc.esper.net.
 
-## Installation
-
-#### Heroku
+## Installation on Heroku
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-#### Dokku
-0. Install the [dokku-redis](https://github.com/ohardy/dokku-redis#redis-plugin-for-dokku) plugin
-0. `dokku redis:start`
-0. You also might want to use [docker-options](https://github.com/dyson/dokku-docker-options) for persistent storage:
+## Installation on Dokku
+##### [dokku server]
+Install the [dokku-redis](https://github.com/ohardy/dokku-redis#redis-plugin-for-dokku) plugin.
+```shell
+dokku redis:start
+dokku apps:create crafatar
+dokku config:set crafatar BIND=0.0.0.0 PORT=5000
+```
+For persistent images and logs:
+```shell
+dokku docker-options:add crafatar run "-v /var/lib/crafatar/images:/app/images"
+dokku docker-options:add crafatar run "-v /var/log/crafatar:/app/logs"
+```
+If you want to listen on extra domains:
+```shell
+dokku domains crafatar:add example.com
+```
+##### [your machine]
+Add dokku remote and deploy!
+```shell
+git remote add dokku dokku@example.com:crafatar
+git push dokku master
+```
 
-  ```docker
-  -v /var/lib/crafatar/images:/app/images
-  -v /var/log/crafatar:/app/logs
-  ```
-0. Deploy with ENV config:
-
-  ```bash
-  PORT=5000
-  BIND=0.0.0.0
-  ```
-
-#### Local
+## Installation on your machine
 * Use io.js
 * [Install](https://github.com/Automattic/node-canvas/wiki) Cairo.
 * `npm install`
@@ -68,12 +74,13 @@ Please [visit the website](https://crafatar.com) for details.
 npm test
 ```
 
-If you want to debug failing tests, you can set the env
+If you want to debug failing tests:
 ```shell
-VERBOSE_TEST=true
+# show logs during tests
+env VERBOSE_TEST=true npm test
 ```
 
-To debug caching, it can be helpful to monitor redis commands while tests are running:
+It can be helpful to monitor redis commands to debug caching errors:
 ```shell
 redis-cli monitor
 ```
