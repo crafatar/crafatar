@@ -858,6 +858,14 @@ describe("Crafatar", function() {
             done();
           });
         });
+
+        it("should return a 422 (invalid request path " + location + ")", function(done) {
+          request.get("http://localhost:3000/" + location + "/thisisaninvaliduuid/invalid", function(error, res, body) {
+            assert.ifError(error);
+            assert.strictEqual(res.statusCode, 422);
+            done();
+          });
+        });
       }(loc));
     }
 
