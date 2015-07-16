@@ -1,13 +1,24 @@
 doctype html
-html
+html(lang="en")
   head
     title= title
     link(rel="icon", sizes="16x16", type="image/png", href="/favicon.png")
     link(href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/css/bootstrap.min.css", rel="stylesheet")
     link(rel="stylesheet", href="/stylesheets/style.css")
-    meta(name="description", content="Crafatar is a blazing fast Minecraft avatar API with support for avatars, 1.8 skins, and even 3D renders!")
+
+    meta(name="description", content="Crafatar is a blazing fast Minecraft avatar API with support for avatars, skins, and even 3D renders!")
     meta(name="keywords", content="minecraft, avatar, renders, skins, uuid, username")
     meta(name="viewport", content="initial-scale=1,maximum-scale=1")
+
+    meta(charset='utf-8')
+    meta(property='og:title', content='Unturned Mods')      
+    meta(property='og:type', content='website')      
+    meta(property='og:url', content='https://crafatar.com')       
+    meta(property='og:image', content='https://crafatar.com/logo.png')
+    meta(property='og:description', content='A blazing fast Minecraft avatar API with support for avatars, skins, and 3D renders.')
+  
+    meta(name='twitter:card', content='summary')
+    meta(name='twitter:creator', content='@Crafatar')
   body
     a.forkme(href="https://github.com/crafatar/crafatar", target="_blank") Fork me on GitHub
     a.sponsor(href="https://akliz.net/crafatar", target="_blank", title="Crafatar is sponsored by Akliz")
