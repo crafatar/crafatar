@@ -98,7 +98,7 @@ block content
                 .example #{domain}/avatars/jeb_?default=alex
                 p.preview Jeb's avatar, or fall back to alex <i>(this example assumes jeb_ does not exist)</i>
               #avatar-example-6.example-wrapper
-                .example #{domain}/avatars/jeb_?default=https://i.imgur.com/ocJVWAc.png
+                .example #{domain}/avatars/jeb_?default=https%3A%2F%2Fi.imgur.com%2FocJVWAc.png
                 p.preview
                   | Jeb's avatar, or fall back to a custom image <i>(this example assumes jeb_ does not exist)</i>
               p.preview-placeholder
@@ -112,7 +112,6 @@ block content
             h3 3D Renders
           p
             | Crafatar also provides support for 3D renders of Minecraft skins.<br>
-            | Please note that <b>this feature is currently beta</b>!<br>
             | Replace
             mark.green  userid
             |  with a Mojang <b>UUID</b> or <b>username</b> to get a render of the skin.
