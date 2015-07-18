@@ -859,7 +859,7 @@ describe("Crafatar", function() {
           });
         });
 
-        it("should return a 404 (invalid request path " + location + ")", function(done) {
+        it("should return a 404 (invalid path " + location + ")", function(done) {
           request.get("http://localhost:3000/" + location + "/853c80ef3c3749fdaa49938b674adae6/invalid", function(error, res, body) {
             assert.ifError(error);
             assert.strictEqual(res.statusCode, 404);
