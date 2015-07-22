@@ -1,8 +1,16 @@
 language: node_js
 node_js:
   - iojs-v2.0
-before_install:
-  - sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
+sudo: false
+addons:
+  apt:
+    packages:
+    - libcairo2-dev
+    - libjpeg8-dev
+    - libpango1.0-dev
+    - libgif-dev
+    - build-essential
+    - g++
 script:
   - npm run-script test-travis
 notifications:
