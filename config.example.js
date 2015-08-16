@@ -29,7 +29,6 @@ var config = {
   server: {
     http_timeout: 1000,             // ms until connection to Mojang is dropped
     debug_enabled: false,           // enables logging.debug
-    clusters: 1,                    // we recommend not using multiple clusters YET, see issue #80
     log_time: true                  // set to false if you use an external logger that provides timestamps
   }
 };
