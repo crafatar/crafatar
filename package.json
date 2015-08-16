@@ -22,7 +22,7 @@
   ],
   "scripts": {
     "postinstall": "cp 'config.example.js' 'config.js'",
-    "start": "forever -l logs/log.log -o logs/out.log -e logs/error.log -p ./ -a --minUptime 8000 --spinSleepTime 1500 www.js",
+    "start": "node www.js",
     "test": "mocha",
     "test-travis": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
@@ -30,19 +30,18 @@
     "iojs": "2.0.x"
   },
   "dependencies": {
-    "canvas": "^1.2.3",
+    "canvas": "^1.2.7",
     "crc": "~3.3.0",
-    "forever": "~0.14.2",
     "jade": "~1.11.0",
     "lwip": "~0.0.7",
     "mime": "~1.3.4",
     "node-df": "~0.1.1",
     "redis": "~0.12.1",
-    "request": "~2.58.0",
+    "request": "~2.60.0",
     "toobusy-js": "~0.4.2"
   },
   "devDependencies": {
-    "coveralls": "~2.11.2",
+    "coveralls": "~2.11.4",
     "istanbul": "~0.3.17",
     "mocha": "~2.2.5",
     "mocha-lcov-reporter": "~0.0.2"
