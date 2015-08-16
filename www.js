@@ -3,8 +3,9 @@ var cleaner = require("./lib/cleaner");
 var config = require("./config");
 var cluster = require("cluster");
 
-process.on("uncaughtException", function (err) {
+process.on("uncaughtException", function(err) {
   logging.error("uncaughtException", err.stack || err.toString());
+  process.exit(1);
 });
 
 if (cluster.isMaster) {
