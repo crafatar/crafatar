@@ -13,7 +13,7 @@ var config = {
     interval: 1800,                               // interval seconds to check limits
     disk_limit: 10240,                            // min allowed free KB on disk to trigger image deletion
     redis_limit: 24576,                           // max allowed used KB on redis to trigger redis flush
-    amount: 50000                                 // amount of skins for which all iamge types are deleted
+    amount: 50000                                 // amount of skins for which all image types are deleted
   },
   directories: {
     faces: "/var/lib/crafatar/images/faces/",     // directory where faces are kept. must have trailing "/"
