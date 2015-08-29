@@ -11,7 +11,7 @@ var config = {
   },
   cleaner: {
     interval: 1800,                               // interval seconds to check limits
-    disk_limit: 10240,                            // min allowed free KB on disk to trigger image deletion
+    disk_limit: 524288,                           // min allowed free KB on disk to trigger image deletion
     redis_limit: 24576,                           // max allowed used KB on redis to trigger redis flush
     amount: 50000                                 // amount of skins for which all image types are deleted
   },
