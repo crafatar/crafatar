@@ -204,14 +204,6 @@ describe("Crafatar", function() {
         });
       });
     });
-    it("should ignore file updates on invalid files", function(done) {
-      assert.doesNotThrow(function() {
-        cache.update_timestamp(rid, "0123456789abcdef0123456789abcdef", "invalid-file.png", false, function(err) {
-          assert.ifError(err);
-          done();
-        });
-      });
-    });
     it("should not find the file", function(done) {
       skins.open_skin(rid, "non/existent/path", function(err, img) {
         assert(err);
