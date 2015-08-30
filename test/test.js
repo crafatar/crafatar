@@ -1013,7 +1013,7 @@ describe("Crafatar", function() {
           it("uuid should be rate limited", function(done) {
             networking.get_profile(rid, id, function() {
               networking.get_profile(rid, id, function(err, profile) {
-                assert.strictEqual(err, "TooManyRequests");
+                assert.strictEqual(err, "TooManyRequestsException");
                 assert.strictEqual(profile.error, "TooManyRequestsException");
                 done();
               });
