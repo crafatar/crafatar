@@ -11,7 +11,7 @@ addons:
     - libgif-dev
     - build-essential
     - g++
-before_deploy:
+before_install:
   - mkdir -pv /var/lib/crafatar/{faces,helms,skins,renders,capes}
 script:
   - npm run-script test-travis
