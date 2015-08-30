@@ -10,7 +10,7 @@ var config = {
     default_scale: 6                              // for 3D rendered skins; scale to be used when no scale given
   },
   cleaner: {
-    interval: 1800,                               // interval seconds to check limits
+    interval: 600,                                // interval seconds to check limits
     disk_limit: 524288,                           // min allowed free KB on disk to trigger image deletion
     redis_limit: 24576,                           // max allowed used KB on redis to trigger redis flush
     amount: 50000                                 // amount of skins for which all image types are deleted
