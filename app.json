@@ -10,7 +10,7 @@
     ],
     "website": "https://crafatar.com/",
     "env": {
-      "HEROKU": "true",
+      "EPHEMERAL_STORAGE": "true",
       "BUILDPACK_URL": "https://github.com/mojodna/heroku-buildpack-multi.git#build-env"
     },
     "addons": [
