@@ -11,9 +11,6 @@ addons:
     - libgif-dev
     - build-essential
     - g++
-before_install:
-  - mkdir -pv images/{faces,helms,skins,renders,capes}
-  - sed -i.bak 's/\/var\/lib\/crafatar\///g' config.example.js
 script:
   - npm run-script test-travis
 notifications:

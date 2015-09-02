@@ -16,11 +16,11 @@ var config = {
     amount: 50000                                 // amount of skins for which all image types are deleted
   },
   directories: {
-    faces: "/var/lib/crafatar/images/faces/",     // directory where faces are kept. must have trailing "/"
-    helms: "/var/lib/crafatar/images/helms/",     // directory where helms are kept. must have trailing "/"
-    skins: "/var/lib/crafatar/images/skins/",     // directory where skins are kept. must have trailing "/"
-    renders: "/var/lib/crafatar/images/renders/", // directory where rendered skins are kept. must have trailing "/"
-    capes: "/var/lib/crafatar/images/capes/"      // directory where capes are kept. must have trailing "/"
+    faces: "./images/faces/",                     // directory where faces are kept. must have trailing "/"
+    helms: "./images/helms/",                     // directory where helms are kept. must have trailing "/"
+    skins: "./images/skins/",                     // directory where skins are kept. must have trailing "/"
+    renders: "./images/renders/",                 // directory where rendered skins are kept. must have trailing "/"
+    capes: "./images/capes/"                      // directory where capes are kept. must have trailing "/"
   },
   caching: {
     local: 1200,                                  // seconds until we will check if user's skin changed. should be > 60 to comply with Mojang's rate limit
