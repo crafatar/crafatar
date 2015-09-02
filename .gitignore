@@ -1,4 +1,4 @@
-images/
+images/*/*.png
 node_modules/
 coverage/
 .DS_Store
