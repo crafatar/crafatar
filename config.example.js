@@ -27,7 +27,7 @@ var config = {
     browser: 3600                                 // seconds until browser will request image again
   },
   server: {
-    http_timeout: 1000,                           // ms until connection to Mojang is dropped
+    http_timeout: 2000,                           // ms until connection to Mojang is dropped
     debug_enabled: false,                         // enables logging.debug
     log_time: true                                // set to false if you use an external logger that provides timestamps
   }
