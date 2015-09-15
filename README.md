@@ -33,6 +33,10 @@ Please [visit the website](https://crafatar.com) for details.
 * Open an [issue](https://github.com/crafatar/crafatar/issues/) on GitHub
 * You can [join IRC](https://webchat.esper.net/?channels=crafatar) in #crafatar on irc.esper.net.
 
+# Installation
+
+Have a look at [crafatar/setup](https://github.com/crafatar/setup) to see how we set things up at Crafatar.
+
 ## Installation on Heroku
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
