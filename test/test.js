@@ -301,30 +301,37 @@ describe("Crafatar", function() {
     });
 
     it("should not fail on simultaneous requests", function(done) {
-      var url = "http://localhost:3000/avatars/696a82ce41f44b51aa31b8709b8686f0";
-      // 10 requests at once
-      var requests = 10;
-      var finished = 0;
-      function partDone() {
-        finished++;
-        if (requests === finished) {
-          done();
+      // do not change "constructor" !
+      // it's a reserved property name, we're testing for that
+      var sids = ["696a82ce41f44b51aa31b8709b8686f0", "constructor"];
+
+      for (var j in sids) {
+        var id = sids[j];
+        var url = "http://localhost:3000/avatars/" + id;
+        // 10 requests at once
+        var requests = 10;
+        var finished = 0;
+        function partDone() {
+          finished++;
+          if (requests === finished) {
+            done();
+          }
         }
-      }
-      function req() {
-        request.get(url, function(error, res, body) {
-          assert.ifError(error);
-          assert.strictEqual(res.statusCode, 200);
-          assert_headers(res);
-          assert(res.headers.etag);
-          assert.strictEqual(res.headers["content-type"], "image/png");
-          assert(body);
-          partDone();
-        });
-      }
-      // make simultanous requests
-      for (var j = 0; j < requests; j++) {
-        req(j);
+        function req() {
+          request.get(url, function(error, res, body) {
+            assert.ifError(error);
+            assert.strictEqual(res.statusCode, 200);
+            assert_headers(res);
+            assert(res.headers.etag);
+            assert.strictEqual(res.headers["content-type"], "image/png");
+            assert(body);
+            partDone();
+          });
+        }
+        // make simultanous requests
+        for (var k = 0; k < requests; k++) {
+          req(k);
+        }
       }
     });
 
