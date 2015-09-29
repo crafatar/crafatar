@@ -62,14 +62,14 @@ block content
                   td default
                   td string
                   td
-                    | The standard value is calculated based on the UUID (even = alex, odd = steve).<br>
-                    | Usernames always default to steve.
+                    | The standard value is calculated based on the UUID (even = MHF_Alex, odd = MHF_Steve).<br>
+                    | Usernames always default to MHF_Steve.
                   td
                     | The image to be served when the userid has no skin.<br>
-                    | Valid options are
-                    a(href="/avatars/0?default=steve")  steve
-                    | ,
-                    a(href="/avatars/0?default=alex")  alex
+                    | Valid options are any userid, including
+                    a(href="/avatars/0?default=MHF_Steve")  MHF_Steve
+                    |  and
+                    a(href="/avatars/0?default=MHF_Alex")  MHF_Alex
                     | , or a custom URL.
                 tr
                   td helm
@@ -95,8 +95,8 @@ block content
                 .example #{domain}/avatars/853c80ef3c3749fdaa49938b674adae6
                 p.preview Jeb's avatar by UUID
               #avatar-example-5.example-wrapper
-                .example #{domain}/avatars/jeb_?default=alex
-                p.preview Jeb's avatar, or fall back to alex <i>(this example assumes jeb_ does not exist)</i>
+                .example #{domain}/avatars/jeb_?default=MHF_Alex
+                p.preview Jeb's avatar, or fall back to MHF_Alex <i>(this example assumes jeb_ does not exist)</i>
               #avatar-example-6.example-wrapper
                 .example #{domain}/avatars/jeb_?default=https%3A%2F%2Fi.imgur.com%2FocJVWAc.png
                 p.preview
@@ -195,14 +195,14 @@ block content
                   td default
                   td string
                   td
-                    | The standard value is calculated based on the UUID (even = alex, odd = steve).<br>
-                    | Usernames always default to steve.
+                    | The standard value is calculated based on the UUID (even = MHF_Alex, odd = MHF_Steve).<br>
+                    | Usernames always default to MHF_Steve.
                   td
                     | The image to be served when the userid has no skin.<br>
-                    | Valid options are
-                    a(href="/skins/0?default=steve")  steve
-                    | ,
-                    a(href="/skins/0?default=alex")  alex
+                    | Valid options are any userid, including
+                    a(href="/skins/0?default=MHF_Steve")  MHF_Steve
+                    |  and
+                    a(href="/skins/0?default=MHF_Alex")  MHF_Alex
                     | , or a custom URL.
 
           section
@@ -214,8 +214,8 @@ block content
                 .example #{domain}/skins/jeb_
                 p.preview Jeb's skin
               #skin-example-2.example-wrapper
-                .example #{domain}/skins/jeb_?default=alex
-                p.preview Jeb's skin, or fall back to alex <i>(this example assumes jeb_ does not exist)</i>
+                .example #{domain}/skins/jeb_?default=MHF_Alex
+                p.preview Jeb's skin, or fall back to MHF_Alex <i>(this example assumes jeb_ does not exist)</i>
               p.preview-placeholder
                 | Hover over the example URLs above for a preview!
             .preview-background
@@ -347,7 +347,7 @@ block content
   img.preload(src="/avatars/020242a17b9441799eff511eea1221da?size=64", alt="preloaded image")
   img.preload(src="/avatars/020242a17b9441799eff511eea1221da?size=64&helm", alt="preloaded image")
   img.preload(src="/avatars/069a79f444e94726a5befca90e38aaf5?size=64", alt="preloaded image")
-  img.preload(src="/avatars/0?default=alex", alt="preloaded image")
+  img.preload(src="/avatars/0?default=MHF_Alex", alt="preloaded image")
   img.preload(src="/avatars/0?default=https%3A%2F%2Fi.imgur.com%2FocJVWAc.png", alt="preloaded image")
   img.preload(src="/avatars/0ea8eca3dbf647cc9d1ac64551ca975c?size=64", alt="preloaded image")
   img.preload(src="/avatars/0ea8eca3dbf647cc9d1ac64551ca975c?size=64&helm", alt="preloaded image")
@@ -393,5 +393,5 @@ block content
   img.preload(src="/capes/md_5", alt="preloaded image")
   img.preload(src="/renders/body/jeb_?helm&scale=4", alt="preloaded image")
   img.preload(src="/renders/head/853c80ef3c3749fdaa49938b674adae6?scale=8", alt="preloaded image")
-  img.preload(src="/skins/0?default=alex", alt="preloaded image")
+  img.preload(src="/skins/0?default=MHF_Alex", alt="preloaded image")
   img.preload(src="/skins/jeb_", alt="preloaded image")
