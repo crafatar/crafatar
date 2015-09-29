@@ -147,6 +147,19 @@ block content
                   td null
                   td
                   td Apply the "second" layer (hat) to the avatar.
+                tr
+                  td default
+                  td string
+                  td
+                    | The standard value is calculated based on the UUID (even = MHF_Alex, odd = MHF_Steve).<br>
+                    | Usernames always default to MHF_Steve.
+                  td
+                    | The image to be served when the userid has no skin.<br>
+                    | Valid options are any userid, including
+                    a(href="/renders/body/0?default=MHF_Steve")  MHF_Steve
+                    |  and
+                    a(href="/renders/body/0?default=MHF_Alex")  MHF_Alex
+                    | , or a custom URL.
 
           section
             a(id="render-examples", class="anchor")
