@@ -37,41 +37,7 @@ Please [visit the website](https://crafatar.com) for details.
 
 Have a look at [crafatar/setup](https://github.com/crafatar/setup) to see how we set things up at Crafatar.
 
-## Installation on Heroku
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-
-## Installation on Dokku
-##### [dokku server]
-Install the [dokku-redis](https://github.com/ohardy/dokku-redis#redis-plugin-for-dokku) plugin.
-```shell
-dokku redis:start
-dokku apps:create crafatar
-dokku config:set crafatar BIND=0.0.0.0 PORT=5000
-```
-For persistent images and logs:
-```shell
-dokku docker-options:add crafatar deploy "-v /var/lib/crafatar/images:/app/images"
-dokku docker-options:add crafatar deploy "-v /var/log/crafatar:/app/logs"
-```
-If you want to listen on extra domains:
-```shell
-dokku domains crafatar:add example.com
-```
-##### [your machine]
-Add dokku remote and deploy!
-```shell
-git remote add dokku dokku@example.com:crafatar
-git push dokku master
-```
-
-## Installation on your machine
-* Use io.js
-* [Install](https://github.com/Automattic/node-canvas/wiki) Cairo.
-* `npm install`
-* Start `redis-server`
-* `npm start`
-* Access [http://localhost:3000](http://localhost:3000)
-
+For more info about local setup, Heroku, or Dokku please see [Installation](https://github.com/crafatar/crafatar/wiki/Installation) on the wiki.
 
 ## Tests
 ```shell
