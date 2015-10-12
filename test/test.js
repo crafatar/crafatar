@@ -799,7 +799,7 @@ describe("Crafatar", function() {
             try {
               assert.ok(matches);
             } catch(e) {
-              throw new Error(crc(body) + " != " + location.crc32);
+              throw new Error(crc(body) + " != " + location.crc32 + " | " + body.toString("base64"));
             }
             assert.strictEqual(res.headers.location, location.redirect);
             if (location.etag === undefined) {
