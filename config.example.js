@@ -28,7 +28,7 @@ var config = {
   },
   server: {
     http_timeout: 2000,                           // ms until connection to Mojang is dropped
-    debug_enabled: false,                         // enables logging.debug
+    debug_enabled: false,                         // enables logging.debug & editing index page
     log_time: true                                // set to false if you use an external logger that provides timestamps
   }
 };
