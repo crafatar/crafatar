@@ -25,13 +25,12 @@ a.forkme {
   position: fixed;
   display: inline-block;
   background: #008000;
-  box-shadow: 0 0 5px #000;
   color: #fff;
   font-weight: bold;
-  padding: 3px 40px;
+  padding: 3px 35px;
   border: 2px solid #006400;
-  -webkit-transform: rotate(45deg) translate(65px);
-  transform: rotate(45deg) translate(65px);
+  -webkit-transform: rotate(45deg) translate(62px);
+  transform: rotate(45deg) translate(62px);
 }
 a.forkme:hover {
   color: #ddd;
@@ -40,12 +39,12 @@ a.forkme:hover {
 
 a.sponsor {
   position: fixed;
+  z-index: 1041;
+  width: 48px;
+  height: 48px;
   right: 0px;
   top: 0px;
-  height: 40px;
-  width: 40px;
-  z-index: 1041;
-  margin: 5px 10px;
+  margin: 5px;
 }
 
 .container > .navbar-header {
@@ -83,8 +82,15 @@ thead {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #333;
-  font-weight: normal;
+  font-weight: 200;
+}
+
+h1 {
+  font-size: 4rem;
+}
+
+h2 {
+  font-size: 1.3rem;
 }
 
 h3 {
@@ -210,6 +216,10 @@ img.preload {
   position: fixed;
   top: -9999px;
   left: -9999px;
+}
+
+.jumbotron {
+  padding: 1em 0 3em;
 }
 
 .jumbotron img {
