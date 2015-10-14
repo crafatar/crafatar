@@ -150,13 +150,13 @@ h4 {
 }
 
 #avatar-example-1:hover .preview {
-  background-image: url("/avatars/jeb_");
+  background-image: url("/avatars/853c80ef3c3749fdaa49938b674adae6");
 }
 #avatar-example-2:hover .preview {
-  background-image: url("/avatars/jeb_?helm");
+  background-image: url("/avatars/853c80ef3c3749fdaa49938b674adae6?helm");
 }
 #avatar-example-3:hover .preview {
-  background-image: url("/avatars/jeb_?size=128");
+  background-image: url("/avatars/853c80ef3c3749fdaa49938b674adae6?size=128");
 }
 #avatar-example-4:hover .preview {
   background-image: url("/avatars/853c80ef3c3749fdaa49938b674adae6");
@@ -169,24 +169,24 @@ h4 {
 }
 
 #render-example-1:hover .preview {
-  background-image: url("/renders/body/jeb_?helm&scale=4");
+  background-image: url("/renders/body/853c80ef3c3749fdaa49938b674adae6?helm&scale=4");
 }
 #render-example-2:hover .preview {
   background-image: url("/renders/head/853c80ef3c3749fdaa49938b674adae6?scale=8");
 }
 
 #skin-example-1:hover .preview {
-  background-image: url("/skins/jeb_");
+  background-image: url("/skins/853c80ef3c3749fdaa49938b674adae6");
 }
 #skin-example-2:hover .preview {
   background-image: url("/skins/0?default=mhf_alex");
 }
 
 #cape-example-1:hover .preview {
-  background-image: url("/capes/Dinnerbone");
+  background-image: url("/capes/61699b2ed3274a019f1e0ea8c3f06bc6");
 }
 #cape-example-2:hover .preview {
-  background-image: url("/capes/md_5");
+  background-image: url("/capes/af74a02d19cb445bb07f6866a861f783");
 }
 
 img.preload {
