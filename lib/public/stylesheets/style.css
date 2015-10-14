@@ -13,11 +13,6 @@ a {
   color: #00B7FF;
 }
 
-a.anchor {
-  position: relative;
-  top: -50px;
-}
-
 a.forkme {
   top: 0;
   right: 0;
@@ -47,22 +42,8 @@ a.sponsor {
   margin: 5px;
 }
 
-.container > .navbar-header {
-  display: inline-block;
-  margin: inherit;
-}
-
-a.navbar-brand.twitter {
-  color: #55acee;
-}
-
-a.navbar-brand.twitter:before {
-  content: "";
-  background: url("/images/twitter.png");
-  display: inline-block;
-  height: 16px;
-  width: 16px;
-  vertical-align: middle;
+.alert {
+  font-size: 1rem;
 }
 
 mark.green {
@@ -81,7 +62,7 @@ thead {
   margin-left: auto;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h6 {
   font-weight: 200;
 }
 
