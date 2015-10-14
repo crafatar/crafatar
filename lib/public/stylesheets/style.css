@@ -207,7 +207,7 @@ img.preload {
   margin: 5px;
 }
 
-.avatar-wrapper {
+#avatar-wrapper {
   height: 64px;
   overflow: hidden;
 }
