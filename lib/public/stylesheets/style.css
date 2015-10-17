@@ -145,13 +145,14 @@ code {
 #avatar-wrapper {
   height: 64px;
   overflow: hidden;
+  font-size: 0;
 }
 
 .avatar {
   width: 64px;
   height: 64px;
   display: inline-block;
-  margin-right: 0.5em;
+  margin-right: 6px;
 }
 
 .avatar.jomo {background-image: url("/avatars/ae795aa86327408e92ab25c8a59f3ba1?size=64")}
