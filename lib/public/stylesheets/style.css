@@ -116,6 +116,10 @@ h3 {
   margin-top: 2em;
 }
 
+code {
+  word-wrap: break-word;
+}
+
 .code {
   display: block;
   font-family: monospace;
