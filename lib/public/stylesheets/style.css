@@ -54,11 +54,25 @@ a.sponsor {
 }
 
 #documentation .row .col-md-2 {
-    text-align: center;
+  text-align: center;
 }
 
 #documentation .row > div {
-    padding: 15px;
+  padding: 15px;
+}
+
+#try input {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 0.3em;
+  line-height: 1.5em;
+  margin: 0px;
+}
+
+img.tryit {
+  -webkit-filter: drop-shadow(0px 0px 6px);
+  filter: drop-shadow(0px 0px 6px);
 }
 
 mark {
@@ -80,9 +94,6 @@ span[title] {
   text-decoration: underline dotted;
 }
 
-thead {
-  font-weight: bold;
-}
 
 .row {
   margin-right: auto;
