@@ -22,10 +22,10 @@ a.forkme {
   background: #008000;
   color: #fff;
   font-weight: bold;
-  padding: 3px 35px;
+  padding: 3px 100px;
   border: 2px solid #006400;
-  -webkit-transform: rotate(45deg) translate(62px);
-  transform: rotate(45deg) translate(62px);
+  -webkit-transform: rotate(45deg) translate(108px, -46px);
+  transform: rotate(45deg) translate(108px, -46px);
 }
 
 a.forkme:hover {
