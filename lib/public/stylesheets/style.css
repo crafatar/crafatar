@@ -27,6 +27,7 @@ a.forkme {
   -webkit-transform: rotate(45deg) translate(62px);
   transform: rotate(45deg) translate(62px);
 }
+
 a.forkme:hover {
   color: #ddd;
   text-decoration: none;
@@ -46,11 +47,37 @@ a.sponsor {
   font-size: 1rem;
 }
 
-mark.green {
+#documentation .row {
+  background: #eee;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+}
+
+#documentation .row .col-md-2 {
+    text-align: center;
+}
+
+#documentation .row > div {
+    padding: 15px;
+}
+
+mark {
   background: inherit;
-  color: #008000;
   font-weight: bold;
   padding: 0;
+}
+
+mark.green {
+  color: #080;
+}
+
+mark.blue {
+  color: #08f;
+}
+
+span[title] {
+  cursor: help;
+  text-decoration: underline dotted;
 }
 
 thead {
@@ -71,12 +98,9 @@ h1 {
 }
 
 h2 {
-  font-size: 1.3rem;
-}
-
-h3 {
   margin-top: 2em;
 }
+
 
 h4 {
   margin-top: 1em;
@@ -94,109 +118,6 @@ h4 {
   border-radius: 0px 4px 4px 0px;
   box-shadow: 0 0 1px inset;
   position: relative;
-}
-
-.code .example {
-  cursor: text;
-}
-
-.code .example:hover {
-  color: #000;
-  text-decoration: underline;
-}
-
-.preview-background {
-  background: #eee;
-  height: 220px;
-}
-
-.code .example-wrapper .preview, .code .preview-placeholder {
-  display: none;
-  left: 0;
-  right: 0;
-  position: absolute;
-  bottom: -260px;
-  padding-left: 10px;
-  height: 220px;
-  background-position: 10px center;
-  background-repeat: no-repeat;
-  font-size: 14px;
-  font-family: "Helvetica Neue", Arial, sans-serif;
-  font-weight: 300;
-  color: #666;
-}
-
-.code .preview-placeholder {
-  display: block;
-  font-weight: bold;
-  line-height: 200px;
-}
-
-.code .preview-placeholder:hover {
-  /* fixes glitchy blinking */
-  display: block !important;
-}
-
-.code:hover .preview-placeholder {
-  display: none;
-}
-
-.code .example-wrapper .preview i {
-  color: #aaa;
-}
-
-.code .example-wrapper:hover .preview {
-  display: block;
-}
-
-#avatar-example-1:hover .preview {
-  background-image: url("/avatars/853c80ef3c3749fdaa49938b674adae6");
-}
-#avatar-example-2:hover .preview {
-  background-image: url("/avatars/853c80ef3c3749fdaa49938b674adae6?helm");
-}
-#avatar-example-3:hover .preview {
-  background-image: url("/avatars/853c80ef3c3749fdaa49938b674adae6?size=128");
-}
-#avatar-example-4:hover .preview {
-  background-image: url("/avatars/853c80ef3c3749fdaa49938b674adae6");
-}
-#avatar-example-5:hover .preview {
-  background-image: url("/avatars/0?default=mhf_alex");
-}
-#avatar-example-6:hover .preview {
-  background-image: url("/avatars/0?default=https%3A%2F%2Fi.imgur.com%2FocJVWAc.png");
-}
-
-#render-example-1:hover .preview {
-  background-image: url("/renders/body/853c80ef3c3749fdaa49938b674adae6?helm&scale=4");
-}
-#render-example-2:hover .preview {
-  background-image: url("/renders/head/853c80ef3c3749fdaa49938b674adae6?scale=8");
-}
-
-#skin-example-1:hover .preview {
-  background-image: url("/skins/853c80ef3c3749fdaa49938b674adae6");
-}
-#skin-example-2:hover .preview {
-  background-image: url("/skins/0?default=mhf_alex");
-}
-
-#cape-example-1:hover .preview {
-  background-image: url("/capes/61699b2ed3274a019f1e0ea8c3f06bc6");
-}
-#cape-example-2:hover .preview {
-  background-image: url("/capes/af74a02d19cb445bb07f6866a861f783");
-}
-
-img.preload {
-  /*
-    preload hover images
-    browsers don't load 0x0 images
-  */
-  position: fixed;
-  top: -9999px;
-  left: -9999px;
 }
 
 .jumbotron {
