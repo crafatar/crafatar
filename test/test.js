@@ -1020,7 +1020,7 @@ describe("Crafatar", function() {
           it("uuid should be rate limited", function(done) {
             networking.get_profile(rid, id, function() {
               networking.get_profile(rid, id, function(err, profile) {
-                assert.ifError(err);
+                assert.strictEqual(err.toString(), "HTTP: 429");
                 assert.strictEqual(profile, null);
                 done();
               });
