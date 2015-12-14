@@ -1,5 +1,5 @@
 # Crafatar [![travis](https://img.shields.io/travis/crafatar/crafatar/master.svg?style=flat-square)](https://travis-ci.org/crafatar/crafatar/) [![Coverage Status](https://img.shields.io/coveralls/crafatar/crafatar.svg?style=flat-square)](https://coveralls.io/r/crafatar/crafatar) [![Code Climate](https://img.shields.io/codeclimate/github/crafatar/crafatar.svg?style=flat-square)](https://codeclimate.com/github/crafatar/crafatar)
-[![IRC: #crafatar](https://img.shields.io/badge/IRC-%23crafatar-blue.svg?style=flat-square)](https://webchat.esper.net/?channels=crafatar) [![dependency status](https://img.shields.io/david/crafatar/crafatar.svg?style=flat-square)](https://david-dm.org/crafatar/crafatar) [![devDependency status](https://img.shields.io/david/dev/crafatar/crafatar.svg?style=flat-square)](https://david-dm.org/crafatar/crafatar#info=devDependencies) [![docs status](https://inch-ci.org/github/crafatar/crafatar.svg?branch=master&style=flat-square)](https://inch-ci.org/github/crafatar/crafatar)
+[![IRC: esper.net](https://img.shields.io/badge/IRC-esper.net-blue.svg?style=flat-square)](https://webchat.esper.net/?channels=crafatar "#crafatar") [![dependency status](https://img.shields.io/david/crafatar/crafatar.svg?style=flat-square)](https://david-dm.org/crafatar/crafatar) [![devDependency status](https://img.shields.io/david/dev/crafatar/crafatar.svg?style=flat-square)](https://david-dm.org/crafatar/crafatar#info=devDependencies) [![docs status](https://inch-ci.org/github/crafatar/crafatar.svg?branch=master&style=flat-square)](https://inch-ci.org/github/crafatar/crafatar)
 
 
 <img alt="logo" src="lib/public/logo.png" align="right">
@@ -33,41 +33,11 @@ Please [visit the website](https://crafatar.com) for details.
 * Open an [issue](https://github.com/crafatar/crafatar/issues/) on GitHub
 * You can [join IRC](https://webchat.esper.net/?channels=crafatar) in #crafatar on irc.esper.net.
 
-## Installation on Heroku
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+# Installation
 
-## Installation on Dokku
-##### [dokku server]
-Install the [dokku-redis](https://github.com/ohardy/dokku-redis#redis-plugin-for-dokku) plugin.
-```shell
-dokku redis:start
-dokku apps:create crafatar
-dokku config:set crafatar BIND=0.0.0.0 PORT=5000
-```
-For persistent images and logs:
-```shell
-dokku docker-options:add crafatar deploy "-v /var/lib/crafatar/images:/app/images"
-dokku docker-options:add crafatar deploy "-v /var/log/crafatar:/app/logs"
-```
-If you want to listen on extra domains:
-```shell
-dokku domains crafatar:add example.com
-```
-##### [your machine]
-Add dokku remote and deploy!
-```shell
-git remote add dokku dokku@example.com:crafatar
-git push dokku master
-```
+Have a look at [crafatar/setup](https://github.com/crafatar/setup) to see how we set things up at Crafatar.
 
-## Installation on your machine
-* Use io.js
-* [Install](https://github.com/Automattic/node-canvas/wiki) Cairo.
-* `npm install`
-* Start `redis-server`
-* `npm start`
-* Access [http://localhost:3000](http://localhost:3000)
-
+For more info about local setup, Heroku, or Dokku please see [Installation](https://github.com/crafatar/crafatar/wiki/Installation) on the wiki.
 
 ## Tests
 ```shell

@@ -13,11 +13,6 @@ a {
   color: #00B7FF;
 }
 
-a.anchor {
-  position: relative;
-  top: -50px;
-}
-
 a.forkme {
   top: 0;
   right: 0;
@@ -25,14 +20,14 @@ a.forkme {
   position: fixed;
   display: inline-block;
   background: #008000;
-  box-shadow: 0 0 5px #000;
   color: #fff;
   font-weight: bold;
-  padding: 3px 40px;
+  padding: 3px 100px;
   border: 2px solid #006400;
-  -webkit-transform: rotate(45deg) translate(65px);
-  transform: rotate(45deg) translate(65px);
+  -webkit-transform: rotate(45deg) translate(108px, -46px);
+  transform: rotate(45deg) translate(108px, -46px);
 }
+
 a.forkme:hover {
   color: #ddd;
   text-decoration: none;
@@ -40,60 +35,89 @@ a.forkme:hover {
 
 a.sponsor {
   position: fixed;
+  z-index: 1041;
+  width: 48px;
+  height: 48px;
   right: 0px;
   top: 0px;
-  height: 40px;
-  width: 40px;
-  z-index: 1041;
-  margin: 5px 10px;
+  margin: 5px;
 }
 
-.container > .navbar-header {
-  display: inline-block;
-  margin: inherit;
+.alert {
+  font-size: 1rem;
 }
 
-a.navbar-brand.twitter {
-  color: #55acee;
-  font-size: 16px;
+#documentation .row {
+  background: #eee;
+  border-radius: 0.25rem;
 }
 
-a.navbar-brand.twitter:before {
-  content: "";
-  background: url("/images/twitter.png");
-  display: inline-block;
-  height: 16px;
-  width: 16px;
-  vertical-align: middle;
+#documentation .row .col-md-2 {
+  text-align: center;
 }
 
-mark.green {
+#documentation .row > div {
+  padding: 15px;
+}
+
+#try input {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 0.3em;
+  line-height: 1.5em;
+  margin: 0px;
+}
+
+img.tryit {
+  -webkit-filter: drop-shadow(0px 0px 6px);
+  filter: drop-shadow(0px 0px 6px);
+}
+
+mark {
   background: inherit;
-  color: #008000;
   font-weight: bold;
   padding: 0;
 }
 
-thead {
-  font-weight: bold;
+mark.green {
+  color: #080;
 }
+
+mark.blue {
+  color: #08f;
+}
+
+span[title] {
+  cursor: help;
+  text-decoration: underline dotted;
+}
+
 
 .row {
   margin-right: auto;
   margin-left: auto;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  color: #333;
-  font-weight: normal;
+h1, h2, h3, h4, h6 {
+  font-weight: 200;
 }
 
-h3 {
+h1 {
+  font-size: 4rem;
+}
+
+h2 {
   margin-top: 2em;
 }
 
-h4 {
-  margin-top: 1em;
+h3 {
+  font-size: 1.3rem;
+  margin-top: 2em;
+}
+
+code {
+  word-wrap: break-word;
 }
 
 .code {
@@ -110,184 +134,86 @@ h4 {
   position: relative;
 }
 
-.code .example {
-  cursor: text;
-}
-
-.code .example:hover {
-  color: #000;
-  text-decoration: underline;
-}
-
-.preview-background {
-  background: #eee;
-  height: 220px;
-}
-
-.code .example-wrapper .preview, .code .preview-placeholder {
-  display: none;
-  left: 0;
-  right: 0;
-  position: absolute;
-  bottom: -260px;
-  padding-left: 10px;
-  height: 220px;
-  background-position: 10px center;
-  background-repeat: no-repeat;
-  font-size: 14px;
-  font-family: "Helvetica Neue", Arial, sans-serif;
-  font-weight: 300;
-  color: #666;
-}
-
-.code .preview-placeholder {
-  display: block;
-  font-weight: bold;
-  line-height: 200px;
-}
-
-.code .preview-placeholder:hover {
-  /* fixes glitchy blinking */
-  display: block !important;
-}
-
-.code:hover .preview-placeholder {
-  display: none;
-}
-
-.code .example-wrapper .preview i {
-  color: #aaa;
-}
-
-.code .example-wrapper:hover .preview {
-  display: block;
-}
-
-#avatar-example-1:hover .preview {
-  background-image: url("/avatars/jeb_");
-}
-#avatar-example-2:hover .preview {
-  background-image: url("/avatars/jeb_?helm");
-}
-#avatar-example-3:hover .preview {
-  background-image: url("/avatars/jeb_?size=128");
-}
-#avatar-example-4:hover .preview {
-  background-image: url("/avatars/853c80ef3c3749fdaa49938b674adae6");
-}
-#avatar-example-5:hover .preview {
-  background-image: url("/avatars/0?default=alex");
-}
-#avatar-example-6:hover .preview {
-  background-image: url("/avatars/0?default=https%3A%2F%2Fi.imgur.com%2FocJVWAc.png");
-}
-
-#render-example-1:hover .preview {
-  background-image: url("/renders/body/jeb_?helm&scale=4");
-}
-#render-example-2:hover .preview {
-  background-image: url("/renders/head/853c80ef3c3749fdaa49938b674adae6?scale=8");
-}
-
-#skin-example-1:hover .preview {
-  background-image: url("/skins/jeb_");
-}
-#skin-example-2:hover .preview {
-  background-image: url("/skins/0?default=alex");
-}
-
-#cape-example-1:hover .preview {
-  background-image: url("/capes/Dinnerbone");
-}
-#cape-example-2:hover .preview {
-  background-image: url("/capes/md_5");
-}
-
-img.preload {
-  /*
-    preload hover images
-    browsers don't load 0x0 images
-  */
-  position: fixed;
-  top: -9999px;
-  left: -9999px;
+.jumbotron {
+  padding: 1em 0 3em;
 }
 
 .jumbotron img {
   margin: 5px;
 }
 
-.avatar-wrapper {
+#avatar-wrapper {
   height: 64px;
   overflow: hidden;
+  font-size: 0;
 }
 
 .avatar {
   width: 64px;
   height: 64px;
   display: inline-block;
-  margin-right: 0.5em;
+  margin-right: 6px;
 }
 
 .avatar.jomo {background-image: url("/avatars/ae795aa86327408e92ab25c8a59f3ba1?size=64")}
-.avatar.jomo:hover {background-image: url("/avatars/ae795aa86327408e92ab25c8a59f3ba1?size=64&helm")}
+.avatar.jomo:hover {background-image: url("/avatars/ae795aa86327408e92ab25c8a59f3ba1?size=64&overlay")}
 
 .avatar.jake_0 {background-image: url("/avatars/2d5aa9cdaeb049189930461fc9b91cc5?size=64")}
-.avatar.jake_0:hover {background-image: url("/avatars/2d5aa9cdaeb049189930461fc9b91cc5?size=64&helm")}
+.avatar.jake_0:hover {background-image: url("/avatars/2d5aa9cdaeb049189930461fc9b91cc5?size=64&overlay")}
 
 .avatar.sk89q {background-image: url("/avatars/0ea8eca3dbf647cc9d1ac64551ca975c?size=64")}
-.avatar.sk89q:hover {background-image: url("/avatars/0ea8eca3dbf647cc9d1ac64551ca975c?size=64&helm")}
+.avatar.sk89q:hover {background-image: url("/avatars/0ea8eca3dbf647cc9d1ac64551ca975c?size=64&overlay")}
 
 .avatar.md_5 {background-image: url("/avatars/af74a02d19cb445bb07f6866a861f783?size=64")}
-.avatar.md_5:hover {background-image: url("/avatars/af74a02d19cb445bb07f6866a861f783?size=64&helm")}
+.avatar.md_5:hover {background-image: url("/avatars/af74a02d19cb445bb07f6866a861f783?size=64&overlay")}
 
 .avatar.jeb {background-image: url("/avatars/853c80ef3c3749fdaa49938b674adae6?size=64")}
-.avatar.jeb:hover {background-image: url("/avatars/853c80ef3c3749fdaa49938b674adae6?size=64&helm")}
+.avatar.jeb:hover {background-image: url("/avatars/853c80ef3c3749fdaa49938b674adae6?size=64&overlay")}
 
 .avatar.notch {background-image: url("/avatars/069a79f444e94726a5befca90e38aaf5?size=64")}
-.avatar.notch:hover {background-image: url("/avatars/069a79f444e94726a5befca90e38aaf5?size=64&helm")}
+.avatar.notch:hover {background-image: url("/avatars/069a79f444e94726a5befca90e38aaf5?size=64&overlay")}
 
 .avatar.dinnerbone {background-image: url("/avatars/61699b2ed3274a019f1e0ea8c3f06bc6?size=64")}
-.avatar.dinnerbone:hover {background-image: url("/avatars/61699b2ed3274a019f1e0ea8c3f06bc6?size=64&helm")}
+.avatar.dinnerbone:hover {background-image: url("/avatars/61699b2ed3274a019f1e0ea8c3f06bc6?size=64&overlay")}
 
 .avatar.ez {background-image: url("/avatars/7d043c7389524696bfba571c05b6aec0?size=64")}
-.avatar.ez:hover {background-image: url("/avatars/7d043c7389524696bfba571c05b6aec0?size=64&helm")}
+.avatar.ez:hover {background-image: url("/avatars/7d043c7389524696bfba571c05b6aec0?size=64&overlay")}
 
 .avatar.grumm {background-image: url("/avatars/e6b5c088068044df9e1b9bf11792291b?size=64")}
-.avatar.grumm:hover {background-image: url("/avatars/e6b5c088068044df9e1b9bf11792291b?size=64&helm")}
+.avatar.grumm:hover {background-image: url("/avatars/e6b5c088068044df9e1b9bf11792291b?size=64&overlay")}
 
 .avatar.themogmimer {background-image: url("/avatars/1c1bd09a6a0f4928a7914102a35d2670?size=64")}
-.avatar.themogmimer:hover {background-image: url("/avatars/1c1bd09a6a0f4928a7914102a35d2670?size=64&helm")}
+.avatar.themogmimer:hover {background-image: url("/avatars/1c1bd09a6a0f4928a7914102a35d2670?size=64&overlay")}
 
 .avatar.marc {background-image: url("/avatars/b05881186e75410db2db4d3066b223f7?size=64")}
-.avatar.marc:hover {background-image: url("/avatars/b05881186e75410db2db4d3066b223f7?size=64&helm")}
+.avatar.marc:hover {background-image: url("/avatars/b05881186e75410db2db4d3066b223f7?size=64&overlay")}
 
 .avatar.searge {background-image: url("/avatars/696a82ce41f44b51aa31b8709b8686f0?size=64")}
-.avatar.searge:hover {background-image: url("/avatars/696a82ce41f44b51aa31b8709b8686f0?size=64&helm")}
+.avatar.searge:hover {background-image: url("/avatars/696a82ce41f44b51aa31b8709b8686f0?size=64&overlay")}
 
 .avatar.xlson {background-image: url("/avatars/b9583ca43e64488a9c8c4ab27e482255?size=64")}
-.avatar.xlson:hover {background-image: url("/avatars/b9583ca43e64488a9c8c4ab27e482255?size=64&helm")}
+.avatar.xlson:hover {background-image: url("/avatars/b9583ca43e64488a9c8c4ab27e482255?size=64&overlay")}
 
 .avatar.minecraftchick {background-image: url("/avatars/c9b54008fd8047428b238787b5f2401c?size=64")}
-.avatar.minecraftchick:hover {background-image: url("/avatars/c9b54008fd8047428b238787b5f2401c?size=64&helm")}
+.avatar.minecraftchick:hover {background-image: url("/avatars/c9b54008fd8047428b238787b5f2401c?size=64&overlay")}
 
 .avatar.kappe {background-image: url("/avatars/d8f9a4340f2d415f9acfcd70341c75ec?size=64")}
-.avatar.kappe:hover {background-image: url("/avatars/d8f9a4340f2d415f9acfcd70341c75ec?size=64&helm")}
+.avatar.kappe:hover {background-image: url("/avatars/d8f9a4340f2d415f9acfcd70341c75ec?size=64&overlay")}
 
 .avatar.krisjelbring {background-image: url("/avatars/7125ba8b1c864508b92bb5c042ccfe2b?size=64")}
-.avatar.krisjelbring:hover {background-image: url("/avatars/7125ba8b1c864508b92bb5c042ccfe2b?size=64&helm")}
+.avatar.krisjelbring:hover {background-image: url("/avatars/7125ba8b1c864508b92bb5c042ccfe2b?size=64&overlay")}
 
 .avatar.thinkofdeath {background-image: url("/avatars/4566e69fc90748ee8d71d7ba5aa00d20?size=64")}
-.avatar.thinkofdeath:hover {background-image: url("/avatars/4566e69fc90748ee8d71d7ba5aa00d20?size=64&helm")}
+.avatar.thinkofdeath:hover {background-image: url("/avatars/4566e69fc90748ee8d71d7ba5aa00d20?size=64&overlay")}
 
 .avatar.evilseph {background-image: url("/avatars/020242a17b9441799eff511eea1221da?size=64")}
-.avatar.evilseph:hover {background-image: url("/avatars/020242a17b9441799eff511eea1221da?size=64&helm")}
+.avatar.evilseph:hover {background-image: url("/avatars/020242a17b9441799eff511eea1221da?size=64&overlay")}
 
 .avatar.mollstam {background-image: url("/avatars/9769ecf6331448f3ace67ae06cec64a3?size=64")}
-.avatar.mollstam:hover {background-image: url("/avatars/9769ecf6331448f3ace67ae06cec64a3?size=64&helm")}
+.avatar.mollstam:hover {background-image: url("/avatars/9769ecf6331448f3ace67ae06cec64a3?size=64&overlay")}
 
 .avatar.mollstam {background-image: url("/avatars/f8cdb6839e9043eea81939f85d9c5d69?size=64")}
-.avatar.mollstam:hover {background-image: url("/avatars/f8cdb6839e9043eea81939f85d9c5d69?size=64&helm")}
+.avatar.mollstam:hover {background-image: url("/avatars/f8cdb6839e9043eea81939f85d9c5d69?size=64&overlay")}
 
 .avatar.flipped {
   -webkit-transform: rotate(180deg);

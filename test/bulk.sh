@@ -25,9 +25,9 @@ bulk() {
   trap return INT
   echo "$ids" | while read id; do
     if [ -z "$async" ]; then
-      curl -sSL -o /dev/null -w "%{url_effective} %{http_code} %{time_total}s\\n" -- "$host/avatars/$id?helm"
+      curl -sSL -o /dev/null -w "%{url_effective} %{http_code} %{time_total}s\\n" -- "$host/avatars/$id?overlay"
     else
-      curl -sSL -o /dev/null -w "%{url_effective} %{http_code} %{time_total}s\\n" -- "$host/avatars/$id?helm" &
+      curl -sSL -o /dev/null -w "%{url_effective} %{http_code} %{time_total}s\\n" -- "$host/avatars/$id?overlay" &
       sleep "$interval"
     fi
   done

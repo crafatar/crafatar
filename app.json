@@ -1,6 +1,6 @@
 {
     "name": "Crafatar",
-    "description": "A Minecraft Avatar API written in NodeJS",
+    "description": "A blazing fast API for Minecraft faces!",
     "repository": "https://github.com/crafatar/crafatar",
     "keywords": [
         "node",
@@ -10,10 +10,21 @@
     ],
     "website": "https://crafatar.com/",
     "env": {
-      "HEROKU": "true",
-      "BUILDPACK_URL": "https://github.com/mojodna/heroku-buildpack-multi.git#build-env"
+        "EPHEMERAL_STORAGE": {
+            "description": "Set to true if your storage is gone after deploying",
+            "required": false,
+            "value": true
+        }
     },
     "addons": [
         "rediscloud"
+    ],
+    "buildpacks": [
+        {
+            "url": "https://github.com/mojodna/heroku-buildpack-cairo.git"
+        },
+        {
+            "url": "https://github.com/heroku/heroku-buildpack-nodejs.git"
+        }
     ]
 }

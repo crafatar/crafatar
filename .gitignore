@@ -1,8 +1,8 @@
 images/*/*.png
-*.log
 node_modules/
-.DS_Store
-*.rdb
 coverage/
-config.js
+.DS_Store
+*.log
+*.rdb
 *.sublime-*
+config.js
