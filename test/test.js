@@ -610,7 +610,7 @@ describe("Crafatar", function() {
       "head render with existing uuid": {
         url: "http://localhost:3000/renders/head/853c80ef3c3749fdaa49938b674adae6?scale=2",
         etag: '"a846b82963"',
-        crc32: [3487896679]
+        crc32: [3487896679, 3001090792]
       },
       "head render with non-existent uuid": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2",
@@ -640,7 +640,7 @@ describe("Crafatar", function() {
       "overlay head render with existing uuid": {
         url: "http://localhost:3000/renders/head/853c80ef3c3749fdaa49938b674adae6?scale=2&overlay",
         etag: '"a846b82963"',
-        crc32: [762377383]
+        crc32: [762377383, 1726474987]
       },
       "overlay head render with non-existent uuid": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&overlay",
@@ -730,7 +730,7 @@ describe("Crafatar", function() {
       "body render with existing uuid": {
         url: "http://localhost:3000/renders/body/853c80ef3c3749fdaa49938b674adae6?scale=2",
         etag: '"a846b82963"',
-        crc32: [3127075871]
+        crc32: [3127075871, 2595192206]
       },
       "body render with non-existent uuid": {
         url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2",
@@ -760,7 +760,7 @@ describe("Crafatar", function() {
       "overlay body render with existing uuid": {
         url: "http://localhost:3000/renders/body/853c80ef3c3749fdaa49938b674adae6?scale=2&overlay",
         etag: '"a846b82963"',
-        crc32: [699892097]
+        crc32: [699892097, 2732138694]
       },
       "overlay body render with non-existent uuid": {
         url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&overlay",
