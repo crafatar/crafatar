@@ -17,7 +17,7 @@ var fs = require("fs");
 config.server.http_timeout *= 3;
 
 // no spam
-if (process.env.VERBOSE_TEST !== "true") {
+if (process.env.VERBOSE_TEST !== "true" && process.env.TRAVIS !== "true") {
   logging.log = logging.debug = logging.warn = logging.error = function() {};
 }
 
