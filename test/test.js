@@ -775,6 +775,22 @@ describe("Crafatar", function() {
       }(loc));
     }
 
+    it("should update the username skin type on uuid request", function(done) {
+      /*eslint-disable handle-callback-err */
+      request.get("http://localhost:3000/renders/body/mhf_alex", function(error, res, body) {
+        cache.get_details("mhf_alex", function(err, details) {
+          assert.strictEqual(details.slim, false);
+          request.get("http://localhost:3000/renders/body/6ab4317889fd490597f60f67d9d76fd9", function(uerror, ures, ubody) {
+            cache.get_details("mhf_alex", function(cerr, cdetails) {
+              /*eslint-enable handle-callback-err */
+              assert.strictEqual(cdetails.slim, true);
+              done();
+            });
+          });
+        });
+      });
+    });
+
     it("should return a 422 (invalid size)", function(done) {
       var size = config.avatars.max_size + 1;
       request.get("http://localhost:3000/avatars/Jake_0?size=" + size, function(error, res, body) {
