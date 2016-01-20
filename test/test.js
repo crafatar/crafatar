@@ -791,6 +791,18 @@ describe("Crafatar", function() {
       });
     });
 
+    it("should return 304 on server error", function(done) {
+      var original_timeout = config.server.http_timeout;
+      config.server.http_timeout = 1;
+      request.get({url: "http://localhost:3000/avatars/whatever", headers: {"If-None-Match": '"some-etag"'}}, function(error, res, body) {
+        assert.ifError(error);
+        assert.ifError(body);
+        assert.strictEqual(res.statusCode, 304);
+        config.server.http_timeout = original_timeout;
+        done();
+      });
+    });
+
     it("should return a 422 (invalid size)", function(done) {
       var size = config.avatars.max_size + 1;
       request.get("http://localhost:3000/avatars/Jake_0?size=" + size, function(error, res, body) {
