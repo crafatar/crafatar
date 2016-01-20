@@ -340,7 +340,7 @@ describe("Crafatar", function() {
     var server_tests = {
       "avatar with existing username": {
         url: "http://localhost:3000/avatars/jeb_?size=16",
-        crc32: [1623808067]
+        crc32: [3337292777]
       },
       "avatar with non-existent username": {
         url: "http://localhost:3000/avatars/0?size=16",
@@ -367,7 +367,7 @@ describe("Crafatar", function() {
       },
       "overlay avatar with existing username": {
         url: "http://localhost:3000/avatars/jeb_?size=16&overlay",
-        crc32: [646871998]
+        crc32: [1710265722]
       },
       "overlay avatar with non-existent username": {
         url: "http://localhost:3000/avatars/0?size=16&overlay",
@@ -394,7 +394,7 @@ describe("Crafatar", function() {
       },
       "avatar with existing uuid": {
         url: "http://localhost:3000/avatars/853c80ef3c3749fdaa49938b674adae6?size=16",
-        crc32: [1623808067]
+        crc32: [3337292777]
       },
       "avatar with non-existent uuid": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16",
@@ -421,7 +421,7 @@ describe("Crafatar", function() {
       },
       "overlay avatar with existing uuid": {
         url: "http://localhost:3000/avatars/853c80ef3c3749fdaa49938b674adae6?size=16&overlay",
-        crc32: [646871998]
+        crc32: [1710265722]
       },
       "overlay avatar with non-existent uuid": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&overlay",
