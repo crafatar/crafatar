@@ -31,7 +31,7 @@
     "test-travis": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "engines": {
-    "iojs": "2.0.x"
+    "node": "4.2.4"
   },
   "dependencies": {
     "canvas": "^1.3.7",
