@@ -6,7 +6,7 @@
 [Crafatar](https://crafatar.com) serves Minecraft avatars based on the skin for use in external applications.
 Inspired by [Gravatar](https://gravatar.com) (hence the name) and [Minotar](https://minotar.net).
 
-Image manipulation is done by [lwip](https://github.com/EyalAr/lwip). 3D renders are created with [node-canvas](https://github.com/Automattic/node-canvas), based on math by [confuser](https://github.com/confuser/serverless-mc-skin-viewer).
+Image manipulation is done by [lwip](https://github.com/EyalAr/lwip). 3D renders are created with [node-canvas](https://github.com/Automattic/node-canvas) / [cairo](http://cairographics.org/).
 
 # Contributions welcome!
 
