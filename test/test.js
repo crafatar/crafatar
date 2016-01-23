@@ -222,7 +222,7 @@ describe("Crafatar", function() {
       assert("" + res.headers["response-time"]);
       assert(res.headers["x-request-id"]);
       assert.equal(res.headers["access-control-allow-origin"], "*");
-      assert.equal(res.headers["cache-control"], "max-age=" + config.caching.browser + ", public");
+      assert.equal(res.headers["cache-control"], "max-age=" + config.caching.browser);
     }
 
     // throws Exception when +url+ is requested with +etag+
