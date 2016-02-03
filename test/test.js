@@ -293,7 +293,7 @@ describe("Crafatar", function() {
       var url = "http://localhost:3000/%61%76%61%74%61%72%73/%6a%6f%6d%6f"; // avatars/jomo
       request.get(url, function(error, res, body) {
         assert.ifError(error);
-        assert.strictEqual(res.statusCode, 200);
+        assert.strictEqual(res.statusCode, 201);
         assert_headers(res);
         assert(res.headers.etag);
         assert.strictEqual(res.headers["content-type"], "image/png");
@@ -322,7 +322,7 @@ describe("Crafatar", function() {
         function req() {
           request.get(url, function(error, res, body) {
             assert.ifError(error);
-            assert.strictEqual(res.statusCode, 200);
+            assert.strictEqual(res.statusCode === 201 || res.statusCode === 200, true);
             assert_headers(res);
             assert(res.headers.etag);
             assert.strictEqual(res.headers["content-type"], "image/png");
@@ -763,7 +763,7 @@ describe("Crafatar", function() {
               done();
             } else {
               assert.strictEqual(res.headers["content-type"], "image/png");
-              assert.strictEqual(res.statusCode, 200);
+              assert.strictEqual(res.statusCode, res.headers["x-storage-type"] === "downloaded" ? 201 : 200);
               assert(res.headers.etag);
               assert.strictEqual(res.headers.etag, '"' + hash + '"');
               assert_cache(location.url, res.headers.etag, function() {
