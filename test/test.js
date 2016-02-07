@@ -448,7 +448,7 @@ describe("Crafatar", function() {
       },
       "cape with existing username": {
         url: "http://localhost:3000/capes/jeb_",
-        crc32: [989800403, 1901140141]
+        crc32: [2556702429]
       },
       "cape with non-existent username": {
         url: "http://localhost:3000/capes/0",
@@ -461,7 +461,7 @@ describe("Crafatar", function() {
       },
       "cape with existing uuid": {
         url: "http://localhost:3000/capes/853c80ef3c3749fdaa49938b674adae6",
-        crc32: [989800403, 1901140141]
+        crc32: [2556702429]
       },
       "cape with non-existent uuid": {
         url: "http://localhost:3000/capes/00000000000000000000000000000000",
