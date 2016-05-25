@@ -27,6 +27,7 @@
   "scripts": {
     "postinstall": "cp 'config.example.js' 'config.js'",
     "start": "node www.js",
+    "dev": "nodemon www.js",
     "test": "mocha",
     "test-travis": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
@@ -37,12 +38,17 @@
     "canvas": "^1.3.10",
     "crc": "~3.4.0",
     "ejs": "^2.3.4",
+    "koa": "^1.2.0",
+    "koa-logger": "^1.3.0",
+    "koa-router": "^5.4.0",
+    "koa-static-server": "^0.1.8",
+    "koa-toobusy": "^1.0.1",
     "lwip": "~0.0.8",
     "mime": "~1.3.4",
     "node-df": "crafatar/node-df",
+    "promisify-node": "^0.4.0",
     "redis": "~2.5.2",
-    "request": "~2.69.0",
-    "toobusy-js": "~0.4.2"
+    "request": "~2.69.0"
   },
   "devDependencies": {
     "coveralls": "~2.11.6",
