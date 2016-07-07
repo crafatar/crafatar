@@ -42,7 +42,7 @@
     "node-df": "crafatar/node-df",
     "redis": "~2.5.2",
     "request": "~2.69.0",
-    "toobusy-js": "~0.4.2"
+    "toobusy-js": "~0.5.1"
   },
   "devDependencies": {
     "coveralls": "~2.11.6",
