@@ -82,43 +82,43 @@ describe("Crafatar", function() {
 
   describe("UUID/username", function() {
     it("non-hex uuid is invalid", function(done) {
-      assert.strictEqual(helpers.id_valid("g098cb60fa8e427cb299793cbd302c9a"), false);
+      assert.throws(helpers.validateUserId.bind(helpers, "g098cb60fa8e427cb299793cbd302c9a"));
       done();
     });
     it("empty id is invalid", function(done) {
-      assert.strictEqual(helpers.id_valid(""), false);
+      assert.throws(helpers.validateUserId.bind(helpers, ""));
       done();
     });
     it("non-alphanumeric username is invalid", function(done) {
-      assert.strictEqual(helpers.id_valid("usernäme"), false);
+      assert.throws(helpers.validateUserId.bind(helpers, "usernäme"));
       done();
     });
     it("dashed username is invalid", function(done) {
-      assert.strictEqual(helpers.id_valid("user-name"), false);
+      assert.throws(helpers.validateUserId.bind(helpers, "user-name"));
       done();
     });
     it(">16 length username is invalid", function(done) {
-      assert.strictEqual(helpers.id_valid("ThisNameIsTooLong"), false);
+      assert.throws(helpers.validateUserId.bind(helpers, "ThisNameIsTooLong"));
       done();
     });
     it("lowercase uuid is valid", function(done) {
-      assert.strictEqual(helpers.id_valid("0098cb60fa8e427cb299793cbd302c9a"), true);
+      assert.strictEqual(helpers.validateUserId("0098cb60fa8e427cb299793cbd302c9a"), "0098cb60fa8e427cb299793cbd302c9a");
       done();
     });
     it("uppercase uuid is valid", function(done) {
-      assert.strictEqual(helpers.id_valid("1DCEF164FF0A47F2B9A691385C774EE7"), true);
+      assert.strictEqual(helpers.validateUserId("1DCEF164FF0A47F2B9A691385C774EE7"), "1DCEF164FF0A47F2B9A691385C774EE7");
       done();
     });
     it("dashed uuid is valid", function(done) {
-      assert.strictEqual(helpers.id_valid("0098cb60-fa8e-427c-b299-793cbd302c9a"), true);
+      assert.strictEqual(helpers.validateUserId("0098cb60-fa8e-427c-b299-793cbd302c9a"), "0098cb60fa8e427cb299793cbd302c9a");
       done();
     });
     it("16 chars, underscored, capital, numbered username is valid", function(done) {
-      assert.strictEqual(helpers.id_valid("__niceUs3rname__"), true);
+      assert.strictEqual(helpers.validateUserId("__niceUs3rname__"), "__niceUs3rname__");
       done();
     });
     it("1 char username is valid", function(done) {
-      assert.strictEqual(helpers.id_valid("a"), true);
+      assert.strictEqual(helpers.validateUserId("a"), "a");
       done();
     });
     it("should not exist (uuid)", function(done) {
