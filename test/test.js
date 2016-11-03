@@ -72,12 +72,16 @@ describe("Crafatar", function() {
   // we might have to make 2 HTTP requests
   this.timeout(config.server.http_timeout * 2 + 50);
 
-  before(function() {
-    cache.get_redis().flushall();
-    // cause I don't know how big hard drives are these days
-    config.cleaner.disk_limit = Infinity;
-    config.cleaner.redis_limit = Infinity;
-    cleaner.run();
+  before(function(done) {
+    console.log("Flushing and waiting for redis ...");
+    cache.get_redis().flushall(function() {
+      console.log("Redis flushed!");
+      // cause I don't know how big hard drives are these days
+      config.cleaner.disk_limit = Infinity;
+      config.cleaner.redis_limit = Infinity;
+      cleaner.run();
+      done();
+    });
   });
 
   describe("UUID/username", function() {
