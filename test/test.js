@@ -81,6 +81,10 @@ describe("Crafatar", function() {
   });
 
   describe("UUID/username", function() {
+    it("empty username is invalid", function(done) {
+      assert.strictEqual(helpers.id_valid(""), false);
+      done();
+    });
     it("non-hex uuid is invalid", function(done) {
       assert.strictEqual(helpers.id_valid("g098cb60fa8e427cb299793cbd302c9a"), false);
       done();
