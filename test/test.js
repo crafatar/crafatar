@@ -933,84 +933,92 @@ describe("Crafatar", function() {
     var iid = ids[i];
     var iid_type = iid.length > 16 ? "uuid" : "name";
     // needs an anonymous function because id and id_type aren't constant
-    (function(id, id_type) {
-      describe("Networking: Avatar", function() {
-        before(function() {
-          cache.get_redis().flushall();
-          console.log("\n\nRunning tests with " + id_type + " '" + id + "'\n\n");
-        });
-
-        it("should be downloaded", function(done) {
-          helpers.get_avatar(rid(), id, false, 160, function(err, status, image) {
-            assert.ifError(err);
-            assert.strictEqual(status, 2);
-            done();
+    (function(n, id, id_type) {
+      // Mojang's UUID rate limiting is case-insensitive
+      // so we don't run UUID tests twice
+      if(n < 3) {
+        describe("Networking: Avatar", function() {
+          before(function() {
+            cache.get_redis().flushall();
+            console.log("\n\nRunning tests with " + id_type + " '" + id + "'\n\n");
           });
-        });
-        it("should be cached", function(done) {
-          helpers.get_avatar(rid(), id, false, 160, function(err, status, image) {
-            assert.ifError(err);
-            assert.strictEqual(status === 0 || status === 1, true);
-            done();
-          });
-        });
-        if (id.length > 16) {
-          // can't run 'checked' test due to Mojang's rate limits :(
-        } else {
-          it("should be checked", function(done) {
-            var original_cache_time = config.caching.local;
-            config.caching.local = 0;
+          it("should be downloaded", function(done) {
             helpers.get_avatar(rid(), id, false, 160, function(err, status, image) {
               assert.ifError(err);
-              assert.strictEqual(status, 3);
-              config.caching.local = original_cache_time;
+              assert.strictEqual(status, 2);
               done();
             });
           });
-        }
-      });
+          it("should be cached", function(done) {
+            helpers.get_avatar(rid(), id, false, 160, function(err, status, image) {
+              assert.ifError(err);
+              assert.strictEqual(status === 0 || status === 1, true);
+              done();
+            });
+          });
+          if (id.length > 16) {
+            // can't run 'checked' test due to Mojang's rate limits :(
+          } else {
+            it("should be checked", function(done) {
+              var original_cache_time = config.caching.local;
+              config.caching.local = 0;
+              helpers.get_avatar(rid(), id, false, 160, function(err, status, image) {
+                assert.ifError(err);
+                assert.strictEqual(status, 3);
+                config.caching.local = original_cache_time;
+                done();
+              });
+            });
+          }
+        });
 
-      describe("Networking: Skin", function() {
-        it("should not fail (uuid)", function(done) {
-          helpers.get_skin(rid(), id, function(err, hash, status, img) {
-            assert.strictEqual(err, null);
-            done();
+        describe("Networking: Skin", function() {
+          it("should not fail (uuid)", function(done) {
+            helpers.get_skin(rid(), id, function(err, hash, status, img) {
+              assert.strictEqual(err, null);
+              done();
+            });
           });
         });
-      });
 
-      describe("Networking: Render", function() {
-        it("should not fail (full body)", function(done) {
-          helpers.get_render(rid(), id, 6, true, true, function(err, hash, img) {
-            assert.ifError(err);
-            done();
+        describe("Networking: Render", function() {
+          it("should not fail (full body)", function(done) {
+            helpers.get_render(rid(), id, 6, true, true, function(err, hash, img) {
+              assert.ifError(err);
+              done();
+            });
+          });
+          it("should not fail (only head)", function(done) {
+            helpers.get_render(rid(), id, 6, true, false, function(err, hash, img) {
+              assert.ifError(err);
+              done();
+            });
           });
         });
-        it("should not fail (only head)", function(done) {
-          helpers.get_render(rid(), id, 6, true, false, function(err, hash, img) {
-            assert.ifError(err);
-            done();
-          });
-        });
-      });
 
-      describe("Networking: Cape", function() {
-        it("should not fail (possible cape)", function(done) {
-          helpers.get_cape(rid(), id, function(err, hash, status, img) {
-            assert.ifError(err);
-            done();
+        describe("Networking: Cape", function() {
+          it("should not fail (possible cape)", function(done) {
+            helpers.get_cape(rid(), id, function(err, hash, status, img) {
+              assert.ifError(err);
+              done();
+            });
           });
         });
-      });
+      }
 
 
       describe("Errors", function() {
         before(function() {
+          if(n >= 3) {
+            // Notice for tests skipped above
+            console.log("\n\nSkipping tests with " + id_type + " '" + id + "' due to case-insensitive rate-limiting\n\n");
+          }
           cache.get_redis().flushall();
         });
 
         if (id_type === "uuid") {
-          it("uuid should be rate limited", function(done) {
+          // just making sure ...
+          it("uuid SHOULD be rate limited", function(done) {
             networking.get_profile(rid(), id, function() {
               networking.get_profile(rid(), id, function(err, profile) {
                 assert.strictEqual(err.toString(), "HTTP: 429");
@@ -1030,6 +1038,6 @@ describe("Crafatar", function() {
           });
         }
       });
-    }(iid, iid_type));
+    }(i, iid, iid_type));
   }
 });
