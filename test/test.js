@@ -1,8 +1,14 @@
 /* globals describe, it, before, after */
 /* eslint no-loop-func:0 guard-for-in:0 */
+
+// no spam
+var logging = require("../lib/logging");
+if (process.env.VERBOSE_TEST !== "true" && process.env.TRAVIS !== "true") {
+  logging.log = logging.debug = logging.warn = logging.error = function() {};
+}
+
 var networking = require("../lib/networking");
 var helpers = require("../lib/helpers");
-var logging = require("../lib/logging");
 var cleaner = require("../lib/cleaner");
 var request = require("request");
 var config = require("../config");
@@ -15,11 +21,6 @@ var fs = require("fs");
 
 // we don't want tests to fail because of slow internet
 config.server.http_timeout *= 3;
-
-// no spam
-if (process.env.VERBOSE_TEST !== "true" && process.env.TRAVIS !== "true") {
-  logging.log = logging.debug = logging.warn = logging.error = function() {};
-}
 
 var uuids = fs.readFileSync("test/uuids.txt").toString().split(/\r?\n/);
 var names = fs.readFileSync("test/usernames.txt").toString().split(/\r?\n/);
@@ -954,7 +955,7 @@ describe("Crafatar", function() {
           });
         });
         if (id.length > 16) {
-          console.log("can't run 'checked' test due to Mojang's rate limits :(");
+          // can't run 'checked' test due to Mojang's rate limits :(
         } else {
           it("should be checked", function(done) {
             var original_cache_time = config.caching.local;
