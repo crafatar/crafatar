@@ -185,7 +185,7 @@ describe("Crafatar", function() {
       var original_timeout = config.server.http_timeout;
       config.server.http_timeout = 1;
       networking.get_profile(rid(), "069a79f444e94726a5befca90e38aaf5", function(err, profile) {
-        assert.strictEqual(err.code, "ETIMEDOUT");
+        assert.notStrictEqual(["ETIMEDOUT", "ESOCKETTIMEDOUT"].indexOf(err.code), -1);
         config.server.http_timeout = original_timeout;
         done();
       });
@@ -194,7 +194,7 @@ describe("Crafatar", function() {
       var original_timeout = config.server.http_timeout;
       config.server.http_timeout = 1;
       networking.get_username_url(rid(), "jomo", 0, function(err, url) {
-        assert.strictEqual(err.code, "ETIMEDOUT");
+        assert.notStrictEqual(["ETIMEDOUT", "ESOCKETTIMEDOUT"].indexOf(err.code), -1);
         config.server.http_timeout = original_timeout;
         done();
       });
@@ -203,7 +203,7 @@ describe("Crafatar", function() {
       var original_timeout = config.http_timeout;
       config.server.http_timeout = 1;
       networking.get_from(rid(), "http://textures.minecraft.net/texture/477be35554684c28bdeee4cf11c591d3c88afb77e0b98da893fd7bc318c65184", function(body, res, error) {
-        assert.strictEqual(error.code, "ETIMEDOUT");
+        assert.notStrictEqual(["ETIMEDOUT", "ESOCKETTIMEDOUT"].indexOf(error.code), -1);
         config.server.http_timeout = original_timeout;
         done();
       });
