@@ -801,12 +801,15 @@ describe("Crafatar", function() {
     });
 
     it("should return 304 on server error", function(done) {
+      var original_debug = config.server.debug_enabled;
       var original_timeout = config.server.http_timeout;
+      config.server.debug_enabled = false;
       config.server.http_timeout = 1;
       request.get({url: "http://localhost:3000/avatars/whatever", headers: {"If-None-Match": '"some-etag"'}}, function(error, res, body) {
         assert.ifError(error);
         assert.ifError(body);
         assert.strictEqual(res.statusCode, 304);
+        config.server.debug_enabled = original_debug;
         config.server.http_timeout = original_timeout;
         done();
       });
