@@ -6,3 +6,4 @@ coverage/
 *.rdb
 *.sublime-*
 config.js
+lib/public/images/sponsor.png

@@ -30,7 +30,11 @@ var config = {
     http_timeout: 2000,                           // ms until connection to Mojang is dropped
     debug_enabled: false,                         // enables logging.debug & editing index page
     log_time: true                                // set to false if you use an external logger that provides timestamps
-  }
+  },
+  sponsor: {
+    sidebar: '<hr><div class="list-group"><a class="list-group-item sponsor-item" href="https://akliz.net/crafatar" target="_blank" title="Applies to all modpacks and plans for the first billing cycle only.">Save 20% on a Minecraft server with Akliz.</a></div>',
+    top_right: '<a href="https://akliz.net/crafatar" target="_blank" title="Crafatar is sponsored by Akliz" class="sponsor"><img src="/images/sponsor.png" alt="Akliz"></a>'
+  },
 };
 
 module.exports = config;

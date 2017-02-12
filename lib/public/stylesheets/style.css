@@ -43,6 +43,17 @@ a.sponsor {
   margin: 5px;
 }
 
+a.sponsor-item {
+  color: #aa7100 !important;
+  font-weight: initial;
+  background: #fff3de;
+  border-color: #fcd794;
+}
+
+.sponsor-item:hover {
+  background: #fff8ec !important;
+}
+
 .alert {
   font-size: 1rem;
 }
