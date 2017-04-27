@@ -45,7 +45,7 @@
     "toobusy-js": "~0.5.1"
   },
   "devDependencies": {
-    "coveralls": "~2.11.14",
+    "coveralls": "~2.13.1",
     "istanbul": "~0.4.5",
     "mocha": "~3.1.2",
     "mocha-lcov-reporter": "~1.2.0"
