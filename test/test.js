@@ -456,7 +456,7 @@ describe("Crafatar", function() {
         redirect: "http://example.com/CaseSensitive",
       },
       "cape with existing username": {
-        url: "http://localhost:3000/capes/jeb_",
+        url: "http://localhost:3000/capes/notch",
         crc32: [2556702429],
       },
       "cape with non-existent username": {
@@ -469,7 +469,7 @@ describe("Crafatar", function() {
         redirect: "http://example.com/CaseSensitive",
       },
       "cape with existing uuid": {
-        url: "http://localhost:3000/capes/853c80ef3c3749fdaa49938b674adae6",
+        url: "http://localhost:3000/capes/069a79f444e94726a5befca90e38aaf5",
         crc32: [2556702429],
       },
       "cape with non-existent uuid": {
