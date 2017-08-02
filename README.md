@@ -3,8 +3,8 @@
 
 
 <img alt="logo" src="lib/public/logo.png" align="right">
-[Crafatar](https://crafatar.com) serves Minecraft avatars based on the skin for use in external applications.
-Inspired by [Gravatar](https://gravatar.com) (hence the name) and [Minotar](https://minotar.net).
+<a href="https://crafatar.com">Crafatar</a> serves Minecraft avatars based on the skin for use in external applications.
+Inspired by <a href="https://gravatar.com">Gravatar</a> (hence the name) and <a href="https://minotar.net">Minotar</a>.
 
 Image manipulation is done by [lwip](https://github.com/EyalAr/lwip). 3D renders are created with [node-canvas](https://github.com/Automattic/node-canvas) / [cairo](http://cairographics.org/).
 
