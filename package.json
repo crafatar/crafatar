@@ -34,7 +34,7 @@
     "node": "6.11.1"
   },
   "dependencies": {
-    "canvas": "^1.6.2",
+    "canvas": "^1.6.4",
     "crc": "~3.4.1",
     "ejs": "^2.5.2",
     "pajk-lwip": "0.2.0",
