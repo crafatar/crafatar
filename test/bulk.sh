@@ -17,7 +17,7 @@ if [ -z "$host" ] || [ ! -z "$@" ]; then
 fi
 
 # insert newline after uuids
-ids="$(echo | cat 'uuids.txt' - 'usernames.txt')"
+ids="$(cat 'uuids.txt')"
 # `brew install coreutils` on OS X
 ids="$(shuf <<< "$ids" 2>/dev/null || gshuf <<< "$ids")"
 

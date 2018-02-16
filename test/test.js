@@ -23,11 +23,9 @@ var fs = require("fs");
 config.server.http_timeout *= 3;
 
 var uuids = fs.readFileSync("test/uuids.txt").toString().split(/\r?\n/);
-var names = fs.readFileSync("test/usernames.txt").toString().split(/\r?\n/);
 
-// Get a random UUID + name in order to prevent rate limiting
+// Get a random UUIDto prevent rate limiting
 var uuid = uuids[Math.round(Math.random() * (uuids.length - 1))];
-var name = names[Math.round(Math.random() * (names.length - 1))];
 
 
 // Let's hope these will never be assigned
@@ -62,13 +60,6 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-var ids = [
-  uuid.toLowerCase(),
-  name.toLowerCase(),
-  name.toUpperCase(),
-  uuid.toUpperCase(),
-];
-
 describe("Crafatar", function() {
   // we might have to make 2 HTTP requests
   this.timeout(config.server.http_timeout * 2 + 50);
@@ -86,28 +77,12 @@ describe("Crafatar", function() {
   });
 
   describe("UUID/username", function() {
-    it("empty username is invalid", function(done) {
-      assert.strictEqual(helpers.id_valid(""), false);
-      done();
-    });
     it("non-hex uuid is invalid", function(done) {
       assert.strictEqual(helpers.id_valid("g098cb60fa8e427cb299793cbd302c9a"), false);
       done();
     });
     it("empty id is invalid", function(done) {
       assert.strictEqual(helpers.id_valid(""), false);
-      done();
-    });
-    it("non-alphanumeric username is invalid", function(done) {
-      assert.strictEqual(helpers.id_valid("usernäme"), false);
-      done();
-    });
-    it("dashed username is invalid", function(done) {
-      assert.strictEqual(helpers.id_valid("user-name"), false);
-      done();
-    });
-    it(">16 length username is invalid", function(done) {
-      assert.strictEqual(helpers.id_valid("ThisNameIsTooLong"), false);
       done();
     });
     it("lowercase uuid is valid", function(done) {
@@ -122,12 +97,28 @@ describe("Crafatar", function() {
       assert.strictEqual(helpers.id_valid("0098cb60-fa8e-427c-b299-793cbd302c9a"), true);
       done();
     });
-    it("16 chars, underscored, capital, numbered username is valid", function(done) {
-      assert.strictEqual(helpers.id_valid("__niceUs3rname__"), true);
+    it("username is invalid", function(done) {
+      assert.strictEqual(helpers.id_valid("__niceUs3rname__"), false);
       done();
     });
-    it("1 char username is valid", function(done) {
-      assert.strictEqual(helpers.id_valid("a"), true);
+    it("username alex is invalid", function(done) {
+      assert.strictEqual(helpers.id_valid("alex"), false);
+      done();
+    });
+    it("username mhf_alex is invalid", function(done) {
+      assert.strictEqual(helpers.id_valid("mhf_alex"), false);
+      done();
+    });
+    it("username steve is invalid", function(done) {
+      assert.strictEqual(helpers.id_valid("steve"), false);
+      done();
+    });
+    it("username mhf_steve is invalid", function(done) {
+      assert.strictEqual(helpers.id_valid("mhf_steve"), false);
+      done();
+    });
+    it(">16 length username is invalid", function(done) {
+      assert.strictEqual(helpers.id_valid("ThisNameIsTooLong"), false);
       done();
     });
     it("should not exist (uuid)", function(done) {
@@ -138,29 +129,8 @@ describe("Crafatar", function() {
         done();
       });
     });
-    it("should not exist (username)", function(done) {
-      networking.get_username_url(rid(), "Steve", 0, function(err, profile) {
-        assert.ifError(err);
-        done();
-      });
-    });
   });
   describe("Avatar", function() {
-    it("uuid's account should exist, but skin should not", function(done) {
-      // profile "Alex" - hoping it'll never have a skin
-      networking.get_profile(rid(), "ec561538f3fd461daff5086b22154bce", function(err, profile) {
-        assert.ifError(err);
-        assert.notStrictEqual(profile, null);
-        networking.get_uuid_info(profile, "CAPE", function(url) {
-          assert.strictEqual(url, null);
-          done();
-        });
-      });
-    });
-    it("Username should default to MHF_Steve", function(done) {
-      assert.strictEqual(skins.default_skin("TestUser"), "mhf_steve");
-      done();
-    });
     for (var a in alex_ids) {
       var alexid = alex_ids[a];
       (function(alex_id) {
@@ -185,15 +155,6 @@ describe("Crafatar", function() {
       var original_timeout = config.server.http_timeout;
       config.server.http_timeout = 1;
       networking.get_profile(rid(), "069a79f444e94726a5befca90e38aaf5", function(err, profile) {
-        assert.notStrictEqual(["ETIMEDOUT", "ESOCKETTIMEDOUT"].indexOf(err.code), -1);
-        config.server.http_timeout = original_timeout;
-        done();
-      });
-    });
-    it("should time out on username info download", function(done) {
-      var original_timeout = config.server.http_timeout;
-      config.server.http_timeout = 1;
-      networking.get_username_url(rid(), "jomo", 0, function(err, url) {
         assert.notStrictEqual(["ETIMEDOUT", "ESOCKETTIMEDOUT"].indexOf(err.code), -1);
         config.server.http_timeout = original_timeout;
         done();
@@ -299,7 +260,7 @@ describe("Crafatar", function() {
     });
 
     it("should return correct HTTP response for URL encoded URLs", function(done) {
-      var url = "http://localhost:3000/%61%76%61%74%61%72%73/%6a%6f%6d%6f"; // avatars/jomo
+      var url = "http://localhost:3000/%61%76%61%74%61%72%73/%61%65%37%39%35%61%61%38%36%33%32%37%34%30%38%65%39%32%61%62%32%35%63%38%61%35%39%66%33%62%61%31"; // avatars/ae795aa86327408e92ab25c8a59f3ba1
       request.get(url, function(error, res, body) {
         assert.ifError(error);
         assert.strictEqual(res.statusCode, 201);
@@ -312,95 +273,34 @@ describe("Crafatar", function() {
     });
 
     it("should not fail on simultaneous requests", function(done) {
-      // do not change "constructor" !
-      // it's a reserved property name, we're testing for that
-      var sids = ["696a82ce41f44b51aa31b8709b8686f0", "constructor"];
-
-      for (var j in sids) {
-        var id = sids[j];
-        var url = "http://localhost:3000/avatars/" + id;
-        // 10 requests at once
-        var requests = 10;
-        var finished = 0;
-        function partDone() {
-          finished++;
-          if (requests === finished) {
-            done();
-          }
-        }
-        function req() {
-          request.get(url, function(error, res, body) {
-            assert.ifError(error);
-            assert.strictEqual(res.statusCode === 201 || res.statusCode === 200, true);
-            assert_headers(res);
-            assert(res.headers.etag);
-            assert.strictEqual(res.headers["content-type"], "image/png");
-            assert(body);
-            partDone();
-          });
-        }
-        // make simultanous requests
-        for (var k = 0; k < requests; k++) {
-          req(k);
+      var url = "http://localhost:3000/avatars/696a82ce41f44b51aa31b8709b8686f0";
+      // 10 requests at once
+      var requests = 10;
+      var finished = 0;
+      function partDone() {
+        finished++;
+        if (requests === finished) {
+          done();
         }
       }
-    });
+      function req() {
+        request.get(url, function(error, res, body) {
+          assert.ifError(error);
+          assert.strictEqual(res.statusCode === 201 || res.statusCode === 200, true);
+          assert_headers(res);
+          assert(res.headers.etag);
+          assert.strictEqual(res.headers["content-type"], "image/png");
+          assert(body);
+          partDone();
+        });
+      }
+      // make simultanous requests
+      for (var k = 0; k < requests; k++) {
+        req(k);
+      }
+  });
 
     var server_tests = {
-      "avatar with existing username": {
-        url: "http://localhost:3000/avatars/jeb_?size=16",
-        crc32: [3337292777],
-      },
-      "avatar with non-existent username": {
-        url: "http://localhost:3000/avatars/0?size=16",
-        crc32: [2416827277, 1243826040],
-      },
-      "avatar with non-existent username defaulting to mhf_alex": {
-        url: "http://localhost:3000/avatars/0?size=16&default=mhf_alex",
-        crc32: [862751081, 809395677],
-      },
-      "avatar with non-existent username defaulting to username": {
-        url: "http://localhost:3000/avatars/0?size=16&default=jeb_",
-        crc32: [0],
-        redirect: "/avatars/jeb_?size=16",
-      },
-      "avatar with non-existent username defaulting to uuid": {
-        url: "http://localhost:3000/avatars/0?size=16&default=853c80ef3c3749fdaa49938b674adae6",
-        crc32: [0],
-        redirect: "/avatars/853c80ef3c3749fdaa49938b674adae6?size=16",
-      },
-      "avatar with non-existent username defaulting to url": {
-        url: "http://localhost:3000/avatars/0?size=16&default=http%3A%2F%2Fexample.com%2FCaseSensitive",
-        crc32: [0],
-        redirect: "http://example.com/CaseSensitive",
-      },
-      "overlay avatar with existing username": {
-        url: "http://localhost:3000/avatars/jeb_?size=16&overlay",
-        crc32: [1710265722],
-      },
-      "overlay avatar with non-existent username": {
-        url: "http://localhost:3000/avatars/0?size=16&overlay",
-        crc32: [2416827277, 1243826040],
-      },
-      "overlay avatar with non-existent username defaulting to mhf_alex": {
-        url: "http://localhost:3000/avatars/0?size=16&overlay&default=mhf_alex",
-        crc32: [862751081, 809395677],
-      },
-      "overlay avatar with non-existent username defaulting to username": {
-        url: "http://localhost:3000/avatars/0?size=16&overlay&default=jeb_",
-        crc32: [0],
-        redirect: "/avatars/jeb_?size=16&overlay=",
-      },
-      "overlay avatar with non-existent username defaulting to uuid": {
-        url: "http://localhost:3000/avatars/0?size=16&overlay&default=853c80ef3c3749fdaa49938b674adae6",
-        crc32: [0],
-        redirect: "/avatars/853c80ef3c3749fdaa49938b674adae6?size=16&overlay=",
-      },
-      "overlay avatar with non-existent username defaulting to url": {
-        url: "http://localhost:3000/avatars/0?size=16&overlay&default=http%3A%2F%2Fexample.com%2FCaseSensitive",
-        crc32: [0],
-        redirect: "http://example.com/CaseSensitive",
-      },
       "avatar with existing uuid": {
         url: "http://localhost:3000/avatars/853c80ef3c3749fdaa49938b674adae6?size=16",
         crc32: [3337292777],
@@ -412,11 +312,6 @@ describe("Crafatar", function() {
       "avatar with non-existent uuid defaulting to mhf_alex": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&default=mhf_alex",
         crc32: [862751081, 809395677],
-      },
-      "avatar with non-existent uuid defaulting to username": {
-        url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&default=jeb_",
-        crc32: [0],
-        redirect: "/avatars/jeb_?size=16",
       },
       "avatar with non-existent uuid defaulting to uuid": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&default=853c80ef3c3749fdaa49938b674adae6",
@@ -440,11 +335,6 @@ describe("Crafatar", function() {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&overlay&default=mhf_alex",
         crc32: [862751081, 809395677],
       },
-      "overlay avatar with non-existent uuid defaulting to username": {
-        url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&default=jeb_",
-        crc32: [0],
-        redirect: "/avatars/jeb_?size=16",
-      },
       "overlay avatar with non-existent uuid defaulting to uuid": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&default=853c80ef3c3749fdaa49938b674adae6",
         crc32: [0],
@@ -452,19 +342,6 @@ describe("Crafatar", function() {
       },
       "overlay avatar with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&overlay&default=http%3A%2F%2Fexample.com%2FCaseSensitive",
-        crc32: [0],
-        redirect: "http://example.com/CaseSensitive",
-      },
-      "cape with existing username": {
-        url: "http://localhost:3000/capes/notch",
-        crc32: [2556702429],
-      },
-      "cape with non-existent username": {
-        url: "http://localhost:3000/capes/0",
-        crc32: [0],
-      },
-      "cape with non-existent username defaulting to url": {
-        url: "http://localhost:3000/capes/0?default=http%3A%2F%2Fexample.com%2FCaseSensitive",
         crc32: [0],
         redirect: "http://example.com/CaseSensitive",
       },
@@ -481,33 +358,6 @@ describe("Crafatar", function() {
         crc32: [0],
         redirect: "http://example.com/CaseSensitive",
       },
-      "skin with existing username": {
-        url: "http://localhost:3000/skins/jeb_",
-        crc32: [26500336],
-      },
-      "skin with non-existent username": {
-        url: "http://localhost:3000/skins/0",
-        crc32: [981937087],
-      },
-      "skin with non-existent username defaulting to mhf_alex": {
-        url: "http://localhost:3000/skins/0?default=mhf_alex",
-        crc32: [2298915739],
-      },
-      "skin with non-existent username defaulting to username": {
-        url: "http://localhost:3000/skins/0?size=16&default=jeb_",
-        crc32: [0],
-        redirect: "/skins/jeb_?size=16",
-      },
-      "skin with non-existent username defaulting to uuid": {
-        url: "http://localhost:3000/skins/0?size=16&default=853c80ef3c3749fdaa49938b674adae6",
-        crc32: [0],
-        redirect: "/skins/853c80ef3c3749fdaa49938b674adae6?size=16",
-      },
-      "skin with non-existent username defaulting to url": {
-        url: "http://localhost:3000/skins/0?default=http%3A%2F%2Fexample.com%2FCaseSensitive",
-        crc32: [0],
-        redirect: "http://example.com/CaseSensitive",
-      },
       "skin with existing uuid": {
         url: "http://localhost:3000/skins/853c80ef3c3749fdaa49938b674adae6",
         crc32: [26500336],
@@ -520,11 +370,6 @@ describe("Crafatar", function() {
         url: "http://localhost:3000/skins/00000000000000000000000000000000?default=mhf_alex",
         crc32: [2298915739],
       },
-      "skin with non-existent uuid defaulting to username": {
-        url: "http://localhost:3000/skins/00000000000000000000000000000000?size=16&default=jeb_",
-        crc32: [0],
-        redirect: "/skins/jeb_?size=16",
-      },
       "skin with non-existent uuid defaulting to uuid": {
         url: "http://localhost:3000/skins/00000000000000000000000000000000?size=16&default=853c80ef3c3749fdaa49938b674adae6",
         crc32: [0],
@@ -532,60 +377,6 @@ describe("Crafatar", function() {
       },
       "skin with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/skins/00000000000000000000000000000000?default=http%3A%2F%2Fexample.com%2FCaseSensitive",
-        crc32: [0],
-        redirect: "http://example.com/CaseSensitive",
-      },
-      "head render with existing username": {
-        url: "http://localhost:3000/renders/head/jeb_?scale=2",
-        crc32: [3487896679, 3001090792],
-      },
-      "head render with non-existent username": {
-        url: "http://localhost:3000/renders/head/0?scale=2",
-        crc32: [3257141069, 214248305],
-      },
-      "head render with non-existent username defaulting to mhf_alex": {
-        url: "http://localhost:3000/renders/head/0?scale=2&default=mhf_alex",
-        crc32: [263450586, 3116770561],
-      },
-      "head render with non-existent username defaulting to username": {
-        url: "http://localhost:3000/avatars/0?scale=2&default=jeb_",
-        crc32: [0],
-        redirect: "/avatars/jeb_?scale=2",
-      },
-      "head render with non-existent username defaulting to uuid": {
-        url: "http://localhost:3000/avatars/0?scale=2&default=853c80ef3c3749fdaa49938b674adae6",
-        crc32: [0],
-        redirect: "/avatars/853c80ef3c3749fdaa49938b674adae6?scale=2",
-      },
-      "head render with non-existent username defaulting to url": {
-        url: "http://localhost:3000/renders/head/0?scale=2&default=http%3A%2F%2Fexample.com%2FCaseSensitive",
-        crc32: [0],
-        redirect: "http://example.com/CaseSensitive",
-      },
-      "overlay head render with existing username": {
-        url: "http://localhost:3000/renders/head/jeb_?scale=2&overlay",
-        crc32: [762377383, 1726474987],
-      },
-      "overlay head render with non-existent username": {
-        url: "http://localhost:3000/renders/head/0?scale=2&overlay",
-        crc32: [3257141069, 214248305],
-      },
-      "overlay head render with non-existent username defaulting to mhf_alex": {
-        url: "http://localhost:3000/renders/head/0?scale=2&overlay&default=mhf_alex",
-        crc32: [263450586, 3116770561],
-      },
-      "overlay head render with non-existent username defaulting to username": {
-        url: "http://localhost:3000/renders/head/0?scale=2&overlay&default=jeb_",
-        crc32: [0],
-        redirect: "/renders/head/jeb_?scale=2&overlay=",
-      },
-      "overlay head render with non-existent username defaulting to uuid": {
-        url: "http://localhost:3000/renders/head/0?scale=2&overlay&default=853c80ef3c3749fdaa49938b674adae6",
-        crc32: [0],
-        redirect: "/renders/head/853c80ef3c3749fdaa49938b674adae6?scale=2&overlay=",
-      },
-      "overlay head render with non-existent username defaulting to url": {
-        url: "http://localhost:3000/renders/head/0?scale=2&overlay&default=http%3A%2F%2Fexample.com%2FCaseSensitive",
         crc32: [0],
         redirect: "http://example.com/CaseSensitive",
       },
@@ -600,11 +391,6 @@ describe("Crafatar", function() {
       "head render with non-existent uuid defaulting to mhf_alex": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&default=mhf_alex",
         crc32: [263450586, 3116770561],
-      },
-      "head render with non-existent uuid defaulting to username": {
-        url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&default=jeb_",
-        crc32: [0],
-        redirect: "/renders/head/jeb_?scale=2",
       },
       "head render with non-existent uuid defaulting to uuid": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&default=853c80ef3c3749fdaa49938b674adae6",
@@ -628,11 +414,6 @@ describe("Crafatar", function() {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&overlay&default=mhf_alex",
         crc32: [263450586, 3116770561],
       },
-      "overlay head with non-existent uuid defaulting to username": {
-        url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&overlay&default=jeb_",
-        crc32: [0],
-        redirect: "/renders/head/jeb_?scale=2&overlay=",
-      },
       "overlay head with non-existent uuid defaulting to uuid": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&overlay&default=853c80ef3c3749fdaa49938b674adae6",
         crc32: [0],
@@ -640,60 +421,6 @@ describe("Crafatar", function() {
       },
       "overlay head render with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&overlay&default=http%3A%2F%2Fexample.com%2FCaseSensitive",
-        crc32: [0],
-        redirect: "http://example.com/CaseSensitive",
-      },
-      "body render with existing username": {
-        url: "http://localhost:3000/renders/body/jeb_?scale=2",
-        crc32: [3127075871, 2595192206],
-      },
-      "body render with non-existent username": {
-        url: "http://localhost:3000/renders/body/0?scale=2",
-        crc32: [1046655221, 1620063267],
-      },
-      "body render with non-existent username defaulting to mhf_alex": {
-        url: "http://localhost:3000/renders/body/0?scale=2&default=mhf_alex",
-        crc32: [549240598, 3952648540],
-      },
-      "body render with non-existent username defaulting to username": {
-        url: "http://localhost:3000/renders/body/0?scale=2&default=jeb_",
-        crc32: [0],
-        redirect: "/renders/body/jeb_?scale=2",
-      },
-      "body render with non-existent username defaulting to uuid": {
-        url: "http://localhost:3000/renders/body/0?scale=2&default=853c80ef3c3749fdaa49938b674adae6",
-        crc32: [0],
-        redirect: "/renders/body/853c80ef3c3749fdaa49938b674adae6?scale=2",
-      },
-      "body render with non-existent username defaulting to url": {
-        url: "http://localhost:3000/renders/body/0?scale=2&default=http%3A%2F%2Fexample.com%2FCaseSensitive",
-        crc32: [0],
-        redirect: "http://example.com/CaseSensitive",
-      },
-      "overlay body render with existing username": {
-        url: "http://localhost:3000/renders/body/jeb_?scale=2&overlay",
-        crc32: [699892097, 2732138694],
-      },
-      "overlay body render with non-existent username": {
-        url: "http://localhost:3000/renders/body/0?scale=2&overlay",
-        crc32: [1046655221, 1620063267],
-      },
-      "overlay body render with non-existent username defaulting to mhf_alex": {
-        url: "http://localhost:3000/renders/body/0?scale=2&overlay&default=mhf_alex",
-        crc32: [549240598, 3952648540],
-      },
-      "overlay body render with non-existent username defaulting to username": {
-        url: "http://localhost:3000/renders/body/0?scale=2&overlay&default=jeb_",
-        crc32: [0],
-        redirect: "/renders/body/jeb_?scale=2&overlay=",
-      },
-      "overlay body render with non-existent username defaulting to uuid": {
-        url: "http://localhost:3000/renders/body/0?scale=2&overlay&default=853c80ef3c3749fdaa49938b674adae6",
-        crc32: [0],
-        redirect: "/renders/body/853c80ef3c3749fdaa49938b674adae6?scale=2&overlay=",
-      },
-      "overlay body render with non-existent username defaulting to url": {
-        url: "http://localhost:3000/renders/body/0?scale=2&overlay&default=http%3A%2F%2Fexample.com%2FCaseSensitive",
         crc32: [0],
         redirect: "http://example.com/CaseSensitive",
       },
@@ -709,13 +436,8 @@ describe("Crafatar", function() {
         url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&default=mhf_alex",
         crc32: [549240598, 3952648540],
       },
-      "body render with non-existent uuid defaulting to username": {
-        url: "http://localhost:3000/renders/body/0?scale=2&default=jeb_",
-        crc32: [0],
-        redirect: "/renders/body/jeb_?scale=2",
-      },
       "body render with non-existent uuid defaulting to uuid": {
-        url: "http://localhost:3000/renders/body/0?scale=2&default=853c80ef3c3749fdaa49938b674adae6",
+        url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&default=853c80ef3c3749fdaa49938b674adae6",
         crc32: [0],
         redirect: "/renders/body/853c80ef3c3749fdaa49938b674adae6?scale=2",
       },
@@ -784,28 +506,12 @@ describe("Crafatar", function() {
       }(loc));
     }
 
-    it("should update the username skin type on uuid request", function(done) {
-      /*eslint-disable handle-callback-err */
-      request.get("http://localhost:3000/renders/body/mhf_alex", function(error, res, body) {
-        cache.get_details("mhf_alex", function(err, details) {
-          assert.strictEqual(details.slim, false);
-          request.get("http://localhost:3000/renders/body/6ab4317889fd490597f60f67d9d76fd9", function(uerror, ures, ubody) {
-            cache.get_details("mhf_alex", function(cerr, cdetails) {
-              /*eslint-enable handle-callback-err */
-              assert.strictEqual(cdetails.slim, true);
-              done();
-            });
-          });
-        });
-      });
-    });
-
     it("should return 304 on server error", function(done) {
       var original_debug = config.server.debug_enabled;
       var original_timeout = config.server.http_timeout;
       config.server.debug_enabled = false;
       config.server.http_timeout = 1;
-      request.get({url: "http://localhost:3000/avatars/whatever", headers: {"If-None-Match": '"some-etag"'}}, function(error, res, body) {
+      request.get({url: "http://localhost:3000/avatars/0000000000000000000000000000000f", headers: {"If-None-Match": '"some-etag"'}}, function(error, res, body) {
         assert.ifError(error);
         assert.ifError(body);
         assert.strictEqual(res.statusCode, 304);
@@ -817,7 +523,7 @@ describe("Crafatar", function() {
 
     it("should return a 422 (invalid size)", function(done) {
       var size = config.avatars.max_size + 1;
-      request.get("http://localhost:3000/avatars/Jake_0?size=" + size, function(error, res, body) {
+      request.get("http://localhost:3000/avatars/2d5aa9cdaeb049189930461fc9b91cc5?size=" + size, function(error, res, body) {
         assert.ifError(error);
         assert.strictEqual(res.statusCode, 422);
         done();
@@ -826,7 +532,7 @@ describe("Crafatar", function() {
 
     it("should return a 422 (invalid scale)", function(done) {
       var scale = config.renders.max_scale + 1;
-      request.get("http://localhost:3000/renders/head/Jake_0?scale=" + scale, function(error, res, body) {
+      request.get("http://localhost:3000/renders/head/2d5aa9cdaeb049189930461fc9b91cc5?scale=" + scale, function(error, res, body) {
         assert.ifError(error);
         assert.strictEqual(res.statusCode, 422);
         done();
@@ -841,12 +547,12 @@ describe("Crafatar", function() {
       });
     });
 
-    // testing all paths for Invalid UserID
+    // testing all paths for Invalid UUID
     var locations = ["avatars", "skins", "capes", "renders/body", "renders/head"];
     for (var l in locations) {
       loc = locations[l];
       (function(location) {
-        it("should return a 422 (invalid id " + location + ")", function(done) {
+        it("should return a 422 (invalid uuid " + location + ")", function(done) {
           request.get("http://localhost:3000/" + location + "/thisisaninvaliduuid", function(error, res, body) {
             assert.ifError(error);
             assert.strictEqual(res.statusCode, 422);
@@ -873,14 +579,14 @@ describe("Crafatar", function() {
 
   // we have to make sure that we test both a 32x64 and 64x64 skin
   describe("Networking: Render", function() {
-    it("should not fail (username, 32x64 skin)", function(done) {
-      helpers.get_render(rid(), "md_5", 6, true, true, function(err, hash, img) {
+    it("should not fail (uuid, 32x64 skin)", function(done) {
+      helpers.get_render(rid(), "af74a02d19cb445bb07f6866a861f783", 6, true, true, function(err, hash, img) {
         assert.strictEqual(err, null);
         done();
       });
     });
-    it("should not fail (username, 64x64 skin)", function(done) {
-      helpers.get_render(rid(), "Jake_0", 6, true, true, function(err, hash, img) {
+    it("should not fail (uuid, 64x64 skin)", function(done) {
+      helpers.get_render(rid(), "2d5aa9cdaeb049189930461fc9b91cc5", 6, true, true, function(err, hash, img) {
         assert.strictEqual(err, null);
         done();
       });
@@ -931,116 +637,74 @@ describe("Crafatar", function() {
   });
 
 
-  // DRY with uuid and username tests
-  for (var i in ids) {
-    var iid = ids[i];
-    var iid_type = iid.length > 16 ? "uuid" : "name";
-    // needs an anonymous function because id and id_type aren't constant
-    (function(n, id, id_type) {
-      // Mojang's UUID rate limiting is case-insensitive
-      // so we don't run UUID tests twice
-      if(n < 3) {
-        describe("Networking: Avatar", function() {
-          before(function() {
-            cache.get_redis().flushall();
-            console.log("\n\nRunning tests with " + id_type + " '" + id + "'\n\n");
-          });
-          it("should be downloaded", function(done) {
-            helpers.get_avatar(rid(), id, false, 160, function(err, status, image) {
-              assert.ifError(err);
-              assert.strictEqual(status, 2);
-              done();
-            });
-          });
-          it("should be cached", function(done) {
-            helpers.get_avatar(rid(), id, false, 160, function(err, status, image) {
-              assert.ifError(err);
-              assert.strictEqual(status === 0 || status === 1, true);
-              done();
-            });
-          });
-          if (id.length > 16) {
-            // can't run 'checked' test due to Mojang's rate limits :(
-          } else {
-            it("should be checked", function(done) {
-              var original_cache_time = config.caching.local;
-              config.caching.local = 0;
-              helpers.get_avatar(rid(), id, false, 160, function(err, status, image) {
-                assert.ifError(err);
-                assert.strictEqual(status, 3);
-                config.caching.local = original_cache_time;
-                done();
-              });
-            });
-          }
-        });
 
-        describe("Networking: Skin", function() {
-          it("should not fail (uuid)", function(done) {
-            helpers.get_skin(rid(), id, function(err, hash, status, img) {
-              assert.strictEqual(err, null);
-              done();
-            });
-          });
-        });
-
-        describe("Networking: Render", function() {
-          it("should not fail (full body)", function(done) {
-            helpers.get_render(rid(), id, 6, true, true, function(err, hash, img) {
-              assert.ifError(err);
-              done();
-            });
-          });
-          it("should not fail (only head)", function(done) {
-            helpers.get_render(rid(), id, 6, true, false, function(err, hash, img) {
-              assert.ifError(err);
-              done();
-            });
-          });
-        });
-
-        describe("Networking: Cape", function() {
-          it("should not fail (possible cape)", function(done) {
-            helpers.get_cape(rid(), id, function(err, hash, status, img) {
-              assert.ifError(err);
-              done();
-            });
-          });
-        });
-      }
-
-
-      describe("Errors", function() {
-        before(function() {
-          if(n >= 3) {
-            // Notice for tests skipped above
-            console.log("\n\nSkipping tests with " + id_type + " '" + id + "' due to case-insensitive rate-limiting\n\n");
-          }
-          cache.get_redis().flushall();
-        });
-
-        if (id_type === "uuid") {
-          // just making sure ...
-          it("uuid SHOULD be rate limited", function(done) {
-            networking.get_profile(rid(), id, function() {
-              networking.get_profile(rid(), id, function(err, profile) {
-                assert.strictEqual(err.toString(), "HTTP: 429");
-                assert.strictEqual(profile, null);
-                done();
-              });
-            });
-          });
-        } else {
-          it("username should NOT be rate limited (username)", function(done) {
-            helpers.get_avatar(rid(), id, false, 160, function() {
-              helpers.get_avatar(rid(), id, false, 160, function(err, status, image) {
-                assert.strictEqual(err, null);
-                done();
-              });
-            });
-          });
-        }
+  describe("Networking: Avatar", function() {
+    before(function() {
+      cache.get_redis().flushall();
+    });
+    it("should be downloaded", function(done) {
+      helpers.get_avatar(rid(), uuid, false, 160, function(err, status, image) {
+        assert.ifError(err);
+        assert.strictEqual(status, 2);
+        done();
       });
-    }(i, iid, iid_type));
-  }
+    });
+    it("should be cached", function(done) {
+      helpers.get_avatar(rid(), uuid, false, 160, function(err, status, image) {
+        assert.ifError(err);
+        assert.strictEqual(status === 0 || status === 1, true);
+        done();
+      });
+    });
+  });
+
+  describe("Networking: Skin", function() {
+    it("should not fail (uuid)", function(done) {
+      helpers.get_skin(rid(), uuid, function(err, hash, status, img) {
+        assert.strictEqual(err, null);
+        done();
+      });
+    });
+  });
+
+  describe("Networking: Render", function() {
+    it("should not fail (full body)", function(done) {
+      helpers.get_render(rid(), uuid, 6, true, true, function(err, hash, img) {
+        assert.ifError(err);
+        done();
+      });
+    });
+    it("should not fail (only head)", function(done) {
+      helpers.get_render(rid(), uuid, 6, true, false, function(err, hash, img) {
+        assert.ifError(err);
+        done();
+      });
+    });
+  });
+
+  describe("Networking: Cape", function() {
+    it("should not fail (possible cape)", function(done) {
+      helpers.get_cape(rid(), uuid, function(err, hash, status, img) {
+        assert.ifError(err);
+        done();
+      });
+    });
+  });
+
+
+  describe("Errors", function() {
+      before(function() {
+      cache.get_redis().flushall();
+    });
+
+    it("uuid SHOULD be rate limited", function(done) {
+      networking.get_profile(rid(), uuid, function() {
+        networking.get_profile(rid(), uuid, function(err, profile) {
+          assert.strictEqual(err.toString(), "HTTP: 429");
+          assert.strictEqual(profile, null);
+          done();
+        });
+      });
+    });
+  });
 });
