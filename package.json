@@ -31,23 +31,23 @@
     "test-travis": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "engines": {
-    "node": "6.11.1"
+    "node": "8.9.4"
   },
   "dependencies": {
     "canvas": "^1.6.2",
-    "crc": "~3.4.1",
+    "crc": "^3.5.0",
     "ejs": "^2.5.2",
-    "pajk-lwip": "0.2.0",
-    "mime": "~1.3.4",
+    "pajk-lwip": "^0.2.0",
+    "mime": "^2.2.0",
     "node-df": "crafatar/node-df",
-    "redis": "~2.7.1",
-    "request": "~2.81.0",
-    "toobusy-js": "~0.5.1"
+    "redis": "^2.8.0",
+    "request": "^2.83.0",
+    "toobusy-js": "^0.5.1"
   },
   "devDependencies": {
-    "coveralls": "~2.13.1",
-    "istanbul": "~0.4.5",
-    "mocha": "~3.3.0",
-    "mocha-lcov-reporter": "~1.3.0"
+    "coveralls": "^3.0.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^5.0.1",
+    "mocha-lcov-reporter": "^1.3.0"
   }
 }

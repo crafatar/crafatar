@@ -569,12 +569,6 @@ describe("Crafatar", function() {
         });
       }(loc));
     }
-
-    after(function(done) {
-      server.close(function() {
-        done();
-      });
-    });
   });
 
   // we have to make sure that we test both a 32x64 and 64x64 skin
@@ -705,6 +699,13 @@ describe("Crafatar", function() {
           done();
         });
       });
+    });
+  });
+
+  after(function(done) {
+    server.close(function() {
+      cache.get_redis().quit();
+      done();
     });
   });
 });
