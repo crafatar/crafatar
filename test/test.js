@@ -204,7 +204,7 @@ describe("Crafatar", function() {
         },
       }, function(error, res, body) {
         assert.ifError(error);
-        assert.ifError(body);
+        assert.strictEqual(body, '');
         assert.equal(res.statusCode, 304);
         assert_headers(res);
         callback();
@@ -346,7 +346,7 @@ describe("Crafatar", function() {
         redirect: "http://example.com/CaseSensitive",
       },
       "cape with existing uuid": {
-        url: "http://localhost:3000/capes/069a79f444e94726a5befca90e38aaf5",
+        url: "http://localhost:3000/capes/853c80ef3c3749fdaa49938b674adae6",
         crc32: [2556702429],
       },
       "cape with non-existent uuid": {
@@ -382,15 +382,15 @@ describe("Crafatar", function() {
       },
       "head render with existing uuid": {
         url: "http://localhost:3000/renders/head/853c80ef3c3749fdaa49938b674adae6?scale=2",
-        crc32: [3487896679, 3001090792],
+        crc32: [1168786201],
       },
       "head render with non-existent uuid": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2",
-        crc32: [3257141069, 214248305],
+        crc32: [3800926063],
       },
       "head render with non-existent uuid defaulting to mhf_alex": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&default=mhf_alex",
-        crc32: [263450586, 3116770561],
+        crc32: [4027858557],
       },
       "head render with non-existent uuid defaulting to uuid": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&default=853c80ef3c3749fdaa49938b674adae6",
@@ -404,15 +404,15 @@ describe("Crafatar", function() {
       },
       "overlay head render with existing uuid": {
         url: "http://localhost:3000/renders/head/853c80ef3c3749fdaa49938b674adae6?scale=2&overlay",
-        crc32: [762377383, 1726474987],
+        crc32: [2880579826],
       },
       "overlay head render with non-existent uuid": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&overlay",
-        crc32: [3257141069, 214248305],
+        crc32: [3800926063],
       },
       "overlay head render with non-existent uuid defaulting to mhf_alex": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&overlay&default=mhf_alex",
-        crc32: [263450586, 3116770561],
+        crc32: [4027858557],
       },
       "overlay head with non-existent uuid defaulting to uuid": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&overlay&default=853c80ef3c3749fdaa49938b674adae6",
@@ -426,15 +426,15 @@ describe("Crafatar", function() {
       },
       "body render with existing uuid": {
         url: "http://localhost:3000/renders/body/853c80ef3c3749fdaa49938b674adae6?scale=2",
-        crc32: [3127075871, 2595192206],
+        crc32: [2745192436],
       },
       "body render with non-existent uuid": {
         url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2",
-        crc32: [1046655221, 1620063267],
+        crc32: [996962526],
       },
       "body render with non-existent uuid defaulting to mhf_alex": {
         url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&default=mhf_alex",
-        crc32: [549240598, 3952648540],
+        crc32: [1255106465],
       },
       "body render with non-existent uuid defaulting to uuid": {
         url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&default=853c80ef3c3749fdaa49938b674adae6",
@@ -448,15 +448,15 @@ describe("Crafatar", function() {
       },
       "overlay body render with existing uuid": {
         url: "http://localhost:3000/renders/body/853c80ef3c3749fdaa49938b674adae6?scale=2&overlay",
-        crc32: [699892097, 2732138694],
+        crc32: [2441671793],
       },
       "overlay body render with non-existent uuid": {
         url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&overlay",
-        crc32: [1046655221, 1620063267],
+        crc32: [996962526],
       },
       "overlay body render with non-existent uuid defaulting to mhf_alex": {
         url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&overlay&default=mhf_alex",
-        crc32: [549240598, 3952648540],
+        crc32: [1255106465],
       },
       "overlay body render with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&overlay&default=http%3A%2F%2Fexample.com%2FCaseSensitive",
@@ -513,7 +513,7 @@ describe("Crafatar", function() {
       config.server.http_timeout = 1;
       request.get({url: "http://localhost:3000/avatars/0000000000000000000000000000000f", headers: {"If-None-Match": '"some-etag"'}}, function(error, res, body) {
         assert.ifError(error);
-        assert.ifError(body);
+        assert.strictEqual(body, '');
         assert.strictEqual(res.statusCode, 304);
         config.server.debug_enabled = original_debug;
         config.server.http_timeout = original_timeout;
