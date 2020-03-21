@@ -34,22 +34,55 @@ Please [visit the website](https://crafatar.com) for details.
 
 # Installation
 
-Have a look at [crafatar/setup](https://github.com/crafatar/setup) to see how we set things up at Crafatar.
+## Manual
 
-For more info about local setup, Heroku, or Dokku please see [Installation](https://github.com/crafatar/crafatar/wiki/Installation) on the wiki.
+- Install [nodejs](https://nodejs.org/) 12 (LTS)
+- Install `redis-server`
+- Run `npm install`  
+  If that fails, it's likely because because of `node-canvas` dependencies. Follow [this guide](https://github.com/Automattic/node-canvas/wiki#installation-guides) to install them.
+- Run `npm start`
 
-## Tests
-```shell
+Crafatar is now available at http://0.0.0.0:3000.
+
+## Docker
+
+Download the docker image from [releases](https://github.com/crafatar/crafatar/releases) (docker hub coming soon™️).
+
+```sh
+docker load -i crafatar-docker.tar
+mkdir /path/to/crafatar-images
+```
+
+```sh
+docker network create crafatar
+docker run --net crafatar -d --name redis redis
+docker run --net crafatar -v /path/to/crafatar-images:/crafatar/images -e REDIS_URL=redis://redis -p 3000:3000 crafatar:2.1.0
+```
+
+## Environment variables
+
+| Variable            | Default                  | Description                        |
+| :-                  | :-                       | :-                                 |
+| `BIND`              | `0.0.0.0`                | Hostname to listen on              |
+| `PORT`              | `3000`                   | Port to listen on                  |
+| `DEBUG`             | `false`                  | Enable verbose debug logging       |
+| `REDIS_URL`         | `redis://127.0.0.1:6379` | URI of the redis server            |
+| `EPHEMERAL_STORAGE` |                          | If set, redis is flushed on start* |
+
+\* Use this to avoid issues when you have a persistent redis database but an ephemeral storage
+
+# Tests
+```sh
 npm test
 ```
 
 If you want to debug failing tests:
-```shell
+```sh
 # show logs during tests
 env VERBOSE_TEST=true npm test
 ```
 
 It can be helpful to monitor redis commands to debug caching errors:
-```shell
+```sh
 redis-cli monitor
 ```
