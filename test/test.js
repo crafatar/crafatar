@@ -9,7 +9,6 @@ if (process.env.VERBOSE_TEST !== "true" && process.env.TRAVIS !== "true") {
 
 var networking = require("../lib/networking");
 var helpers = require("../lib/helpers");
-var cleaner = require("../lib/cleaner");
 var request = require("request");
 var config = require("../config");
 var server = require("../lib/server");
@@ -68,10 +67,6 @@ describe("Crafatar", function() {
     console.log("Flushing and waiting for redis ...");
     cache.get_redis().flushall(function() {
       console.log("Redis flushed!");
-      // cause I don't know how big hard drives are these days
-      config.cleaner.disk_limit = Infinity;
-      config.cleaner.redis_limit = Infinity;
-      cleaner.run();
       done();
     });
   });

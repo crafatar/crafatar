@@ -39,7 +39,6 @@
     "ejs": "^3.0.1",
     "@randy.tarampi/lwip": "^1.1.0",
     "mime": "^2.4.4",
-    "node-df": "crafatar/node-df",
     "redis": "^3.0.2",
     "request": "^2.88.2",
     "toobusy-js": "^0.5.1"
