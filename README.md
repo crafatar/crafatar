@@ -46,17 +46,11 @@ Crafatar is now available at http://0.0.0.0:3000.
 
 ## Docker
 
-Download the docker image from [releases](https://github.com/crafatar/crafatar/releases) (docker hub coming soon™️).
-
 ```sh
-docker load -i crafatar-docker.tar
-mkdir /path/to/crafatar-images
-```
-
-```sh
+docker pull crafatar/crafatar
 docker network create crafatar
 docker run --net crafatar -d --name redis redis
-docker run --net crafatar -v /path/to/crafatar-images:/crafatar/images -e REDIS_URL=redis://redis -p 3000:3000 crafatar:2.1.0
+docker run --net crafatar -v crafatar-images:/crafatar/images -e REDIS_URL=redis://redis -p 3000:3000 crafatar/crafatar
 ```
 
 ## Environment variables
@@ -70,6 +64,18 @@ docker run --net crafatar -v /path/to/crafatar-images:/crafatar/images -e REDIS_
 | `EPHEMERAL_STORAGE` |                          | If set, redis is flushed on start* |
 
 \* Use this to avoid issues when you have a persistent redis database but an ephemeral storage
+
+# Operational notes
+
+## inodes
+
+Crafatar stores a lot of images on disk. For avatars, these are 8×8 px PNG images with an average file size of \~90 bytes. This can lead to issues on file systems such as ext4, which (by default) has a bytes-per-inode ratio of 16Kb. With thousands of files with an average file size below this ratio, you will run out of available inodes before running out of disk space. (Note that this will still be reported as `ENOSPC: no space left on device`).
+
+Consider using a different file system, changing the inode ratio, or deleting files before the inode limit is reached.
+
+## disk space and memory usage
+
+Eventually you will run out of disk space and/or redis will be out of memory. Make sure to delete image files and/or flush redis before this happens.
 
 # Tests
 ```sh
