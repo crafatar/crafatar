@@ -1,9 +1,3 @@
 images/*/*.png
 node_modules/
 coverage/
-.DS_Store
-*.log
-*.rdb
-*.sublime-*
-config.js
-lib/public/images/sponsor.png

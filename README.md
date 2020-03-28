@@ -53,17 +53,9 @@ docker run --net crafatar -d --name redis redis
 docker run --net crafatar -v crafatar-images:/crafatar/images -e REDIS_URL=redis://redis -p 3000:3000 crafatar/crafatar
 ```
 
-## Environment variables
+## Configration / Environment variables
 
-| Variable            | Default                  | Description                        |
-| :-                  | :-                       | :-                                 |
-| `BIND`              | `0.0.0.0`                | Hostname to listen on              |
-| `PORT`              | `3000`                   | Port to listen on                  |
-| `DEBUG`             | `false`                  | Enable verbose debug logging       |
-| `REDIS_URL`         | `redis://127.0.0.1:6379` | URI of the redis server            |
-| `EPHEMERAL_STORAGE` |                          | If set, redis is flushed on start* |
-
-\* Use this to avoid issues when you have a persistent redis database but an ephemeral storage
+See the `config.js` file.
 
 # Operational notes
 

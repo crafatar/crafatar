@@ -25,7 +25,6 @@
     "avatar"
   ],
   "scripts": {
-    "postinstall": "cp 'config.example.js' 'config.js'",
     "start": "node www.js",
     "test": "mocha",
     "test-travis": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"

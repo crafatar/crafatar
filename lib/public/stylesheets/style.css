@@ -35,12 +35,16 @@ a.forkme:hover {
 
 a.sponsor {
   position: fixed;
-  z-index: 1041;
   width: 48px;
   height: 48px;
   right: 0px;
   top: 0px;
   margin: 5px;
+}
+
+.sponsor img {
+  width: 100%;
+  height: 100%;
 }
 
 a.sponsor-item {
