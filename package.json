@@ -2,28 +2,6 @@
   "name": "crafatar",
   "version": "2.1.2",
   "private": true,
-  "description": "A blazing fast API for Minecraft faces!",
-  "contributors": [
-    {
-      "name": "jomo",
-      "url": "https://github.com/jomo"
-    },
-    {
-      "name": "Jake",
-      "url": "https://github.com/Jake0oo0"
-    }
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/crafatar/crafatar"
-  },
-  "issues": {
-    "url": "https://github.com/crafatar/crafatar/issues"
-  },
-  "keywords": [
-    "minecraft",
-    "avatar"
-  ],
   "scripts": {
     "start": "node www.js",
     "test": "mocha",
