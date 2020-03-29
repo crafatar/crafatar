@@ -1,6 +1,6 @@
 {
   "name": "crafatar",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "private": true,
   "description": "A blazing fast API for Minecraft faces!",
   "contributors": [
@@ -33,10 +33,10 @@
     "node": "12.16.1"
   },
   "dependencies": {
+    "@randy.tarampi/lwip": "^1.1.0",
     "canvas": "^2.6.1",
     "crc": "^3.8.0",
     "ejs": "^3.0.1",
-    "@randy.tarampi/lwip": "^1.1.0",
     "mime": "^2.4.4",
     "redis": "^3.0.2",
     "request": "^2.88.2",
