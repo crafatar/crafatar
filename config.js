@@ -50,6 +50,9 @@ var config = {
     debug_enabled: process.env.DEBUG === "true" || false,
     // set to false if you use an external logger that provides timestamps,
     log_time: process.env.LOG_TIME === "true" || true,
+    // rate limit per second for outgoing requests to the Mojang session server
+    // requests exceeding this limit are skipped and considered failed
+    sessions_rate_limit: parseInt(process.env.SESSIONS_RATE_LIMIT) || Infinity
   },
   sponsor: {
     sidebar: process.env.SPONSOR_SIDE,

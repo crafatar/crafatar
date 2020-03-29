@@ -695,6 +695,18 @@ describe("Crafatar", function() {
         });
       });
     });
+
+    it("CloudFront rate limit is handled", function(done) {
+      var original_rate_limit = config.server.sessions_rate_limit;
+      config.server.sessions_rate_limit = 1;
+      networking.get_profile(rid(), uuid, function() {
+        networking.get_profile(rid(), uuid, function(err, profile) {
+          assert.strictEqual(err.code, "RATELIMIT");
+          config.server.sessions_rate_limit = original_rate_limit;
+          done();
+        });
+      });
+    });
   });
 
   after(function(done) {
