@@ -35,7 +35,9 @@ var config = {
     browser: parseInt(process.env.CACHE_BROWSER) || 3600,
     // If true, redis is flushed on start.
     // Use this to avoid issues when you have a persistent redis database but an ephemeral storage
-    ephemeral: process.env.EPHEMERAL_STORAGE === "true" || false,
+    ephemeral: process.env.EPHEMERAL_STORAGE === "true",
+    // Used for information on the front page
+    cloudflare: process.env.CLOUDFLARE === "true"
   },
   // URL of your redis server
   redis: process.env.REDIS_URL || 'redis://localhost:6379',
@@ -47,9 +49,9 @@ var config = {
     // ms until connection to Mojang is dropped
     http_timeout: parseInt(process.env.EXTERNAL_HTTP_TIMEOUT) || 2000,
     // enables logging.debug & editing index page
-    debug_enabled: process.env.DEBUG === "true" || false,
+    debug_enabled: process.env.DEBUG === "true",
     // set to false if you use an external logger that provides timestamps,
-    log_time: process.env.LOG_TIME === "true" || true,
+    log_time: process.env.LOG_TIME === "true",
     // rate limit per second for outgoing requests to the Mojang session server
     // requests exceeding this limit are skipped and considered failed
     sessions_rate_limit: parseInt(process.env.SESSIONS_RATE_LIMIT) || Infinity
