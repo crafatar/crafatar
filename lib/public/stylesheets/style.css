@@ -58,6 +58,22 @@ a.sponsor-item {
   background: #fff8ec !important;
 }
 
+#quote-wrapper {
+  line-height: 9.5em;
+}
+
+#quote {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: initial;
+  background: #d4e7ff;
+  border-color: #94cbfc;
+}
+
+#quote:hover {
+  background: #dcedff;
+}
+
 .alert {
   font-size: 1rem;
 }
