@@ -535,7 +535,7 @@ describe("Crafatar", function() {
     });
 
     it("should return a 422 (invalid render type)", function(done) {
-      request.get("http://localhost:3000/renders/invalid/Jake_0", function(error, res, body) {
+      request.get("http://localhost:3000/renders/invalid/2d5aa9cdaeb049189930461fc9b91cc5", function(error, res, body) {
         assert.ifError(error);
         assert.strictEqual(res.statusCode, 422);
         done();
@@ -584,7 +584,7 @@ describe("Crafatar", function() {
 
   describe("Networking: Cape", function() {
     it("should not fail (guaranteed cape)", function(done) {
-      helpers.get_cape(rid(), "Dinnerbone", function(err, hash, status, img) {
+      helpers.get_cape(rid(), "61699b2ed3274a019f1e0ea8c3f06bc6", function(err, hash, status, img) {
         assert.strictEqual(err, null);
         done();
       });
@@ -593,13 +593,13 @@ describe("Crafatar", function() {
       before(function() {
         cache.get_redis().flushall();
       });
-      helpers.get_cape(rid(), "Dinnerbone", function(err, hash, status, img) {
+      helpers.get_cape(rid(), "61699b2ed3274a019f1e0ea8c3f06bc6", function(err, hash, status, img) {
         assert.strictEqual(err, null);
         done();
       });
     });
     it("should not be found", function(done) {
-      helpers.get_cape(rid(), "Jake_0", function(err, hash, status, img) {
+      helpers.get_cape(rid(), "2d5aa9cdaeb049189930461fc9b91cc5", function(err, hash, status, img) {
         assert.ifError(err);
         assert.strictEqual(img, null);
         done();
@@ -609,7 +609,7 @@ describe("Crafatar", function() {
 
   describe("Networking: Skin", function() {
     it("should not fail", function(done) {
-      helpers.get_cape(rid(), "Jake_0", function(err, hash, status, img) {
+      helpers.get_cape(rid(), "2d5aa9cdaeb049189930461fc9b91cc5", function(err, hash, status, img) {
         assert.strictEqual(err, null);
         done();
       });
@@ -618,7 +618,7 @@ describe("Crafatar", function() {
       before(function() {
         cache.get_redis().flushall();
       });
-      helpers.get_cape(rid(), "Jake_0", function(err, hash, status, img) {
+      helpers.get_cape(rid(), "2d5aa9cdaeb049189930461fc9b91cc5", function(err, hash, status, img) {
         assert.strictEqual(err, null);
         done();
       });
@@ -686,15 +686,16 @@ describe("Crafatar", function() {
       cache.get_redis().flushall();
     });
 
-    it("uuid SHOULD be rate limited", function(done) {
-      networking.get_profile(rid(), uuid, function() {
-        networking.get_profile(rid(), uuid, function(err, profile) {
-          assert.strictEqual(err.toString(), "HTTP: 429");
-          assert.strictEqual(profile, null);
-          done();
-        });
-      });
-    });
+    // Mojang has changed its rate limiting, so we no longer expect to hit the rate limit
+    // it("uuid SHOULD be rate limited", function(done) {
+    //   networking.get_profile(rid(), uuid, function() {
+    //     networking.get_profile(rid(), uuid, function(err, profile) {
+    //       assert.strictEqual(err.toString(), "HTTP: 429");
+    //       assert.strictEqual(profile, null);
+    //       done();
+    //     });
+    //   });
+    // });
 
     it("CloudFront rate limit is handled", function(done) {
       var original_rate_limit = config.server.sessions_rate_limit;
