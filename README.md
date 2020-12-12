@@ -34,6 +34,14 @@ Please [visit the website](https://crafatar.com) for details.
 
 # Installation
 
+## Docker
+
+```sh
+docker network create crafatar
+docker run --net crafatar -d --name redis redis
+docker run --net crafatar -v crafatar-images:/crafatar/images -e REDIS_URL=redis://redis -p 3000:3000 crafatar/crafatar
+```
+
 ## Manual
 
 - Install [nodejs](https://nodejs.org/) 12 (LTS)
@@ -43,15 +51,6 @@ Please [visit the website](https://crafatar.com) for details.
 - Run `npm start`
 
 Crafatar is now available at http://0.0.0.0:3000.
-
-## Docker
-
-```sh
-docker pull crafatar/crafatar
-docker network create crafatar
-docker run --net crafatar -d --name redis redis
-docker run --net crafatar -v crafatar-images:/crafatar/images -e REDIS_URL=redis://redis -p 3000:3000 crafatar/crafatar
-```
 
 ## Configration / Environment variables
 

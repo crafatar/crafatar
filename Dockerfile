@@ -1,47 +1,35 @@
-FROM node:12-alpine
+FROM node:12-alpine AS builder
 
-ARG AVATAR_MIN
-ARG AVATAR_MAX
-ARG AVATAR_DEFAULT
-ARG RENDER_MIN
-ARG RENDER_MAX
-ARG RENDER_DEFAULT
-ARG FACE_DIR
-ARG HELM_DIR
-ARG SKIN_DIR
-ARG RENDER_DIR
-ARG CAPE_DIR
-ARG CACHE_LOCAL
-ARG CACHE_BROWSER
-ARG EPHEMERAL_STORAGE
-ARG REDIS_URL
-ARG PORT
-ARG BIND
-ARG EXTERNAL_HTTP_TIMEOUT
-ARG DEBUG
-ARG LOG_TIME
-ARG SPONSOR_SIDE
-ARG TOP_RIGHT
+RUN apk --no-cache add git python build-base redis cairo-dev pango-dev jpeg-dev giflib-dev
 
-ENV NODE_ENV production
+RUN adduser -D app
+USER app
 
-RUN apk --no-cache --virtual .build-deps add git python build-base
-RUN apk --no-cache --virtual .canvas-deps add cairo-dev pango-dev jpeg-dev giflib-dev
-
-RUN mkdir -p /crafatar/images/faces
-RUN mkdir -p /crafatar/images/helms
-RUN mkdir -p /crafatar/images/skins
-RUN mkdir -p /crafatar/images/renders
-RUN mkdir -p /crafatar/images/capes
-
-VOLUME /crafatar/images
-
-COPY package.json www.js config.js crafatar/
-COPY lib/ crafatar/lib/
-
-WORKDIR /crafatar
-
+COPY --chown=app package.json package-lock.json /home/app/crafatar/
+WORKDIR /home/app/crafatar
 RUN npm install
 
+COPY --chown=app . .
+RUN mkdir -p images/faces images/helms images/skins images/renders images/capes
+
+ARG VERBOSE_TEST
+ARG DEBUG
+RUN nohup redis-server & npm test
+
+
+FROM node:12-alpine
+RUN apk --no-cache add cairo pango jpeg giflib
+RUN adduser -D app
+USER app
+RUN mkdir /home/app/crafatar
+WORKDIR /home/app/crafatar
+RUN mkdir -p images/faces images/helms images/skins images/renders images/capes
+
+COPY --chown=app --from=builder /home/app/crafatar/node_modules/ node_modules/
+COPY --chown=app package.json www.js config.js ./
+COPY --chown=app lib/ lib/
+
+VOLUME /home/app/crafatar/images
+ENV NODE_ENV production
+ENTRYPOINT ["npm", "start"]
 EXPOSE 3000
-ENTRYPOINT npm start

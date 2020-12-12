@@ -1,0 +1,6 @@
+.*
+*.md
+Dockerfile
+LICENSE
+images/
+node_modules/
