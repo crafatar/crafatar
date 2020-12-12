@@ -3,7 +3,7 @@
 
 // no spam
 var logging = require("../lib/logging");
-if (process.env.VERBOSE_TEST !== "true" && process.env.TRAVIS !== "true") {
+if (process.env.VERBOSE_TEST !== "true") {
   logging.log = logging.debug = logging.warn = logging.error = function() {};
 }
 
