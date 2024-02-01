@@ -88,8 +88,8 @@ describe("Crafatar", function() {
       assert.strictEqual(helpers.id_valid("1DCEF164FF0A47F2B9A691385C774EE7"), true);
       done();
     });
-    it("dashed uuid is valid", function(done) {
-      assert.strictEqual(helpers.id_valid("0098cb60-fa8e-427c-b299-793cbd302c9a"), true);
+    it("dashed uuid is not valid", function(done) {
+      assert.strictEqual(helpers.id_valid("0098cb60-fa8e-427c-b299-793cbd302c9a"), false);
       done();
     });
     it("username is invalid", function(done) {
@@ -298,6 +298,10 @@ describe("Crafatar", function() {
     var server_tests = {
       "avatar with existing uuid": {
         url: "http://localhost:3000/avatars/853c80ef3c3749fdaa49938b674adae6?size=16",
+        crc32: [4264176600],
+      },
+      "avatar with existing dashed uuid": {
+        url: "http://localhost:3000/avatars/853c80ef-3c37-49fd-aa49938b674adae6?size=16",
         crc32: [4264176600],
       },
       "avatar with non-existent uuid": {
