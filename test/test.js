@@ -315,7 +315,7 @@ describe("Crafatar", function() {
       "avatar with non-existent uuid defaulting to uuid": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&default=853c80ef3c3749fdaa49938b674adae6",
         crc32: [0],
-        redirect: "/avatars/853c80ef3c3749fdaa49938b674adae6?size=16",
+        redirect: "http://localhost:3000/avatars/853c80ef3c3749fdaa49938b674adae6?size=16",
       },
       "avatar with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&default=http%3A%2F%2Fexample.com%2FCaseSensitive",
@@ -337,7 +337,7 @@ describe("Crafatar", function() {
       "overlay avatar with non-existent uuid defaulting to uuid": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&default=853c80ef3c3749fdaa49938b674adae6",
         crc32: [0],
-        redirect: "/avatars/853c80ef3c3749fdaa49938b674adae6?size=16",
+        redirect: "http://localhost:3000/avatars/853c80ef3c3749fdaa49938b674adae6?size=16",
       },
       "overlay avatar with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/avatars/00000000000000000000000000000000?size=16&overlay&default=http%3A%2F%2Fexample.com%2FCaseSensitive",
@@ -372,7 +372,7 @@ describe("Crafatar", function() {
       "skin with non-existent uuid defaulting to uuid": {
         url: "http://localhost:3000/skins/00000000000000000000000000000000?size=16&default=853c80ef3c3749fdaa49938b674adae6",
         crc32: [0],
-        redirect: "/skins/853c80ef3c3749fdaa49938b674adae6?size=16",
+        redirect: "http://localhost:3000/skins/853c80ef3c3749fdaa49938b674adae6?size=16",
       },
       "skin with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/skins/00000000000000000000000000000000?default=http%3A%2F%2Fexample.com%2FCaseSensitive",
@@ -394,7 +394,7 @@ describe("Crafatar", function() {
       "head render with non-existent uuid defaulting to uuid": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&default=853c80ef3c3749fdaa49938b674adae6",
         crc32: [0],
-        redirect: "/renders/head/853c80ef3c3749fdaa49938b674adae6?scale=2",
+        redirect: "http://localhost:3000/renders/head/853c80ef3c3749fdaa49938b674adae6?scale=2",
       },
       "head render with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&default=http%3A%2F%2Fexample.com%2FCaseSensitive",
@@ -416,7 +416,7 @@ describe("Crafatar", function() {
       "overlay head with non-existent uuid defaulting to uuid": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&overlay&default=853c80ef3c3749fdaa49938b674adae6",
         crc32: [0],
-        redirect: "/renders/head/853c80ef3c3749fdaa49938b674adae6?scale=2&overlay=",
+        redirect: "http://localhost:3000/renders/head/853c80ef3c3749fdaa49938b674adae6?scale=2&overlay=",
       },
       "overlay head render with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/renders/head/00000000000000000000000000000000?scale=2&overlay&default=http%3A%2F%2Fexample.com%2FCaseSensitive",
@@ -438,7 +438,7 @@ describe("Crafatar", function() {
       "body render with non-existent uuid defaulting to uuid": {
         url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&default=853c80ef3c3749fdaa49938b674adae6",
         crc32: [0],
-        redirect: "/renders/body/853c80ef3c3749fdaa49938b674adae6?scale=2",
+        redirect: "http://localhost:3000/renders/body/853c80ef3c3749fdaa49938b674adae6?scale=2",
       },
       "body render with non-existent uuid defaulting to url": {
         url: "http://localhost:3000/renders/body/00000000000000000000000000000000?scale=2&default=http%3A%2F%2Fexample.com%2FCaseSensitive",
@@ -568,6 +568,30 @@ describe("Crafatar", function() {
         });
       }(loc));
     }
+
+    it("should return /public resources", function(done) {
+      request.get("http://localhost:3000/javascript/crafatar.js", function(error, res, body) {
+        assert.ifError(error);
+        assert.strictEqual(res.statusCode, 200);
+        done();
+      });
+    });
+
+    it("should not allow path traversal on /public", function(done) {
+      request.get("http://localhost:3000/../server.js", function(error, res, body) {
+        assert.ifError(error);
+        assert.strictEqual(res.statusCode, 404);
+        done();
+      });
+    });
+
+    it("should not allow encoded path traversal on /public", function(done) {
+      request.get("http://localhost:3000/%2E%2E/server.js", function(error, res, body) {
+        assert.ifError(error);
+        assert.strictEqual(res.statusCode, 404);
+        done();
+      });
+    });
   });
 
   // we have to make sure that we test both a 32x64 and 64x64 skin
