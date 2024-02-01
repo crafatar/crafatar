@@ -1,6 +1,6 @@
 FROM node:12-alpine AS builder
 
-RUN apk --no-cache add git python build-base redis cairo-dev pango-dev jpeg-dev giflib-dev
+RUN apk --no-cache add git python3 build-base redis cairo-dev pango-dev jpeg-dev giflib-dev
 
 RUN adduser -D app
 USER app

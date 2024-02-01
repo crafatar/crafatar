@@ -346,7 +346,7 @@ describe("Crafatar", function() {
       },
       "cape with existing uuid": {
         url: "http://localhost:3000/capes/853c80ef3c3749fdaa49938b674adae6",
-        crc32: [985789174],
+        crc32: [985789174, 2099310578],
       },
       "cape with non-existent uuid": {
         url: "http://localhost:3000/capes/00000000000000000000000000000000",
@@ -710,7 +710,7 @@ describe("Crafatar", function() {
 
 
   describe("Errors", function() {
-      before(function() {
+    before(function() {
       cache.get_redis().flushall();
     });
 

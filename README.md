@@ -39,7 +39,7 @@ Please [visit the website](https://crafatar.com) for details.
 ```sh
 docker network create crafatar
 docker run --net crafatar -d --name redis redis
-docker run --net crafatar -v crafatar-images:/crafatar/images -e REDIS_URL=redis://redis -p 3000:3000 crafatar/crafatar
+docker run --net crafatar -v crafatar-images:/home/app/crafatar/images -e REDIS_URL=redis://redis -p 3000:3000 crafatar/crafatar
 ```
 
 ## Manual
