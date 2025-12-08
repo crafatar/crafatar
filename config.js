@@ -61,8 +61,8 @@ var config = {
     top_right: process.env.SPONSOR_TOP_RIGHT
   },
   endpoints: {
-    textures_url: "https://textures.minecraft.net/texture/",
-    session_url: "https://sessionserver.mojang.com/session/minecraft/profile/"
+    textures_url: process.env.TEXTURES_ENDPOINT || "https://textures.minecraft.net/texture/",
+    session_url: process.env.SESSION_ENDPOINT || "https://sessionserver.mojang.com/session/minecraft/profile/"
   }
 };
 
