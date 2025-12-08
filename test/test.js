@@ -158,7 +158,7 @@ describe("Crafatar", function() {
     it("should time out on skin download", function(done) {
       var original_timeout = config.http_timeout;
       config.server.http_timeout = 1;
-      networking.get_from(rid(), "http://textures.minecraft.net/texture/477be35554684c28bdeee4cf11c591d3c88afb77e0b98da893fd7bc318c65184", function(body, res, error) {
+      networking.get_from(rid(), config.endpoints.textures_url + "477be35554684c28bdeee4cf11c591d3c88afb77e0b98da893fd7bc318c65184", function(body, res, error) {
         assert.notStrictEqual(["ETIMEDOUT", "ESOCKETTIMEDOUT"].indexOf(error.code), -1);
         config.server.http_timeout = original_timeout;
         done();
@@ -166,7 +166,7 @@ describe("Crafatar", function() {
     });
     it("should not find the skin", function(done) {
       assert.doesNotThrow(function() {
-        networking.get_from(rid(), "http://textures.minecraft.net/texture/this-does-not-exist", function(img, response, err) {
+        networking.get_from(rid(), config.endpoints.textures_url + "this-does-not-exist", function(img, response, err) {
           assert.strictEqual(err, null); // no error here, but it shouldn't throw exceptions
           done();
         });
