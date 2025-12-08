@@ -60,6 +60,10 @@ var config = {
     sidebar: process.env.SPONSOR_SIDE,
     top_right: process.env.SPONSOR_TOP_RIGHT
   },
+  endpoints: {
+    textures_url: process.env.TEXTURES_ENDPOINT || "https://textures.minecraft.net/texture/",
+    session_url: process.env.SESSION_ENDPOINT || "https://sessionserver.mojang.com/session/minecraft/profile/"
+  }
 };
 
 module.exports = config;
