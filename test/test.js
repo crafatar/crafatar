@@ -267,6 +267,15 @@ describe("Crafatar", function() {
       });
     });
 
+    it("should return 422 response for invalid URLs", function(done) {
+      var url = "http://localhost:3000/%";
+      request.get(url, function(error, res, body) {
+        assert.ifError(error);
+        assert.strictEqual(res.statusCode, 422);
+        done();
+      });
+    });
+
     it("should not fail on simultaneous requests", function(done) {
       var url = "http://localhost:3000/avatars/696a82ce41f44b51aa31b8709b8686f0";
       // 10 requests at once
